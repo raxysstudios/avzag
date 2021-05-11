@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.avzag_flutter">
-   <application
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
         android:label="avzag_flutter"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -37,5 +38,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data 
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCUmt4iYymoCxeBtin5h2iBVospmb8CeVM"/>
     </application>
 </manifest>
