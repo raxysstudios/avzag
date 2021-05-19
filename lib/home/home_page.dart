@@ -8,11 +8,28 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    print("AEAEAE");
-    return Column(
-      children: [
-        Text("AEAEAE"),
-      ],
-    );
+    return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(
+            "Avzag",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        body: Center(
+          child: TextButton(
+            onPressed: () {},
+            child: Text("A button"),
+          ),
+        ));
   }
 }
