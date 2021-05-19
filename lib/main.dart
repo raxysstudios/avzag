@@ -1,134 +1,42 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
+import 'home/home_page.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(App());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+/// We are using a StatefulWidget such that we only create the [Future] once,
+/// no matter how many times our widget rebuild.
+/// If we used a [StatelessWidget], in the event where [App] is rebuilt, that
+/// would re-initialize FlutterFire and make our application re-enter loading state,
+/// which is undesired.
+class App extends StatefulWidget {
+  // Create the initialization Future outside of `build`:
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Google Maps Demo',
-      home: MapSample(),
-    );
-  }
+  _AppState createState() => _AppState();
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class _AppState extends State<App> {
+  /// The future is part of the state of our widget. We should not call `initializeApp`
+  /// directly inside [build].
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) => MaterialApp(
+        title: 'Avzag',
+        theme: ThemeData(primaryColor: Colors.white),
+        home: snapshot.hasError
+            ? Text("Error")
+            : snapshot.connectionState == ConnectionState.done
+                ? HomePage()
+                : CircularProgressIndicator(),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-
-class MapSample extends StatefulWidget {
-  @override
-  State<MapSample> createState() => MapSampleState();
-}
-
-class MapSampleState extends State<MapSample> {
-  List<bool> selected = [true, false, false, false];
-  List<String> lects = ["Iron", "Digor", "Kabardian", "Temirgoi"];
-
-  @override
-  Widget build(BuildContext context) {
-    return FlutterMap(
-      options: MapOptions(
-        center: LatLng(51.5, -0.09),
-        zoom: 13.0,
-        interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
-      ),
-      layers: [
-        TileLayerOptions(
-            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c']),
-        MarkerLayerOptions(
-          markers: [
-            for (var i = 0; i < lects.length; i++)
-              Marker(
-                width: 128,
-                height: 128,
-                point: LatLng(i * 5.0, i * 5.0),
-                builder: (ctx) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 32),
-                    Container(
-                      height: 8,
-                      child: Icon(
-                        Icons.keyboard_arrow_up,
-                        size: 32,
-                      ),
-                    ),
-                    TextButton(
-                      child: Text(
-                        lects[i],
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: selected[i] ? Colors.blue : Colors.black,
-                          shadows: [
-                            Shadow(
-                              blurRadius: 8.0,
-                              color:
-                                  selected[i] ? Colors.white : Colors.black45,
-                            ),
-                          ],
-                        ),
-                      ),
-                      onPressed: () =>
-                          setState(() => selected[i] = !selected[i]),
-                    )
-                  ],
-                ),
-              ),
-          ],
-        ),
-      ],
     );
   }
 }

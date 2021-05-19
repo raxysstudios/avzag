@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
   flutter_map: ^0.12.0
   latlong: ^0.6.1
+  firebase_core: ^1.2.0
+  cloud_firestore: ^2.2.0
 
 dev_dependencies:
   flutter_test:
