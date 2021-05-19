@@ -1,4 +1,4 @@
-# avzag_flutter
+# avzag
 
 A new Flutter project.
 

@@ -1,4 +1,4 @@
-package com.example.avzag_flutter
+package com.example.avzag
 
 import io.flutter.embedding.android.FlutterActivity
 

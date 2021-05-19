@@ -1,6 +1,6 @@
 {
-    "name": "avzag_flutter",
-    "short_name": "avzag_flutter",
+    "name": "avzag",
+    "short_name": "avzag",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
