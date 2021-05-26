@@ -9,6 +9,8 @@ import 'language_card.dart';
 class HomePage extends StatefulWidget {
   final loader = FirebaseFirestore.instance
       .collection('languages')
+      .orderBy('family')
+      .orderBy('name')
       .withConverter(
         fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
         toFirestore: (Language language, _) => language.toJson(),
