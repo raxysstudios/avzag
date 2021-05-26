@@ -1,5 +1,6 @@
 import 'package:avzag/home/language.dart';
 import 'package:avzag/home/language_flag.dart';
+import 'package:avzag/home/nav_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
@@ -47,37 +48,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          drawer: Drawer(
-            child: Column(
-              children: [
-                DrawerHeader(
-                  child: Text(
-                    "Map",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.map),
-                  title: Text("Map"),
-                  onTap: () {},
-                ),
-                ListTile(
-                  leading: Icon(Icons.music_note),
-                  title: Text("Phonology"),
-                  onTap: () {},
-                ),
-                Divider(),
-                ListTile(
-                  leading: Icon(Icons.forum),
-                  title: Text("Channel"),
-                  onTap: () {},
-                ),
-              ],
-            ),
-          ),
+          drawer: NavDraver(),
           body: snapshot.hasError || languages == null
               ? Text("Something went wrong")
               : snapshot.connectionState == ConnectionState.done
