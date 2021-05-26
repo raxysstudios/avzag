@@ -8,7 +8,7 @@ class NavDraver extends StatefulWidget {
 }
 
 class _NavItem {
-  _NavItem(this.icon, this.title, {this.link = null});
+  _NavItem(this.icon, this.title, {this.link});
   final IconData icon;
   final String title;
   final String? link;
