@@ -12,7 +12,6 @@ class LanguageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(language);
     return AspectRatio(
       aspectRatio: 3.5,
       child: SelectableCard(

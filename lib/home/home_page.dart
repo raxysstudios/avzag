@@ -1,4 +1,5 @@
 import 'package:avzag/home/language.dart';
+import 'package:avzag/home/language_flag.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
@@ -25,6 +26,8 @@ class _HomePageState extends State<HomePage> {
         AsyncSnapshot<QuerySnapshot<Language>> snapshot,
       ) {
         final languages = snapshot.data?.docs.map((l) => l.data());
+        languages?.forEach(donwloadFlag);
+
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
