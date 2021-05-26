@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "192076134069",
-    "project_id": "avzag-languages",
-    "storage_bucket": "avzag-languages.appspot.com"
+    "project_number": "882503981771",
+    "project_id": "avzagapp",
+    "storage_bucket": "avzagapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:192076134069:android:3adc14f2bdbff800e030fc",
+        "mobilesdk_app_id": "1:882503981771:android:a81c9f3fdf9537e426994e",
         "android_client_info": {
           "package_name": "com.alkaitagi.avzag"
         }
       },
       "oauth_client": [
         {
-          "client_id": "192076134069-aivr16b0ue29fv4dt65cpn96vu4o4q55.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.alkaitagi.avzag",
-            "certificate_hash": "f13f21dd281ab091d1a5ed48d3e2aa616b6acef4"
-          }
-        },
-        {
-          "client_id": "192076134069-689d92j9dnar8llqbb5v8182i1a0svmp.apps.googleusercontent.com",
+          "client_id": "882503981771-qim7pqjv06p4ujj0m1htbs68gmg2e26v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCJsppakfuagdBA7rzt-7SqbFhkzBhjJZU"
+          "current_key": "AIzaSyClObYBjzRfHXQ6CBVkOJlx-v1x0oNIHd8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "192076134069-689d92j9dnar8llqbb5v8182i1a0svmp.apps.googleusercontent.com",
+              "client_id": "882503981771-qim7pqjv06p4ujj0m1htbs68gmg2e26v.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
