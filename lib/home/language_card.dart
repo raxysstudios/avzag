@@ -1,5 +1,5 @@
 import 'package:avzag/home/language.dart';
-import 'package:avzag/home/utils.dart';
+import 'package:avzag/utils.dart';
 
 import 'language_flag.dart';
 import 'selectable_card.dart';

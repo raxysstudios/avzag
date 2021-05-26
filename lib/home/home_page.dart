@@ -1,6 +1,6 @@
 import 'package:avzag/home/language.dart';
 import 'package:avzag/home/language_flag.dart';
-import 'package:avzag/home/nav_drawer.dart';
+import 'package:avzag/nav_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
