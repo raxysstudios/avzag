@@ -1,6 +1,7 @@
 import 'package:avzag/home/language.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/nav_drawer.dart';
+import 'package:avzag/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
@@ -49,10 +50,50 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           drawer: NavDraver(title: "Home"),
-          body: snapshot.hasError || languages == null
-              ? Text("Something went wrong")
-              : snapshot.connectionState == ConnectionState.done
-                  ? ListView.separated(
+          body: Builder(
+            builder: (context) {
+              if (snapshot.hasError || languages == null)
+                return Text("Something went wrong.");
+              if (snapshot.connectionState != ConnectionState.done)
+                return Text("Loading, please wait...");
+              return Column(
+                children: [
+                  Container(
+                    height: 48,
+                    child: selected.isEmpty
+                        ? Center(
+                            child: Text(
+                              "Selected languages appear here.",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          )
+                        : ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              for (final n in selected)
+                                Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Chip(
+                                    label: Text(
+                                      capitalize(n),
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    onDeleted: () => setState(
+                                      () => selected.remove(n),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                  ),
+                  Divider(height: 2),
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: languages.length,
                       itemBuilder: (context, index) {
                         final lang = languages[index];
                         final contains = this.selected.contains(lang.name);
@@ -70,9 +111,12 @@ class _HomePageState extends State<HomePage> {
                         height: 2,
                         color: Colors.transparent,
                       ),
-                      itemCount: languages.length,
-                    )
-                  : Text("loading"),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         );
       },
     );
