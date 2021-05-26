@@ -44,12 +44,6 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {},
-              ),
-            ],
           ),
           drawer: NavDraver(title: "Home"),
           body: Builder(
@@ -79,12 +73,12 @@ class _HomePageState extends State<HomePage> {
                               for (final n in selected)
                                 Padding(
                                   padding: const EdgeInsets.all(4),
-                                  child: Chip(
+                                  child: InputChip(
                                     label: Text(
                                       capitalize(n),
                                       style: TextStyle(fontSize: 16),
                                     ),
-                                    onDeleted: () => setState(
+                                    onPressed: () => setState(
                                       () => selected.remove(n),
                                     ),
                                   ),

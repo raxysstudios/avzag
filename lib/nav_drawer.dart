@@ -35,12 +35,12 @@ class NavDraver extends StatelessWidget {
     _NavItem(Icons.construction_outlined, 'Editor tools'),
     _NavItem(
       Icons.forum_outlined,
-      'Editor tools',
+      'Telegram channel',
       link: 'https://t.me/avzag',
     ),
     _NavItem(
-      Icons.construction_outlined,
-      'Editor tools',
+      Icons.code_outlined,
+      'GitHub repository',
       link: 'https://github.com/alkaitagi/avzag_flutter',
     ),
   ];
@@ -65,10 +65,11 @@ class NavDraver extends StatelessWidget {
             ListTile(
               leading: Icon(
                 m.icon,
-                color: Colors.black,
+                color: title == m.title ? Colors.blue : Colors.black,
                 size: 30,
               ),
               title: Text(m.title, style: TextStyle(fontSize: 18)),
+              trailing: m.builder == null ? Text("Coming Soon") : null,
               selected: title == m.title,
               onTap: m.builder == null
                   ? null
@@ -84,8 +85,11 @@ class NavDraver extends StatelessWidget {
             ListTile(
               leading: Icon(m.icon),
               title: Text(m.title),
-              trailing:
-                  m.link == null ? null : Icon(Icons.open_in_new_outlined),
+              trailing: m.link == null
+                  ? m.builder == null
+                      ? Text("Coming Soon")
+                      : null
+                  : Icon(Icons.open_in_new_outlined),
               onTap: m.link == null ? null : () => launch(m.link!),
             ),
         ],
