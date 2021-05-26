@@ -29,7 +29,10 @@ class _HomePageState extends State<HomePage> {
         languages?.forEach(donwloadFlag);
         return Scaffold(
           appBar: AppBar(
-            automaticallyImplyLeading: false,
+            leading: IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {},
+            ),
             title: Text(
               "Avzag",
               style: TextStyle(
@@ -39,10 +42,41 @@ class _HomePageState extends State<HomePage> {
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.settings),
+                icon: Icon(Icons.search),
                 onPressed: () {},
               ),
             ],
+          ),
+          drawer: Drawer(
+            child: Column(
+              children: [
+                DrawerHeader(
+                  child: Text(
+                    "Map",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.map),
+                  title: Text("Map"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: Icon(Icons.music_note),
+                  title: Text("Phonology"),
+                  onTap: () {},
+                ),
+                Divider(),
+                ListTile(
+                  leading: Icon(Icons.forum),
+                  title: Text("Channel"),
+                  onTap: () {},
+                ),
+              ],
+            ),
           ),
           body: snapshot.hasError || languages == null
               ? Text("Something went wrong")
