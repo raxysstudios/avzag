@@ -60,7 +60,7 @@ class NavDraver extends StatelessWidget {
               ),
             ),
           ),
-          Divider(),
+          Divider(height: 0),
           for (final m in modules)
             ListTile(
               leading: Icon(
@@ -80,7 +80,7 @@ class NavDraver extends StatelessWidget {
                       );
                     },
             ),
-          Divider(),
+          Divider(height: 0),
           for (final m in submodules)
             ListTile(
               leading: Icon(m.icon),
