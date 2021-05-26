@@ -2,13 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-launchURL(String url) async {
-  if (await canLaunch(url))
-    await launch(url);
-  else
-    throw 'Could not launch $url';
-}
-
 class NavDraver extends StatefulWidget {
   @override
   _NavDraverState createState() => _NavDraverState();
@@ -37,7 +30,7 @@ class _NavDraverState extends State<NavDraver> {
               color: Colors.black,
               size: 30,
             ),
-            title: Text("Map", style: TextStyle(fontSize: 18)),
+            title: Text("Home", style: TextStyle(fontSize: 18)),
             onTap: () {},
           ),
           ListTile(
@@ -86,14 +79,13 @@ class _NavDraverState extends State<NavDraver> {
             leading: Icon(Icons.forum_outlined),
             title: Text("Telegram channel"),
             trailing: Icon(Icons.open_in_new_outlined),
-            onTap: () =>
-                launchURL("https://github.com/alkaitagi/avzag_flutter"),
+            onTap: () => launch("https://t.me/avzag"),
           ),
           ListTile(
             leading: Icon(Icons.code_outlined),
             title: Text("GitHub repository"),
             trailing: Icon(Icons.open_in_new_outlined),
-            onTap: () => launchURL("https://t.me/avzag"),
+            onTap: () => launch("https://github.com/alkaitagi/avzag_flutter"),
           ),
         ],
       ),

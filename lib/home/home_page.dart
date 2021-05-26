@@ -30,10 +30,6 @@ class _HomePageState extends State<HomePage> {
         languages?.forEach(donwloadFlag);
         return Scaffold(
           appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {},
-            ),
             title: Text(
               "Avzag",
               style: TextStyle(
