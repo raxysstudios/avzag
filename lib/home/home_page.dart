@@ -6,27 +6,31 @@ import 'package:flutter/material.dart';
 import 'language_card.dart';
 
 class HomePage extends StatefulWidget {
+  final loader = FirebaseFirestore.instance
+      .collection('languages')
+      .withConverter(
+        fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
+        toFirestore: (Language language, _) => language.toJson(),
+      )
+      .get();
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  final Set<String> selected = Set();
+
   @override
   Widget build(BuildContext context) {
     // FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
     return FutureBuilder<QuerySnapshot<Language>>(
-      future: FirebaseFirestore.instance
-          .collection('languages')
-          .withConverter(
-            fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
-            toFirestore: (Language language, _) => language.toJson(),
-          )
-          .get(),
+      future: widget.loader,
       builder: (
         BuildContext context,
         AsyncSnapshot<QuerySnapshot<Language>> snapshot,
       ) {
-        final languages = snapshot.data?.docs.map((l) => l.data());
+        final languages = snapshot.data?.docs.map((l) => l.data()).toList();
         languages?.forEach(donwloadFlag);
         return Scaffold(
           appBar: AppBar(
@@ -48,14 +52,25 @@ class _HomePageState extends State<HomePage> {
           body: snapshot.hasError || languages == null
               ? Text("Something went wrong")
               : snapshot.connectionState == ConnectionState.done
-                  ? Column(
-                      children: [
-                        for (final l in languages)
-                          LanguageCard(
-                            l,
-                            onTap: () {},
+                  ? ListView.separated(
+                      itemBuilder: (context, index) {
+                        final lang = languages[index];
+                        final contains = this.selected.contains(lang.name);
+                        return LanguageCard(
+                          lang,
+                          selected: contains,
+                          onTap: () => setState(
+                            () => contains
+                                ? selected.remove(lang.name)
+                                : selected.add(lang.name),
                           ),
-                      ],
+                        );
+                      },
+                      separatorBuilder: (context, index) => Divider(
+                        height: 2,
+                        color: Colors.transparent,
+                      ),
+                      itemCount: languages.length,
                     )
                   : Text("loading"),
         );
