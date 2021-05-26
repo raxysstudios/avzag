@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              "Avzag",
+              "Home",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          drawer: NavDraver(),
+          drawer: NavDraver(title: "Home"),
           body: snapshot.hasError || languages == null
               ? Text("Something went wrong")
               : snapshot.connectionState == ConnectionState.done

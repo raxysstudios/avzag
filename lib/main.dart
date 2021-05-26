@@ -22,11 +22,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   List<Language> languages = [];
 
-  final modules = {
-    'home': () => HomePage(),
-  };
-  var currentModule = "home";
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -44,7 +39,7 @@ class _AppState extends State<App> {
           home: snapshot.hasError
               ? Text("Error")
               : snapshot.connectionState == ConnectionState.done
-                  ? modules[currentModule]?.call()
+                  ? HomePage()
                   : Text("Loading, please wait..."),
         );
       },

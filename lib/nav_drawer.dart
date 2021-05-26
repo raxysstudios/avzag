@@ -1,23 +1,32 @@
+import 'package:avzag/home/home_page.dart';
+import 'package:avzag/phonology/phonology.page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class NavDraver extends StatefulWidget {
-  @override
-  _NavDraverState createState() => _NavDraverState();
-}
-
 class _NavItem {
-  _NavItem(this.icon, this.title, {this.link});
+  _NavItem(this.icon, this.title, {this.builder, this.link});
   final IconData icon;
   final String title;
+  final Widget Function()? builder;
   final String? link;
 }
 
-class _NavDraverState extends State<NavDraver> {
+class NavDraver extends StatelessWidget {
+  NavDraver({this.title});
+  final String? title;
+
   final modules = [
-    _NavItem(Icons.map_outlined, 'Home'),
-    _NavItem(Icons.music_note_outlined, 'Phonology'),
+    _NavItem(
+      Icons.map_outlined,
+      'Home',
+      builder: () => HomePage(),
+    ),
+    _NavItem(
+      Icons.music_note_outlined,
+      'Phonology',
+      builder: () => PhonologyPage(),
+    ),
     _NavItem(Icons.switch_left_outlined, 'Converter'),
     _NavItem(Icons.chat_outlined, 'Phrasebook'),
     _NavItem(Icons.book_outlined, 'Dictionary'),
@@ -60,7 +69,15 @@ class _NavDraverState extends State<NavDraver> {
                 size: 30,
               ),
               title: Text(m.title, style: TextStyle(fontSize: 18)),
-              onTap: () {},
+              selected: title == m.title,
+              onTap: m.builder == null
+                  ? null
+                  : () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => m.builder!()),
+                      );
+                    },
             ),
           Divider(),
           for (final m in submodules)
