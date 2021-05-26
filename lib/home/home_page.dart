@@ -1,3 +1,4 @@
+import 'package:avzag/home/language.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
@@ -8,20 +9,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String documentId = "languages";
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      future: FirebaseFirestore.instance.collection('languages').get(),
-      builder: (BuildContext context,
-          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+    // FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
+    return FutureBuilder<QuerySnapshot<Language>>(
+      future: FirebaseFirestore.instance
+          .collection('languages')
+          .withConverter(
+            fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
+            toFirestore: (Language language, _) => language.toJson(),
+          )
+          .get(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<QuerySnapshot<Language>> snapshot,
+      ) {
+        final languages = snapshot.data?.docs.map((l) => l.data());
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: Text(
-              "Ævzag",
+              "Avzag",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -34,18 +42,15 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          body: snapshot.hasError
+          body: snapshot.hasError || languages == null
               ? Text("Something went wrong")
               : snapshot.connectionState == ConnectionState.done
                   ? Column(
                       children: [
-                        for (final l in snapshot.data?.docs ?? [])
-                          TextButton(
-                            onPressed: () {},
-                            child: LanguageCard(
-                              l.data()["name"]["native"],
-                              onTap: () {},
-                            ),
+                        for (final l in languages)
+                          LanguageCard(
+                            l,
+                            onTap: () {},
                           ),
                       ],
                     )

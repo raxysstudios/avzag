@@ -2,7 +2,7 @@
     package="com.alkaitagi.avzag">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="avzag"
+        android:label="Avzag"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

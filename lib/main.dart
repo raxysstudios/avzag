@@ -30,7 +30,12 @@ class _AppState extends State<App> {
       future: _initialization,
       builder: (context, snapshot) => MaterialApp(
         title: 'Avzag',
-        theme: ThemeData(primaryColor: Colors.white),
+        theme: ThemeData(
+          primaryColor: Colors.white,
+          cardTheme: CardTheme(
+            clipBehavior: Clip.antiAlias,
+          ),
+        ),
         home: snapshot.hasError
             ? Text("Error")
             : snapshot.connectionState == ConnectionState.done

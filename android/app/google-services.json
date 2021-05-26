@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "882503981771-6i19fj6aot195lmelngq8ok4185vau9p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alkaitagi.avzag",
+            "certificate_hash": "f13f21dd281ab091d1a5ed48d3e2aa616b6acef4"
+          }
+        },
+        {
           "client_id": "882503981771-qim7pqjv06p4ujj0m1htbs68gmg2e26v.apps.googleusercontent.com",
           "client_type": 3
         }

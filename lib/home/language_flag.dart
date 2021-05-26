@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:avzag/home/language.dart';
 import 'package:flutter/material.dart';
 
 class LanguageFlag extends StatelessWidget {
@@ -7,7 +8,7 @@ class LanguageFlag extends StatelessWidget {
     this.offset = const Offset(0, 0),
     this.scale = 18,
   });
-  final String language;
+  final Language language;
   final Offset offset;
   final double scale;
 

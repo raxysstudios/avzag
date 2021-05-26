@@ -14,12 +14,6 @@ class SelectableCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: selected ? 2 : 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      margin: const EdgeInsets.all(0),
-      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Stack(

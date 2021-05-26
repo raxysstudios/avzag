@@ -1,15 +1,18 @@
+import 'package:avzag/home/language.dart';
+
 import 'language_flag.dart';
 import 'selectable_card.dart';
 import 'package:flutter/material.dart';
 
 class LanguageCard extends StatelessWidget {
   const LanguageCard(this.language, {this.selected = false, this.onTap});
-  final String language;
+  final Language language;
   final bool selected;
   final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
+    print(language);
     return AspectRatio(
       aspectRatio: 3.5,
       child: SelectableCard(
@@ -25,7 +28,7 @@ class LanguageCard extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(language),
+            child: Text(language.name),
           ),
         ],
       ),
