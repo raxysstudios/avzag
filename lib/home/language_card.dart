@@ -1,4 +1,5 @@
 import 'package:avzag/home/language.dart';
+import 'package:avzag/home/utils.dart';
 
 import 'language_flag.dart';
 import 'selectable_card.dart';
@@ -12,25 +13,40 @@ class LanguageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 3.5,
-      child: SelectableCard(
-        onTap: onTap,
-        selected: selected,
-        children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: LanguageFlag(
-              language,
-              offset: Offset(-24, 0),
-            ),
+    return SelectableCard(
+      onTap: onTap,
+      selected: selected,
+      children: [
+        Align(
+          alignment: Alignment.centerRight,
+          child: LanguageFlag(
+            language,
+            offset: Offset(-30, 30),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(language.name),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                capitalize(language.name),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                capitalize(language.family?.join(' • ') ?? ''),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -27,7 +27,6 @@ class _HomePageState extends State<HomePage> {
       ) {
         final languages = snapshot.data?.docs.map((l) => l.data());
         languages?.forEach(donwloadFlag);
-
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
