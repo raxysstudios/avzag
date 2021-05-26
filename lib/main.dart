@@ -1,3 +1,4 @@
+import 'package:avzag/home/language.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'home/home_page.dart';
@@ -19,29 +20,34 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  /// The future is part of the state of our widget. We should not call `initializeApp`
-  /// directly inside [build].
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  List<Language> languages = [];
+
+  final modules = {
+    'home': () => HomePage(),
+  };
+  var currentModule = "home";
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       // Initialize FlutterFire:
-      future: _initialization,
-      builder: (context, snapshot) => MaterialApp(
-        title: 'Avzag',
-        theme: ThemeData(
-          primaryColor: Colors.white,
-          cardTheme: CardTheme(
-            clipBehavior: Clip.antiAlias,
+      future: Firebase.initializeApp(),
+      builder: (context, snapshot) {
+        return MaterialApp(
+          title: 'Avzag',
+          theme: ThemeData(
+            primaryColor: Colors.white,
+            cardTheme: CardTheme(
+              clipBehavior: Clip.antiAlias,
+            ),
           ),
-        ),
-        home: snapshot.hasError
-            ? Text("Error")
-            : snapshot.connectionState == ConnectionState.done
-                ? HomePage()
-                : CircularProgressIndicator(),
-      ),
+          home: snapshot.hasError
+              ? Text("Error")
+              : snapshot.connectionState == ConnectionState.done
+                  ? modules[currentModule]?.call()
+                  : Text("Loading, please wait..."),
+        );
+      },
     );
   }
 }

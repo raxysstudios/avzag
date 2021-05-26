@@ -7,7 +7,35 @@ class NavDraver extends StatefulWidget {
   _NavDraverState createState() => _NavDraverState();
 }
 
+class _NavItem {
+  _NavItem(this.icon, this.title, {this.link = null});
+  final IconData icon;
+  final String title;
+  final String? link;
+}
+
 class _NavDraverState extends State<NavDraver> {
+  final modules = [
+    _NavItem(Icons.map_outlined, 'Home'),
+    _NavItem(Icons.music_note_outlined, 'Phonology'),
+    _NavItem(Icons.switch_left_outlined, 'Converter'),
+    _NavItem(Icons.chat_outlined, 'Phrasebook'),
+    _NavItem(Icons.book_outlined, 'Dictionary'),
+  ];
+  final submodules = [
+    _NavItem(Icons.construction_outlined, 'Editor tools'),
+    _NavItem(
+      Icons.forum_outlined,
+      'Editor tools',
+      link: 'https://t.me/avzag',
+    ),
+    _NavItem(
+      Icons.construction_outlined,
+      'Editor tools',
+      link: 'https://github.com/alkaitagi/avzag_flutter',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -24,69 +52,25 @@ class _NavDraverState extends State<NavDraver> {
             ),
           ),
           Divider(),
-          ListTile(
-            leading: Icon(
-              Icons.map_outlined,
-              color: Colors.black,
-              size: 30,
+          for (final m in modules)
+            ListTile(
+              leading: Icon(
+                m.icon,
+                color: Colors.black,
+                size: 30,
+              ),
+              title: Text(m.title, style: TextStyle(fontSize: 18)),
+              onTap: () {},
             ),
-            title: Text("Home", style: TextStyle(fontSize: 18)),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.music_note_outlined,
-              color: Colors.black,
-              size: 30,
-            ),
-            title: Text("Phonology", style: TextStyle(fontSize: 18)),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.switch_left_outlined,
-              color: Colors.black,
-              size: 30,
-            ),
-            title: Text("Converter", style: TextStyle(fontSize: 18)),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.chat_outlined,
-              color: Colors.black,
-              size: 30,
-            ),
-            title: Text("Phrasebook", style: TextStyle(fontSize: 18)),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.book_outlined,
-              color: Colors.black,
-              size: 30,
-            ),
-            title: Text("Dictionary", style: TextStyle(fontSize: 18)),
-            onTap: () {},
-          ),
           Divider(),
-          ListTile(
-            leading: Icon(Icons.construction_outlined),
-            title: Text("Editor tools"),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(Icons.forum_outlined),
-            title: Text("Telegram channel"),
-            trailing: Icon(Icons.open_in_new_outlined),
-            onTap: () => launch("https://t.me/avzag"),
-          ),
-          ListTile(
-            leading: Icon(Icons.code_outlined),
-            title: Text("GitHub repository"),
-            trailing: Icon(Icons.open_in_new_outlined),
-            onTap: () => launch("https://github.com/alkaitagi/avzag_flutter"),
-          ),
+          for (final m in submodules)
+            ListTile(
+              leading: Icon(m.icon),
+              title: Text(m.title),
+              trailing:
+                  m.link == null ? null : Icon(Icons.open_in_new_outlined),
+              onTap: m.link == null ? null : () => launch(m.link!),
+            ),
         ],
       ),
     );
