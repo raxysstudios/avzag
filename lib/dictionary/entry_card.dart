@@ -127,6 +127,13 @@ class _EntryCardState extends State<EntryCard>
           color: Colors.transparent,
         ),
       ],
+      if (widget.entry.notes != null) ...[
+        Divider(
+          height: 4,
+          color: Colors.transparent,
+        ),
+        NoteList(widget.entry.notes),
+      ],
       for (final f in widget.entry.forms)
         Row(
           children: [
