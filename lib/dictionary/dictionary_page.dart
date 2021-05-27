@@ -64,7 +64,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               IconButton(
                 onPressed: () => setState(() => useLists = !useLists),
                 icon: Icon(Icons.format_list_bulleted_outlined),
-                color: scholar ? Colors.blue : Colors.black,
+                color: useLists ? Colors.blue : Colors.black,
               ),
               VerticalDivider(width: 8),
             ],
