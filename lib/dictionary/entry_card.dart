@@ -60,7 +60,13 @@ class _EntryCardState extends State<EntryCard>
             ],
         ],
       ),
-      NoteList(use.notes),
+      if (use.notes != null) ...[
+        Divider(
+          height: 4,
+          color: Colors.transparent,
+        ),
+        NoteList(use.notes),
+      ],
       if (use.samples != null)
         for (final s in use.samples!) ...[
           Divider(
@@ -95,7 +101,7 @@ class _EntryCardState extends State<EntryCard>
                 fontSize: 16,
               ),
             ),
-        ]
+        ],
     ];
   }
 
@@ -161,7 +167,7 @@ class _EntryCardState extends State<EntryCard>
           title: Text(
             expanded ? capitalize(defaultForm) : defaultForm,
             style: TextStyle(
-              fontSize: expanded ? 20 : 16,
+              fontSize: 20,
               fontWeight: expanded ? FontWeight.bold : FontWeight.normal,
             ),
           ),
@@ -191,7 +197,13 @@ class _EntryCardState extends State<EntryCard>
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            for (final u in widget.entry.uses!) ...buildUse(u),
+                            for (final u in widget.entry.uses!) ...[
+                              ...buildUse(u),
+                              Divider(
+                                height: 4,
+                                color: Colors.transparent,
+                              ),
+                            ],
                           ],
                         ),
                 ),

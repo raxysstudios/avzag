@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class NoteList extends StatelessWidget {
@@ -11,7 +13,13 @@ class NoteList extends StatelessWidget {
         ? Offstage()
         : Column(
             children: [
-              for (final n in notes!) Text(n),
+              for (final n in notes!)
+                Text(
+                  n,
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
             ],
           );
   }

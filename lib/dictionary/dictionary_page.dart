@@ -59,7 +59,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 onPressed: () => setState(() => scholar = !scholar),
                 icon: Icon(Icons.school_outlined),
                 color: scholar ? Colors.blue : Colors.black,
-              )
+              ),
+              VerticalDivider(width: 8),
             ],
           ),
           drawer: NavDraver(title: "Dictionary"),
