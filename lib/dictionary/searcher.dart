@@ -15,7 +15,9 @@ class Searcher {
     reset();
   }
 
-  Future<void> sleep() => Future.delayed(Duration(milliseconds: 10));
+  Future<void> sleep() {
+    return Future.delayed(Duration(milliseconds: 10));
+  }
 
   void reset() {
     this.languages.forEach((l) => this.progress[l] = 0);
@@ -100,8 +102,13 @@ class Searcher {
 
       if (languages.length == 1) {
         lect = languages.first;
-        await this
-            .queryDictionary(lect, dictionaries[lect]!, queries, true, true);
+        await this.queryDictionary(
+          lect,
+          dictionaries[lect]!,
+          queries,
+          true,
+          true,
+        );
         return;
       }
 
