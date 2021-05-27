@@ -1,3 +1,4 @@
+import 'package:avzag/dictionary/entry_card.dart';
 import 'package:avzag/nav_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -57,14 +58,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 return Text("Something went wrong.");
               if (snapshot.connectionState != ConnectionState.done)
                 return Text("Loading, please wait...");
-              return Column(
+              return ListView(
                 children: [
                   for (final l in languages) ...[
                     Text(
                       l!,
                       style: TextStyle(fontSize: 24),
                     ),
-                    for (final e in dictionaries[l]!) Text(e.forms[0].plain),
+                    for (final e in dictionaries[l]!) EntryCard(e),
                   ],
                 ],
               );
