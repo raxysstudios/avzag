@@ -12,32 +12,34 @@ class DictionaryPage extends StatefulWidget {
 class _DictionaryPageState extends State<DictionaryPage> {
   final languages = ['iron', 'kaitag'];
   final Map<String, List<Entry>> dictionaries = {};
-  Iterable<Future<String?>> loaders = [];
+  Future<List<String?>>? loader;
 
   bool scholar = false;
 
   @override
   void initState() {
     super.initState();
-    loaders = languages.map((l) {
-      return FirebaseFirestore.instance
-          .collection('languages/$l/dictionary')
-          .withConverter(
-            fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
-            toFirestore: (Entry language, _) => language.toJson(),
-          )
-          .get()
-          .then((d) {
-        dictionaries[l] = d.docs.map((e) => e.data()).toList();
-        return d.docs.isEmpty ? null : l;
-      });
-    });
+    loader = Future.wait(
+      languages.map((l) {
+        return FirebaseFirestore.instance
+            .collection('languages/$l/dictionary')
+            .withConverter(
+              fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
+              toFirestore: (Entry language, _) => language.toJson(),
+            )
+            .get()
+            .then((d) {
+          dictionaries[l] = d.docs.map((e) => e.data()).toList();
+          return d.docs.isEmpty ? null : l;
+        });
+      }),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Iterable<String?>>(
-      future: Future.wait(loaders),
+      future: loader,
       builder: (
         BuildContext context,
         AsyncSnapshot<Iterable<String?>> snapshot,
