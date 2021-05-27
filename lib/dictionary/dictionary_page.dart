@@ -3,31 +3,41 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'models.dart';
 
-class HomePage extends StatefulWidget {
-  final loader = FirebaseFirestore.instance
-      .collectionGroup('dictionary')
-      .withConverter(
-        fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
-        toFirestore: (Entry language, _) => language.toJson(),
-      )
-      .get();
-
+class DictionaryPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _DictionaryPageState createState() => _DictionaryPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final Set<String> selected = Set();
+class _DictionaryPageState extends State<DictionaryPage> {
+  final languages = ['iron', 'kaitag'];
+  final Map<String, List<Entry>> dictionaries = {};
+  Iterable<Future<String?>> loaders = [];
+
+  _DictionaryPageState() {
+    loaders = languages.map((l) {
+      return FirebaseFirestore.instance
+          .collection('languages/$l/dictionary')
+          .withConverter(
+            fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
+            toFirestore: (Entry language, _) => language.toJson(),
+          )
+          .get()
+          .then((d) {
+        dictionaries[l] = d.docs.map((e) => e.data()).toList();
+        return d.docs.isEmpty ? null : l;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot<Entry>>(
-      future: widget.loader,
+    return FutureBuilder<Iterable<String?>>(
+      future: Future.wait(loaders),
       builder: (
         BuildContext context,
-        AsyncSnapshot<QuerySnapshot<Entry>> snapshot,
+        AsyncSnapshot<Iterable<String?>> snapshot,
       ) {
-        final dictionaries = snapshot.data?.docs.map((l) => l.data()).toList();
+        final languages = snapshot.data?.where((l) => l != null).toList();
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -38,16 +48,22 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          drawer: NavDraver(title: "Home"),
+          drawer: NavDraver(title: "Dictionary"),
           body: Builder(
             builder: (context) {
-              if (snapshot.hasError || dictionaries == null)
+              if (snapshot.hasError || languages == null)
                 return Text("Something went wrong.");
               if (snapshot.connectionState != ConnectionState.done)
                 return Text("Loading, please wait...");
               return Column(
                 children: [
-                  for (final e in dictionaries) Text(e.forms[0].plain),
+                  for (final l in languages) ...[
+                    Text(
+                      l!,
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    for (final e in dictionaries[l]!) Text(e.forms[0].plain),
+                  ],
                 ],
               );
             },
