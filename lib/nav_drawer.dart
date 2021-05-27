@@ -1,16 +1,72 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
-import 'package:avzag/phonology/phonology_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class _NavItem {
-  _NavItem(this.icon, this.title, {this.builder, this.link});
+  _NavItem(
+    this.icon,
+    this.title, {
+    this.builder,
+    this.link,
+    this.selected = false,
+  });
   final IconData icon;
   final String title;
   final Widget Function()? builder;
   final String? link;
+  final bool selected;
+
+  Widget build(
+    BuildContext context, {
+    bool small = false,
+    bool selected = true,
+  }) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        size: small ? 24 : 30,
+        color: link != null || builder == null ? Colors.black45 : Colors.black,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color:
+              link == null && builder == null ? Colors.black45 : Colors.black,
+          fontSize: small ? 14 : 18,
+        ),
+      ),
+      trailing: link == null
+          ? builder == null
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.construction_outlined),
+                    Text(
+                      "Coming Soon",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 12,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                )
+              : null
+          : Icon(Icons.open_in_new_outlined),
+      onTap: link == null
+          ? builder == null
+              ? null
+              : () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => builder!()),
+                  );
+                }
+          : () => launch(link!),
+    );
+  }
 }
 
 class NavDraver extends StatelessWidget {
@@ -41,7 +97,7 @@ class NavDraver extends StatelessWidget {
     ),
   ];
   final submodules = [
-    _NavItem(Icons.construction_outlined, 'Editor tools'),
+    _NavItem(Icons.library_add_outlined, 'Editor tools'),
     _NavItem(
       Icons.forum_outlined,
       'Telegram channel',
@@ -70,37 +126,9 @@ class NavDraver extends StatelessWidget {
             ),
           ),
           Divider(height: 0),
-          for (final m in modules)
-            ListTile(
-              leading: Icon(
-                m.icon,
-                color: title == m.title ? Colors.blue : Colors.black,
-                size: 30,
-              ),
-              title: Text(m.title, style: TextStyle(fontSize: 18)),
-              trailing: m.builder == null ? Text("Coming Soon") : null,
-              selected: title == m.title,
-              onTap: m.builder == null
-                  ? null
-                  : () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => m.builder!()),
-                      );
-                    },
-            ),
+          for (final m in modules) m.build(context),
           Divider(height: 0),
-          for (final m in submodules)
-            ListTile(
-              leading: Icon(m.icon),
-              title: Text(m.title),
-              trailing: m.link == null
-                  ? m.builder == null
-                      ? Text("Coming Soon")
-                      : null
-                  : Icon(Icons.open_in_new_outlined),
-              onTap: m.link == null ? null : () => launch(m.link!),
-            ),
+          for (final m in submodules) m.build(context, small: true),
         ],
       ),
     );
