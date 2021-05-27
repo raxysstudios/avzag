@@ -13,7 +13,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
   final Map<String, List<Entry>> dictionaries = {};
   Iterable<Future<String?>> loaders = [];
 
-  _DictionaryPageState() {
+  @override
+  void initState() {
+    super.initState();
     loaders = languages.map((l) {
       return FirebaseFirestore.instance
           .collection('languages/$l/dictionary')
