@@ -27,8 +27,13 @@ class _NavItem {
       leading: Icon(
         icon,
         size: small ? 24 : 30,
-        color: link != null || builder == null ? Colors.black45 : Colors.black,
+        color: selected
+            ? Colors.blue
+            : link != null || builder == null
+                ? Colors.black45
+                : Colors.black,
       ),
+      selected: selected,
       title: Text(
         title,
         style: TextStyle(
@@ -126,9 +131,17 @@ class NavDraver extends StatelessWidget {
             ),
           ),
           Divider(height: 0),
-          for (final m in modules) m.build(context),
+          for (final m in modules)
+            m.build(
+              context,
+              selected: m.title == title,
+            ),
           Divider(height: 0),
-          for (final m in submodules) m.build(context, small: true),
+          for (final m in submodules)
+            m.build(
+              context,
+              small: true,
+            ),
         ],
       ),
     );
