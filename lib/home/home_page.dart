@@ -13,8 +13,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final Set<String> selected = Set();
+  late Future? loader;
   List<Language> languages = [];
-  Future? loader;
 
   @override
   void initState() {
