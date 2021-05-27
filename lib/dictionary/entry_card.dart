@@ -6,8 +6,9 @@ import 'models.dart';
 
 class EntryCard extends StatefulWidget {
   final Entry entry;
+  final bool scholar;
 
-  EntryCard(this.entry);
+  EntryCard(this.entry, {this.scholar = false});
 
   @override
   _EntryCardState createState() => _EntryCardState();
@@ -17,9 +18,9 @@ class _EntryCardState extends State<EntryCard>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool expanded = false;
-  bool scholar = true;
 
   String get defaultForm => widget.entry.forms[0].plain;
+  bool get scholar => widget.scholar;
 
   @override
   void initState() {

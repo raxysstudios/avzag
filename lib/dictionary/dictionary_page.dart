@@ -14,6 +14,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
   final Map<String, List<Entry>> dictionaries = {};
   Iterable<Future<String?>> loaders = [];
 
+  bool scholar = false;
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +52,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            actions: [
+              IconButton(
+                onPressed: () => setState(() => scholar = !scholar),
+                icon: Icon(Icons.school_outlined),
+                color: scholar ? Colors.blue : Colors.black,
+              )
+            ],
           ),
           drawer: NavDraver(title: "Dictionary"),
           body: Builder(
@@ -65,7 +74,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
                       l!,
                       style: TextStyle(fontSize: 24),
                     ),
-                    for (final e in dictionaries[l]!) EntryCard(e),
+                    for (final e in dictionaries[l]!)
+                      EntryCard(e, scholar: scholar),
                   ],
                 ],
               );
