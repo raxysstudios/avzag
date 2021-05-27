@@ -15,6 +15,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   Future<List<String?>>? loader;
 
   bool scholar = false;
+  bool useLists = false;
 
   @override
   void initState() {
@@ -58,6 +59,11 @@ class _DictionaryPageState extends State<DictionaryPage> {
               IconButton(
                 onPressed: () => setState(() => scholar = !scholar),
                 icon: Icon(Icons.school_outlined),
+                color: scholar ? Colors.blue : Colors.black,
+              ),
+              IconButton(
+                onPressed: () => setState(() => useLists = !useLists),
+                icon: Icon(Icons.format_list_bulleted_outlined),
                 color: scholar ? Colors.blue : Colors.black,
               ),
               VerticalDivider(width: 8),
