@@ -1,4 +1,5 @@
 import 'package:avzag/dictionary/entry_card.dart';
+import 'package:avzag/dictionary/searcher.dart';
 import 'package:avzag/nav_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ class DictionaryPage extends StatefulWidget {
 class _DictionaryPageState extends State<DictionaryPage> {
   final languages = ['iron', 'kaitag'];
   final Map<String, List<Entry>> dictionaries = {};
-  Future<List<String?>>? loader;
+  late Future<List<String?>>? loader;
+  late Searcher searcher;
 
   bool scholar = false;
   bool useLists = false;
@@ -36,6 +38,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
         });
       }),
     );
+    searcher = Searcher(dictionaries);
   }
 
   @override
@@ -79,13 +82,27 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 return Text("Loading, please wait...");
               return ListView(
                 children: [
-                  for (final l in languages) ...[
+                  TextField(
+                    onChanged: (q) => setState(() => searcher.search("", q)),
+                  ),
+                  for (final m in searcher.results.entries) ...[
                     Text(
-                      l!,
-                      style: TextStyle(fontSize: 24),
+                      m.key,
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
-                    for (final e in dictionaries[l]!)
-                      EntryCard(e, scholar: scholar),
+                    for (final l in m.value.entries) ...[
+                      Text(
+                        l.key,
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                      for (final e in l.value) EntryCard(e, scholar: scholar),
+                    ]
                   ],
                 ],
               );
