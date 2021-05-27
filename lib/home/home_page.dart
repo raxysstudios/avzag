@@ -1,4 +1,4 @@
-import 'package:avzag/home/language.dart';
+import 'package:avzag/home/models.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/nav_drawer.dart';
 import 'package:avzag/utils.dart';
@@ -26,7 +26,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // FirebaseFirestore.instance.settings = Settings(persistenceEnabled: false);
     return FutureBuilder<QuerySnapshot<Language>>(
       future: widget.loader,
       builder: (

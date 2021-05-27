@@ -1,10 +1,13 @@
 // import 'package:latlong/latlong.dart';
-
-List<T> json2list<T>(Object? array) {
-  return (array as Iterable<dynamic>).map((i) => i as T).toList();
-}
+import '../utils.dart';
 
 class Language {
+  final String name;
+  final String? flag;
+  // final LatLng? location;
+  final List<String>? family;
+  final List<String>? tags;
+
   Language({
     required this.name,
     // this.location,
@@ -22,19 +25,12 @@ class Language {
           tags: json2list<String>(json['tags']),
         );
 
-  final String name;
-  final String? flag;
-  // final LatLng? location;
-  final List<String>? family;
-  final List<String>? tags;
-
   Map<String, Object?> toJson() {
-    return {
-      name: name,
-      'flag': flag,
-      // 'location': location,
-      'family': family,
-      'tags': tags
-    };
+    final Map<String, dynamic> data = {};
+    data['name'] = name;
+    if (flag != null) data['flag'] = flag;
+    if (family != null) data['family'] = family;
+    if (tags != null) data['tags'] = tags;
+    return data;
   }
 }

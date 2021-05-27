@@ -1,5 +1,5 @@
 import 'package:avzag/home/home_page.dart';
-import 'package:avzag/phonology/phonology.page.dart';
+import 'package:avzag/phonology/phonology_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';

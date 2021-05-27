@@ -1,4 +1,4 @@
-import 'package:avzag/home/language.dart';
+import 'package:avzag/home/models.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/nav_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,7 +44,7 @@ class _PhonologyPageState extends State<PhonologyPage> {
             ],
           ),
           drawer: NavDraver(title: "Phonology"),
-          body: Text("loading"),
+          body: Text("Phonology"),
         );
       },
     );
