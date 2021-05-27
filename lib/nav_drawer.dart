@@ -21,7 +21,7 @@ class _NavItem {
   Widget build(
     BuildContext context, {
     bool small = false,
-    bool selected = true,
+    bool selected = false,
   }) {
     return ListTile(
       leading: Icon(
@@ -37,8 +37,11 @@ class _NavItem {
       title: Text(
         title,
         style: TextStyle(
-          color:
-              link == null && builder == null ? Colors.black45 : Colors.black,
+          color: selected
+              ? Colors.blue
+              : link == null && builder == null
+                  ? Colors.black45
+                  : Colors.black,
           fontSize: small ? 14 : 18,
         ),
       ),
