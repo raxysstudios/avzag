@@ -154,7 +154,6 @@ class _EntryCardState extends State<EntryCard>
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (expanded) Divider(height: 0),
         ListTile(
           minVerticalPadding: 0,
           contentPadding: const EdgeInsets.only(left: 8),
