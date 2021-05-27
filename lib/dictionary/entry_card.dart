@@ -134,6 +134,10 @@ class _EntryCardState extends State<EntryCard>
         ),
         NoteList(widget.entry.notes),
       ],
+      Divider(
+        height: 4,
+        color: Colors.transparent,
+      ),
       for (final f in widget.entry.forms)
         Row(
           children: [
