@@ -38,7 +38,11 @@ Iterable<String> checkToken(Entry entry, String token, bool forms, bool uses) {
 }
 
 Iterable<String> checkQueries(
-    Entry entry, List<List<String>> queries, bool forms, bool uses) {
+  Entry entry,
+  Iterable<Iterable<String>> queries,
+  bool forms,
+  bool uses,
+) {
   final meanings = Set<String>();
   for (final query in queries) {
     Iterable<String> _meanings = entry.uses?.map((u) => u.meaning) ?? [];

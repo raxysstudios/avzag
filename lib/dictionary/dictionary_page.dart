@@ -30,8 +30,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
             )
             .get()
             .then((d) {
+          if (d.docs.isEmpty) return null;
           dictionaries[l] = d.docs.map((e) => e.data()).toList();
-          return d.docs.isEmpty ? null : l;
+          return l;
         });
       }),
     );
