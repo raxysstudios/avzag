@@ -1,3 +1,4 @@
+import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
 import 'package:avzag/phonology/phonology_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,11 +26,15 @@ class NavDraver extends StatelessWidget {
     _NavItem(
       Icons.music_note_outlined,
       'Phonology',
-      builder: () => PhonologyPage(),
+      // builder: () => PhonologyPage(),
     ),
     _NavItem(Icons.switch_left_outlined, 'Converter'),
     _NavItem(Icons.chat_outlined, 'Phrasebook'),
-    _NavItem(Icons.book_outlined, 'Dictionary'),
+    _NavItem(
+      Icons.book_outlined,
+      'Dictionary',
+      builder: () => DictionaryPage(),
+    ),
   ];
   final submodules = [
     _NavItem(Icons.construction_outlined, 'Editor tools'),
