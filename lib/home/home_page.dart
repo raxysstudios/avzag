@@ -7,33 +7,41 @@ import 'package:flutter/material.dart';
 import 'language_card.dart';
 
 class HomePage extends StatefulWidget {
-  final loader = FirebaseFirestore.instance
-      .collection('languages')
-      .orderBy('family')
-      .orderBy('name')
-      .withConverter(
-        fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
-        toFirestore: (Language language, _) => language.toJson(),
-      )
-      .get();
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   final Set<String> selected = Set();
+  List<Language> languages = [];
+  Future? loader;
+
+  @override
+  void initState() {
+    super.initState();
+    loader = FirebaseFirestore.instance
+        .collection('languages')
+        .orderBy('family')
+        .orderBy('name')
+        .withConverter(
+          fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
+          toFirestore: (Language language, _) => language.toJson(),
+        )
+        .get()
+        .then((d) async {
+      languages = d.docs.map((l) => l.data()).toList();
+      for (final l in languages) await donwloadFlag(l);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot<Language>>(
-      future: widget.loader,
+    return FutureBuilder(
+      future: loader,
       builder: (
         BuildContext context,
-        AsyncSnapshot<QuerySnapshot<Language>> snapshot,
+        AsyncSnapshot snapshot,
       ) {
-        final languages = snapshot.data?.docs.map((l) => l.data()).toList();
-        languages?.forEach(donwloadFlag);
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -47,8 +55,7 @@ class _HomePageState extends State<HomePage> {
           drawer: NavDraver(title: "Home"),
           body: Builder(
             builder: (context) {
-              if (snapshot.hasError || languages == null)
-                return Text("Something went wrong.");
+              if (snapshot.hasError) return Text("Something went wrong.");
               if (snapshot.connectionState != ConnectionState.done)
                 return Text("Loading, please wait...");
               return Column(
