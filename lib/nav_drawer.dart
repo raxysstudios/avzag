@@ -35,6 +35,10 @@ class NavDraver extends StatelessWidget {
       'Dictionary',
       builder: () => DictionaryPage(),
     ),
+    _NavItem(
+      Icons.local_library_outlined,
+      'Bootcamp',
+    ),
   ];
   final submodules = [
     _NavItem(Icons.construction_outlined, 'Editor tools'),
