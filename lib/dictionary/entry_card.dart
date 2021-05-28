@@ -162,6 +162,8 @@ class _EntryCardState extends State<EntryCard>
             TabBar(
               controller: _tabController,
               isScrollable: true,
+              labelColor: Colors.blue,
+              unselectedLabelColor: Colors.black,
               tabs: [
                 Tab(icon: const Icon(Icons.textsms_outlined)),
                 Tab(icon: const Icon(Icons.info_outlined)),
@@ -169,12 +171,13 @@ class _EntryCardState extends State<EntryCard>
             )
           ],
         ),
+        Divider(height: 0),
         Expanded(
           child: TabBarView(
             controller: _tabController,
             children: [
               ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.all(8),
                 children: widget.entry.uses == null
                     ? [Text("No uses data.")]
                     : [
@@ -188,7 +191,7 @@ class _EntryCardState extends State<EntryCard>
                       ],
               ),
               ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.all(8),
                 children: buildForms(),
               ),
             ],
