@@ -28,7 +28,6 @@ class Searcher {
 
   void addResult(String lect, Iterable<String> meanings, Entry entry) {
     setState(() {
-      print("LECT $lect | ENTRY ${entry.forms[0].plain}");
       for (final m in meanings) {
         if (results[m] == null) results[m] = {};
         if (results[m]![lect] == null) results[m]![lect] = [];
