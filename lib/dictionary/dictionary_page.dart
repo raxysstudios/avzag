@@ -12,6 +12,7 @@ class DictionaryPage extends StatefulWidget {
 
 class _DictionaryPageState extends State<DictionaryPage> {
   final languages = ['iron', 'kaitag'];
+  final inputController = TextEditingController();
   late Future<void>? loader;
   late Searcher searcher;
 
@@ -23,6 +24,32 @@ class _DictionaryPageState extends State<DictionaryPage> {
     super.initState();
     loader = load(languages);
     searcher = Searcher(dictionaries);
+    inputController.addListener(
+      () => setState(
+        () => searcher.search("", inputController.text),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    inputController.dispose();
+    super.dispose();
+  }
+
+  showHelp() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          children: [
+            Text("under construction"),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -50,11 +77,16 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 color: scholar ? Colors.blue : Colors.black,
               ),
               IconButton(
-                onPressed: () => setState(() => useLists = !useLists),
-                icon: Icon(Icons.format_list_bulleted_outlined),
-                color: useLists ? Colors.blue : Colors.black,
+                visualDensity: VisualDensity(vertical: -4),
+                onPressed: showHelp,
+                icon: Icon(Icons.help_outline_outlined),
               ),
-              VerticalDivider(width: 8),
+              // IconButton(
+              //   onPressed: () => setState(() => useLists = !useLists),
+              //   icon: Icon(Icons.format_list_bulleted_outlined),
+              //   color: useLists ? Colors.blue : Colors.black,
+              // ),
+              SizedBox(width: 4),
             ],
           ),
           drawer: NavDraver(title: "Dictionary"),
@@ -67,14 +99,25 @@ class _DictionaryPageState extends State<DictionaryPage> {
               return ListView(
                 children: [
                   TextField(
-                    onChanged: (q) => setState(() => searcher.search("", q)),
+                    controller: inputController,
+                    decoration: InputDecoration(
+                      hintText: "Enter query",
+                      prefixIcon: Icon(Icons.search_outlined),
+                    ),
                   ),
                   for (final m in searcher.results.entries) ...[
-                    Text(
-                      m.key,
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontStyle: FontStyle.italic,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      child: Text(
+                        capitalize(m.key),
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 16,
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ),
                     for (final l in m.value.entries)
@@ -102,7 +145,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                               children: [
                                 Text(
                                   capitalize(e.forms[0].plain),
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 18),
                                 ),
                                 Text(
                                   capitalize(l.key),
@@ -112,7 +155,22 @@ class _DictionaryPageState extends State<DictionaryPage> {
                             ),
                           ),
                         ),
-                  ]
+                    Divider(height: 0),
+                  ],
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      inputController.text.isEmpty
+                          ? "Start typing above to see results."
+                          : "End of results.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 16,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
                 ],
               );
             },
