@@ -1,3 +1,4 @@
+import '../utils.dart';
 import 'entry_card.dart';
 import 'searcher.dart';
 import 'store.dart';
@@ -76,17 +77,42 @@ class _DictionaryPageState extends State<DictionaryPage> {
                         fontStyle: FontStyle.italic,
                       ),
                     ),
-                    for (final l in m.value.entries) ...[
-                      Text(
-                        l.key,
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontStyle: FontStyle.italic,
+                    for (final l in m.value.entries)
+                      for (final e in l.value)
+                        InkWell(
+                          onTap: () => showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return Container(
+                                height: 320,
+                                child: EntryCard(
+                                  e,
+                                  scholar: scholar,
+                                ),
+                              );
+                            },
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 4,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  capitalize(e.forms[0].plain),
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  capitalize(l.key),
+                                  style: TextStyle(color: Colors.black54),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                      for (final e in l.value) EntryCard(e, scholar: scholar),
-                    ]
-                  ],
+                  ]
                 ],
               );
             },

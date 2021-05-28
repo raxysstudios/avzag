@@ -18,9 +18,7 @@ class EntryCard extends StatefulWidget {
 class _EntryCardState extends State<EntryCard>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  bool expanded = false;
 
-  String get defaultForm => widget.entry.forms[0].plain;
   bool get scholar => widget.scholar;
 
   @override
@@ -38,130 +36,107 @@ class _EntryCardState extends State<EntryCard>
   List<Widget> buildUse(Use use) {
     final concept = concepts[use.concept]!;
     return [
-      Row(
-        textBaseline: TextBaseline.alphabetic,
-        crossAxisAlignment: CrossAxisAlignment.baseline,
-        children: [
-          Text(
-            capitalize(concept.meaning),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: RichText(
+          text: TextSpan(
+            text: capitalize(concept.meaning),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
+            children: scholar && concept.tags != null
+                ? [
+                    TextSpan(
+                      text: " " + concept.tags!.join(" "),
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ]
+                : null,
           ),
-          if (scholar && concept.tags != null)
-            for (final t in concept.tags!) ...[
-              VerticalDivider(width: 8),
-              Text(
-                t,
+        ),
+      ),
+      if (use.notes != null)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: NoteList(use.notes),
+        ),
+      if (use.samples != null)
+        for (final s in use.samples!)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: RichText(
+              text: TextSpan(
+                text: s.plain,
                 style: TextStyle(
-                  color: Colors.black54,
+                  color: Colors.black,
                   fontSize: 16,
                 ),
+                children: [
+                  TextSpan(
+                    text: [
+                      "",
+                      s.translation,
+                      scholar ? [s.ipa, s.glossed] : null,
+                    ].where((t) => t != null).join("\n"),
+                    style: TextStyle(
+                      color: Colors.black54,
+                    ),
+                  )
+                ],
               ),
-            ],
-        ],
-      ),
-      if (use.notes != null) ...[
-        Divider(
-          height: 4,
-          color: Colors.transparent,
-        ),
-        NoteList(use.notes),
-      ],
-      if (use.samples != null)
-        for (final s in use.samples!) ...[
-          Divider(
-            height: 4,
-            color: Colors.transparent,
+            ),
           ),
-          Text(
-            s.plain,
-            style: TextStyle(fontSize: 16),
-          ),
-          if (s.translation != null)
-            Text(
-              s.translation!,
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-              ),
-            ),
-          if (scholar && s.ipa != null)
-            Text(
-              s.ipa!,
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-              ),
-            ),
-          if (scholar && s.glossed != null)
-            Text(
-              s.glossed!,
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-              ),
-            ),
-        ],
     ];
   }
 
   List<Widget> buildForms() {
     return [
-      if (scholar && widget.entry.tags != null) ...[
-        Row(
-          children: [
-            for (final t in widget.entry.tags!) ...[
-              Text(
-                t,
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
-                ),
-              ),
-              VerticalDivider(width: 8),
-            ],
-          ],
-        ),
-        Divider(
-          height: 4,
-          color: Colors.transparent,
-        ),
-      ],
-      if (widget.entry.notes != null) ...[
-        NoteList(widget.entry.notes),
-        Divider(
-          height: 4,
-          color: Colors.transparent,
-        ),
-      ],
-      for (final f in widget.entry.forms)
-        Row(
-          children: [
-            Text(
-              f.plain,
-              style: TextStyle(fontSize: 16),
+      if (scholar && widget.entry.tags != null)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Text(
+            widget.entry.tags!.join(" "),
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
-            VerticalDivider(width: 8),
-            if (scholar && f.ipa != null)
-              Text(
-                f.ipa!,
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
-                ),
-              ),
-            VerticalDivider(width: 8),
-            if (scholar && f.glossed != null)
-              Text(
-                f.glossed!,
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 16,
-                ),
-              ),
-          ],
+          ),
+        ),
+      if (widget.entry.notes != null)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: NoteList(widget.entry.notes),
+        ),
+      for (final f in widget.entry.forms)
+        RichText(
+          text: TextSpan(
+            text: f.plain,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+            children: scholar
+                ? [
+                    TextSpan(
+                      text: ["", f.ipa, f.glossed]
+                          .where((e) => e != null)
+                          .join(' '),
+                      style: TextStyle(
+                        wordSpacing: 4,
+                        color: Colors.black54,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ]
+                : null,
+          ),
         ),
     ];
   }
@@ -169,65 +144,57 @@ class _EntryCardState extends State<EntryCard>
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        ListTile(
-          minVerticalPadding: 0,
-          contentPadding: const EdgeInsets.only(left: 8),
-          title: Text(
-            expanded ? capitalize(defaultForm) : defaultForm,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: expanded ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-          onTap: () => setState(() => expanded = !expanded),
-          dense: true,
-          trailing: expanded
-              ? TabBar(
-                  controller: _tabController,
-                  isScrollable: true,
-                  tabs: [
-                    Tab(icon: const Icon(Icons.textsms_outlined)),
-                    Tab(icon: const Icon(Icons.info_outlined)),
-                  ],
-                )
-              : null,
-        ),
-        if (expanded) ...[
-          Container(
-            height: 256,
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: widget.entry.uses == null
-                      ? Text("No uses data.")
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            for (final u in widget.entry.uses!) ...[
-                              ...buildUse(u),
-                              Divider(
-                                height: 4,
-                                color: Colors.transparent,
-                              ),
-                            ],
-                          ],
-                        ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: buildForms(),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(
+                  capitalize(widget.entry.forms[0].plain),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
+              ),
             ),
+            TabBar(
+              controller: _tabController,
+              isScrollable: true,
+              tabs: [
+                Tab(icon: const Icon(Icons.textsms_outlined)),
+                Tab(icon: const Icon(Icons.info_outlined)),
+              ],
+            )
+          ],
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                children: widget.entry.uses == null
+                    ? [Text("No uses data.")]
+                    : [
+                        for (final u in widget.entry.uses!) ...[
+                          ...buildUse(u),
+                          Divider(
+                            height: 4,
+                            color: Colors.transparent,
+                          ),
+                        ],
+                      ],
+              ),
+              ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                children: buildForms(),
+              ),
+            ],
           ),
-          Divider(height: 0)
-        ],
+        ),
       ],
     );
   }
