@@ -1,6 +1,6 @@
-import 'package:avzag/dictionary/entry_card.dart';
-import 'package:avzag/dictionary/searcher.dart';
-import 'package:avzag/dictionary/store.dart';
+import 'entry_card.dart';
+import 'searcher.dart';
+import 'store.dart';
 import 'package:avzag/nav_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -59,7 +59,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
           drawer: NavDraver(title: "Dictionary"),
           body: Builder(
             builder: (context) {
-              if (snapshot.hasError || languages.isNotEmpty)
+              if (snapshot.hasError || languages.isEmpty)
                 return Text("Something went wrong.");
               if (snapshot.connectionState != ConnectionState.done)
                 return Text("Loading, please wait...");
