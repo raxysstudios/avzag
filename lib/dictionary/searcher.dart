@@ -2,6 +2,7 @@ import 'models.dart';
 import 'queryUtils.dart';
 
 class Searcher {
+  Function setState;
   final Map<String, List<Entry>> dictionaries;
   final Map<String, double> progress = {};
   final Map<String, Map<String, List<Entry>>> results = {};
@@ -11,7 +12,7 @@ class Searcher {
   Function? pending;
   bool executing = false;
 
-  Searcher(this.dictionaries) {
+  Searcher(this.dictionaries, this.setState) {
     reset();
   }
 
@@ -26,11 +27,14 @@ class Searcher {
   }
 
   void addResult(String lect, Iterable<String> meanings, Entry entry) {
-    for (final m in meanings) {
-      if (results[m] == null) results[m] = {};
-      if (results[m]![lect] == null) results[m]![lect] = [];
-      results[m]![lect]!.add(entry);
-    }
+    setState(() {
+      print("LECT $lect | ENTRY ${entry.forms[0].plain}");
+      for (final m in meanings) {
+        if (results[m] == null) results[m] = {};
+        if (results[m]![lect] == null) results[m]![lect] = [];
+        results[m]![lect]!.add(entry);
+      }
+    });
   }
 
   Future<void> queryDictionary(

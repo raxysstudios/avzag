@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../utils.dart';
 import 'models.dart';
 
 final Map<String, List<Entry>> dictionaries = {};
 final Map<String, Concept> concepts = {};
+final List<SearchPreset> presets = [];
 
 Future<void> load(Iterable<String> languages) async {
   dictionaries.clear();
@@ -34,5 +36,12 @@ Future<void> load(Iterable<String> languages) async {
       .get()
       .then((d) {
     d.docs.forEach((d) => concepts[d.id] = d.data());
+  });
+
+  presets.clear();
+  await FirebaseFirestore.instance.doc('meta/dictionary').get().then((d) {
+    presets.addAll(
+      listFromJson(d.data()?['presets'], (i) => SearchPreset.fromJson(i)) ?? [],
+    );
   });
 }

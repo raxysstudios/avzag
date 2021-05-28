@@ -1,3 +1,5 @@
+import 'package:avzag/dictionary/models.dart';
+
 import '../utils.dart';
 import 'entry_card.dart';
 import 'searcher.dart';
@@ -17,22 +19,24 @@ class _DictionaryPageState extends State<DictionaryPage> {
   late Searcher searcher;
   String language = "";
 
-  bool scholar = false;
-  bool useLists = false;
+  bool useScholar = false;
+  SearchPreset? preset;
+
+  void search() {
+    setState(() {
+      if (preset == null)
+        searcher.search(language, inputController.text);
+      else
+        searcher.search("", preset!.query);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     loader = load(languages);
-    searcher = Searcher(dictionaries);
-    inputController.addListener(
-      () => setState(
-        () => searcher.search(
-          language,
-          inputController.text,
-        ),
-      ),
-    );
+    searcher = Searcher(dictionaries, setState);
+    inputController.addListener(search);
   }
 
   @override
@@ -48,9 +52,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          children: [
-            Text("under construction"),
-          ],
+          children: [],
         );
       },
     );
@@ -76,9 +78,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
             ),
             actions: [
               IconButton(
-                onPressed: () => setState(() => scholar = !scholar),
+                onPressed: () => setState(() => useScholar = !useScholar),
                 icon: Icon(Icons.school_outlined),
-                color: scholar ? Colors.blue : Colors.black,
+                color: useScholar ? Colors.blue : Colors.black,
               ),
               IconButton(
                 onPressed: showHelp,
@@ -96,49 +98,103 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 return Text("Loading, please wait...");
               return ListView(
                 children: [
-                  TextField(
-                    controller: inputController,
-                    decoration: InputDecoration(
-                      labelText: language.isEmpty
-                          ? "Search in English"
-                          : "Search in ${capitalize(language)}",
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(left: 4),
-                        child: IconButton(
-                          onPressed: () {},
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: () => setState(
+                            () {
+                              if (preset == null) {
+                                inputController.text = "";
+                                preset = presets[0];
+                              } else
+                                preset = null;
+                              search();
+                            },
+                          ),
                           icon: Icon(
-                            Icons.format_list_bulleted_outlined,
-                            color: Colors.black,
+                            preset == null
+                                ? Icons.library_books_outlined
+                                : Icons.search_outlined,
                           ),
                         ),
-                      ),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: PopupMenuButton<String>(
-                          icon: Icon(
-                            Icons.flag_outlined,
-                            color: Colors.black,
-                          ),
-                          onSelected: (l) => setState(() => language = l),
-                          itemBuilder: (BuildContext context) {
-                            return [
-                              PopupMenuItem<String>(
-                                value: '',
-                                child: Text('English'),
-                              ),
-                              PopupMenuDivider(),
-                              ...languages.map((String l) {
-                                return PopupMenuItem<String>(
-                                  value: l,
-                                  child: Text(capitalize(l)),
-                                );
-                              })
-                            ];
-                          },
-                        ),
-                      ),
+                        ...preset == null
+                            ? [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                    ),
+                                    child: TextField(
+                                      controller: inputController,
+                                      decoration: InputDecoration(
+                                        labelText: language.isEmpty
+                                            ? "Search in English"
+                                            : "Search in ${capitalize(language)}",
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                PopupMenuButton<String>(
+                                  icon: Icon(Icons.flag_outlined),
+                                  onSelected: (l) => setState(() {
+                                    language = l;
+                                    inputController.text = "";
+                                    search();
+                                  }),
+                                  itemBuilder: (BuildContext context) {
+                                    return [
+                                      PopupMenuItem<String>(
+                                        value: '',
+                                        child: Text('English'),
+                                      ),
+                                      PopupMenuDivider(),
+                                      ...languages.map((String l) {
+                                        return PopupMenuItem<String>(
+                                          value: l,
+                                          child: Text(capitalize(l)),
+                                        );
+                                      })
+                                    ];
+                                  },
+                                ),
+                              ]
+                            : [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 11,
+                                      left: 4,
+                                      right: 12,
+                                    ),
+                                    child:
+                                        DropdownButtonFormField<SearchPreset>(
+                                      value: preset,
+                                      isExpanded: true,
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only(
+                                          bottom: 11,
+                                        ),
+                                      ),
+                                      items: presets.map((p) {
+                                        return DropdownMenuItem(
+                                          value: p,
+                                          child: Text(capitalize(p.title)),
+                                        );
+                                      }).toList(),
+                                      onChanged: (p) => setState(() {
+                                        preset = p;
+                                        search();
+                                      }),
+                                    ),
+                                  ),
+                                )
+                              ],
+                      ],
                     ),
                   ),
+                  Divider(height: 0),
                   for (final m in searcher.results.entries) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -164,7 +220,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                                 height: 320,
                                 child: EntryCard(
                                   e,
-                                  scholar: scholar,
+                                  scholar: useScholar,
                                 ),
                               );
                             },
@@ -194,9 +250,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: Text(
-                      inputController.text.isEmpty
-                          ? "Start typing above to see results."
-                          : "End of results.",
+                      inputController.text.isNotEmpty || preset != null
+                          ? "End of results."
+                          : "Start typing above to see results.",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black54,
