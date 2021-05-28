@@ -15,6 +15,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   final inputController = TextEditingController();
   late Future<void>? loader;
   late Searcher searcher;
+  String language = "";
 
   bool scholar = false;
   bool useLists = false;
@@ -26,7 +27,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
     searcher = Searcher(dictionaries);
     inputController.addListener(
       () => setState(
-        () => searcher.search("", inputController.text),
+        () => searcher.search(
+          language,
+          inputController.text,
+        ),
       ),
     );
   }
@@ -77,15 +81,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 color: scholar ? Colors.blue : Colors.black,
               ),
               IconButton(
-                visualDensity: VisualDensity(vertical: -4),
                 onPressed: showHelp,
                 icon: Icon(Icons.help_outline_outlined),
               ),
-              // IconButton(
-              //   onPressed: () => setState(() => useLists = !useLists),
-              //   icon: Icon(Icons.format_list_bulleted_outlined),
-              //   color: useLists ? Colors.blue : Colors.black,
-              // ),
               SizedBox(width: 4),
             ],
           ),
@@ -101,8 +99,44 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   TextField(
                     controller: inputController,
                     decoration: InputDecoration(
-                      hintText: "Enter query",
-                      prefixIcon: Icon(Icons.search_outlined),
+                      labelText: language.isEmpty
+                          ? "Search in English"
+                          : "Search in ${capitalize(language)}",
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(left: 4),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.format_list_bulleted_outlined,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: PopupMenuButton<String>(
+                          icon: Icon(
+                            Icons.flag_outlined,
+                            color: Colors.black,
+                          ),
+                          onSelected: (l) => setState(() => language = l),
+                          itemBuilder: (BuildContext context) {
+                            return [
+                              PopupMenuItem<String>(
+                                value: '',
+                                child: Text('English'),
+                              ),
+                              PopupMenuDivider(),
+                              ...languages.map((String l) {
+                                return PopupMenuItem<String>(
+                                  value: l,
+                                  child: Text(capitalize(l)),
+                                );
+                              })
+                            ];
+                          },
+                        ),
+                      ),
                     ),
                   ),
                   for (final m in searcher.results.entries) ...[
