@@ -1,3 +1,4 @@
+import 'package:avzag/dictionary/store.dart';
 import 'package:flutter/material.dart';
 
 import '../note_list.dart';
@@ -35,20 +36,21 @@ class _EntryCardState extends State<EntryCard>
   }
 
   List<Widget> buildUse(Use use) {
+    final concept = concepts[use.concept]!;
     return [
       Row(
         textBaseline: TextBaseline.alphabetic,
         crossAxisAlignment: CrossAxisAlignment.baseline,
         children: [
           Text(
-            capitalize(use.meaning),
+            capitalize(concept.meaning),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
-          if (scholar && use.tags != null)
-            for (final t in use.tags!) ...[
+          if (scholar && concept.tags != null)
+            for (final t in concept.tags!) ...[
               VerticalDivider(width: 8),
               Text(
                 t,

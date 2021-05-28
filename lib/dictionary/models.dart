@@ -27,28 +27,45 @@ class Entry {
 }
 
 class Use {
-  String meaning;
-  List<String>? tags;
+  String concept;
   List<Sample>? samples;
   List<String>? notes;
 
-  Use({required this.meaning, this.tags, this.samples, this.notes});
+  Use({required this.concept, this.samples, this.notes});
 
   Use.fromJson(Map<String, dynamic> json)
       : this(
-          meaning: json['meaning'],
-          tags: json2list(json['tags']),
+          concept: json['concept'],
           samples: listFromJson(json['samples'], (j) => Sample.fromJson(j)),
           notes: json2list(json['notes']),
         );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['meaning'] = meaning;
-    if (tags != null) data['tags'] = tags;
+    data['concept'] = concept;
     if (samples != null)
       data['samples'] = samples!.map((v) => v.toJson()).toList();
     if (notes != null) data['notes'] = notes;
+    return data;
+  }
+}
+
+class Concept {
+  String meaning;
+  List<String>? tags;
+
+  Concept({required this.meaning, required this.tags});
+
+  Concept.fromJson(Map<String, dynamic> json)
+      : this(
+          meaning: json['meaning'],
+          tags: json2list(json['tags']),
+        );
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['meaning'] = meaning;
+    if (tags != null) data['tags'] = tags;
     return data;
   }
 }

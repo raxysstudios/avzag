@@ -1,12 +1,19 @@
+import 'package:avzag/dictionary/store.dart';
+
 import 'models.dart';
+
+String getMeaning(Use use) {
+  return concepts[use.concept]?.meaning ?? '';
+}
 
 Iterable<String> checkTag(Entry entry, String tag) {
   tag = tag.substring(1);
   if (entry.tags?.contains(tag) ?? false)
-    return entry.uses?.map((u) => u.meaning) ?? [];
+    return entry.uses?.map(getMeaning) ?? [];
   return entry.uses
-          ?.where((u) => u.tags?.contains(tag) ?? false)
-          .map((u) => u.meaning) ??
+          ?.map((u) => concepts[u.concept]!)
+          .where((c) => c.tags?.contains(tag) ?? false)
+          .map((c) => c.meaning) ??
       [];
 }
 
@@ -29,10 +36,10 @@ Iterable<String> checkToken(Entry entry, String token, bool forms, bool uses) {
   if (forms &&
       entry.uses != null &&
       entry.forms.any((f) => checkSegment(f.plain, token)))
-    meanings.addAll(entry.uses!.map((u) => u.meaning));
+    meanings.addAll(entry.uses!.map(getMeaning));
   if (uses && entry.uses != null)
     meanings.addAll(
-      entry.uses!.map((u) => u.meaning).where((m) => checkSegment(m, token)),
+      entry.uses!.map(getMeaning).where((m) => checkSegment(m, token)),
     );
   return meanings;
 }
@@ -45,7 +52,7 @@ Iterable<String> checkQueries(
 ) {
   final meanings = Set<String>();
   for (final query in queries) {
-    Iterable<String> _meanings = entry.uses?.map((u) => u.meaning) ?? [];
+    Iterable<String> _meanings = entry.uses?.map(getMeaning) ?? [];
     for (final token in query) {
       final fits = checkToken(entry, token, forms, uses);
       _meanings = _meanings.where((m) => fits.contains(m));

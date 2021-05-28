@@ -1,9 +1,8 @@
 import 'package:avzag/dictionary/entry_card.dart';
 import 'package:avzag/dictionary/searcher.dart';
+import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/nav_drawer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'models.dart';
 
 class DictionaryPage extends StatefulWidget {
   @override
@@ -12,8 +11,7 @@ class DictionaryPage extends StatefulWidget {
 
 class _DictionaryPageState extends State<DictionaryPage> {
   final languages = ['iron', 'kaitag'];
-  final Map<String, List<Entry>> dictionaries = {};
-  late Future<List<String?>>? loader;
+  late Future<void>? loader;
   late Searcher searcher;
 
   bool scholar = false;
@@ -22,34 +20,19 @@ class _DictionaryPageState extends State<DictionaryPage> {
   @override
   void initState() {
     super.initState();
-    loader = Future.wait(
-      languages.map((l) {
-        return FirebaseFirestore.instance
-            .collection('languages/$l/dictionary')
-            .withConverter(
-              fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
-              toFirestore: (Entry language, _) => language.toJson(),
-            )
-            .get()
-            .then((d) {
-          if (d.docs.isEmpty) return null;
-          dictionaries[l] = d.docs.map((e) => e.data()).toList();
-          return l;
-        });
-      }),
-    );
+    loader = load(languages);
     searcher = Searcher(dictionaries);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Iterable<String?>>(
+    return FutureBuilder(
       future: loader,
       builder: (
         BuildContext context,
-        AsyncSnapshot<Iterable<String?>> snapshot,
+        AsyncSnapshot snapshot,
       ) {
-        final languages = snapshot.data?.where((l) => l != null).toList();
+        final languages = dictionaries.keys;
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -76,7 +59,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
           drawer: NavDraver(title: "Dictionary"),
           body: Builder(
             builder: (context) {
-              if (snapshot.hasError || languages == null)
+              if (snapshot.hasError || languages.isNotEmpty)
                 return Text("Something went wrong.");
               if (snapshot.connectionState != ConnectionState.done)
                 return Text("Loading, please wait...");
