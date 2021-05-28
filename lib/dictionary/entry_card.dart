@@ -82,7 +82,7 @@ class _EntryCardState extends State<EntryCard>
                     text: [
                       "",
                       s.translation,
-                      scholar ? [s.ipa, s.glossed] : null,
+                      ...scholar ? [s.ipa, s.glossed] : [],
                     ].where((t) => t != null).join("\n"),
                     style: TextStyle(
                       color: Colors.black54,
@@ -131,7 +131,6 @@ class _EntryCardState extends State<EntryCard>
                       style: TextStyle(
                         wordSpacing: 4,
                         color: Colors.black54,
-                        fontSize: 16,
                       ),
                     ),
                   ]
