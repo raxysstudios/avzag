@@ -1,7 +1,7 @@
 import 'package:avzag/dictionary/store.dart';
 import 'package:flutter/material.dart';
 
-import '../note_list.dart';
+import '../note.dart';
 import '../utils.dart';
 import 'models.dart';
 
@@ -61,11 +61,10 @@ class _EntryCardState extends State<EntryCard>
           ),
         ),
       ),
-      if (use.notes != null)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: NoteList(use.notes),
-        ),
+      NoteList(
+        use.note,
+        padding: const EdgeInsets.only(bottom: 4),
+      ),
       if (use.samples != null)
         for (final s in use.samples!)
           Padding(
@@ -109,11 +108,10 @@ class _EntryCardState extends State<EntryCard>
             ),
           ),
         ),
-      if (widget.entry.notes != null)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: NoteList(widget.entry.notes),
-        ),
+      NoteList(
+        widget.entry.note,
+        padding: const EdgeInsets.only(bottom: 4),
+      ),
       for (final f in widget.entry.forms)
         RichText(
           text: TextSpan(

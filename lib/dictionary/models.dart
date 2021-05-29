@@ -4,16 +4,16 @@ class Entry {
   List<Sample> forms;
   List<Use>? uses;
   List<String>? tags;
-  List<String>? notes;
+  String? note;
 
-  Entry({required this.forms, this.uses, this.tags, this.notes});
+  Entry({required this.forms, this.uses, this.tags, this.note});
 
   Entry.fromJson(Map<String, dynamic> json)
       : this(
           forms: listFromJson(json['forms'], (j) => Sample.fromJson(j))!,
           uses: listFromJson(json['uses'], (j) => Use.fromJson(j)),
           tags: json2list(json['tags']),
-          notes: json2list(json['notes']),
+          note: json['note'],
         );
 
   Map<String, dynamic> toJson() {
@@ -21,7 +21,7 @@ class Entry {
     data['forms'] = this.forms.map((v) => v.toJson()).toList();
     if (uses != null) data['uses'] = this.uses!.map((v) => v.toJson()).toList();
     if (tags != null) data['tags'] = tags;
-    if (notes != null) data['notes'] = notes;
+    if (note?.isNotEmpty ?? false) data['note'] = note;
     return data;
   }
 }
@@ -29,15 +29,15 @@ class Entry {
 class Use {
   String concept;
   List<Sample>? samples;
-  List<String>? notes;
+  String? note;
 
-  Use({required this.concept, this.samples, this.notes});
+  Use({required this.concept, this.samples, this.note});
 
   Use.fromJson(Map<String, dynamic> json)
       : this(
           concept: json['concept'],
           samples: listFromJson(json['samples'], (j) => Sample.fromJson(j)),
-          notes: json2list(json['notes']),
+          note: json['note'],
         );
 
   Map<String, dynamic> toJson() {
@@ -45,7 +45,7 @@ class Use {
     data['concept'] = concept;
     if (samples != null)
       data['samples'] = samples!.map((v) => v.toJson()).toList();
-    if (notes != null) data['notes'] = notes;
+    if (note?.isNotEmpty ?? false) data['note'] = note;
     return data;
   }
 }
