@@ -1,11 +1,12 @@
 import 'package:avzag/dictionary/editor/concept_selector.dart';
-import 'package:avzag/dictionary/sample_display.dart';
+import 'package:avzag/dictionary/sample/sample.dart';
+import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:flutter/material.dart';
 
 import '../concept_display.dart';
 import '../models.dart';
 import '../store.dart';
-import 'sample_editor.dart';
+import '../sample/sample_editor.dart';
 
 class EntryEditor extends StatefulWidget {
   EntryEditor(this.sourceEntry);

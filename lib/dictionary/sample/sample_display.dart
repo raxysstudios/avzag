@@ -1,4 +1,5 @@
 import 'package:avzag/dictionary/models.dart';
+import 'package:avzag/dictionary/sample/sample.dart';
 import 'package:flutter/material.dart';
 
 class SampleDisplay extends StatelessWidget {

@@ -1,10 +1,15 @@
-import '../models.dart';
+import 'package:avzag/dictionary/sample/sample.dart';
 import 'package:flutter/material.dart';
 
 class SampleEditor extends StatefulWidget {
   final Sample value;
   final ValueSetter<Sample> setter;
-  SampleEditor(this.value, this.setter);
+  final bool translation;
+  SampleEditor(
+    this.value,
+    this.setter, {
+    this.translation = true,
+  });
 
   @override
   _SampleEditorState createState() => _SampleEditorState();
@@ -44,11 +49,12 @@ class _SampleEditorState extends State<SampleEditor> {
             decoration: InputDecoration(labelText: "Leipzig glossed text"),
             onChanged: (s) => sample.glossed = s,
           ),
-          TextFormField(
-            initialValue: sample.translation,
-            decoration: InputDecoration(labelText: "Translation"),
-            onChanged: (s) => sample.translation = s,
-          ),
+          if (widget.translation)
+            TextFormField(
+              initialValue: sample.translation,
+              decoration: InputDecoration(labelText: "Translation"),
+              onChanged: (s) => sample.translation = s,
+            ),
           OutlinedButton.icon(
             onPressed: () {
               if (formKey.currentState!.validate()) widget.setter(sample);

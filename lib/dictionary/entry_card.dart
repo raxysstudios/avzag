@@ -1,5 +1,5 @@
 import 'package:avzag/dictionary/concept_display.dart';
-import 'package:avzag/dictionary/sample_display.dart';
+import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/store.dart';
 import 'package:flutter/material.dart';
 
