@@ -1,3 +1,4 @@
+import 'package:avzag/dictionary/editor/dictionary_editor.dart';
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -105,7 +106,11 @@ class NavDraver extends StatelessWidget {
     ),
   ];
   final submodules = [
-    _NavItem(Icons.library_add_outlined, 'Editor tools'),
+    _NavItem(
+      Icons.library_add_outlined,
+      'Editor tools',
+      builder: () => DictionaryEditor(),
+    ),
     _NavItem(
       Icons.forum_outlined,
       'Telegram channel',
