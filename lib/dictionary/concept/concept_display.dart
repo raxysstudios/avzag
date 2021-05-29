@@ -1,7 +1,6 @@
-import 'package:avzag/dictionary/models.dart';
+import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
-
-import '../utils.dart';
+import 'concept.dart';
 
 class ConceptDisplay extends StatelessWidget {
   final Concept concept;

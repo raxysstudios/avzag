@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../utils.dart';
+import 'concept/concept.dart';
 import 'models.dart';
 
 final Map<String, List<Entry>> dictionaries = {};
