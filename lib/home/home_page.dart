@@ -1,8 +1,6 @@
-import 'package:avzag/home/models.dart';
-import 'package:avzag/home/language_flag.dart';
+import 'package:avzag/home/store.dart';
 import 'package:avzag/nav_drawer.dart';
 import 'package:avzag/utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
 
@@ -14,24 +12,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final Set<String> selected = Set();
   late Future? loader;
-  List<Language> languages = [];
 
   @override
   void initState() {
     super.initState();
-    loader = FirebaseFirestore.instance
-        .collection('languages')
-        .orderBy('family')
-        .orderBy('name')
-        .withConverter(
-          fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
-          toFirestore: (Language language, _) => language.toJson(),
-        )
-        .get()
-        .then((d) async {
-      languages = d.docs.map((l) => l.data()).toList();
-      for (final l in languages) await donwloadFlag(l);
-    });
+    loader = load();
   }
 
   @override
