@@ -1,7 +1,7 @@
-import 'package:avzag/home/store.dart';
 import 'package:avzag/nav_drawer.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
+import 'store.dart';
 import 'language_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final Set<String> selected = Set();
-  late Future? loader;
+  late Future<void>? loader;
 
   @override
   void initState() {

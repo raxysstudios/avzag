@@ -4,9 +4,9 @@ import 'language_flag.dart';
 
 List<Language> languages = [];
 
-Future load() async {
+Future<void> load() async {
   languages.clear();
-  FirebaseFirestore.instance
+  await FirebaseFirestore.instance
       .collection('languages')
       .orderBy('family')
       .orderBy('name')
