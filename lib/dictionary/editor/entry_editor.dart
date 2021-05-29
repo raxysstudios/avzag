@@ -1,9 +1,11 @@
 import 'package:avzag/dictionary/editor/concept_selector.dart';
+import 'package:avzag/dictionary/sample_display.dart';
 import 'package:flutter/material.dart';
 
 import '../concept_display.dart';
 import '../models.dart';
 import '../store.dart';
+import 'sample_editor.dart';
 
 class EntryEditor extends StatefulWidget {
   EntryEditor(this.sourceEntry);
@@ -16,7 +18,7 @@ class EntryEditor extends StatefulWidget {
 class _EntryEditorState extends State<EntryEditor>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  Entry entry = Entry(forms: []);
+  late Entry entry;
 
   @override
   void initState() {
@@ -53,6 +55,37 @@ class _EntryEditorState extends State<EntryEditor>
           entry.uses!.add(Use(concept: concept));
         } else
           use.concept = concept;
+      });
+  }
+
+  void selectSample({Use? use, Sample? sample}) async {
+    final result = await showDialog<Sample>(
+      context: context,
+      builder: (_) => SimpleDialog(
+        title: Text("Fill Sample"),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 8,
+        ),
+        children: [
+          SampleEditor(
+            sample ?? Sample(plain: ""),
+            (s) => Navigator.pop(context, s),
+          ),
+        ],
+      ),
+    );
+    if (result != null)
+      setState(() {
+        if (sample == null) {
+          if (use != null) {
+            if (use.samples == null) use.samples = [];
+            use.samples!.add(result);
+          }
+        } else {
+          var i = use!.samples!.indexOf(sample);
+          use.samples![i] = result;
+        }
       });
   }
 
@@ -108,6 +141,25 @@ class _EntryEditorState extends State<EntryEditor>
                           onTap: () => selectConcept(use: u),
                         );
                       }),
+                      if (u.samples != null)
+                        for (final s in u.samples!)
+                          InkWell(
+                            child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 16,
+                                ),
+                                child: SampleDisplay(s)),
+                            onTap: () => selectSample(
+                              use: u,
+                              sample: s,
+                            ),
+                          ),
+                      OutlinedButton.icon(
+                        onPressed: () => selectSample(use: u),
+                        icon: Icon(Icons.add_outlined),
+                        label: Text("New Sample"),
+                      ),
                       Divider(height: 0),
                     ],
                   OutlinedButton.icon(

@@ -1,4 +1,5 @@
 import 'package:avzag/dictionary/concept_display.dart';
+import 'package:avzag/dictionary/sample_display.dart';
 import 'package:avzag/dictionary/store.dart';
 import 'package:flutter/material.dart';
 
@@ -52,27 +53,7 @@ class _EntryCardState extends State<EntryCard>
         for (final s in use.samples!)
           Padding(
             padding: const EdgeInsets.only(bottom: 4),
-            child: RichText(
-              text: TextSpan(
-                text: s.plain,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                ),
-                children: [
-                  TextSpan(
-                    text: [
-                      "",
-                      s.translation,
-                      ...scholar ? [s.ipa, s.glossed] : [],
-                    ].where((t) => t != null).join("\n"),
-                    style: TextStyle(
-                      color: Colors.black54,
-                    ),
-                  )
-                ],
-              ),
-            ),
+            child: SampleDisplay(s),
           ),
     ];
   }
