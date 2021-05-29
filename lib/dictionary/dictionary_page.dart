@@ -218,7 +218,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                             builder: (context) {
                               return Container(
                                 height: 320,
-                                child: EntryCard(
+                                child: EntryDisplay(
                                   e,
                                   scholar: useScholar,
                                 ),

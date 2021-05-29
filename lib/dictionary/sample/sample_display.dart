@@ -1,11 +1,15 @@
-import 'package:avzag/dictionary/models.dart';
 import 'package:avzag/dictionary/sample/sample.dart';
 import 'package:flutter/material.dart';
 
 class SampleDisplay extends StatelessWidget {
   final Sample sample;
   final bool scholar;
-  SampleDisplay(this.sample, {this.scholar = true});
+  final bool row;
+  SampleDisplay(
+    this.sample, {
+    this.scholar = true,
+    this.row = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +26,9 @@ class SampleDisplay extends StatelessWidget {
               "",
               sample.translation,
               ...scholar ? [sample.ipa, sample.glossed] : [],
-            ].where((t) => t != null).join("\n"),
+            ].where((t) => t != null).join(row ? " " : "\n"),
             style: TextStyle(
+              wordSpacing: row ? 4 : null,
               color: Colors.black54,
             ),
           )

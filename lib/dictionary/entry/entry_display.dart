@@ -8,17 +8,17 @@ import '../../utils.dart';
 import '../models.dart';
 import 'entry.dart';
 
-class EntryCard extends StatefulWidget {
+class EntryDisplay extends StatefulWidget {
   final Entry entry;
   final bool scholar;
 
-  EntryCard(this.entry, {this.scholar = false});
+  EntryDisplay(this.entry, {this.scholar = false});
 
   @override
-  _EntryCardState createState() => _EntryCardState();
+  _EntryDisplayState createState() => _EntryDisplayState();
 }
 
-class _EntryCardState extends State<EntryCard>
+class _EntryDisplayState extends State<EntryDisplay>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -78,27 +78,10 @@ class _EntryCardState extends State<EntryCard>
         padding: const EdgeInsets.only(bottom: 4),
       ),
       for (final f in widget.entry.forms)
-        RichText(
-          text: TextSpan(
-            text: f.plain,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-            ),
-            children: scholar
-                ? [
-                    TextSpan(
-                      text: ["", f.ipa, f.glossed]
-                          .where((e) => e != null)
-                          .join(' '),
-                      style: TextStyle(
-                        wordSpacing: 4,
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ]
-                : null,
-          ),
+        SampleDisplay(
+          f,
+          scholar: scholar,
+          row: true,
         ),
     ];
   }

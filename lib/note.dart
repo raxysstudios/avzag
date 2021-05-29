@@ -13,7 +13,7 @@ class NoteList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return note?.isEmpty ?? false
+    return note == null
         ? Offstage()
         : Padding(
             padding: padding,
