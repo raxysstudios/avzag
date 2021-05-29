@@ -1,3 +1,4 @@
+import 'package:avzag/dictionary/concept_display.dart';
 import 'package:avzag/dictionary/store.dart';
 import 'package:flutter/material.dart';
 
@@ -38,27 +39,9 @@ class _EntryCardState extends State<EntryCard>
     return [
       Padding(
         padding: const EdgeInsets.only(bottom: 4),
-        child: RichText(
-          text: TextSpan(
-            text: capitalize(concept.meaning),
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-            children: scholar && concept.tags != null
-                ? [
-                    TextSpan(
-                      text: " " + concept.tags!.join(" "),
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ]
-                : null,
-          ),
+        child: ConceptDisplay(
+          concept,
+          scholar: scholar,
         ),
       ),
       NoteList(

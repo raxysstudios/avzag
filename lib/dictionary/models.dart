@@ -89,9 +89,9 @@ class Sample {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     data['plain'] = plain;
-    if (ipa != null) data['ipa'] = ipa;
-    if (glossed != null) data['glossed'] = ipa;
-    if (translation != null) data['translation'] = ipa;
+    if (ipa?.isNotEmpty ?? false) data['ipa'] = ipa;
+    if (glossed?.isNotEmpty ?? false) data['glossed'] = ipa;
+    if (translation?.isNotEmpty ?? false) data['translation'] = ipa;
     return data;
   }
 }

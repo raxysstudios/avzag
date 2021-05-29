@@ -1,5 +1,5 @@
 import 'models.dart';
-import 'queryUtils.dart';
+import 'query_utils.dart';
 
 class Searcher {
   Function setState;
