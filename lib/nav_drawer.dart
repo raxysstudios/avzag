@@ -1,4 +1,4 @@
-import 'package:avzag/dictionary/editor/dictionary_editor.dart';
+import 'package:avzag/dictionary/dictionary_editor.dart';
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
 import 'package:flutter/cupertino.dart';

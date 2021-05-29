@@ -1,5 +1,6 @@
 import 'package:avzag/dictionary/store.dart';
 
+import 'entry/entry.dart';
 import 'models.dart';
 
 String getMeaning(Use use) {

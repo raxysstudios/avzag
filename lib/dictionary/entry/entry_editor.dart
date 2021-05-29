@@ -7,6 +7,7 @@ import '../concept/concept_display.dart';
 import '../models.dart';
 import '../store.dart';
 import '../sample/sample_editor.dart';
+import 'entry.dart';
 
 class EntryEditor extends StatefulWidget {
   EntryEditor(this.sourceEntry);

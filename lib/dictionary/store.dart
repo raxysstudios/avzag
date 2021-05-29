@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../utils.dart';
 import 'concept/concept.dart';
+import 'entry/entry.dart';
 import 'models.dart';
 
 final Map<String, List<Entry>> dictionaries = {};
 final Map<String, Concept> concepts = {};
 final List<SearchPreset> presets = [];
+final List<String> grammaticalTags = [];
 
 Future<void> load(Iterable<String> languages) async {
   dictionaries.clear();
@@ -40,9 +42,15 @@ Future<void> load(Iterable<String> languages) async {
   });
 
   presets.clear();
+  grammaticalTags.clear();
   await FirebaseFirestore.instance.doc('meta/dictionary').get().then((d) {
+    final data = d.data()!;
     presets.addAll(
-      listFromJson(d.data()?['presets'], (i) => SearchPreset.fromJson(i)) ?? [],
+      listFromJson(
+        data['presets'],
+        (i) => SearchPreset.fromJson(i),
+      )!,
     );
+    grammaticalTags.addAll(json2list(data['tags']['grammatical'])!);
   });
 }

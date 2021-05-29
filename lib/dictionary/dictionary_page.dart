@@ -1,7 +1,7 @@
 import 'package:avzag/dictionary/models.dart';
 
 import '../utils.dart';
-import 'entry_card.dart';
+import 'entry/entry_display.dart';
 import 'searcher.dart';
 import 'store.dart';
 import 'package:avzag/nav_drawer.dart';

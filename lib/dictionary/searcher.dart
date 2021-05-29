@@ -1,4 +1,4 @@
-import 'models.dart';
+import 'entry/entry.dart';
 import 'query_utils.dart';
 
 class Searcher {

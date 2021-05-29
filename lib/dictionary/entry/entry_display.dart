@@ -3,9 +3,10 @@ import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/store.dart';
 import 'package:flutter/material.dart';
 
-import '../note.dart';
-import '../utils.dart';
-import 'models.dart';
+import '../../note.dart';
+import '../../utils.dart';
+import '../models.dart';
+import 'entry.dart';
 
 class EntryCard extends StatefulWidget {
   final Entry entry;
