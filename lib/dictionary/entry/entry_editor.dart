@@ -137,42 +137,25 @@ class _EntryEditorState extends State<EntryEditor>
   List<Widget> buildList<T>(
     List<T> list,
     Function(T i) onTap,
-    Widget Function(T i) builder,
-  ) {
+    Widget Function(T i) builder, {
+    List<PopupMenuItem<Function(T)>>? actions,
+  }) {
+    if (actions == null) actions = [];
+    actions.add(PopupMenuItem(
+      value: (i) => setState(() => list.remove(i)),
+      child: Text('Delete', style: TextStyle(color: Colors.red)),
+    ));
     return [
       for (final i in list)
-        Row(
-          children: [
-            Expanded(
-              child: Card(
-                child: InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 16,
-                    ),
-                    child: builder(i),
-                  ),
-                  onTap: () => onTap(i),
-                ),
-              ),
-            ),
-            PopupMenuButton<Function>(
-              onSelected: (a) => a(),
-              itemBuilder: (BuildContext context) => [
-                PopupMenuItem(
-                  value: () => setState(() {
-                    list.remove(i);
-                  }),
-                  child: Text(
-                    'Delete',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
-              ],
-            )
-          ],
-        )
+        ListTile(
+          title: builder(i),
+          onTap: () => onTap(i),
+          contentPadding: const EdgeInsets.only(left: 16, right: 8),
+          trailing: PopupMenuButton<Function(T)>(
+            onSelected: (a) => a(i),
+            itemBuilder: (BuildContext context) => actions!,
+          ),
+        ),
     ];
   }
 
@@ -218,7 +201,7 @@ class _EntryEditorState extends State<EntryEditor>
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    "No entry forms yet.\nAn entry must have at least one form.",
+                    "An entry must have at least one form.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black54,
@@ -235,36 +218,37 @@ class _EntryEditorState extends State<EntryEditor>
           ),
           ListView(
             children: [
-              if (entry.uses?.isEmpty ?? true)
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    "No entry uses yet.\n",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
               if (entry.uses != null)
                 ...buildList<Use>(
                   entry.uses!,
-                  (u) => selectConcept(use: u),
+                  (u) => selectSample(use: u),
+                  // (u) => selectConcept(use: u),
                   (u) => Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      ConceptDisplay(
-                        concepts[u.concept]!,
-                        scholar: true,
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: u.samples?.isEmpty ?? true ? 0 : 16,
+                        ),
+                        child: ConceptDisplay(
+                          concepts[u.concept]!,
+                          scholar: true,
+                        ),
                       ),
                       if (u.samples != null)
-                        for (final s in u.samples!) ...[
-                          Divider(height: 0),
-                          SampleDisplay(s, scholar: true),
-                        ],
+                        ...buildList<Sample>(
+                          u.samples!,
+                          (s) => selectSample(use: u, sample: s),
+                          (s) => SampleDisplay(s, scholar: true),
+                        ),
                     ],
                   ),
+                  actions: [
+                    PopupMenuItem(
+                      value: (u) => selectSample(use: u),
+                      child: Text('Add sample'),
+                    )
+                  ],
                 ),
             ],
           ),
