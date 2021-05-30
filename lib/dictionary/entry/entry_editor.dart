@@ -130,6 +130,52 @@ class _EntryEditorState extends State<EntryEditor>
 
   void uploadEntry() async {}
 
+  void deleteItem<T>(T item, List<T> list) {
+    list.remove(item);
+  }
+
+  List<Widget> buildList<T>(
+    List<T> list,
+    Function(T i) onTap,
+    Widget Function(T i) builder,
+  ) {
+    return [
+      for (final i in list)
+        Row(
+          children: [
+            Expanded(
+              child: Card(
+                child: InkWell(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 16,
+                    ),
+                    child: builder(i),
+                  ),
+                  onTap: () => onTap(i),
+                ),
+              ),
+            ),
+            PopupMenuButton<Function>(
+              onSelected: (a) => a(),
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem(
+                  value: () => setState(() {
+                    list.remove(i);
+                  }),
+                  child: Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+            )
+          ],
+        )
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,7 +213,6 @@ class _EntryEditorState extends State<EntryEditor>
         controller: tabController,
         children: [
           ListView(
-            padding: const EdgeInsets.all(8),
             children: [
               if (entry.forms.isEmpty)
                 Padding(
@@ -181,22 +226,14 @@ class _EntryEditorState extends State<EntryEditor>
                     ),
                   ),
                 ),
-              for (final f in entry.forms) ...[
-                InkWell(
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 16,
-                      ),
-                      child: SampleDisplay(f, row: true)),
-                  onTap: () => selectForm(form: f),
-                ),
-                Divider(height: 0),
-              ],
+              ...buildList<Sample>(
+                entry.forms,
+                (f) => selectForm(form: f),
+                (i) => SampleDisplay(i, row: true),
+              )
             ],
           ),
           ListView(
-            padding: const EdgeInsets.all(8),
             children: [
               if (entry.uses?.isEmpty ?? true)
                 Padding(
@@ -211,51 +248,24 @@ class _EntryEditorState extends State<EntryEditor>
                   ),
                 ),
               if (entry.uses != null)
-                for (final u in entry.uses!)
-                  Card(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Builder(builder: (context) {
-                            final c = concepts[u.concept]!;
-                            return InkWell(
-                              child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 16,
-                                  ),
-                                  child: ConceptDisplay(c)),
-                              onTap: () => selectConcept(use: u),
-                            );
-                          }),
-                          if (u.samples != null)
-                            for (final s in u.samples!) ...[
-                              InkWell(
-                                child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 16,
-                                    ),
-                                    child: SampleDisplay(s)),
-                                onTap: () => selectSample(
-                                  use: u,
-                                  sample: s,
-                                ),
-                              ),
-                              Divider(height: 0),
-                            ],
-                          OutlinedButton.icon(
-                            onPressed: () => selectSample(use: u),
-                            icon: Icon(Icons.add_outlined),
-                            label: Text("New Sample"),
-                          ),
-                        ],
+                ...buildList<Use>(
+                  entry.uses!,
+                  (u) => selectConcept(use: u),
+                  (u) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ConceptDisplay(
+                        concepts[u.concept]!,
+                        scholar: true,
                       ),
-                    ),
+                      if (u.samples != null)
+                        for (final s in u.samples!) ...[
+                          Divider(height: 0),
+                          SampleDisplay(s, scholar: true),
+                        ],
+                    ],
                   ),
+                ),
             ],
           ),
           ListView(
