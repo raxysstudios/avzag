@@ -30,7 +30,6 @@ dependencies:
   firebase_storage: ^8.1.0
   path_provider: ^2.0.2
   url_launcher: ^6.0.4
-  multi_select_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:

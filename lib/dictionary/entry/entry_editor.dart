@@ -1,9 +1,8 @@
 import 'package:avzag/dictionary/concept/concept_selector.dart';
 import 'package:avzag/dictionary/sample/sample.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
+import 'package:avzag/tag_selection.dart';
 import 'package:flutter/material.dart';
-// import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../concept/concept_display.dart';
 import '../models.dart';
@@ -211,15 +210,12 @@ class _EntryEditorState extends State<EntryEditor>
               ListView(
                 padding: const EdgeInsets.all(8),
                 children: [
-                  MultiSelectChipField(
-                    items: grammaticalTags
-                        .map((e) => MultiSelectItem(e, e))
-                        .toList(),
-                    initialValue: entry.tags,
-                    onSaved: (tags) {
-                      print(tags);
-                      // _selectedAnimals = values;
-                    },
+                  TagSelection(
+                    grammaticalTags,
+                    (t) => setState(
+                      () => entry.tags = t,
+                    ),
+                    selected: entry.tags,
                   ),
                   SizedBox(
                     height: 8,
