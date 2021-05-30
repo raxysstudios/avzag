@@ -8,10 +8,10 @@ import 'models.dart';
 final Map<String, List<Entry>> dictionaries = {};
 final Map<String, Concept> concepts = {};
 final List<SearchPreset> presets = [];
-final List<String> grammaticalTags = [];
+final List<String> grammarTags = [];
+final List<String> semanticTags = [];
 
 Future<void> load(Iterable<String> languages) async {
-  dictionaries.clear();
   await Future.wait(
     languages.map((l) {
       return FirebaseFirestore.instance
@@ -22,14 +22,13 @@ Future<void> load(Iterable<String> languages) async {
           )
           .get()
           .then((d) {
+        dictionaries.clear();
         if (d.docs.isEmpty) return null;
         dictionaries[l] = d.docs.map((e) => e.data()).toList();
         return l;
       });
     }),
   );
-
-  concepts.clear();
   await FirebaseFirestore.instance
       .collection('meta/dictionary/concepts')
       .withConverter(
@@ -38,12 +37,15 @@ Future<void> load(Iterable<String> languages) async {
       )
       .get()
       .then((d) {
+    concepts.clear();
     d.docs.forEach((d) => concepts[d.id] = d.data());
   });
 
-  presets.clear();
-  grammaticalTags.clear();
   await FirebaseFirestore.instance.doc('meta/dictionary').get().then((d) {
+    presets.clear();
+    grammarTags.clear();
+    semanticTags.clear();
+
     final data = d.data()!;
     presets.addAll(
       listFromJson(
@@ -51,6 +53,11 @@ Future<void> load(Iterable<String> languages) async {
         (i) => SearchPreset.fromJson(i),
       )!,
     );
-    grammaticalTags.addAll(json2list(data['tags']['grammatical'])!);
+    grammarTags.addAll(
+      json2list(data['tags']['grammar'])!,
+    );
+    semanticTags.addAll(
+      json2list(data['tags']['semantic'])!,
+    );
   });
 }

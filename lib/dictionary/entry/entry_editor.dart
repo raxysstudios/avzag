@@ -211,7 +211,7 @@ class _EntryEditorState extends State<EntryEditor>
                 padding: const EdgeInsets.all(8),
                 children: [
                   TagSelection(
-                    grammaticalTags,
+                    grammarTags,
                     (t) => setState(
                       () => entry.tags = t,
                     ),
