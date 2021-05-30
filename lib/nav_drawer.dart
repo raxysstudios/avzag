@@ -27,7 +27,7 @@ class _NavItem {
     return ListTile(
       leading: Icon(
         icon,
-        size: small ? 24 : 30,
+        size: 24,
         color: selected
             ? Colors.blue
             : link != null || builder == null
@@ -48,20 +48,7 @@ class _NavItem {
       ),
       trailing: link == null
           ? builder == null
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.construction_outlined),
-                    Text(
-                      "Coming Soon",
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 12,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ],
-                )
+              ? Icon(Icons.construction_outlined)
               : null
           : Icon(Icons.open_in_new_outlined),
       onTap: link == null
@@ -121,6 +108,11 @@ class NavDraver extends StatelessWidget {
       'GitHub repository',
       link: 'https://github.com/alkaitagi/avzag_flutter',
     ),
+    _NavItem(
+      Icons.email_outlined,
+      'Developer contact',
+      link: 'mailto:alkaitagi@outlook.com?subject=Avzag',
+    ),
   ];
 
   @override
@@ -129,11 +121,14 @@ class NavDraver extends StatelessWidget {
       child: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
             child: Text(
               "Ævzag",
               style: TextStyle(
-                fontSize: 36,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -150,6 +145,17 @@ class NavDraver extends StatelessWidget {
               context,
               small: true,
             ),
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 16,
+            ),
+            child: Text(
+              "Developed in Dagestan, North Caucasus.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black54),
+            ),
+          ),
         ],
       ),
     );
