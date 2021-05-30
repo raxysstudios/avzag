@@ -28,7 +28,7 @@ class _EntryEditorState extends State<EntryEditor>
   void initState() {
     super.initState();
     entry = Entry.fromJson(widget.sourceEntry.toJson());
-    tabController = new TabController(length: 3, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
     tabController.addListener(
       () => setState(() {
         if (tabController.index == 0)
@@ -39,7 +39,7 @@ class _EntryEditorState extends State<EntryEditor>
           newItem = null;
       }),
     );
-    tabController.index = 0;
+    newItem = () => selectForm(form: null);
   }
 
   @override
@@ -128,6 +128,8 @@ class _EntryEditorState extends State<EntryEditor>
       });
   }
 
+  void uploadEntry() async {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,7 +141,7 @@ class _EntryEditorState extends State<EntryEditor>
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: entry.forms.isEmpty ? null : uploadEntry,
             icon: Icon(Icons.publish_outlined),
           ),
           SizedBox(width: 8),
