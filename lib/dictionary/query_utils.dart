@@ -1,7 +1,7 @@
 import 'package:avzag/dictionary/store.dart';
 
 import 'entry/entry.dart';
-import 'models.dart';
+import 'use/use.dart';
 
 String getMeaning(Use use) {
   return concepts[use.concept]?.meaning ?? '';

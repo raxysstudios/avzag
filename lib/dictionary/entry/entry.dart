@@ -1,5 +1,5 @@
-import 'package:avzag/dictionary/models.dart';
 import 'package:avzag/dictionary/sample/sample.dart';
+import 'package:avzag/dictionary/use/use.dart';
 import 'package:avzag/utils.dart';
 
 class Entry {

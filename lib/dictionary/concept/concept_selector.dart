@@ -1,7 +1,6 @@
 import 'package:avzag/dictionary/concept/concept_display.dart';
 import 'package:avzag/tag_selection.dart';
 import 'package:flutter/material.dart';
-import 'concept.dart';
 import '../store.dart';
 
 class ConceptSelect extends StatefulWidget {

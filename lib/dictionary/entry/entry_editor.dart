@@ -1,11 +1,11 @@
 import 'package:avzag/dictionary/concept/concept_selector.dart';
 import 'package:avzag/dictionary/sample/sample.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
+import 'package:avzag/dictionary/use/use.dart';
 import 'package:avzag/tag_selection.dart';
 import 'package:flutter/material.dart';
 
 import '../concept/concept_display.dart';
-import '../models.dart';
 import '../store.dart';
 import '../sample/sample_editor.dart';
 import 'entry.dart';

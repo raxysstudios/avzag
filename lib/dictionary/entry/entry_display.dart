@@ -1,11 +1,12 @@
 import 'package:avzag/dictionary/concept/concept_display.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/store.dart';
+import 'package:avzag/dictionary/use/use.dart';
+import 'package:avzag/dictionary/use/use_display.dart';
 import 'package:flutter/material.dart';
 
 import '../../note_display.dart';
 import '../../utils.dart';
-import '../models.dart';
 import 'entry.dart';
 
 class EntryDisplay extends StatefulWidget {
@@ -34,29 +35,6 @@ class _EntryDisplayState extends State<EntryDisplay>
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  List<Widget> buildUse(Use use) {
-    final concept = concepts[use.concept]!;
-    return [
-      Padding(
-        padding: const EdgeInsets.only(bottom: 4),
-        child: ConceptDisplay(
-          concept,
-          scholar: scholar,
-        ),
-      ),
-      NoteList(
-        use.note,
-        padding: const EdgeInsets.only(bottom: 4),
-      ),
-      if (use.samples != null)
-        for (final s in use.samples!)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: SampleDisplay(s),
-          ),
-    ];
   }
 
   List<Widget> buildForms() {
@@ -127,7 +105,7 @@ class _EntryDisplayState extends State<EntryDisplay>
                     ? [Text("No uses data.")]
                     : [
                         for (final u in widget.entry.uses!) ...[
-                          ...buildUse(u),
+                          UseDisplay(u, scholar: scholar),
                           Divider(
                             height: 4,
                             color: Colors.transparent,
