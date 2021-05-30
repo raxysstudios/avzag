@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'use.dart';
 
 class UseEditor extends StatefulWidget {
+  final Use source;
+  final ValueSetter<Use> setter;
+  UseEditor(this.source, {required this.setter});
+
   @override
   _UseEditorState createState() => _UseEditorState();
 }

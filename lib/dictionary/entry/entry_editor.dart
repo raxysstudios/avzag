@@ -20,19 +20,31 @@ class EntryEditor extends StatefulWidget {
 
 class _EntryEditorState extends State<EntryEditor>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  late TabController tabController;
   late Entry entry;
+  Function()? newItem;
 
   @override
   void initState() {
     super.initState();
     entry = Entry.fromJson(widget.sourceEntry.toJson());
-    _tabController = new TabController(length: 2, vsync: this);
+    tabController = new TabController(length: 3, vsync: this);
+    tabController.addListener(
+      () => setState(() {
+        if (tabController.index == 0)
+          newItem = () => selectForm(form: null);
+        else if (tabController.index == 1)
+          newItem = () => selectConcept(use: null);
+        else
+          newItem = null;
+      }),
+    );
+    tabController.index = 0;
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    tabController.dispose();
     super.dispose();
   }
 
@@ -118,144 +130,157 @@ class _EntryEditorState extends State<EntryEditor>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  "Entry editing",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            TabBar(
-              controller: _tabController,
-              isScrollable: true,
-              labelColor: Colors.blue,
-              unselectedLabelColor: Colors.black,
-              tabs: [
-                Tab(icon: const Icon(Icons.textsms_outlined)),
-                Tab(icon: const Icon(Icons.info_outlined)),
-              ],
-            )
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Entry editor"),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.close_outlined),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.publish_outlined),
+          ),
+          SizedBox(width: 8),
+        ],
+        bottom: TabBar(
+          controller: tabController,
+          labelColor: Colors.blue,
+          unselectedLabelColor: Colors.black,
+          tabs: [
+            Tab(icon: Icon(Icons.tune_outlined)),
+            Tab(icon: Icon(Icons.textsms_outlined)),
+            Tab(icon: Icon(Icons.info_outlined)),
           ],
         ),
-        Divider(height: 0),
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
+      ),
+      floatingActionButton: newItem == null
+          ? null
+          : FloatingActionButton(
+              onPressed: newItem,
+              child: Icon(Icons.add_outlined),
+            ),
+      body: TabBarView(
+        controller: tabController,
+        children: [
+          ListView(
+            padding: const EdgeInsets.all(8),
             children: [
-              ListView(
-                padding: const EdgeInsets.all(8),
-                children: [
-                  if (entry.uses != null)
-                    for (final u in entry.uses!)
-                      Card(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Builder(builder: (context) {
-                                final c = concepts[u.concept]!;
-                                return InkWell(
-                                  child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 16,
-                                      ),
-                                      child: ConceptDisplay(c)),
-                                  onTap: () => selectConcept(use: u),
-                                );
-                              }),
-                              if (u.samples != null)
-                                for (final s in u.samples!) ...[
-                                  InkWell(
-                                    child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 16,
-                                        ),
-                                        child: SampleDisplay(s)),
-                                    onTap: () => selectSample(
-                                      use: u,
-                                      sample: s,
-                                    ),
-                                  ),
-                                  Divider(height: 0),
-                                ],
-                              OutlinedButton.icon(
-                                onPressed: () => selectSample(use: u),
-                                icon: Icon(Icons.add_outlined),
-                                label: Text("New Sample"),
-                              ),
-                            ],
-                          ),
-                        ),
+              if (entry.forms.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    "No entry forms yet.\nAn entry must have at least one form.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+              for (final f in entry.forms) ...[
+                InkWell(
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 16,
                       ),
-                  OutlinedButton.icon(
-                    onPressed: selectConcept,
-                    icon: Icon(Icons.add_outlined),
-                    label: Text("New Usecase"),
-                  ),
-                ],
-              ),
-              ListView(
-                padding: const EdgeInsets.all(8),
-                children: [
-                  TagSelection(
-                    grammarTags,
-                    (t) => setState(
-                      () => entry.tags = t,
-                    ),
-                    selected: entry.tags,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  TextFormField(
-                    initialValue: entry.note,
-                    onChanged: (n) => entry.note,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: "Word etymology, other notes",
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Divider(height: 0),
-                  for (final f in entry.forms) ...[
-                    InkWell(
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 16,
-                          ),
-                          child: SampleDisplay(f, row: true)),
-                      onTap: () => selectForm(form: f),
-                    ),
-                    Divider(height: 0),
-                  ],
-                  OutlinedButton.icon(
-                    onPressed: selectForm,
-                    icon: Icon(Icons.add_outlined),
-                    label: Text("New Word Form"),
-                  ),
-                ],
-              )
+                      child: SampleDisplay(f, row: true)),
+                  onTap: () => selectForm(form: f),
+                ),
+                Divider(height: 0),
+              ],
             ],
           ),
-        ),
-      ],
+          ListView(
+            padding: const EdgeInsets.all(8),
+            children: [
+              if (entry.uses?.isEmpty ?? true)
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    "No entry uses yet.\n",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+              if (entry.uses != null)
+                for (final u in entry.uses!)
+                  Card(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Builder(builder: (context) {
+                            final c = concepts[u.concept]!;
+                            return InkWell(
+                              child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 16,
+                                  ),
+                                  child: ConceptDisplay(c)),
+                              onTap: () => selectConcept(use: u),
+                            );
+                          }),
+                          if (u.samples != null)
+                            for (final s in u.samples!) ...[
+                              InkWell(
+                                child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 16,
+                                    ),
+                                    child: SampleDisplay(s)),
+                                onTap: () => selectSample(
+                                  use: u,
+                                  sample: s,
+                                ),
+                              ),
+                              Divider(height: 0),
+                            ],
+                          OutlinedButton.icon(
+                            onPressed: () => selectSample(use: u),
+                            icon: Icon(Icons.add_outlined),
+                            label: Text("New Sample"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+            ],
+          ),
+          ListView(
+            padding: const EdgeInsets.all(8),
+            children: [
+              TextFormField(
+                initialValue: entry.note,
+                onChanged: (n) => entry.note,
+                maxLines: null,
+                decoration: InputDecoration(
+                  filled: true,
+                  labelText: "Word etymology, other notes",
+                ),
+              ),
+              SizedBox(height: 8),
+              Text("Grammar tags"),
+              TagSelection(
+                grammarTags,
+                (t) => setState(
+                  () => entry.tags = t,
+                ),
+                selected: entry.tags,
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

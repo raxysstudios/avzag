@@ -35,8 +35,7 @@ class _SampleEditorState extends State<SampleEditor> {
           TextFormField(
             initialValue: sample.plain,
             decoration: InputDecoration(labelText: "Plain text"),
-            validator: (v) =>
-                v?.isEmpty ?? false ? 'Please enter some text' : null,
+            validator: (v) => v?.isEmpty ?? false ? 'Cannot be empty' : null,
             onChanged: (s) => sample.plain = s,
           ),
           TextFormField(

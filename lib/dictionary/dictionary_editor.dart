@@ -15,16 +15,13 @@ class _DictionaryEditorState extends State<DictionaryEditor> {
   Language language = languages[0];
 
   void editEntry(Entry? entry) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          height: 512,
-          child: EntryEditor(
-            entry ?? Entry(forms: []),
-          ),
-        );
-      },
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EntryEditor(
+          entry ?? Entry(forms: []),
+        ),
+      ),
     );
   }
 
