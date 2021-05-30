@@ -1,5 +1,7 @@
+import 'package:avzag/dictionary/concept/concept.dart';
 import 'package:avzag/dictionary/concept/concept_display.dart';
 import 'package:avzag/tag_selection.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../store.dart';
 
@@ -13,6 +15,7 @@ class ConceptSelect extends StatefulWidget {
 
 class _ConceptSelectState extends State<ConceptSelect> {
   bool creating = false;
+  bool uploading = false;
   List<String> tags = [];
   String query = "";
 
@@ -80,10 +83,11 @@ class _ConceptSelectState extends State<ConceptSelect> {
         decoration: InputDecoration(
           labelText: "Concept meaning",
         ),
+        validator: (v) => v?.isEmpty ?? false ? 'Cannot be empty' : null,
         onChanged: (m) => query = m,
       ),
       SizedBox(height: 16),
-      Text("Choose semantic tags"),
+      Text("Semantic tags"),
       Expanded(
         child: TagSelection(
           semanticTags,
@@ -93,12 +97,30 @@ class _ConceptSelectState extends State<ConceptSelect> {
           selected: tags,
         ),
       ),
-      OutlinedButton.icon(
-        onPressed: () {},
-        icon: Icon(Icons.check_outlined),
-        label: Text("Save & Select"),
-      ),
+      uploading
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [CircularProgressIndicator()],
+            )
+          : OutlinedButton.icon(
+              onPressed: uploadConcept,
+              icon: Icon(Icons.check_outlined),
+              label: Text("Save & Select"),
+            ),
     ];
+  }
+
+  Future<void> uploadConcept() async {
+    setState(() => uploading = true);
+    final concept = Concept(meaning: query, tags: tags);
+    final id = await FirebaseFirestore.instance
+        .collection('meta/dictionary/concepts')
+        .add(concept.toJson())
+        .then((d) {
+      concepts[d.id] = concept;
+      return d.id;
+    });
+    widget.setter(id);
   }
 
   @override
