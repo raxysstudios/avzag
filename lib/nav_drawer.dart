@@ -70,7 +70,7 @@ class NavDraver extends StatelessWidget {
                 Divider(height: 0),
                 SwitchListTile(
                   title: Text('Editor mode'),
-                  subtitle: Text('off'),
+                  subtitle: Text('Off'),
                   value: editorMode != null,
                   secondary: Padding(
                     padding: const EdgeInsets.only(top: 8),
