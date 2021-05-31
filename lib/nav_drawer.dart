@@ -24,7 +24,7 @@ class NavDraver extends StatelessWidget {
   Widget buildTitle(String text, {bool disabled = false}) {
     return Text(
       text,
-      style: TextStyle(fontSize: 20),
+      style: TextStyle(fontSize: 18),
     );
   }
 
