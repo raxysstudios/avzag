@@ -1,4 +1,3 @@
-import 'package:avzag/dictionary/dictionary_editor.dart';
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
 import 'package:avzag/home/store.dart';
@@ -8,93 +7,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class _NavItem {
-  _NavItem(
-    this.icon,
-    this.title, {
-    this.builder,
-    this.link,
-    this.selected = false,
-  });
-  final IconData icon;
-  final String title;
-  final Widget Function()? builder;
-  final String? link;
-  final bool selected;
-
-  Widget build(
-    BuildContext context, {
-    bool small = false,
-    bool selected = false,
-  }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        size: 24,
-        color: selected
-            ? Colors.blue
-            : link != null || builder == null
-                ? Colors.black45
-                : Colors.black,
-      ),
-      selected: selected,
-      title: Text(
-        title,
-        style: TextStyle(
-          color: selected
-              ? Colors.blue
-              : link == null && builder == null
-                  ? Colors.black45
-                  : Colors.black,
-          fontSize: small ? 14 : 18,
-        ),
-      ),
-      trailing: link == null
-          ? builder == null
-              ? Icon(Icons.construction_outlined)
-              : null
-          : Icon(Icons.open_in_new_outlined),
-      onTap: link == null
-          ? builder == null
-              ? null
-              : () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => builder!()),
-                  );
-                }
-          : () => launch(link!),
-    );
-  }
-}
-
 class NavDraver extends StatelessWidget {
   NavDraver({this.title});
   final String? title;
 
-  final modules = [
-    _NavItem(
-      Icons.map_outlined,
-      'Home',
-      builder: () => HomePage(),
-    ),
-    _NavItem(
-      Icons.music_note_outlined,
-      'Phonology',
-      // builder: () => PhonologyPage(),
-    ),
-    _NavItem(Icons.switch_left_outlined, 'Converter'),
-    _NavItem(Icons.chat_outlined, 'Phrasebook'),
-    _NavItem(
-      Icons.book_outlined,
-      'Dictionary',
-      builder: () => DictionaryPage(),
-    ),
-    _NavItem(
-      Icons.local_library_outlined,
-      'Bootcamp',
-    ),
-  ];
+  void navigate(
+    BuildContext context,
+    Widget Function(BuildContext) builder,
+  ) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: builder),
+    );
+  }
+
+  Widget buildTitle(String text, {bool disabled = false}) {
+    return Text(
+      text,
+      style: TextStyle(fontSize: 20),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +40,7 @@ class NavDraver extends StatelessWidget {
                 vertical: 14,
               ),
               child: Text(
-                "Ævzag",
+                'Ævzag',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -130,7 +62,7 @@ class NavDraver extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    "Developed in Dagestan, North Caucasus.",
+                    'Developed in Dagestan, North Caucasus.',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black54),
                   ),
@@ -176,11 +108,42 @@ class NavDraver extends StatelessWidget {
             ),
           ),
           Divider(height: 0),
-          for (final m in modules)
-            m.build(
-              context,
-              selected: m.title == title,
-            ),
+          ListTile(
+            leading: Icon(Icons.map_outlined),
+            title: buildTitle('Home'),
+            selected: title == 'Home',
+            onTap: () => navigate(context, (c) => HomePage()),
+          ),
+          ListTile(
+            leading: Icon(Icons.music_note_outlined),
+            title: buildTitle('Phonology'),
+            trailing: Icon(Icons.construction_outlined),
+            enabled: false,
+          ),
+          ListTile(
+            leading: Icon(Icons.switch_left_outlined),
+            title: buildTitle('Converter'),
+            trailing: Icon(Icons.construction_outlined),
+            enabled: false,
+          ),
+          ListTile(
+            leading: Icon(Icons.chat_outlined),
+            title: buildTitle('Phrasebook'),
+            trailing: Icon(Icons.construction_outlined),
+            enabled: false,
+          ),
+          ListTile(
+            leading: Icon(Icons.book_outlined),
+            title: buildTitle('Dictionary'),
+            selected: title == 'Dictionary',
+            onTap: () => navigate(context, (c) => DictionaryPage()),
+          ),
+          ListTile(
+            leading: Icon(Icons.local_library_outlined),
+            title: buildTitle('Bootcamp'),
+            trailing: Icon(Icons.construction_outlined),
+            enabled: false,
+          ),
         ],
       ),
     );
