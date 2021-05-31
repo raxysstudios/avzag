@@ -1,6 +1,8 @@
 import 'package:avzag/dictionary/dictionary_editor.dart';
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
+import 'package:avzag/home/store.dart';
+import 'package:avzag/store.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -93,28 +95,6 @@ class NavDraver extends StatelessWidget {
       'Bootcamp',
     ),
   ];
-  final submodules = [
-    _NavItem(
-      Icons.library_add_outlined,
-      'Editor tools',
-      builder: () => DictionaryEditor(),
-    ),
-    _NavItem(
-      Icons.forum_outlined,
-      'Telegram channel',
-      link: 'https://t.me/avzag',
-    ),
-    _NavItem(
-      Icons.code_outlined,
-      'GitHub repository',
-      link: 'https://github.com/alkaitagi/avzag_flutter',
-    ),
-    _NavItem(
-      Icons.email_outlined,
-      'Developer contact',
-      link: 'mailto:alkaitagi@outlook.com?subject=Avzag',
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -148,9 +128,7 @@ class NavDraver extends StatelessWidget {
               children: [
                 Divider(height: 0),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                  ),
+                  padding: const EdgeInsets.all(16),
                   child: Text(
                     "Developed in Dagestan, North Caucasus.",
                     textAlign: TextAlign.center,
@@ -158,11 +136,42 @@ class NavDraver extends StatelessWidget {
                   ),
                 ),
                 Divider(height: 0),
-                for (final m in submodules)
-                  m.build(
-                    context,
-                    small: true,
+                SwitchListTile(
+                  title: Text('Editor mode'),
+                  subtitle: Text('off'),
+                  value: editorMode != null,
+                  secondary: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Icon(Icons.edit_outlined),
                   ),
+                  onChanged: (e) {
+                    editorMode = e ? languages[0].name : null;
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.email_outlined),
+                  title: Text('Developer contact'),
+                  trailing: Icon(Icons.open_in_new_outlined),
+                  onTap: () => launch(
+                    'mailto:alkaitagi@outlook.com?subject=Avzag',
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.forum_outlined),
+                  title: Text('Telegram channel'),
+                  trailing: Icon(Icons.open_in_new_outlined),
+                  onTap: () => launch(
+                    'https://t.me/avzag',
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.code_outlined),
+                  title: Text('GitHub repository'),
+                  trailing: Icon(Icons.open_in_new_outlined),
+                  onTap: () => launch(
+                    'https://github.com/alkaitagi/avzag_flutter',
+                  ),
+                ),
               ],
             ),
           ),
