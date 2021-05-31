@@ -1,6 +1,7 @@
 import 'package:avzag/dictionary/dictionary_editor.dart';
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -120,17 +121,53 @@ class NavDraver extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
-            child: Text(
-              "Ævzag",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+          ExpandableNotifier(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ExpandableButton(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                    child: Text(
+                      "Ævzag",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  theme: ExpandableThemeData(
+                    hasIcon: true,
+                  ),
+                ),
+                Expandable(
+                  collapsed: Offstage(),
+                  expanded: Column(
+                    children: [
+                      Divider(height: 0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16,
+                        ),
+                        child: Text(
+                          "Developed in Dagestan, North Caucasus.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black54),
+                        ),
+                      ),
+                      Divider(height: 0),
+                      for (final m in submodules)
+                        m.build(
+                          context,
+                          small: true,
+                        ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
           Divider(height: 0),
@@ -139,23 +176,6 @@ class NavDraver extends StatelessWidget {
               context,
               selected: m.title == title,
             ),
-          Divider(height: 0),
-          for (final m in submodules)
-            m.build(
-              context,
-              small: true,
-            ),
-          Divider(height: 0),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 16,
-            ),
-            child: Text(
-              "Developed in Dagestan, North Caucasus.",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.black54),
-            ),
-          ),
         ],
       ),
     );
