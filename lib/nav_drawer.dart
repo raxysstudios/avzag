@@ -121,52 +121,48 @@ class NavDraver extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          ExpandableNotifier(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          ExpandablePanel(
+            header: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
+              child: Text(
+                "Ævzag",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            theme: ExpandableThemeData(
+              expandIcon: Icons.expand_more_outlined,
+              collapseIcon: Icons.expand_more_outlined,
+              iconPadding: const EdgeInsets.only(
+                right: 16,
+                top: 16,
+              ),
+            ),
+            collapsed: Offstage(),
+            expanded: Column(
               children: [
-                ExpandableButton(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
-                    child: Text(
-                      "Ævzag",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                Divider(height: 0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
                   ),
-                  theme: ExpandableThemeData(
-                    hasIcon: true,
+                  child: Text(
+                    "Developed in Dagestan, North Caucasus.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black54),
                   ),
                 ),
-                Expandable(
-                  collapsed: Offstage(),
-                  expanded: Column(
-                    children: [
-                      Divider(height: 0),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                        ),
-                        child: Text(
-                          "Developed in Dagestan, North Caucasus.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                      ),
-                      Divider(height: 0),
-                      for (final m in submodules)
-                        m.build(
-                          context,
-                          small: true,
-                        ),
-                    ],
+                Divider(height: 0),
+                for (final m in submodules)
+                  m.build(
+                    context,
+                    small: true,
                   ),
-                ),
               ],
             ),
           ),
