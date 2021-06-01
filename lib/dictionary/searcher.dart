@@ -21,9 +21,11 @@ class Searcher {
   }
 
   void reset() {
-    this.languages.forEach((l) => this.progress[l] = 0);
-    this.progress[""] = 0;
-    this.results.clear();
+    setState(() {
+      this.languages.forEach((l) => this.progress[l] = 0);
+      this.progress[''] = 0;
+      this.results.clear();
+    });
   }
 
   void addResult(String lect, Iterable<String> meanings, Entry entry) {
@@ -33,6 +35,12 @@ class Searcher {
         if (results[m]![lect] == null) results[m]![lect] = [];
         results[m]![lect]!.add(entry);
       }
+    });
+  }
+
+  void updateProgress(String key, double value) {
+    setState(() {
+      progress[key] = value;
     });
   }
 
@@ -49,11 +57,11 @@ class Searcher {
       if (pending != null)
         return;
       else if (i % 1000 == 0) {
-        progress[lect] = i / entries.length;
+        updateProgress(lect, i / entries.length);
         await sleep();
       }
     }
-    progress[lect] = 1;
+    updateProgress(lect, 1);
   }
 
   Future<Iterable<Iterable<String>>> findMeanings(
@@ -67,12 +75,12 @@ class Searcher {
       if (pending != null)
         return [];
       else if (i % 1000 == 0) {
-        progress[""] = i / entries.length;
+        updateProgress('', i / entries.length);
         await sleep();
       }
     }
-    progress[""] = 1;
-    return meanings.map((m) => ["!" + m]);
+    updateProgress('', 1);
+    return meanings.map((m) => ['!' + m]);
   }
 
   Future<void> queue(Future<void> Function() action) async {
@@ -101,7 +109,10 @@ class Searcher {
     queue(() async {
       reset();
       var queries = parseQuery(query.toLowerCase());
-      if (queries.isEmpty) return;
+      if (queries.isEmpty) {
+        updateProgress('', 1);
+        return;
+      }
 
       if (languages.length == 1) {
         lect = languages.first;
