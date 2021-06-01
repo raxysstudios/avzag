@@ -82,21 +82,34 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   for (final m in searcher.results.entries) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                        horizontal: 16,
+                        vertical: 8,
                       ),
                       child: Text(
                         capitalize(m.key),
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black54,
                           fontSize: 16,
-                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     for (final l in m.value.entries)
                       for (final e in l.value)
-                        InkWell(
+                        ListTile(
+                          dense: true,
+                          title: Text(
+                            capitalize(e.forms[0].plain),
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          trailing: Text(
+                            capitalize(l.key),
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 14,
+                            ),
+                          ),
                           onTap: () => showModalBottomSheet(
                             context: context,
                             builder: (context) {
@@ -109,30 +122,11 @@ class _DictionaryPageState extends State<DictionaryPage> {
                               );
                             },
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 4,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  capitalize(e.forms[0].plain),
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                Text(
-                                  capitalize(l.key),
-                                  style: TextStyle(color: Colors.black54),
-                                )
-                              ],
-                            ),
-                          ),
                         ),
                     Divider(height: 0),
                   ],
                   Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(16),
                     child: Text(
                       searcher.executing
                           ? "Searching..."
