@@ -24,13 +24,14 @@ class _EditorSwitchState extends State<EditorSwitch> {
               children: [
                 ListTile(
                   leading: Icon(Icons.edit_off_outlined),
-                  title: Text("Turn off"),
+                  title: Text("None"),
                   selected: editorMode == null,
                   onTap: () => Navigator.pop(context),
                 ),
                 for (final l in languages)
                   LanguageTile(
                     l,
+                    selected: editorMode == l.name,
                     onTap: () => Navigator.pop(
                       context,
                       l.name,

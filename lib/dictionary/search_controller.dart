@@ -113,13 +113,17 @@ class SearchControllerState extends State<SearchController> {
                               Icons.lightbulb_outlined,
                             ),
                             title: Text('English'),
+                            selected: language == null,
                           ),
                         ),
                         PopupMenuDivider(),
                         ...lngs.map((l) {
                           return PopupMenuItem(
                             value: l,
-                            child: LanguageTile(l),
+                            child: LanguageTile(
+                              l,
+                              selected: language == l,
+                            ),
                           );
                         })
                       ];

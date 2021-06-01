@@ -6,9 +6,10 @@ import 'language_avatar.dart';
 
 class LanguageTile extends StatelessWidget {
   final Language language;
+  final bool selected;
   final void Function()? onTap;
 
-  const LanguageTile(this.language, {this.onTap});
+  const LanguageTile(this.language, {this.selected = false, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ class LanguageTile extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
+      selected: selected,
       onTap: onTap,
     );
   }
