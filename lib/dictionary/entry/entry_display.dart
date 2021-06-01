@@ -47,16 +47,19 @@ class _EntryDisplayState extends State<EntryDisplay>
               fontWeight: FontWeight.bold,
             ),
           ),
-          trailing: IconButton(
-            onPressed: () {
-              setState(() {
-                scholar = !scholar;
-              });
-              widget.toggleScholar?.call();
-            },
-            icon: Icon(
-              Icons.school_outlined,
-              color: scholar ? Colors.blue : Colors.black,
+          trailing: Transform.translate(
+            offset: Offset(12, 0),
+            child: IconButton(
+              onPressed: () {
+                setState(() {
+                  scholar = !scholar;
+                });
+                widget.toggleScholar?.call();
+              },
+              icon: Icon(
+                Icons.school_outlined,
+                color: scholar ? Colors.blue : Colors.black,
+              ),
             ),
           ),
         ),
