@@ -91,10 +91,12 @@ class SearchControllerState extends State<SearchController> {
                                   capitalize(
                                     language!.name,
                                   ),
-                          suffixIcon: IconButton(
-                            onPressed: () => inputController.clear(),
-                            icon: Icon(Icons.clear),
-                          ),
+                          suffixIcon: inputController.text.isEmpty
+                              ? null
+                              : IconButton(
+                                  onPressed: () => inputController.clear(),
+                                  icon: Icon(Icons.clear),
+                                ),
                         ),
                       ),
                     ),
