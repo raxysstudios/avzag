@@ -2,7 +2,7 @@ import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/use/use_display.dart';
 import 'package:flutter/material.dart';
 
-import '../../note_display.dart';
+import '../../widgets/note_display.dart';
 import '../../utils.dart';
 import 'entry.dart';
 

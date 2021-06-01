@@ -1,6 +1,6 @@
 import 'package:avzag/dictionary/concept/concept.dart';
 import 'package:avzag/dictionary/concept/concept_display.dart';
-import 'package:avzag/tag_selection.dart';
+import 'package:avzag/widgets/tag_selection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../store.dart';
