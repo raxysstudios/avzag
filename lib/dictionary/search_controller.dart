@@ -48,7 +48,7 @@ class SearchControllerState extends State<SearchController> {
       if (preset == null)
         widget.searcher.search(language?.name ?? '', inputController.text);
       else
-        widget.searcher.search("", preset!.query);
+        widget.searcher.search('', preset!.query);
     });
   }
 
@@ -62,7 +62,7 @@ class SearchControllerState extends State<SearchController> {
             onPressed: () => setState(
               () {
                 if (preset == null) {
-                  inputController.text = "";
+                  inputController.clear();
                   preset = presets[0];
                 } else
                   preset = null;
@@ -91,6 +91,10 @@ class SearchControllerState extends State<SearchController> {
                                   capitalize(
                                     language!.name,
                                   ),
+                          suffixIcon: IconButton(
+                            onPressed: () => inputController.clear(),
+                            icon: Icon(Icons.clear),
+                          ),
                         ),
                       ),
                     ),
@@ -101,7 +105,7 @@ class SearchControllerState extends State<SearchController> {
                         : LanguageAvatar(language!),
                     onSelected: (l) => setState(() {
                       language = l.name == "NO" ? null : l;
-                      inputController.text = '';
+                      inputController.clear();
                       search();
                     }),
                     itemBuilder: (BuildContext context) {
