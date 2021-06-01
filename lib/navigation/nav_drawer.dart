@@ -1,11 +1,12 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
-import 'package:avzag/home/store.dart';
-import 'package:avzag/store.dart';
+import 'package:avzag/navigation/editor_toggle.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'expandable_title.dart';
 
 class NavDraver extends StatelessWidget {
   NavDraver({this.title});
@@ -33,30 +34,8 @@ class NavDraver extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          ExpandablePanel(
-            header: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
-              child: Text(
-                'Ævzag',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            theme: ExpandableThemeData(
-              expandIcon: Icons.expand_more_outlined,
-              collapseIcon: Icons.expand_more_outlined,
-              iconPadding: const EdgeInsets.only(
-                right: 16,
-                top: 16,
-              ),
-            ),
-            collapsed: Offstage(),
-            expanded: Column(
+          ExpandableTitle(
+            Column(
               children: [
                 Divider(height: 0),
                 Padding(
@@ -68,18 +47,7 @@ class NavDraver extends StatelessWidget {
                   ),
                 ),
                 Divider(height: 0),
-                SwitchListTile(
-                  title: Text('Editor mode'),
-                  subtitle: Text('Off'),
-                  value: editorMode != null,
-                  secondary: Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Icon(Icons.edit_outlined),
-                  ),
-                  onChanged: (e) {
-                    editorMode = e ? languages[0].name : null;
-                  },
-                ),
+                EditorSwitch(),
                 ListTile(
                   leading: Icon(Icons.email_outlined),
                   title: Text('Developer contact'),

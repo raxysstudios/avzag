@@ -4,7 +4,7 @@ import '../utils.dart';
 import 'entry/entry_display.dart';
 import 'searcher.dart';
 import 'store.dart';
-import 'package:avzag/nav_drawer.dart';
+import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:flutter/material.dart';
 
 class DictionaryPage extends StatefulWidget {

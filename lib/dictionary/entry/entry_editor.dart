@@ -11,8 +11,9 @@ import '../sample/sample_editor.dart';
 import 'entry.dart';
 
 class EntryEditor extends StatefulWidget {
-  EntryEditor(this.sourceEntry);
   final Entry sourceEntry;
+
+  EntryEditor(this.sourceEntry);
 
   @override
   _EntryEditorState createState() => _EntryEditorState();

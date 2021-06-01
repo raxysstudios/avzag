@@ -2,7 +2,7 @@ import 'package:avzag/dictionary/entry/entry_editor.dart';
 import 'package:avzag/home/models.dart';
 import 'package:avzag/home/store.dart';
 import 'package:flutter/material.dart';
-import '../nav_drawer.dart';
+import '../navigation/nav_drawer.dart';
 import '../utils.dart';
 import 'entry/entry.dart';
 
