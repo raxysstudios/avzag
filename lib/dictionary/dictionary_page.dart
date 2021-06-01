@@ -57,11 +57,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
             ),
             actions: [
               IconButton(
-                onPressed: () => setState(() => useScholar = !useScholar),
-                icon: Icon(Icons.school_outlined),
-                color: useScholar ? Colors.blue : Colors.black,
-              ),
-              IconButton(
                 onPressed: showHelp,
                 icon: Icon(Icons.help_outline_outlined),
               ),
@@ -114,10 +109,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
                             context: context,
                             builder: (context) {
                               return Container(
-                                height: 320,
+                                height: 384,
                                 child: EntryDisplay(
                                   e,
                                   scholar: useScholar,
+                                  toggleScholar: () => setState(
+                                    () => useScholar = !useScholar,
+                                  ),
                                 ),
                               );
                             },

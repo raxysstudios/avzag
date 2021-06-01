@@ -9,8 +9,9 @@ import 'entry.dart';
 class EntryDisplay extends StatefulWidget {
   final Entry entry;
   final bool scholar;
+  final void Function()? toggleScholar;
 
-  EntryDisplay(this.entry, {this.scholar = false});
+  EntryDisplay(this.entry, {this.scholar = false, this.toggleScholar});
 
   @override
   _EntryDisplayState createState() => _EntryDisplayState();
@@ -19,11 +20,11 @@ class EntryDisplay extends StatefulWidget {
 class _EntryDisplayState extends State<EntryDisplay>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-  bool get scholar => widget.scholar;
+  late bool scholar;
 
   @override
   void initState() {
+    scholar = widget.scholar;
     super.initState();
     _tabController = new TabController(length: 2, vsync: this);
   }
@@ -38,13 +39,24 @@ class _EntryDisplayState extends State<EntryDisplay>
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(
+        ListTile(
+          title: Text(
             capitalize(widget.entry.forms[0].plain),
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
+            ),
+          ),
+          trailing: IconButton(
+            onPressed: () {
+              setState(() {
+                scholar = !scholar;
+              });
+              widget.toggleScholar?.call();
+            },
+            icon: Icon(
+              Icons.school_outlined,
+              color: scholar ? Colors.blue : Colors.black,
             ),
           ),
         ),
@@ -53,7 +65,7 @@ class _EntryDisplayState extends State<EntryDisplay>
           child: ListView(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: widget.entry.uses == null
@@ -68,7 +80,7 @@ class _EntryDisplayState extends State<EntryDisplay>
               ),
               Divider(height: 0),
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
