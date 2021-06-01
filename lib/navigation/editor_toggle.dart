@@ -1,4 +1,4 @@
-import 'package:avzag/home/language_card.dart';
+import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
@@ -15,19 +15,25 @@ class _EditorSwitchState extends State<EditorSwitch> {
       context: context,
       builder: (_) => SimpleDialog(
         title: Text("Select language"),
-        contentPadding: const EdgeInsets.all(16),
         children: [
           Container(
             height: 512,
             child: ListView(
               children: [
+                ListTile(
+                  leading: Icon(Icons.edit_off_outlined),
+                  title: Text("Turn off"),
+                  selected: editorMode == null,
+                  onTap: () => Navigator.pop(context),
+                ),
                 for (final l in languages)
-                  LanguageCard(
-                    l,
-                    onTap: () => Navigator.pop(
-                      context,
-                      l.name,
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: getFlagImage(l),
                     ),
+                    title: Text(capitalize(l.name)),
+                    selected: editorMode == l.name,
+                    onTap: () => Navigator.pop(context, l.name),
                   ),
               ],
             ),
@@ -50,7 +56,7 @@ class _EditorSwitchState extends State<EditorSwitch> {
         child: Icon(Icons.edit_outlined),
       ),
       onChanged: (e) async {
-        final mode = e ? await chooseLanguage() : null;
+        final mode = await chooseLanguage();
         setState(() => editorMode = mode);
       },
     );

@@ -23,29 +23,43 @@ Future<void> donwloadFlag(Language language) async {
   print("downloaded " + path);
 }
 
+ImageProvider getFlagImage(Language language) {
+  return FileImage(
+    File(docDir + flagPath(language)),
+  );
+}
+
 class LanguageFlag extends StatelessWidget {
   const LanguageFlag(
     this.language, {
+    this.width = 16,
+    this.height = 4,
+    this.rotation = -pi / 4,
     this.offset = const Offset(0, 0),
     this.scale = 18,
+    this.circle = false,
   });
   final Language language;
+  final double width;
+  final double height;
+  final bool circle;
+  final double rotation;
   final Offset offset;
   final double scale;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 16,
-      height: 4,
+      width: width,
+      height: height,
       child: Transform.translate(
         offset: offset,
         child: Transform.rotate(
-          angle: -pi / 4,
+          angle: rotation,
           child: Transform.scale(
             scale: scale,
-            child: Image.file(
-              File(docDir + flagPath(language)),
+            child: Image(
+              image: getFlagImage(language),
               repeat: ImageRepeat.repeatX,
               // fit: BoxFit.contain,
               errorBuilder: (
