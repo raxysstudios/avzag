@@ -16,7 +16,7 @@ class _EditorSwitchState extends State<EditorSwitch> {
     return await showDialog<String>(
       context: context,
       builder: (_) => SimpleDialog(
-        title: Text("Select language"),
+        title: Text("Select editing language"),
         children: [
           Container(
             height: 512,
