@@ -15,21 +15,18 @@ class UseDisplay extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: ConceptDisplay(
-            concepts[use.concept]!,
-            scholar: scholar,
-          ),
+        ConceptDisplay(
+          concepts[use.concept]!,
+          scholar: scholar,
         ),
         NoteList(
           use.note,
-          padding: const EdgeInsets.only(bottom: 4),
+          padding: const EdgeInsets.only(top: 4),
         ),
         if (use.samples != null)
           for (final s in use.samples!)
             Padding(
-              padding: const EdgeInsets.only(bottom: 4),
+              padding: const EdgeInsets.only(top: 4),
               child: SampleDisplay(s, scholar: scholar),
             )
       ],
