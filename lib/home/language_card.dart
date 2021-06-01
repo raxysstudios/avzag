@@ -19,7 +19,7 @@ class LanguageCard extends StatelessWidget {
         child: Stack(
           children: [
             AnimatedOpacity(
-              opacity: selected ? 1 : 0.5,
+              opacity: selected ? 1 : 0.4,
               duration: Duration(milliseconds: 250),
               child: Align(
                 alignment: Alignment.centerRight,
