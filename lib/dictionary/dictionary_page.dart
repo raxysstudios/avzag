@@ -107,18 +107,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
                           ),
                           onTap: () => showModalBottomSheet(
                             context: context,
-                            builder: (context) {
-                              return Container(
-                                height: 384,
-                                child: EntryDisplay(
-                                  e,
-                                  scholar: useScholar,
-                                  toggleScholar: () => setState(
-                                    () => useScholar = !useScholar,
-                                  ),
-                                ),
-                              );
-                            },
+                            builder: (context) => EntryDisplay(
+                              e,
+                              scholar: useScholar,
+                              toggleScholar: () => setState(
+                                () => useScholar = !useScholar,
+                              ),
+                            ),
                           ),
                         ),
                     Divider(height: 0),

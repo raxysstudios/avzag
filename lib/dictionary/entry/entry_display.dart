@@ -37,85 +37,88 @@ class _EntryDisplayState extends State<EntryDisplay>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          title: Text(
-            capitalize(widget.entry.forms[0].plain),
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          trailing: Transform.translate(
-            offset: Offset(12, 0),
-            child: IconButton(
-              onPressed: () {
-                setState(() {
-                  scholar = !scholar;
-                });
-                widget.toggleScholar?.call();
-              },
-              icon: Icon(
-                Icons.school_outlined,
-                color: scholar ? Colors.blue : Colors.black,
+    return Container(
+      height: 512,
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              capitalize(widget.entry.forms[0].plain),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-        ),
-        Divider(height: 0),
-        Expanded(
-          child: ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: widget.entry.uses == null
-                      ? [Text("No uses data.")]
-                      : [
-                          for (final u in widget.entry.uses!) ...[
-                            UseDisplay(u, scholar: scholar),
-                            SizedBox(height: 4),
-                          ],
-                        ],
+            trailing: Transform.translate(
+              offset: Offset(12, 0),
+              child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    scholar = !scholar;
+                  });
+                  widget.toggleScholar?.call();
+                },
+                icon: Icon(
+                  Icons.school_outlined,
+                  color: scholar ? Colors.blue : Colors.black,
                 ),
               ),
-              Divider(height: 0),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (scholar && widget.entry.tags != null)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 4),
-                        child: Text(
-                          widget.entry.tags!.join(" "),
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+            ),
+          ),
+          Divider(height: 0),
+          Expanded(
+            child: ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: widget.entry.uses == null
+                        ? [Text("No uses data.")]
+                        : [
+                            for (final u in widget.entry.uses!) ...[
+                              UseDisplay(u, scholar: scholar),
+                              SizedBox(height: 4),
+                            ],
+                          ],
+                  ),
+                ),
+                Divider(height: 0),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (scholar && widget.entry.tags != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Text(
+                            widget.entry.tags!.join(" "),
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
+                      NoteList(
+                        widget.entry.note,
+                        padding: const EdgeInsets.only(bottom: 4),
                       ),
-                    NoteList(
-                      widget.entry.note,
-                      padding: const EdgeInsets.only(bottom: 4),
-                    ),
-                    for (final f in widget.entry.forms)
-                      SampleDisplay(
-                        f,
-                        scholar: scholar,
-                        row: true,
-                      ),
-                  ],
+                      for (final f in widget.entry.forms)
+                        SampleDisplay(
+                          f,
+                          scholar: scholar,
+                          row: true,
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
