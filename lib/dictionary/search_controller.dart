@@ -112,7 +112,7 @@ class SearchControllerState extends State<SearchController> {
                           value: Language(name: "NO"),
                           child: ListTile(
                             leading: Icon(
-                              Icons.lightbulb_outlined,
+                              Icons.language_outlined,
                             ),
                             title: Text('English'),
                             selected: language == null,
