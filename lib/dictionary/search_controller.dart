@@ -98,7 +98,7 @@ class SearchControllerState extends State<SearchController> {
                   ),
                   PopupMenuButton<Language>(
                     icon: language == null
-                        ? Icon(Icons.lightbulb_outlined)
+                        ? Icon(Icons.language_outlined)
                         : LanguageAvatar(language!),
                     tooltip: "Select language",
                     onSelected: (l) => setState(() {
