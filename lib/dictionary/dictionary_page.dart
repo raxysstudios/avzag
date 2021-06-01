@@ -130,7 +130,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     child: Text(
                       searcher.executing
                           ? "Searching..."
-                          : searcher.progress[''] == 0
+                          : searcher.done
                               ? "End of results."
                               : "Start typing above to see results.",
                       textAlign: TextAlign.center,

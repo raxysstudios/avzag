@@ -11,6 +11,7 @@ class Searcher {
 
   Function? pending;
   bool executing = false;
+  bool get done => !executing && progress[''] == 1;
 
   Searcher(this.dictionaries, this.setState) {
     reset();
@@ -22,9 +23,9 @@ class Searcher {
 
   void reset() {
     setState(() {
-      this.languages.forEach((l) => this.progress[l] = 0);
-      this.progress[''] = 0;
-      this.results.clear();
+      languages.forEach((l) => progress[l] = 0);
+      progress[''] = 0;
+      results.clear();
     });
   }
 
@@ -109,29 +110,26 @@ class Searcher {
     queue(() async {
       reset();
       var queries = parseQuery(query.toLowerCase());
-      if (queries.isEmpty) {
-        updateProgress('', 1);
-        return;
-      }
-
+      if (queries.isEmpty) return;
       if (languages.length == 1) {
         lect = languages.first;
-        await this.queryDictionary(
+        await queryDictionary(
           lect,
           dictionaries[lect]!,
           queries,
           true,
           true,
         );
+        updateProgress('', 1);
         return;
       }
 
       if (queries.isNotEmpty) if (lect.isNotEmpty)
-        queries = await this.findMeanings(dictionaries[lect]!, queries);
+        queries = await findMeanings(dictionaries[lect]!, queries);
       if (queries.isNotEmpty)
         await Future.wait(
           dictionaries.entries.map(
-            (d) => this.queryDictionary(
+            (d) => queryDictionary(
               d.key,
               d.value,
               queries,
@@ -140,6 +138,7 @@ class Searcher {
             ),
           ),
         );
+      updateProgress('', 1);
     });
   }
 }
