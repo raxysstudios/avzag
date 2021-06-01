@@ -11,7 +11,7 @@ final List<SearchPreset> presets = [];
 final List<String> grammarTags = [];
 final List<String> semanticTags = [];
 
-Future<void> load(Iterable<String> languages) async {
+Future<void> loadDictionaries(Iterable<String> languages) async {
   dictionaries.clear();
   await Future.wait(
     languages.map((l) {

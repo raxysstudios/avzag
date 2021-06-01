@@ -23,12 +23,6 @@ Future<void> donwloadFlag(Language language) async {
   print("downloaded " + path);
 }
 
-ImageProvider getFlagImage(Language language) {
-  return FileImage(
-    File(docDir + flagPath(language)),
-  );
-}
-
 class LanguageFlag extends StatelessWidget {
   const LanguageFlag(
     this.language, {
@@ -58,10 +52,9 @@ class LanguageFlag extends StatelessWidget {
           angle: rotation,
           child: Transform.scale(
             scale: scale,
-            child: Image(
-              image: getFlagImage(language),
+            child: Image.file(
+              File(docDir + flagPath(language)),
               repeat: ImageRepeat.repeatX,
-              // fit: BoxFit.contain,
               errorBuilder: (
                 BuildContext context,
                 Object exception,

@@ -13,10 +13,7 @@ class LanguageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
-      margin: const EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(),
-      color: Colors.transparent,
+      // color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
         child: Stack(

@@ -1,4 +1,9 @@
 import 'package:avzag/dictionary/models.dart';
+import 'package:avzag/home/language_avatar.dart';
+import 'package:avzag/home/language_flag.dart';
+import 'package:avzag/home/language_tile.dart';
+import 'package:avzag/home/models.dart';
+import 'package:avzag/home/store.dart';
 
 import '../utils.dart';
 import 'entry/entry_display.dart';
@@ -13,11 +18,10 @@ class DictionaryPage extends StatefulWidget {
 }
 
 class _DictionaryPageState extends State<DictionaryPage> {
-  final languages = ['iron', 'kaitag'];
   final inputController = TextEditingController();
   late Future<void>? loader;
   late Searcher searcher;
-  String language = "";
+  Language? language;
 
   bool useScholar = false;
   SearchPreset? preset;
@@ -25,7 +29,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   void search() {
     setState(() {
       if (preset == null)
-        searcher.search(language, inputController.text);
+        searcher.search(language?.name ?? '', inputController.text);
       else
         searcher.search("", preset!.query);
     });
@@ -34,7 +38,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
   @override
   void initState() {
     super.initState();
-    loader = load(languages);
+    loader = loadDictionaries(
+      languages.map((l) => l.name),
+    );
     searcher = Searcher(dictionaries, setState);
     inputController.addListener(search);
   }
@@ -66,7 +72,11 @@ class _DictionaryPageState extends State<DictionaryPage> {
         BuildContext context,
         AsyncSnapshot snapshot,
       ) {
-        final languages = dictionaries.keys;
+        final lngs = dictionaries.keys.map(
+          (n) => languages.singleWhere(
+            (l) => l.name == n,
+          ),
+        );
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -129,31 +139,41 @@ class _DictionaryPageState extends State<DictionaryPage> {
                                     child: TextField(
                                       controller: inputController,
                                       decoration: InputDecoration(
-                                        labelText: language.isEmpty
+                                        labelText: language == null
                                             ? "Search in English"
-                                            : "Search in ${capitalize(language)}",
+                                            : "Search in " +
+                                                capitalize(
+                                                  language!.name,
+                                                ),
                                       ),
                                     ),
                                   ),
                                 ),
-                                PopupMenuButton<String>(
-                                  icon: Icon(Icons.flag_outlined),
+                                PopupMenuButton<Language>(
+                                  icon: language == null
+                                      ? Icon(Icons.lightbulb_outlined)
+                                      : LanguageAvatar(language!),
                                   onSelected: (l) => setState(() {
-                                    language = l;
-                                    inputController.text = "";
+                                    language = l.name == "NO" ? null : l;
+                                    inputController.text = '';
                                     search();
                                   }),
                                   itemBuilder: (BuildContext context) {
                                     return [
-                                      PopupMenuItem<String>(
-                                        value: '',
-                                        child: Text('English'),
+                                      PopupMenuItem(
+                                        value: Language(name: "NO"),
+                                        child: ListTile(
+                                          leading: Icon(
+                                            Icons.lightbulb_outlined,
+                                          ),
+                                          title: Text('English'),
+                                        ),
                                       ),
                                       PopupMenuDivider(),
-                                      ...languages.map((String l) {
-                                        return PopupMenuItem<String>(
+                                      ...lngs.map((l) {
+                                        return PopupMenuItem(
                                           value: l,
-                                          child: Text(capitalize(l)),
+                                          child: LanguageTile(l),
                                         );
                                       })
                                     ];

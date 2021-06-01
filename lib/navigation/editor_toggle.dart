@@ -1,4 +1,6 @@
+import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/home/language_flag.dart';
+import 'package:avzag/home/language_tile.dart';
 import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
@@ -27,13 +29,12 @@ class _EditorSwitchState extends State<EditorSwitch> {
                   onTap: () => Navigator.pop(context),
                 ),
                 for (final l in languages)
-                  ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: getFlagImage(l),
+                  LanguageTile(
+                    l,
+                    onTap: () => Navigator.pop(
+                      context,
+                      l.name,
                     ),
-                    title: Text(capitalize(l.name)),
-                    selected: editorMode == l.name,
-                    onTap: () => Navigator.pop(context, l.name),
                   ),
               ],
             ),
