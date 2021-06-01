@@ -18,11 +18,15 @@ class LanguageCard extends StatelessWidget {
         onTap: onTap,
         child: Stack(
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: LanguageFlag(
-                language,
-                offset: Offset(-30, 36),
+            AnimatedOpacity(
+              opacity: selected ? 1 : 0.5,
+              duration: Duration(milliseconds: 250),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: LanguageFlag(
+                  language,
+                  offset: Offset(-30, 36),
+                ),
               ),
             ),
             ListTile(
@@ -31,16 +35,12 @@ class LanguageCard extends StatelessWidget {
               title: Text(
                 capitalize(language.name),
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               subtitle: Text(
                 capitalize(language.family?.join(' • ') ?? ''),
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
               ),
             ),
           ],
