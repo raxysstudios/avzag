@@ -58,25 +58,20 @@ class SearchControllerState extends State<SearchController> {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => setState(
-              () {
-                if (preset == null) {
-                  inputController.clear();
-                  preset = presets[0];
-                } else
-                  preset = null;
-                search();
-              },
-            ),
-            icon: Icon(
-              preset == null
-                  ? Icons.library_books_outlined
-                  : Icons.search_outlined,
-            ),
-          ),
           ...preset == null
               ? [
+                  IconButton(
+                    onPressed: () => setState(
+                      () {
+                        inputController.clear();
+                        preset = presets[0];
+
+                        search();
+                      },
+                    ),
+                    icon: Icon(Icons.library_books_outlined),
+                    tooltip: "View presets",
+                  ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -105,6 +100,7 @@ class SearchControllerState extends State<SearchController> {
                     icon: language == null
                         ? Icon(Icons.lightbulb_outlined)
                         : LanguageAvatar(language!),
+                    tooltip: "Select language",
                     onSelected: (l) => setState(() {
                       language = l.name == "NO" ? null : l;
                       inputController.clear();
@@ -137,6 +133,18 @@ class SearchControllerState extends State<SearchController> {
                   ),
                 ]
               : [
+                  IconButton(
+                    onPressed: () => setState(
+                      () {
+                        preset = null;
+                        search();
+                      },
+                    ),
+                    icon: Icon(
+                      Icons.search_outlined,
+                    ),
+                    tooltip: "Free search",
+                  ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(

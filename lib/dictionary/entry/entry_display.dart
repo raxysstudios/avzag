@@ -62,6 +62,7 @@ class _EntryDisplayState extends State<EntryDisplay>
                   Icons.school_outlined,
                   color: scholar ? Colors.blue : Colors.black,
                 ),
+                tooltip: "Toggle Scholar mode",
               ),
             ),
           ),
