@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return FirebaseBuilder(
+    return FutureLoader(
       future: loader,
       builder: () => Scaffold(
         appBar: AppBar(

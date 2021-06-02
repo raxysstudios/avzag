@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class FirebaseBuilder extends StatelessWidget {
+class FutureLoader extends StatelessWidget {
   final Future<void>? future;
   final Widget Function()? builder;
 
-  const FirebaseBuilder({
+  const FutureLoader({
     this.future,
     this.builder,
   });

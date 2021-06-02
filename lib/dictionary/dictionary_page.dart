@@ -39,7 +39,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FirebaseBuilder(
+    return FutureLoader(
       future: loader,
       builder: () => Scaffold(
         appBar: AppBar(
