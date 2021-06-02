@@ -1,3 +1,4 @@
+import 'package:avzag/home/models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../utils.dart';
@@ -11,12 +12,12 @@ final List<SearchPreset> presets = [];
 final List<String> grammarTags = [];
 final List<String> semanticTags = [];
 
-Future<void> loadDictionaries(Iterable<String> languages) async {
+Future<void> loadDictionaries(Iterable<Language> languages) async {
   dictionaries.clear();
   await Future.wait(
     languages.map((l) {
       return FirebaseFirestore.instance
-          .collection('languages/$l/dictionary')
+          .collection('languages/${l.name}/dictionary')
           .withConverter(
             fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
             toFirestore: (Entry object, _) => object.toJson(),
@@ -24,8 +25,7 @@ Future<void> loadDictionaries(Iterable<String> languages) async {
           .get()
           .then((d) {
         if (d.docs.isEmpty) return null;
-        dictionaries[l] = d.docs.map((e) => e.data()).toList();
-        return l;
+        dictionaries[l.name] = d.docs.map((e) => e.data()).toList();
       });
     }),
   );
