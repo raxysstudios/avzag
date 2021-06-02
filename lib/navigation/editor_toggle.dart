@@ -1,5 +1,3 @@
-import 'package:avzag/home/language_avatar.dart';
-import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/home/language_tile.dart';
 import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
