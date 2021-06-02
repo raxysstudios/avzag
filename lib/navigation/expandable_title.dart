@@ -13,12 +13,24 @@ class ExpandableTitle extends StatelessWidget {
           horizontal: 16,
           vertical: 14,
         ),
-        child: Text(
-          'Ævzag',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+        child: Row(
+          children: [
+            Transform.scale(
+              scale: 1.5,
+              child: CircleAvatar(
+                backgroundImage: AssetImage('icon.png'),
+                radius: 12,
+              ),
+            ),
+            SizedBox(width: 32),
+            Text(
+              'Ævzag',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
       theme: ExpandableThemeData(
