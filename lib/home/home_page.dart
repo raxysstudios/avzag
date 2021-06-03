@@ -1,4 +1,3 @@
-import 'package:avzag/home/models.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
@@ -13,12 +12,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Set<Language> selected;
+  late List<String> selected;
 
   @override
   void initState() {
     super.initState();
-    selected = Set.from(loadedLanguages);
+    selected = List.from(BaseStore.languages);
   }
 
   @override
@@ -35,9 +34,9 @@ class _HomePageState extends State<HomePage> {
                 var prefs = await SharedPreferences.getInstance();
                 await prefs.setStringList(
                   'languages',
-                  selected.map((l) => l.name).toList(),
+                  selected.toList(),
                 );
-                await loadAll(context);
+                await BaseStore.load(context);
               },
               child: Icon(Icons.download_outlined),
               tooltip: 'Download data',
@@ -65,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.all(4),
                           child: InputChip(
                             label: Text(
-                              capitalize(l.name),
+                              capitalize(l),
                               style: TextStyle(fontSize: 16),
                             ),
                             onPressed: () => setState(
@@ -78,23 +77,20 @@ class _HomePageState extends State<HomePage> {
           ),
           Divider(height: 2),
           Expanded(
-            child: ListView.separated(
-              itemCount: languages.length,
+            child: ListView.builder(
+              itemCount: HomeStore.languages.length,
               itemBuilder: (context, index) {
-                final lang = languages[index];
-                final contains = selected.contains(lang);
+                final lang = HomeStore.languages[index]!;
+                final name = lang.name;
+                final contains = selected.contains(name);
                 return LanguageCard(
                   lang,
                   selected: contains,
                   onTap: () => setState(
-                    () => contains ? selected.remove(lang) : selected.add(lang),
+                    () => contains ? selected.remove(name) : selected.add(name),
                   ),
                 );
               },
-              separatorBuilder: (context, index) => Divider(
-                height: 2,
-                color: Colors.transparent,
-              ),
             ),
           ),
         ],

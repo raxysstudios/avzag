@@ -4,7 +4,7 @@ import 'entry/entry.dart';
 import 'use/use.dart';
 
 String getMeaning(Use use) {
-  return concepts[use.concept]?.meaning ?? '';
+  return DictionaryStore.concepts[use.concept]?.meaning ?? '';
 }
 
 Iterable<String> checkTag(Entry entry, String tag) {
@@ -12,7 +12,7 @@ Iterable<String> checkTag(Entry entry, String tag) {
   if (entry.tags?.contains(tag) ?? false)
     return entry.uses?.map(getMeaning) ?? [];
   return entry.uses
-          ?.map((u) => concepts[u.concept]!)
+          ?.map((u) => DictionaryStore.concepts[u.concept]!)
           .where((c) => c.tags?.contains(tag) ?? false)
           .map((c) => c.meaning) ??
       [];

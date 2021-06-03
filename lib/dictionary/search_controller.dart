@@ -3,8 +3,8 @@ import 'package:avzag/dictionary/searcher.dart';
 import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/home/language_tile.dart';
-import 'package:avzag/home/models.dart';
 import 'package:avzag/home/store.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -20,16 +20,8 @@ class SearchControllerState extends State<SearchController> {
   final inputController = TextEditingController();
   late Future<void>? loader;
 
-  Language? language;
+  String language = '';
   SearchPreset? preset;
-
-  Iterable<Language> get lngs {
-    return dictionaries.keys.map(
-      (n) => languages.singleWhere(
-        (l) => l.name == n,
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -46,7 +38,7 @@ class SearchControllerState extends State<SearchController> {
   void search() {
     setState(() {
       if (preset == null)
-        widget.searcher.search(language?.name ?? '', inputController.text);
+        widget.searcher.search(language, inputController.text);
       else
         widget.searcher.search('', preset!.query);
     });
@@ -64,8 +56,7 @@ class SearchControllerState extends State<SearchController> {
                     onPressed: () => setState(
                       () {
                         inputController.clear();
-                        preset = presets[0];
-
+                        preset = DictionaryStore.presets[0];
                         search();
                       },
                     ),
@@ -80,12 +71,9 @@ class SearchControllerState extends State<SearchController> {
                       child: TextField(
                         controller: inputController,
                         decoration: InputDecoration(
-                          labelText: language == null
+                          labelText: language.isEmpty
                               ? "Search in English"
-                              : "Search in " +
-                                  capitalize(
-                                    language!.name,
-                                  ),
+                              : "Search in " + capitalize(language),
                           suffixIcon: inputController.text.isEmpty
                               ? null
                               : IconButton(
@@ -96,20 +84,20 @@ class SearchControllerState extends State<SearchController> {
                       ),
                     ),
                   ),
-                  PopupMenuButton<Language>(
-                    icon: language == null
+                  PopupMenuButton<String>(
+                    icon: language.isEmpty
                         ? Icon(Icons.language_outlined)
-                        : LanguageAvatar(language!),
+                        : LanguageAvatar(HomeStore.languages[language]!),
                     tooltip: "Select language",
                     onSelected: (l) => setState(() {
-                      language = l.name == "NO" ? null : l;
+                      language = l;
                       inputController.clear();
                       search();
                     }),
                     itemBuilder: (BuildContext context) {
                       return [
                         PopupMenuItem(
-                          value: Language(name: "NO"),
+                          value: '',
                           child: ListTile(
                             visualDensity: const VisualDensity(
                               vertical: -4,
@@ -119,15 +107,15 @@ class SearchControllerState extends State<SearchController> {
                               Icons.language_outlined,
                             ),
                             title: Text('English'),
-                            selected: language == null,
+                            selected: language.isEmpty,
                           ),
                         ),
                         PopupMenuDivider(),
-                        ...lngs.map((l) {
+                        ...BaseStore.languages.map((l) {
                           return PopupMenuItem(
                             value: l,
                             child: LanguageTile(
-                              l,
+                              HomeStore.languages[l]!,
                               selected: language == l,
                             ),
                           );
@@ -164,7 +152,7 @@ class SearchControllerState extends State<SearchController> {
                             bottom: 11,
                           ),
                         ),
-                        items: presets.map((p) {
+                        items: DictionaryStore.presets.map((p) {
                           return DropdownMenuItem(
                             value: p,
                             child: Text(capitalize(p.title)),

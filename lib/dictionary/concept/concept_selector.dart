@@ -13,7 +13,7 @@ class _ConceptSelectState extends State<ConceptSelect> {
   String query = '';
 
   Widget buildSearch() {
-    final filtered = concepts.entries.where(
+    final filtered = DictionaryStore.concepts.entries.where(
       (e) {
         final c = e.value;
         return [

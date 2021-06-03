@@ -19,7 +19,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   @override
   void initState() {
     super.initState();
-    searcher = Searcher(dictionaries, setState);
+    searcher = Searcher(DictionaryStore.dictionaries, setState);
   }
 
   void showHelp() {

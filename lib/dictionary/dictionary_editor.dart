@@ -1,6 +1,5 @@
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
-
 import 'entry/entry.dart';
 import 'entry/entry_editor.dart';
 
@@ -16,7 +15,7 @@ class DictionaryEditorState extends State<DictionaryEditor> {
 
   @override
   Widget build(BuildContext context) {
-    if (editorMode == null) return Offstage();
+    if (BaseStore.editorMode == null) return Offstage();
     return Column(
       children: [
         ElevatedButton.icon(

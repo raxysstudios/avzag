@@ -16,7 +16,7 @@ class UseDisplay extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ConceptDisplay(
-          concepts[use.concept]!,
+          DictionaryStore.concepts[use.concept]!,
           scholar: scholar,
         ),
         NoteList(

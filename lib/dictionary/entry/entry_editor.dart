@@ -228,7 +228,7 @@ class _EntryEditorState extends State<EntryEditor>
                           vertical: u.samples?.isEmpty ?? true ? 0 : 16,
                         ),
                         child: ConceptDisplay(
-                          concepts[u.concept]!,
+                          DictionaryStore.concepts[u.concept]!,
                           scholar: true,
                         ),
                       ),
@@ -271,7 +271,7 @@ class _EntryEditorState extends State<EntryEditor>
               SizedBox(height: 8),
               Text("Grammar tags"),
               TagSelection(
-                grammarTags,
+                DictionaryStore.grammarTags,
                 (t) => setState(() {
                   entry.tags = t;
                 }),

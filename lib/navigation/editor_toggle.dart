@@ -10,6 +10,8 @@ class EditorSwitch extends StatefulWidget {
 }
 
 class _EditorSwitchState extends State<EditorSwitch> {
+  String? get editorMode => BaseStore.editorMode;
+
   Future<String?> chooseLanguage() async {
     return await showDialog<String>(
       context: context,
@@ -26,15 +28,12 @@ class _EditorSwitchState extends State<EditorSwitch> {
                   selected: editorMode == null,
                   onTap: () => Navigator.pop(context),
                 ),
-                for (final l in languages)
+                for (final l in BaseStore.languages)
                   LanguageTile(
-                    l,
-                    selected: editorMode == l.name,
+                    HomeStore.languages[l]!,
+                    selected: editorMode == l,
                     dense: false,
-                    onTap: () => Navigator.pop(
-                      context,
-                      l.name,
-                    ),
+                    onTap: () => Navigator.pop(context, l),
                   ),
               ],
             ),
@@ -49,7 +48,7 @@ class _EditorSwitchState extends State<EditorSwitch> {
     return SwitchListTile(
       title: Text('Editor mode'),
       subtitle: Text(
-        editorMode == null ? 'Off' : capitalize(editorMode!),
+        capitalize(editorMode ?? 'Off'),
       ),
       value: editorMode != null,
       secondary: Padding(
@@ -57,8 +56,8 @@ class _EditorSwitchState extends State<EditorSwitch> {
         child: Icon(Icons.edit_outlined),
       ),
       onChanged: (e) async {
-        final mode = await chooseLanguage();
-        setState(() => editorMode = mode);
+        BaseStore.setEditorMode(await chooseLanguage());
+        setState(() {});
       },
     );
   }

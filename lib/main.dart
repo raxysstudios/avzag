@@ -28,7 +28,7 @@ class _AppState extends State<App> {
       home: Builder(
         builder: (context) {
           Firebase.initializeApp()
-              .then((_) => loadAll(context))
+              .then((_) => BaseStore.load(context))
               .then((_) => SharedPreferences.getInstance())
               .then((prefs) => prefs.getString('module') ?? 'home')
               .then((title) => navigate(context, title));

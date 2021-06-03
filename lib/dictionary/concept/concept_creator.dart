@@ -50,7 +50,7 @@ class _ConceptCreatorState extends State<ConceptCreator> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             children: [
               TagSelection(
-                semanticTags,
+                DictionaryStore.semanticTags,
                 (t) => setState(() {
                   tags = t;
                 }),
@@ -85,7 +85,7 @@ class _ConceptCreatorState extends State<ConceptCreator> {
         .collection('meta/dictionary/concepts')
         .add(concept.toJson())
         .then((d) {
-      concepts[d.id] = concept;
+      DictionaryStore.concepts[d.id] = concept;
       return d.id;
     }).then(
       (id) => Navigator.pop(context, id),
