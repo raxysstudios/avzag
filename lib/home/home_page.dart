@@ -77,20 +77,25 @@ class _HomePageState extends State<HomePage> {
           ),
           Divider(height: 2),
           Expanded(
-            child: ListView.builder(
-              itemCount: HomeStore.languages.length,
-              itemBuilder: (context, index) {
-                final lang = HomeStore.languages[index]!;
-                final name = lang.name;
-                final contains = selected.contains(name);
-                return LanguageCard(
-                  lang,
-                  selected: contains,
-                  onTap: () => setState(
-                    () => contains ? selected.remove(name) : selected.add(name),
+            child: ListView(
+              children: [
+                for (final l in HomeStore.languages.entries)
+                  Builder(
+                    builder: (context) {
+                      final name = l.key;
+                      final contains = selected.contains(name);
+                      return LanguageCard(
+                        l.value,
+                        selected: contains,
+                        onTap: () => setState(
+                          () => contains
+                              ? selected.remove(name)
+                              : selected.add(name),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+              ],
             ),
           ),
         ],
