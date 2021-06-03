@@ -135,7 +135,10 @@ class _EntryEditorState extends State<EntryEditor>
     actions.add(PopupMenuItem(
       value: (i) => setState(() => list.remove(i)),
       child: ListTile(
-        visualDensity: const VisualDensity(vertical: -4),
+        visualDensity: const VisualDensity(
+          vertical: -4,
+          horizontal: -4,
+        ),
         leading: Icon(
           Icons.delete_outline,
           color: Colors.red,
@@ -247,7 +250,10 @@ class _EntryEditorState extends State<EntryEditor>
                     PopupMenuItem(
                       value: (u) => selectSample(use: u),
                       child: ListTile(
-                        visualDensity: const VisualDensity(vertical: -4),
+                        visualDensity: const VisualDensity(
+                          vertical: -4,
+                          horizontal: -4,
+                        ),
                         leading: Icon(Icons.add_outlined),
                         title: Text('Add sample'),
                       ),

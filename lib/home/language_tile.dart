@@ -19,7 +19,12 @@ class LanguageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      visualDensity: dense ? const VisualDensity(vertical: -4) : null,
+      visualDensity: dense
+          ? const VisualDensity(
+              vertical: -4,
+              horizontal: -4,
+            )
+          : null,
       leading: LanguageAvatar(language),
       title: Text(
         capitalize(language.name),

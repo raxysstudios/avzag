@@ -111,7 +111,10 @@ class SearchControllerState extends State<SearchController> {
                         PopupMenuItem(
                           value: Language(name: "NO"),
                           child: ListTile(
-                            visualDensity: const VisualDensity(vertical: -4),
+                            visualDensity: const VisualDensity(
+                              vertical: -4,
+                              horizontal: -4,
+                            ),
                             leading: Icon(
                               Icons.language_outlined,
                             ),
