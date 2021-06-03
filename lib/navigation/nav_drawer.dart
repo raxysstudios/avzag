@@ -8,37 +8,30 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'expandable_title.dart';
 
-Widget Function(BuildContext context) resolveBuilder(
+void navigate(
+  BuildContext context,
   String title,
 ) {
-  switch (title) {
-    case 'home':
-      return (_) => HomePage();
-    case 'dictionary':
-      return (_) => DictionaryPage();
-    default:
-      return (_) => Text("NO ROUTE FOUND");
-  }
+  late Widget Function(BuildContext) builder;
+  if (title == 'home')
+    builder = (_) => HomePage();
+  else if (title == 'dictionary')
+    builder = (_) => DictionaryPage();
+  else
+    builder = (_) => Text("NO ROUTE FOUND");
+
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: builder),
+  );
+  SharedPreferences.getInstance().then(
+    (prefs) => prefs.setString('module', title),
+  );
 }
 
 class NavDraver extends StatelessWidget {
   NavDraver({this.title});
   final String? title;
-
-  void navigate(
-    BuildContext context,
-    String title,
-  ) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: resolveBuilder(title),
-      ),
-    );
-    SharedPreferences.getInstance().then(
-      (prefs) => prefs.setString('module', title),
-    );
-  }
 
   Widget buildTitle(String text, {bool disabled = false}) {
     return Text(
