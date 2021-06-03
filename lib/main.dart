@@ -1,5 +1,4 @@
 import 'package:avzag/firebase_builder.dart';
-import 'package:avzag/home/models.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'home/home_page.dart';
