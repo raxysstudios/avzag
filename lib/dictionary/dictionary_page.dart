@@ -58,13 +58,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
       future: loader,
       builder: () => Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Dictionaries',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          title: Text('Dictionaries'),
           actions: [
             if (editorMode != null)
               IconButton(

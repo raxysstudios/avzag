@@ -26,15 +26,9 @@ class _HomePageState extends State<HomePage> {
       future: loader,
       builder: () => Scaffold(
         appBar: AppBar(
-          title: Text(
-            "Home",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          title: Text('Home'),
         ),
-        drawer: NavDraver(title: "Home"),
+        drawer: NavDraver(title: 'Home'),
         body: Column(
           children: [
             Container(
@@ -42,7 +36,7 @@ class _HomePageState extends State<HomePage> {
               child: selected.isEmpty
                   ? Center(
                       child: Text(
-                        "Selected languages appear here.",
+                        'Selected languages appear here.',
                         style: TextStyle(
                           fontSize: 16,
                           fontStyle: FontStyle.italic,

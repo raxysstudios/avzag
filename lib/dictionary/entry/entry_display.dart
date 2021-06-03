@@ -86,7 +86,7 @@ class _EntryDisplayState extends State<EntryDisplay>
                 ),
                 tooltip: 'Toggle Scholar mode',
               ),
-              
+              SizedBox(width: 4),
             ],
           ),
           Divider(height: 0),
