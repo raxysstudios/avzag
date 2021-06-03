@@ -10,10 +10,10 @@ final List<SearchPreset> presets = [];
 final List<String> grammarTags = [];
 final List<String> semanticTags = [];
 
-Future<void> loadDictionary(Iterable<String> languages) async {
+Future<void> loadDictionary(List<String> langs) async {
   dictionaries.clear();
   await Future.wait(
-    languages.map((l) {
+    langs.map((l) {
       return FirebaseFirestore.instance
           .collection('languages/$l/dictionary')
           .withConverter(

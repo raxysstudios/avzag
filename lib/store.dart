@@ -1,20 +1,29 @@
 import 'package:avzag/dictionary/store.dart';
+import 'package:avzag/home/models.dart';
 import 'package:avzag/home/store.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String? editorMode;
+List<Language> loadedLanguages = [];
 
 Future<void> loadAll(BuildContext? context) async {
   var loader = SharedPreferences.getInstance()
       .then((prefs) => prefs.getStringList('languages'))
-      .then((langs) {
-    langs = langs ?? [];
-    return Future.wait([
+      .then((langs) async {
+    if (langs == null || langs.isEmpty) langs = ['kaitag'];
+    await Future.wait([
       loadHome(langs),
       loadDictionary(langs),
     ]);
-  }).then((_) {});
+    return langs;
+  }).then((langs) {
+    loadedLanguages = langs
+        .map(
+          (n) => languages.firstWhere((l) => l.name == n),
+        )
+        .toList();
+  });
   if (context == null) return await loader;
   showDialog(
     context: context,

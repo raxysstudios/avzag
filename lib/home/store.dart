@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'language_flag.dart';
 
 List<Language> languages = [];
-Set<String> selected = Set();
 
 Future<void> loadHome(List<String> langs) async {
   languages.clear();
@@ -20,7 +19,4 @@ Future<void> loadHome(List<String> langs) async {
     languages = d.docs.map((l) => l.data()).toList();
     for (final l in languages) await donwloadFlag(l);
   });
-  selected
-    ..clear()
-    ..addAll(langs);
 }
