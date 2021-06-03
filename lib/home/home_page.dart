@@ -1,9 +1,11 @@
 import 'package:avzag/firebase_builder.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'store.dart';
 import 'language_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,13 +13,53 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final Set<String> selected = Set();
-  late Future<void>? loader;
+  late Future<void> loader;
+  late Set<String> selected;
+  late Set<String> oldSelected;
+  bool get selectedDiffer => !setEquals(selected, oldSelected);
 
   @override
   void initState() {
     super.initState();
-    loader = load();
+    loader = load()
+        .then((_) => SharedPreferences.getInstance())
+        .then((prefs) => prefs.getStringList('selectedLanguages') ?? [])
+        .then((values) {
+      selected = Set<String>.from(values);
+      oldSelected = Set<String>.from(values);
+    });
+  }
+
+  void downloadLanguages() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        Future.delayed(
+          Duration(seconds: 1),
+          () => Navigator.pop(context),
+        );
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: AlertDialog(
+            contentPadding: const EdgeInsets.all(0),
+            content: Container(
+              height: 128,
+              width: 128,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text("Downloading, please wait..."),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -29,6 +71,13 @@ class _HomePageState extends State<HomePage> {
           title: Text('Home'),
         ),
         drawer: NavDraver(title: 'Home'),
+        floatingActionButton: FloatingActionButton(
+          onPressed: downloadLanguages,
+          child: Icon(
+            selectedDiffer ? Icons.download_outlined : Icons.refresh_outlined,
+          ),
+          tooltip: selectedDiffer ? "Donwload data" : "Refresh data",
+        ),
         body: Column(
           children: [
             Container(
