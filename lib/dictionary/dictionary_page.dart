@@ -1,16 +1,13 @@
+import 'package:avzag/dictionary/editor_card.dart';
 import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/searcher.dart';
 import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/firebase_builder.dart';
 import 'package:avzag/home/store.dart';
-import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
-import 'entry/entry.dart';
 import 'entry/entry_display.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:flutter/material.dart';
-
-import 'entry/entry_editor.dart';
 
 class DictionaryPage extends StatefulWidget {
   @override
@@ -41,17 +38,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
     );
   }
 
-  void openEditor({Entry? entry}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EntryEditor(
-          entry ?? Entry(forms: []),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureLoader(
@@ -60,12 +46,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
         appBar: AppBar(
           title: Text('Dictionaries'),
           actions: [
-            if (editorMode != null)
-              IconButton(
-                onPressed: openEditor,
-                icon: Icon(Icons.add_box_outlined),
-                tooltip: 'Add entry',
-              ),
             IconButton(
               onPressed: showHelp,
               icon: Icon(Icons.help_outline_outlined),
@@ -143,6 +123,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 ),
               ),
             ),
+            DictionaryEditorCard(),
           ],
         ),
       ),
