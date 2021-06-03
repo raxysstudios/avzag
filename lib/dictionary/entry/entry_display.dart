@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/note_display.dart';
 import '../../utils.dart';
 import 'entry.dart';
+import 'entry_editor.dart';
 
 class EntryDisplay extends StatefulWidget {
   final Entry entry;
@@ -41,17 +42,38 @@ class _EntryDisplayState extends State<EntryDisplay>
       height: 512,
       child: Column(
         children: [
-          ListTile(
-            title: Text(
-              capitalize(widget.entry.forms[0].plain),
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    capitalize(widget.entry.forms[0].plain),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-            ),
-            trailing: Transform.translate(
-              offset: Offset(12, 0),
-              child: IconButton(
+              IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EntryEditor(
+                        widget.entry,
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.edit_outlined,
+                  color: Colors.black,
+                ),
+                tooltip: 'Edit this entry',
+              ),
+              IconButton(
                 onPressed: () {
                   setState(() {
                     scholar = !scholar;
@@ -62,9 +84,10 @@ class _EntryDisplayState extends State<EntryDisplay>
                   Icons.school_outlined,
                   color: scholar ? Colors.blue : Colors.black,
                 ),
-                tooltip: "Toggle Scholar mode",
+                tooltip: 'Toggle Scholar mode',
               ),
-            ),
+              
+            ],
           ),
           Divider(height: 0),
           Expanded(
@@ -75,7 +98,7 @@ class _EntryDisplayState extends State<EntryDisplay>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: widget.entry.uses == null
-                        ? [Text("No uses data.")]
+                        ? [Text('No uses data.')]
                         : [
                             for (final u in widget.entry.uses!) ...[
                               UseDisplay(u, scholar: scholar),
@@ -94,7 +117,7 @@ class _EntryDisplayState extends State<EntryDisplay>
                         Padding(
                           padding: const EdgeInsets.only(bottom: 4),
                           child: Text(
-                            widget.entry.tags!.join(" "),
+                            widget.entry.tags!.join(' '),
                             style: TextStyle(
                               color: Colors.black54,
                               fontSize: 16,

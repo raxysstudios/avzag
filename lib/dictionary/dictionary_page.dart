@@ -3,10 +3,14 @@ import 'package:avzag/dictionary/searcher.dart';
 import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/firebase_builder.dart';
 import 'package:avzag/home/store.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
+import 'entry/entry.dart';
 import 'entry/entry_display.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:flutter/material.dart';
+
+import 'entry/entry_editor.dart';
 
 class DictionaryPage extends StatefulWidget {
   @override
@@ -26,14 +30,25 @@ class _DictionaryPageState extends State<DictionaryPage> {
     loader = loadDictionaries(languages);
   }
 
-  showHelp() {
-    return showDialog(
+  void showHelp() {
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
           children: [],
         );
       },
+    );
+  }
+
+  void openEditor({Entry? entry}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EntryEditor(
+          entry ?? Entry(forms: []),
+        ),
+      ),
     );
   }
 
@@ -44,21 +59,28 @@ class _DictionaryPageState extends State<DictionaryPage> {
       builder: () => Scaffold(
         appBar: AppBar(
           title: Text(
-            "Dictionaries",
+            'Dictionaries',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
           actions: [
+            if (editorMode != null)
+              IconButton(
+                onPressed: openEditor,
+                icon: Icon(Icons.add_box_outlined),
+                tooltip: 'Add entry',
+              ),
             IconButton(
               onPressed: showHelp,
               icon: Icon(Icons.help_outline_outlined),
+              tooltip: 'Show help',
             ),
             SizedBox(width: 4),
           ],
         ),
-        drawer: NavDraver(title: "Dictionary"),
+        drawer: NavDraver(title: 'Dictionary'),
         body: ListView(
           children: [
             SearchController(searcher),
@@ -94,16 +116,20 @@ class _DictionaryPageState extends State<DictionaryPage> {
                         fontSize: 14,
                       ),
                     ),
-                    onTap: () => showModalBottomSheet(
-                      context: context,
-                      builder: (context) => EntryDisplay(
-                        e,
-                        scholar: useScholar,
-                        toggleScholar: () => setState(
-                          () => useScholar = !useScholar,
-                        ),
-                      ),
-                    ),
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return EntryDisplay(
+                            e,
+                            scholar: useScholar,
+                            toggleScholar: () => setState(() {
+                              useScholar = !useScholar;
+                            }),
+                          );
+                        },
+                      );
+                    },
                   ),
               Divider(height: 0),
             ],
@@ -111,10 +137,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 searcher.executing
-                    ? "Searching..."
+                    ? 'Searching...'
                     : searcher.done
-                        ? "End of results."
-                        : "Start typing above to see results.",
+                        ? 'End of results.'
+                        : 'Start typing above to see results.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black54,
