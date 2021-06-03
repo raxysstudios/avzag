@@ -18,6 +18,7 @@ class _EditorSwitchState extends State<EditorSwitch> {
       builder: (_) => SimpleDialog(
         title: Text("Select editing language"),
         children: [
+          Text("You can only choose from loaded languages."),
           Container(
             height: 512,
             child: ListView(
