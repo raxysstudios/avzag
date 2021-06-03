@@ -1,4 +1,3 @@
-import 'package:avzag/firebase_builder.dart';
 import 'package:avzag/store.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   final Future<void> loader =
-      Firebase.initializeApp().then((value) => loadAll());
+      Firebase.initializeApp().then((value) => loadAll(null));
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +27,13 @@ class _AppState extends State<App> {
           clipBehavior: Clip.antiAlias,
         ),
       ),
-      home: FutureLoader(
+      home: FutureBuilder(
         future: loader,
-        builder: (_) => HomePage(),
-        errorBuilder: (error) => Material(
-          child: error,
-        ),
+        builder: (context, snapshot) {
+          return snapshot.connectionState == ConnectionState.done
+              ? HomePage()
+              : Offstage();
+        },
       ),
     );
   }

@@ -1,4 +1,3 @@
-import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'concept/concept.dart';
@@ -11,7 +10,7 @@ final List<SearchPreset> presets = [];
 final List<String> grammarTags = [];
 final List<String> semanticTags = [];
 
-Future<void> _load(Iterable<String> languages) async {
+Future<void> loadDictionary(Iterable<String> languages) async {
   dictionaries.clear();
   await Future.wait(
     languages.map((l) {
@@ -59,5 +58,3 @@ Future<void> _load(Iterable<String> languages) async {
     );
   });
 }
-
-ModuleLoader dictionaryLoader = ModuleLoader((ls) => _load(ls));

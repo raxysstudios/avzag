@@ -2,7 +2,6 @@ import 'package:avzag/dictionary/dictionary_editor.dart';
 import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/searcher.dart';
 import 'package:avzag/dictionary/store.dart';
-import 'package:avzag/firebase_builder.dart';
 import 'package:avzag/utils.dart';
 import 'entry/entry_display.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
@@ -36,23 +35,20 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureLoader(
-      future: dictionaryLoader.loader,
-      builder: (body) => Scaffold(
-          appBar: AppBar(
-            title: Text('Dictionaries'),
-            actions: [
-              IconButton(
-                onPressed: showHelp,
-                icon: Icon(Icons.help_outline_outlined),
-                tooltip: 'Show help',
-              ),
-              SizedBox(width: 4),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dictionaries'),
+        actions: [
+          IconButton(
+            onPressed: showHelp,
+            icon: Icon(Icons.help_outline_outlined),
+            tooltip: 'Show help',
           ),
-          drawer: NavDraver(title: 'Dictionary'),
-          body: body),
-      body: () => ListView(
+          SizedBox(width: 4),
+        ],
+      ),
+      drawer: NavDraver(title: 'Dictionary'),
+      body: ListView(
         children: [
           SearchController(searcher),
           Divider(height: 0),

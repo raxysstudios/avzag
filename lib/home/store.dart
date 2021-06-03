@@ -1,12 +1,11 @@
 import 'package:avzag/home/models.dart';
-import 'package:avzag/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'language_flag.dart';
 
 List<Language> languages = [];
 Set<String> selected = Set();
 
-ModuleLoader homeLoader = ModuleLoader((langs) async {
+Future<void> loadHome(List<String> langs) async {
   languages.clear();
   await FirebaseFirestore.instance
       .collection('languages')
@@ -24,4 +23,4 @@ ModuleLoader homeLoader = ModuleLoader((langs) async {
   selected
     ..clear()
     ..addAll(langs);
-});
+}

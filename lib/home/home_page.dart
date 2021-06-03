@@ -1,10 +1,8 @@
-import 'package:avzag/firebase_builder.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'store.dart';
 import 'language_card.dart';
 
@@ -23,61 +21,21 @@ class _HomePageState extends State<HomePage> {
     newSelected.addAll(selected);
   }
 
-  void downloadLanguages() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        SharedPreferences.getInstance()
-            .then((prefs) => prefs.setStringList(
-                  'languages',
-                  newSelected.toList(),
-                ))
-            .then((_) => loadAll())
-            .then((_) => Navigator.pop(context));
-
-        return WillPopScope(
-          onWillPop: () async => false,
-          child: AlertDialog(
-            contentPadding: const EdgeInsets.all(0),
-            content: Container(
-              height: 128,
-              width: 128,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Downloading, please wait...'),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureLoader(
-      future: homeLoader.loader,
-      builder: (body) => Scaffold(
-        appBar: AppBar(
-          title: Text('Home'),
-        ),
-        drawer: NavDraver(title: 'Home'),
-        floatingActionButton: FloatingActionButton(
-          onPressed: downloadLanguages,
-          child: Icon(
-            selectedDiffer ? Icons.download_outlined : Icons.refresh_outlined,
-          ),
-          tooltip: selectedDiffer ? 'Donwload data' : 'Refresh data',
-        ),
-        body: body,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home'),
       ),
-      body: () => Column(
+      drawer: NavDraver(title: 'Home'),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => loadAll(context),
+        child: Icon(
+          selectedDiffer ? Icons.download_outlined : Icons.refresh_outlined,
+        ),
+        tooltip: selectedDiffer ? 'Donwload data' : 'Refresh data',
+      ),
+      body: Column(
         children: [
           Container(
             height: 48,
