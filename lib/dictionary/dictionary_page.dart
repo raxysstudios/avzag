@@ -42,90 +42,90 @@ class _DictionaryPageState extends State<DictionaryPage> {
   Widget build(BuildContext context) {
     return FutureLoader(
       future: loader,
-      builder: () => Scaffold(
-        appBar: AppBar(
-          title: Text('Dictionaries'),
-          actions: [
-            IconButton(
-              onPressed: showHelp,
-              icon: Icon(Icons.help_outline_outlined),
-              tooltip: 'Show help',
-            ),
-            SizedBox(width: 4),
-          ],
-        ),
-        drawer: NavDraver(title: 'Dictionary'),
-        body: ListView(
-          children: [
-            SearchController(searcher),
-            Divider(height: 0),
-            for (final m in searcher.results.entries) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Text(
-                  capitalize(m.key),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+      builder: (body) => Scaffold(
+          appBar: AppBar(
+            title: Text('Dictionaries'),
+            actions: [
+              IconButton(
+                onPressed: showHelp,
+                icon: Icon(Icons.help_outline_outlined),
+                tooltip: 'Show help',
               ),
-              for (final l in m.value.entries)
-                for (final e in l.value)
-                  ListTile(
-                    dense: true,
-                    title: Text(
-                      capitalize(e.forms[0].plain),
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    trailing: Text(
-                      capitalize(l.key),
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 14,
-                      ),
-                    ),
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return EntryDisplay(
-                            e,
-                            scholar: useScholar,
-                            toggleScholar: () => setState(() {
-                              useScholar = !useScholar;
-                            }),
-                          );
-                        },
-                      );
-                    },
-                  ),
-              Divider(height: 0),
+              SizedBox(width: 4),
             ],
+          ),
+          drawer: NavDraver(title: 'Dictionary'),
+          body: body),
+      body: () => ListView(
+        children: [
+          SearchController(searcher),
+          Divider(height: 0),
+          for (final m in searcher.results.entries) ...[
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
               child: Text(
-                searcher.executing
-                    ? 'Searching...'
-                    : searcher.done
-                        ? 'End of results.'
-                        : 'Start typing above to see results.',
+                capitalize(m.key),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black54,
                   fontSize: 16,
-                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            DictionaryEditor(),
+            for (final l in m.value.entries)
+              for (final e in l.value)
+                ListTile(
+                  dense: true,
+                  title: Text(
+                    capitalize(e.forms[0].plain),
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  trailing: Text(
+                    capitalize(l.key),
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 14,
+                    ),
+                  ),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return EntryDisplay(
+                          e,
+                          scholar: useScholar,
+                          toggleScholar: () => setState(() {
+                            useScholar = !useScholar;
+                          }),
+                        );
+                      },
+                    );
+                  },
+                ),
+            Divider(height: 0),
           ],
-        ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              searcher.executing
+                  ? 'Searching...'
+                  : searcher.done
+                      ? 'End of results.'
+                      : 'Start typing above to see results.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ),
+          DictionaryEditor(),
+        ],
       ),
     );
   }

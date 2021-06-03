@@ -14,8 +14,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Future<void> loader;
-  late Set<String> selected;
-  late Set<String> oldSelected;
+  final Set<String> selected = new Set();
+  final Set<String> oldSelected = new Set();
   bool get selectedDiffer => !setEquals(selected, oldSelected);
 
   @override
@@ -23,10 +23,16 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     loader = load()
         .then((_) => SharedPreferences.getInstance())
-        .then((prefs) => prefs.getStringList('selectedLanguages') ?? [])
+        .then((prefs) => prefs.getStringList('selectedLanguages'))
         .then((values) {
-      selected = Set<String>.from(values);
-      oldSelected = Set<String>.from(values);
+      values = values ?? [];
+      selected
+        ..clear()
+        ..addAll(values);
+      oldSelected
+        ..clear()
+        ..addAll(values);
+      print("SELECTED $selected");
     });
   }
 
@@ -66,7 +72,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return FutureLoader(
       future: loader,
-      builder: () => Scaffold(
+      builder: (body) => Scaffold(
         appBar: AppBar(
           title: Text('Home'),
         ),
@@ -78,65 +84,66 @@ class _HomePageState extends State<HomePage> {
           ),
           tooltip: selectedDiffer ? "Donwload data" : "Refresh data",
         ),
-        body: Column(
-          children: [
-            Container(
-              height: 48,
-              child: selected.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Selected languages appear here.',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.black54,
-                        ),
+        body: body,
+      ),
+      body: () => Column(
+        children: [
+          Container(
+            height: 48,
+            child: selected.isEmpty
+                ? Center(
+                    child: Text(
+                      'Selected languages appear here.',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black54,
                       ),
-                    )
-                  : ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        for (final n in selected)
-                          Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: InputChip(
-                              label: Text(
-                                capitalize(n),
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              onPressed: () => setState(
-                                () => selected.remove(n),
-                              ),
+                    ),
+                  )
+                : ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      for (final n in selected)
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: InputChip(
+                            label: Text(
+                              capitalize(n),
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            onPressed: () => setState(
+                              () => selected.remove(n),
                             ),
                           ),
-                      ],
-                    ),
-            ),
-            Divider(height: 2),
-            Expanded(
-              child: ListView.separated(
-                itemCount: languages.length,
-                itemBuilder: (context, index) {
-                  final lang = languages[index];
-                  final contains = this.selected.contains(lang.name);
-                  return LanguageCard(
-                    lang,
-                    selected: contains,
-                    onTap: () => setState(
-                      () => contains
-                          ? selected.remove(lang.name)
-                          : selected.add(lang.name),
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) => Divider(
-                  height: 2,
-                  color: Colors.transparent,
-                ),
+                        ),
+                    ],
+                  ),
+          ),
+          Divider(height: 2),
+          Expanded(
+            child: ListView.separated(
+              itemCount: languages.length,
+              itemBuilder: (context, index) {
+                final lang = languages[index];
+                final contains = this.selected.contains(lang.name);
+                return LanguageCard(
+                  lang,
+                  selected: contains,
+                  onTap: () => setState(
+                    () => contains
+                        ? selected.remove(lang.name)
+                        : selected.add(lang.name),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => Divider(
+                height: 2,
+                color: Colors.transparent,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

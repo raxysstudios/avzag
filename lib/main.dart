@@ -28,7 +28,10 @@ class _AppState extends State<App> {
       ),
       home: FutureLoader(
         future: initializer,
-        builder: () => HomePage(),
+        builder: (_) => HomePage(),
+        errorBuilder: (error) => Material(
+          child: error,
+        ),
       ),
     );
   }

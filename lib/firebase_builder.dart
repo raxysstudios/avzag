@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 
 class FutureLoader extends StatelessWidget {
   final Future<void>? future;
-  final Widget Function()? builder;
+  final Widget Function(Widget? body) builder;
+  final Widget Function(Widget? body)? errorBuilder;
+  final Widget Function()? body;
 
   const FutureLoader({
     this.future,
-    this.builder,
+    required this.builder,
+    this.body,
+    this.errorBuilder,
   });
 
   @override
@@ -17,8 +21,9 @@ class FutureLoader extends StatelessWidget {
         BuildContext context,
         AsyncSnapshot snapshot,
       ) {
+        Widget? body;
         if (snapshot.hasError)
-          return Material(
+          body = Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,8 +34,8 @@ class FutureLoader extends StatelessWidget {
               ],
             ),
           );
-        if (snapshot.connectionState != ConnectionState.done)
-          return Material(
+        else if (snapshot.connectionState != ConnectionState.done)
+          body = Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +46,10 @@ class FutureLoader extends StatelessWidget {
               ],
             ),
           );
-        return builder?.call() ?? Offstage();
+
+        if (body != null && errorBuilder != null) return errorBuilder!(body);
+        if (body == null && this.body != null) body = this.body!();
+        return builder.call(body);
       },
     );
   }
