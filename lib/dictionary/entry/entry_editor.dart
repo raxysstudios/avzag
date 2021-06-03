@@ -49,34 +49,28 @@ class _EntryEditorState extends State<EntryEditor>
     super.dispose();
   }
 
-  void selectConcept({Use? use}) async {
-    final result = await showDialog<String>(
+  void selectConcept({Use? use}) {
+    showDialog<String>(
       context: context,
-      builder: (_) => SimpleDialog(
-        title: Text("Select concept"),
-        contentPadding: const EdgeInsets.all(16),
-        children: [
-          Container(
-            height: 320,
-            child: ConceptSelect(
-              (k) => Navigator.pop(context, k),
-            ),
+      builder: (_) => ConceptSelect(),
+    ).then((result) {
+      if (result == null) return;
+      if (use == null) {
+        if (entry.uses == null) entry.uses = [];
+        setState(
+          () => entry.uses!.add(
+            Use(concept: result),
           ),
-        ],
-      ),
-    );
-    if (result != null)
-      setState(() {
-        if (use == null) {
-          if (entry.uses == null) entry.uses = [];
-          entry.uses!.add(Use(concept: result));
-        } else
+        );
+      } else
+        setState(() {
           use.concept = result;
-      });
+        });
+    });
   }
 
-  void selectSample({Use? use, Sample? sample}) async {
-    await showDialog<Sample>(
+  void selectSample({Use? use, Sample? sample}) {
+    showDialog<Sample>(
       context: context,
       builder: (_) {
         return SampleEditor(
@@ -100,8 +94,8 @@ class _EntryEditorState extends State<EntryEditor>
     });
   }
 
-  void selectForm({Sample? form}) async {
-    await showDialog<Sample>(
+  void selectForm({Sample? form}) {
+    showDialog<Sample>(
       context: context,
       builder: (_) {
         return SampleEditor(
