@@ -30,6 +30,7 @@ class _EditorSwitchState extends State<EditorSwitch> {
                   LanguageTile(
                     l,
                     selected: editorMode == l.name,
+                    dense: false,
                     onTap: () => Navigator.pop(
                       context,
                       l.name,
