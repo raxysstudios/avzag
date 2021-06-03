@@ -1,4 +1,5 @@
 import 'package:avzag/firebase_builder.dart';
+import 'package:avzag/store.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'home/home_page.dart';
@@ -14,7 +15,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final Future<FirebaseApp> initializer = Firebase.initializeApp();
+  final Future<void> loader =
+      Firebase.initializeApp().then((value) => loadAll());
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class _AppState extends State<App> {
         ),
       ),
       home: FutureLoader(
-        future: initializer,
+        future: loader,
         builder: (_) => HomePage(),
         errorBuilder: (error) => Material(
           child: error,

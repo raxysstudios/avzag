@@ -1,11 +1,12 @@
 import 'package:avzag/firebase_builder.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'store.dart';
 import 'language_card.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,27 +14,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<void> loader;
-  final Set<String> selected = new Set();
-  final Set<String> oldSelected = new Set();
-  bool get selectedDiffer => !setEquals(selected, oldSelected);
+  final Set<String> newSelected = new Set();
+  bool get selectedDiffer => !setEquals(selected, newSelected);
 
   @override
   void initState() {
     super.initState();
-    loader = load()
-        .then((_) => SharedPreferences.getInstance())
-        .then((prefs) => prefs.getStringList('selectedLanguages'))
-        .then((values) {
-      values = values ?? [];
-      selected
-        ..clear()
-        ..addAll(values);
-      oldSelected
-        ..clear()
-        ..addAll(values);
-      print("SELECTED $selected");
-    });
+    newSelected.addAll(selected);
   }
 
   void downloadLanguages() {
@@ -41,10 +28,14 @@ class _HomePageState extends State<HomePage> {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        Future.delayed(
-          Duration(seconds: 1),
-          () => Navigator.pop(context),
-        );
+        SharedPreferences.getInstance()
+            .then((prefs) => prefs.setStringList(
+                  'languages',
+                  newSelected.toList(),
+                ))
+            .then((_) => loadAll())
+            .then((_) => Navigator.pop(context));
+
         return WillPopScope(
           onWillPop: () async => false,
           child: AlertDialog(
@@ -58,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(height: 16),
-                  Text("Downloading, please wait..."),
+                  Text('Downloading, please wait...'),
                 ],
               ),
             ),
@@ -71,7 +62,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return FutureLoader(
-      future: loader,
+      future: homeLoader.loader,
       builder: (body) => Scaffold(
         appBar: AppBar(
           title: Text('Home'),
@@ -82,7 +73,7 @@ class _HomePageState extends State<HomePage> {
           child: Icon(
             selectedDiffer ? Icons.download_outlined : Icons.refresh_outlined,
           ),
-          tooltip: selectedDiffer ? "Donwload data" : "Refresh data",
+          tooltip: selectedDiffer ? 'Donwload data' : 'Refresh data',
         ),
         body: body,
       ),
@@ -126,7 +117,7 @@ class _HomePageState extends State<HomePage> {
               itemCount: languages.length,
               itemBuilder: (context, index) {
                 final lang = languages[index];
-                final contains = this.selected.contains(lang.name);
+                final contains = selected.contains(lang.name);
                 return LanguageCard(
                   lang,
                   selected: contains,

@@ -3,7 +3,6 @@ import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/searcher.dart';
 import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/firebase_builder.dart';
-import 'package:avzag/home/store.dart';
 import 'package:avzag/utils.dart';
 import 'entry/entry_display.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
@@ -16,15 +15,12 @@ class DictionaryPage extends StatefulWidget {
 
 class _DictionaryPageState extends State<DictionaryPage> {
   late Searcher searcher;
-  late Future<void>? loader;
   bool useScholar = false;
 
   @override
   void initState() {
     super.initState();
     searcher = Searcher(dictionaries, setState);
-
-    loader = loadDictionaries(languages);
   }
 
   void showHelp() {
@@ -41,7 +37,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   @override
   Widget build(BuildContext context) {
     return FutureLoader(
-      future: loader,
+      future: dictionaryLoader.loader,
       builder: (body) => Scaffold(
           appBar: AppBar(
             title: Text('Dictionaries'),

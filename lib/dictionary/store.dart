@@ -1,7 +1,6 @@
-import 'package:avzag/home/models.dart';
+import 'package:avzag/store.dart';
+import 'package:avzag/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../utils.dart';
 import 'concept/concept.dart';
 import 'entry/entry.dart';
 import 'models.dart';
@@ -12,12 +11,12 @@ final List<SearchPreset> presets = [];
 final List<String> grammarTags = [];
 final List<String> semanticTags = [];
 
-Future<void> loadDictionaries(Iterable<Language> languages) async {
+Future<void> _load(Iterable<String> languages) async {
   dictionaries.clear();
   await Future.wait(
     languages.map((l) {
       return FirebaseFirestore.instance
-          .collection('languages/${l.name}/dictionary')
+          .collection('languages/$l/dictionary')
           .withConverter(
             fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
             toFirestore: (Entry object, _) => object.toJson(),
@@ -25,7 +24,7 @@ Future<void> loadDictionaries(Iterable<Language> languages) async {
           .get()
           .then((d) {
         if (d.docs.isEmpty) return null;
-        dictionaries[l.name] = d.docs.map((e) => e.data()).toList();
+        dictionaries[l] = d.docs.map((e) => e.data()).toList();
       });
     }),
   );
@@ -60,3 +59,5 @@ Future<void> loadDictionaries(Iterable<Language> languages) async {
     );
   });
 }
+
+ModuleLoader dictionaryLoader = ModuleLoader((ls) => _load(ls));
