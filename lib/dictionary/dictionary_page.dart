@@ -1,4 +1,4 @@
-import 'package:avzag/dictionary/editor_card.dart';
+import 'package:avzag/dictionary/dictionary_editor.dart';
 import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/searcher.dart';
 import 'package:avzag/dictionary/store.dart';
@@ -123,7 +123,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 ),
               ),
             ),
-            DictionaryEditorCard(),
+            DictionaryEditor(),
           ],
         ),
       ),

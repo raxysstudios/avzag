@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'entry/entry.dart';
 import 'entry/entry_editor.dart';
 
-class DictionaryEditorCard extends StatefulWidget {
-  const DictionaryEditorCard({Key? key}) : super(key: key);
+class DictionaryEditor extends StatefulWidget {
+  const DictionaryEditor({Key? key}) : super(key: key);
 
   @override
-  DictionaryEditorCardState createState() => DictionaryEditorCardState();
+  DictionaryEditorState createState() => DictionaryEditorState();
 }
 
-class DictionaryEditorCardState extends State<DictionaryEditorCard> {
+class DictionaryEditorState extends State<DictionaryEditor> {
   bool pendingOnly = false;
 
   @override
