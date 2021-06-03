@@ -20,7 +20,6 @@ Future<void> donwloadFlag(Language language) async {
   File file = File(docDir + path);
   await file.create(recursive: true);
   await firebase_storage.FirebaseStorage.instance.ref(path).writeToFile(file);
-  print("downloaded " + path);
 }
 
 class LanguageFlag extends StatelessWidget {

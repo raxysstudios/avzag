@@ -103,7 +103,7 @@ class Searcher {
   }
 
   stop() {
-    queue(() => Future.sync(() => print("searcher stopped")));
+    queue(() => Future.sync(() => print("Searcher stopped")));
   }
 
   search(String lect, String query) {
