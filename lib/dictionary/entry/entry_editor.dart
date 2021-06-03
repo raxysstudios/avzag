@@ -76,64 +76,54 @@ class _EntryEditorState extends State<EntryEditor>
   }
 
   void selectSample({Use? use, Sample? sample}) async {
-    final result = await showDialog<Sample>(
+    await showDialog<Sample>(
       context: context,
-      builder: (_) => SimpleDialog(
-        title: Text("Fill Sample"),
-        contentPadding: const EdgeInsets.all(16),
-        children: [
-          SampleEditor(
-            sample ?? Sample(plain: ""),
-            (s) => Navigator.pop(context, s),
-          ),
-        ],
-      ),
-    );
-    if (result != null)
-      setState(() {
-        if (sample == null) {
-          if (use != null) {
-            if (use.samples == null) use.samples = [];
-            use.samples!.add(result);
-          }
-        } else {
-          var i = use!.samples!.indexOf(sample);
-          use.samples![i] = result;
+      builder: (_) {
+        return SampleEditor(
+          sample ?? Sample(plain: ""),
+          title: sample == null ? "Add sample" : "Edit sample",
+        );
+      },
+    ).then((result) {
+      if (result == null) return;
+      if (sample == null) {
+        if (use != null) {
+          if (use.samples == null) use.samples = [];
+          setState(() => use.samples!.add(result));
         }
-      });
+      } else {
+        var i = use!.samples!.indexOf(sample);
+        setState(() {
+          use.samples![i] = result;
+        });
+      }
+    });
   }
 
   void selectForm({Sample? form}) async {
-    final result = await showDialog<Sample>(
+    await showDialog<Sample>(
       context: context,
-      builder: (_) => SimpleDialog(
-        title: Text("Fill Word Form"),
-        contentPadding: const EdgeInsets.all(16),
-        children: [
-          SampleEditor(
-            form ?? Sample(plain: ""),
-            (s) => Navigator.pop(context, s),
-            translation: false,
-          ),
-        ],
-      ),
-    );
-    if (result != null)
-      setState(() {
-        if (form == null)
-          entry.forms.add(result);
-        else {
-          final i = entry.forms.indexOf(form);
+      builder: (_) {
+        return SampleEditor(
+          form ?? Sample(plain: ""),
+          title: form == null ? "Add form" : "Edit form",
+          translation: false,
+        );
+      },
+    ).then((result) {
+      if (result == null) return;
+      if (form == null)
+        setState(() => entry.forms.add(result));
+      else {
+        final i = entry.forms.indexOf(form);
+        setState(() {
           entry.forms[i] = result;
-        }
-      });
+        });
+      }
+    });
   }
 
   void uploadEntry() async {}
-
-  void deleteItem<T>(T item, List<T> list) {
-    list.remove(item);
-  }
 
   List<Widget> buildList<T>(
     List<T> list,
@@ -174,7 +164,7 @@ class _EntryEditorState extends State<EntryEditor>
             onPressed: entry.forms.isEmpty ? null : uploadEntry,
             icon: Icon(Icons.publish_outlined),
           ),
-          SizedBox(width: 8),
+          SizedBox(width: 4),
         ],
         bottom: TabBar(
           controller: tabController,
@@ -223,7 +213,6 @@ class _EntryEditorState extends State<EntryEditor>
                 ...buildList<Use>(
                   entry.uses!,
                   (u) => selectSample(use: u),
-                  // (u) => selectConcept(use: u),
                   (u) => Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -269,9 +258,9 @@ class _EntryEditorState extends State<EntryEditor>
               Text("Grammar tags"),
               TagSelection(
                 grammarTags,
-                (t) => setState(
-                  () => entry.tags = t,
-                ),
+                (t) => setState(() {
+                  entry.tags = t;
+                }),
                 selected: entry.tags,
               ),
             ],
