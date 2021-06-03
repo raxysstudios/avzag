@@ -180,9 +180,9 @@ class _EntryEditorState extends State<EntryEditor>
           labelColor: Colors.blue,
           unselectedLabelColor: Colors.black,
           tabs: [
-            Tab(icon: Icon(Icons.tune_outlined)),
-            Tab(icon: Icon(Icons.textsms_outlined)),
-            Tab(icon: Icon(Icons.info_outlined)),
+            Tab(text: "Forms", icon: Icon(Icons.tune_outlined)),
+            Tab(text: "Uses", icon: Icon(Icons.textsms_outlined)),
+            Tab(text: "Info", icon: Icon(Icons.info_outlined)),
           ],
         ),
       ),
