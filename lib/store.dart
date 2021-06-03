@@ -20,10 +20,10 @@ class BaseStore {
   static final List<String> languages = [];
 
   static Future<void> load(BuildContext context) async {
-    return await showLoadingBlock(context, loadStores());
+    return await _blockUI(context, _loadStores());
   }
 
-  static Future<void> loadStores() async {
+  static Future<void> _loadStores() async {
     _prefs = await SharedPreferences.getInstance();
 
     languages
@@ -39,7 +39,7 @@ class BaseStore {
     ]);
   }
 
-  static Future<void> showLoadingBlock(
+  static Future<void> _blockUI(
     BuildContext context,
     Future future,
   ) async {
