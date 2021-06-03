@@ -134,7 +134,16 @@ class _EntryEditorState extends State<EntryEditor>
     if (actions == null) actions = [];
     actions.add(PopupMenuItem(
       value: (i) => setState(() => list.remove(i)),
-      child: Text('Delete', style: TextStyle(color: Colors.red)),
+      child: ListTile(
+        leading: Icon(
+          Icons.delete_outline,
+          color: Colors.red,
+        ),
+        title: Text(
+          'Delete',
+          style: TextStyle(color: Colors.red),
+        ),
+      ),
     ));
     return [
       for (final i in list)
@@ -236,7 +245,10 @@ class _EntryEditorState extends State<EntryEditor>
                   actions: [
                     PopupMenuItem(
                       value: (u) => selectSample(use: u),
-                      child: Text('Add sample'),
+                      child: ListTile(
+                        leading: Icon(Icons.add_outlined),
+                        title: Text('Add sample'),
+                      ),
                     )
                   ],
                 ),
