@@ -3,9 +3,23 @@ import 'package:avzag/home/home_page.dart';
 import 'package:avzag/navigation/editor_toggle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'expandable_title.dart';
+
+Widget Function(BuildContext context) resolveBuilder(
+  String title,
+) {
+  switch (title) {
+    case 'home':
+      return (_) => HomePage();
+    case 'dictionary':
+      return (_) => DictionaryPage();
+    default:
+      return (_) => Text("NO ROUTE FOUND");
+  }
+}
 
 class NavDraver extends StatelessWidget {
   NavDraver({this.title});
@@ -13,11 +27,16 @@ class NavDraver extends StatelessWidget {
 
   void navigate(
     BuildContext context,
-    Widget Function(BuildContext) builder,
+    String title,
   ) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: builder),
+      MaterialPageRoute(
+        builder: resolveBuilder(title),
+      ),
+    );
+    SharedPreferences.getInstance().then(
+      (prefs) => prefs.setString('module', title),
     );
   }
 
@@ -78,8 +97,8 @@ class NavDraver extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.map_outlined),
             title: buildTitle('Home'),
-            selected: title == 'Home',
-            onTap: () => navigate(context, (c) => HomePage()),
+            selected: title == 'home',
+            onTap: () => navigate(context, 'home'),
           ),
           ListTile(
             leading: Icon(Icons.music_note_outlined),
@@ -102,8 +121,8 @@ class NavDraver extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.book_outlined),
             title: buildTitle('Dictionary'),
-            selected: title == 'Dictionary',
-            onTap: () => navigate(context, (c) => DictionaryPage()),
+            selected: title == 'dictionary',
+            onTap: () => navigate(context, 'dictionary'),
           ),
           ListTile(
             leading: Icon(Icons.local_library_outlined),

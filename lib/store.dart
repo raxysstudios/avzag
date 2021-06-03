@@ -25,7 +25,7 @@ Future<void> loadAll(BuildContext? context) async {
         .toList();
   });
   if (context == null) return await loader;
-  showDialog(
+  return await showDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) {
