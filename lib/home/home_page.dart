@@ -1,3 +1,4 @@
+import 'package:avzag/home/models.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
@@ -12,12 +13,42 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<String> selected;
+  late final List<String> selected;
+  late final Map<String, String> tags;
+  final inputController = TextEditingController();
+  final List<Language> languages = [];
 
   @override
   void initState() {
     super.initState();
     selected = List.from(BaseStore.languages);
+    tags = Map.fromIterable(
+      HomeStore.languages.values,
+      key: (l) => l.name,
+      value: (l) => [
+        l.name,
+        ...l.family ?? [],
+        ...l.tags ?? [],
+      ].join(' '),
+    );
+    inputController.addListener(filterLanguages);
+  }
+
+  void filterLanguages() {
+    final query =
+        inputController.text.trim().split(' ').where((s) => s.isNotEmpty);
+    setState(() {
+      languages
+        ..clear()
+        ..addAll(
+          query.isEmpty
+              ? HomeStore.languages.values
+              : HomeStore.languages.values.where((l) {
+                  final t = tags[l.name]!;
+                  return query.any((q) => t.contains(q));
+                }),
+        );
+    });
   }
 
   @override
@@ -43,6 +74,19 @@ class _HomePageState extends State<HomePage> {
             ),
       body: Column(
         children: [
+          TextField(
+            controller: inputController,
+            decoration: InputDecoration(
+              labelText: "Search by names, tags, families",
+              prefixIcon: Icon(Icons.search_outlined),
+              suffixIcon: inputController.text.isEmpty
+                  ? null
+                  : IconButton(
+                      onPressed: () => inputController.clear(),
+                      icon: Icon(Icons.clear),
+                    ),
+            ),
+          ),
           Container(
             height: 48,
             child: selected.isEmpty
@@ -79,18 +123,17 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: ListView(
               children: [
-                for (final l in HomeStore.languages.entries)
+                for (final l in languages)
                   Builder(
                     builder: (context) {
-                      final name = l.key;
-                      final contains = selected.contains(name);
+                      final contains = selected.contains(l.name);
                       return LanguageCard(
-                        l.value,
+                        l,
                         selected: contains,
                         onTap: () => setState(
                           () => contains
-                              ? selected.remove(name)
-                              : selected.add(name),
+                              ? selected.remove(l.name)
+                              : selected.add(l.name),
                         ),
                       );
                     },
