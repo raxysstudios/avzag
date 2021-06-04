@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
       ].join(' '),
     );
     inputController.addListener(filterLanguages);
+    filterLanguages();
   }
 
   void filterLanguages() {
