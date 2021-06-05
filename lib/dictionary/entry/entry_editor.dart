@@ -130,6 +130,7 @@ class _EntryEditorState extends State<EntryEditor>
         DictionaryStore.dictionaries[BaseStore.editorMode]!.add(entry);
         Navigator.pop(context);
       }),
+      text: "Uploading the data...",
     );
   }
 
