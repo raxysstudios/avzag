@@ -1,4 +1,5 @@
 import 'package:avzag/dictionary/store.dart';
+import 'package:avzag/utils.dart';
 import 'package:avzag/widgets/tag_selection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _ConceptCreatorState extends State<ConceptCreator> {
           key: formKey,
           child: TextFormField(
             initialValue: widget.meaning,
+            inputFormatters: [LowerCaseTextFormatter()],
             decoration: InputDecoration(
               labelText: 'Concept meaning',
               contentPadding: const EdgeInsets.symmetric(horizontal: 16),

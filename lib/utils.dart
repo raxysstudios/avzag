@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 String capitalize(String value) => value
     .split(' ')
     .where((w) => w.length > 0)
@@ -13,4 +15,17 @@ List<T>? listFromJson<T>(
   T Function(dynamic) fromJson,
 ) {
   return (array as Iterable<dynamic>?)?.map((i) => fromJson(i)).toList();
+}
+
+class LowerCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue _,
+    TextEditingValue value,
+  ) {
+    return TextEditingValue(
+      text: value.text.toLowerCase(),
+      selection: value.selection,
+    );
+  }
 }

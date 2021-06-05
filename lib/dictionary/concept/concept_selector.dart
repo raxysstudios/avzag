@@ -1,5 +1,6 @@
 import 'package:avzag/dictionary/concept/concept_creator.dart';
 import 'package:avzag/dictionary/concept/concept_display.dart';
+import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 import '../store.dart';
 
@@ -29,6 +30,7 @@ class _ConceptSelectState extends State<ConceptSelect> {
             contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             labelText: 'Search by meanings, tags',
           ),
+          inputFormatters: [LowerCaseTextFormatter()],
           onChanged: (q) => setState(() {
             query = q;
           }),
