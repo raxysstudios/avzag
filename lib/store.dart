@@ -2,7 +2,6 @@ import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/home/store.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'loading_dialog.dart';
 
 class BaseStore {
