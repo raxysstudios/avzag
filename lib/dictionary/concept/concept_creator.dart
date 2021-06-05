@@ -20,8 +20,15 @@ class _ConceptCreatorState extends State<ConceptCreator> {
   List<String> tags = [];
 
   @override
+  void initState() {
+    super.initState();
+    meaning = widget.meaning;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Form(
           key: formKey,
@@ -40,10 +47,7 @@ class _ConceptCreatorState extends State<ConceptCreator> {
         SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'Semantic tags',
-            textAlign: TextAlign.start,
-          ),
+          child: Text('Semantic tags'),
         ),
         Expanded(
           child: ListView(
@@ -86,9 +90,7 @@ class _ConceptCreatorState extends State<ConceptCreator> {
         .add(concept.toJson())
         .then((d) {
       DictionaryStore.concepts[d.id] = concept;
-      return d.id;
-    }).then(
-      (id) => Navigator.pop(context, id),
-    );
+      Navigator.pop(context, d.id);
+    });
   }
 }
