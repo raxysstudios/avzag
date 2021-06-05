@@ -183,7 +183,7 @@ class _EntryEditorState extends State<EntryEditor>
         actions: [
           IconButton(
             onPressed: entry.forms.isEmpty ? null : uploadEntry,
-            icon: Icon(Icons.publish_outlined),
+            icon: Icon(Icons.cloud_upload_outlined),
           ),
           SizedBox(width: 4),
         ],
