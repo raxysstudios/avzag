@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Future<void> showLoadingDialog({
   required BuildContext context,
   required Future future,
-  String text = 'Downloading, please wait...',
+  String text = 'Loading, please wait...',
 }) async {
   return await showDialog(
     context: context,
@@ -23,7 +23,7 @@ Future<void> showLoadingDialog({
               children: [
                 CircularProgressIndicator(),
                 SizedBox(height: 16),
-                Text('Downloading, please wait...'),
+                Text(text),
               ],
             ),
           ),
