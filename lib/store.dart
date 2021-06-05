@@ -3,6 +3,8 @@ import 'package:avzag/home/store.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'loading_dialog.dart';
+
 class BaseStore {
   static late SharedPreferences _prefs;
 
@@ -20,7 +22,10 @@ class BaseStore {
   static final List<String> languages = [];
 
   static Future<void> load(BuildContext context) async {
-    return await _blockUI(context, _loadStores());
+    return await showLoadingDialog(
+      context: context,
+      future: _loadStores(),
+    );
   }
 
   static Future<void> _loadStores() async {
@@ -37,37 +42,5 @@ class BaseStore {
       HomeStore.load(languages),
       DictionaryStore.load(languages),
     ]);
-  }
-
-  static Future<void> _blockUI(
-    BuildContext context,
-    Future future,
-  ) async {
-    return await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        future.then((_) => Navigator.pop(context));
-        return WillPopScope(
-          onWillPop: () async => false,
-          child: AlertDialog(
-            contentPadding: const EdgeInsets.all(0),
-            content: Container(
-              height: 128,
-              width: 128,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Downloading, please wait...'),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }

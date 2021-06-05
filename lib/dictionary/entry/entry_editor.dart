@@ -117,7 +117,9 @@ class _EntryEditorState extends State<EntryEditor>
     });
   }
 
-  void uploadEntry() async {}
+  void uploadEntry() async {
+    
+  }
 
   List<Widget> buildList<T>(
     List<T> list,
