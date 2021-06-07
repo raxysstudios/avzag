@@ -59,7 +59,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 vertical: 8,
               ),
               child: Text(
-                capitalize(m.key),
+                capitalize(m.key.meaning),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black54,

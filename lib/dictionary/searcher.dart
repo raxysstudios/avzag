@@ -1,3 +1,5 @@
+import 'package:avzag/dictionary/concept/concept.dart';
+
 import 'entry/entry.dart';
 import 'query_utils.dart';
 
@@ -5,7 +7,7 @@ class Searcher {
   Function setState;
   final Map<String, List<Entry>> dictionaries;
   final Map<String, double> progress = {};
-  final Map<String, Map<String, List<Entry>>> results = {};
+  final Map<Concept, Map<String, List<Entry>>> results = {};
 
   Iterable<String> get languages => dictionaries.keys.toList();
 
@@ -29,12 +31,12 @@ class Searcher {
     });
   }
 
-  void addResult(String lect, Iterable<String> meanings, Entry entry) {
+  void addResult(String lect, Iterable<Concept> concepts, Entry entry) {
     setState(() {
-      for (final m in meanings) {
-        if (results[m] == null) results[m] = {};
-        if (results[m]![lect] == null) results[m]![lect] = [];
-        results[m]![lect]!.add(entry);
+      for (final c in concepts.where((c) => c.meaning.isNotEmpty)) {
+        if (results[c] == null) results[c] = {};
+        if (results[c]![lect] == null) results[c]![lect] = [];
+        results[c]![lect]!.add(entry);
       }
     });
   }
@@ -53,8 +55,8 @@ class Searcher {
     bool uses,
   ) async {
     for (int i = 0; i < entries.length; i++) {
-      final meanings = checkQueries(entries[i], queries, forms, uses);
-      if (meanings.isNotEmpty) addResult(lect, meanings, entries[i]);
+      final concepts = checkQueries(entries[i], queries, forms, uses);
+      if (concepts.isNotEmpty) addResult(lect, concepts, entries[i]);
       if (pending != null)
         return;
       else if (i % 1000 == 0) {
@@ -65,14 +67,14 @@ class Searcher {
     updateProgress(lect, 1);
   }
 
-  Future<Iterable<Iterable<String>>> findMeanings(
+  Future<Iterable<Iterable<String>>> findConcepts(
     List<Entry> entries,
     Iterable<Iterable<String>> queries,
   ) async {
-    final meanings = Set<String>();
+    final concepts = Set<Concept>();
     for (int i = 0; i < entries.length; i++) {
       checkQueries(entries[i], queries, true, false)
-          .forEach((m) => meanings.add(m));
+          .forEach((c) => concepts.add(c));
       if (pending != null)
         return [];
       else if (i % 1000 == 0) {
@@ -81,7 +83,7 @@ class Searcher {
       }
     }
     updateProgress('', 1);
-    return meanings.map((m) => ['!' + m]);
+    return concepts.map((c) => ['!' + c.meaning]);
   }
 
   Future<void> queue(Future<void> Function() action) async {
@@ -125,7 +127,7 @@ class Searcher {
       }
 
       if (queries.isNotEmpty) if (lect.isNotEmpty)
-        queries = await findMeanings(dictionaries[lect]!, queries);
+        queries = await findConcepts(dictionaries[lect]!, queries);
       if (queries.isNotEmpty)
         await Future.wait(
           dictionaries.entries.map(

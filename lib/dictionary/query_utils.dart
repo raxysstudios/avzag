@@ -1,20 +1,24 @@
+import 'package:avzag/dictionary/concept/concept.dart';
 import 'package:avzag/dictionary/store.dart';
 
 import 'entry/entry.dart';
 import 'use/use.dart';
 
-String getMeaning(Use use) {
-  return DictionaryStore.concepts[use.concept]?.meaning ?? '';
+Concept getConcept(Use use) {
+  return DictionaryStore.concepts[use.concept] ??
+      Concept(
+        meaning: "",
+        tags: null,
+      );
 }
 
-Iterable<String> checkTag(Entry entry, String tag) {
+Iterable<Concept> checkTag(Entry entry, String tag) {
   tag = tag.substring(1);
   if (entry.tags?.contains(tag) ?? false)
-    return entry.uses?.map(getMeaning) ?? [];
+    return entry.uses?.map(getConcept) ?? [];
   return entry.uses
-          ?.map((u) => DictionaryStore.concepts[u.concept]!)
-          .where((c) => c.tags?.contains(tag) ?? false)
-          .map((c) => c.meaning) ??
+          ?.map(getConcept)
+          .where((c) => c.tags?.contains(tag) ?? false) ??
       [];
 }
 
@@ -31,36 +35,39 @@ bool checkSegment(String area, String segment) {
   }
 }
 
-Iterable<String> checkToken(Entry entry, String token, bool forms, bool uses) {
+Iterable<Concept> checkToken(
+    Entry entry, String token, bool forms, bool uses) {
   if (token[0] == "#") return checkTag(entry, token);
-  final List<String> meanings = [];
+  final List<Concept> concepts = [];
   if (forms &&
       entry.uses != null &&
       entry.forms.any((f) => checkSegment(f.plain, token)))
-    meanings.addAll(entry.uses!.map(getMeaning));
+    concepts.addAll(entry.uses!.map(getConcept));
   if (uses && entry.uses != null)
-    meanings.addAll(
-      entry.uses!.map(getMeaning).where((m) => checkSegment(m, token)),
+    concepts.addAll(
+      entry.uses!
+          .map(getConcept)
+          .where((c) => checkSegment(c.meaning, token)),
     );
-  return meanings;
+  return concepts;
 }
 
-Iterable<String> checkQueries(
+Iterable<Concept> checkQueries(
   Entry entry,
   Iterable<Iterable<String>> queries,
   bool forms,
   bool uses,
 ) {
-  final meanings = Set<String>();
+  final concepts = Set<Concept>();
   for (final query in queries) {
-    Iterable<String> _meanings = entry.uses?.map(getMeaning) ?? [];
+    Iterable<Concept> _concepts = entry.uses?.map(getConcept) ?? [];
     for (final token in query) {
       final fits = checkToken(entry, token, forms, uses);
-      _meanings = _meanings.where((m) => fits.contains(m));
+      _concepts = _concepts.where((m) => fits.contains(m));
     }
-    _meanings.forEach((m) => meanings.add(m));
+    _concepts.forEach((m) => concepts.add(m));
   }
-  return meanings;
+  return concepts;
 }
 
 Iterable<Iterable<String>> parseQuery(String input) {
