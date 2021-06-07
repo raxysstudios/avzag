@@ -124,10 +124,10 @@ class _EntryEditorState extends State<EntryEditor>
     showLoadingDialog(
       context: context,
       future: FirebaseFirestore.instance
-          .collection('languages/${BaseStore.editorMode}/dictionary')
+          .collection('languages/${EditorStore.language}/dictionary')
           .add(entry.toJson())
           .then((_) {
-        DictionaryStore.dictionaries[BaseStore.editorMode]!.add(entry);
+        DictionaryStore.dictionaries[EditorStore.language]!.add(entry);
         Navigator.pop(context);
       }),
     );

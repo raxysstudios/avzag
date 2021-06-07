@@ -21,8 +21,8 @@ class Language {
           name: json['name'] as String,
           flag: json['flag'] as String,
           // location: json['location'] as LatLng,
-          family: json2list<String>(json['family']),
-          tags: json2list<String>(json['tags']),
+          family: json2list(json['family']),
+          tags: json2list(json['tags']),
         );
 
   Map<String, Object?> toJson() {

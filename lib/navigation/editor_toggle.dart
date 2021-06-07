@@ -12,17 +12,15 @@ class EditorSwitch extends StatefulWidget {
 }
 
 class _EditorSwitchState extends State<EditorSwitch> {
-  String? get editorMode => BaseStore.editorMode;
-
   Future<String?> chooseLanguage() async {
     return await showDialog<String>(
       context: context,
       builder: (_) => SimpleDialog(
-        title: Text("Select editing language"),
+        title: Text('Select editing language'),
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
-            child: Text("You can only choose from loaded languages."),
+            child: Text('You can only choose from loaded languages.'),
           ),
           Container(
             height: 320,
@@ -30,14 +28,15 @@ class _EditorSwitchState extends State<EditorSwitch> {
               children: [
                 ListTile(
                   leading: Icon(Icons.edit_off_outlined),
-                  title: Text("None"),
-                  selected: editorMode == null,
+                  title: Text('None'),
+                  subtitle: Text('Sign out from ${EditorStore.email}'),
+                  selected: EditorStore.language == null,
                   onTap: () => Navigator.pop(context),
                 ),
                 for (final l in BaseStore.languages)
                   LanguageTile(
                     HomeStore.languages[l]!,
-                    selected: editorMode == l,
+                    selected: EditorStore.language == l,
                     dense: false,
                     onTap: () => Navigator.pop(context, l),
                   ),
@@ -73,20 +72,27 @@ class _EditorSwitchState extends State<EditorSwitch> {
     return SwitchListTile(
       title: Text('Editor mode'),
       subtitle: Text(
-        capitalize(editorMode ?? 'Off'),
+        EditorStore.language == null
+            ? 'Off'
+            : (EditorStore.isAdmin ? 'Admin • ' : '') +
+                capitalize(EditorStore.language!),
       ),
-      value: editorMode != null,
+      value: EditorStore.language != null,
       secondary: Padding(
         padding: const EdgeInsets.only(top: 8),
         child: Icon(Icons.edit_outlined),
       ),
       onChanged: (e) async {
-        if (e) {
-          final cred = await signInWithGoogle();
-          if (cred == null) return;
-          print('######### USER ${cred.user?.displayName ?? 'anon'}');
+        if (e && EditorStore.email == null) {
+          final user = await signInWithGoogle();
+          if (user == null) return;
         }
-        BaseStore.setEditorMode(await chooseLanguage());
+        final lang = await chooseLanguage();
+        await EditorStore.setLanguage(lang);
+        if (lang == null) {
+          await FirebaseAuth.instance.signOut();
+          await GoogleSignIn().signOut();
+        }
         setState(() {});
       },
     );

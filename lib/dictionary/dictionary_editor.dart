@@ -15,7 +15,7 @@ class DictionaryEditorState extends State<DictionaryEditor> {
 
   @override
   Widget build(BuildContext context) {
-    if (BaseStore.editorMode == null) return Offstage();
+    if (EditorStore.language == null) return Offstage();
     return Column(
       children: [
         ElevatedButton.icon(
