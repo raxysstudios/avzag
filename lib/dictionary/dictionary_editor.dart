@@ -1,6 +1,5 @@
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
-import 'entry/entry.dart';
 import 'entry/entry_editor.dart';
 
 class DictionaryEditor extends StatefulWidget {

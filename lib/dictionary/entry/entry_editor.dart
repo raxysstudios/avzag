@@ -147,7 +147,7 @@ class _EntryEditorState extends State<EntryEditor>
                 id: entry.id,
               );
           });
-    showLoadingDialog(
+    await showLoadingDialog(
       context: context,
       future: future.then((_) => Navigator.pop(context)),
     );
