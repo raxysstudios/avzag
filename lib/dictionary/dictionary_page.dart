@@ -1,11 +1,13 @@
-import 'package:avzag/dictionary/dictionary_editor.dart';
 import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/searcher.dart';
 import 'package:avzag/dictionary/store.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'entry/entry_display.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:flutter/material.dart';
+
+import 'entry/entry_editor.dart';
 
 class DictionaryPage extends StatefulWidget {
   @override
@@ -117,7 +119,22 @@ class _DictionaryPageState extends State<DictionaryPage> {
               ),
             ),
           ),
-          DictionaryEditor(),
+          if (EditorStore.language != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (c) => EntryEditor(),
+                    ),
+                  ),
+                  icon: Icon(Icons.add_box_outlined),
+                  label: Text('New Entry'),
+                ),
+              ],
+            ),
         ],
       ),
     );
