@@ -1,7 +1,6 @@
 import 'package:avzag/home/models.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/store.dart';
-import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'store.dart';
@@ -59,20 +58,6 @@ class _HomePageState extends State<HomePage> {
         title: Text('Home'),
       ),
       drawer: NavDraver(title: 'Home'),
-      floatingActionButton: selected.isEmpty
-          ? null
-          : FloatingActionButton(
-              onPressed: () async {
-                var prefs = await SharedPreferences.getInstance();
-                await prefs.setStringList(
-                  'languages',
-                  selected.toList(),
-                );
-                await BaseStore.load(context);
-              },
-              child: Icon(Icons.download_outlined),
-              tooltip: 'Download data',
-            ),
       body: Column(
         children: [
           TextField(
@@ -88,39 +73,19 @@ class _HomePageState extends State<HomePage> {
                     ),
             ),
           ),
-          Container(
-            height: 48,
-            child: selected.isEmpty
-                ? Center(
-                    child: Text(
-                      'Selected languages appear here.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.black54,
-                      ),
-                    ),
-                  )
-                : ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      for (final l in selected)
-                        Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: InputChip(
-                            label: Text(
-                              capitalize(l),
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            onPressed: () => setState(
-                              () => selected.remove(l),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+          ElevatedButton.icon(
+            onPressed: () async {
+              var prefs = await SharedPreferences.getInstance();
+              await prefs.setStringList(
+                'languages',
+                selected.toList(),
+              );
+              await BaseStore.load(context);
+            },
+            icon: Icon(Icons.cloud_download_outlined),
+            label: Text('Download Selected'),
           ),
-          Divider(height: 2),
+          Divider(height: 0),
           Expanded(
             child: ListView(
               children: [
