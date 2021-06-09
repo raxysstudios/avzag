@@ -19,10 +19,6 @@ class UseDisplay extends StatelessWidget {
           DictionaryStore.concepts[use.concept]!,
           scholar: scholar,
         ),
-        NoteList(
-          use.note,
-          padding: const EdgeInsets.only(top: 4),
-        ),
         for (final s in use.samples ?? [])
           Padding(
             padding: const EdgeInsets.only(top: 4),

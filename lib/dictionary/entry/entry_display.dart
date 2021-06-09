@@ -98,6 +98,31 @@ class _EntryDisplayState extends State<EntryDisplay>
           Expanded(
             child: ListView(
               children: [
+                if (scholar && widget.entry.tags != null ||
+                    (widget.entry.note?.isNotEmpty ?? false)) ...[
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (scholar && widget.entry.tags != null)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Text(
+                              widget.entry.tags!.join(' '),
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        NoteList(widget.entry.note),
+                      ],
+                    ),
+                  ),
+                  Divider(height: 0),
+                ],
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
                   child: Column(
@@ -118,22 +143,6 @@ class _EntryDisplayState extends State<EntryDisplay>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      if (scholar && widget.entry.tags != null)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4),
-                          child: Text(
-                            widget.entry.tags!.join(' '),
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      NoteList(
-                        widget.entry.note,
-                        padding: const EdgeInsets.only(bottom: 4),
-                      ),
                       for (final f in widget.entry.forms)
                         SampleDisplay(
                           f,
