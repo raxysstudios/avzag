@@ -18,7 +18,10 @@ class DictionaryStore {
         return FirebaseFirestore.instance
             .collection('languages/$l/dictionary')
             .withConverter(
-              fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
+              fromFirestore: (snapshot, _) => Entry.fromJson(
+                snapshot.data()!,
+                id: snapshot.id,
+              ),
               toFirestore: (Entry object, _) => object.toJson(),
             )
             .get()

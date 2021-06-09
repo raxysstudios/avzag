@@ -14,9 +14,8 @@ import '../sample/sample_editor.dart';
 import 'entry.dart';
 
 class EntryEditor extends StatefulWidget {
-  final Entry entry;
-
-  EntryEditor(this.entry);
+  final Entry? entry;
+  EntryEditor({this.entry});
 
   @override
   _EntryEditorState createState() => _EntryEditorState();
@@ -31,7 +30,13 @@ class _EntryEditorState extends State<EntryEditor>
   @override
   void initState() {
     super.initState();
-    entry = Entry.fromJson(widget.entry.toJson());
+    entry = widget.entry == null
+        ? Entry(id: '', forms: [])
+        : Entry.fromJson(
+            widget.entry!.toJson(),
+            id: widget.entry!.id,
+          );
+
     tabController = TabController(length: 3, vsync: this);
     tabController.addListener(
       () => setState(() {
@@ -121,15 +126,30 @@ class _EntryEditorState extends State<EntryEditor>
   }
 
   void uploadEntry() async {
+    final collection = FirebaseFirestore.instance
+        .collection('languages/${EditorStore.language}/dictionary');
+    final dictionary = DictionaryStore.dictionaries[EditorStore.language]!;
+    final json = entry.toJson();
+    final future = widget.entry == null
+        ? collection.add(json).then((d) {
+            dictionary.add(
+              Entry.fromJson(
+                json,
+                id: d.id,
+              ),
+            );
+          })
+        : collection.doc(entry.id).update(json).then((_) {
+            final i = dictionary.indexWhere((e) => e.id == entry.id);
+            if (i >= 0)
+              dictionary[i] = Entry.fromJson(
+                json,
+                id: entry.id,
+              );
+          });
     showLoadingDialog(
       context: context,
-      future: FirebaseFirestore.instance
-          .collection('languages/${EditorStore.language}/dictionary')
-          .add(entry.toJson())
-          .then((_) {
-        DictionaryStore.dictionaries[EditorStore.language]!.add(entry);
-        Navigator.pop(context);
-      }),
+      future: future.then((_) => Navigator.pop(context)),
     );
   }
 

@@ -22,9 +22,7 @@ class DictionaryEditorState extends State<DictionaryEditor> {
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EntryEditor(
-                Entry(forms: []),
-              ),
+              builder: (c) => EntryEditor(),
             ),
           ),
           icon: Icon(Icons.add_box_outlined),

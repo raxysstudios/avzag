@@ -70,7 +70,7 @@ class _EntryDisplayState extends State<EntryDisplay>
                       context,
                       MaterialPageRoute(
                         builder: (context) => EntryEditor(
-                          widget.entry,
+                          entry: widget.entry,
                         ),
                       ),
                     );
