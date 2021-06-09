@@ -162,7 +162,7 @@ class _EntryEditorState extends State<EntryEditor>
         ListTile(
           title: builder(i),
           onTap: () => onTap(i),
-          contentPadding: const EdgeInsets.only(left: 16, right: 8),
+          contentPadding: const EdgeInsets.only(left: 16, right: 4),
           trailing: PopupMenuButton<Function(T)>(
             onSelected: (a) => a(i),
             itemBuilder: (BuildContext context) => actions!,
