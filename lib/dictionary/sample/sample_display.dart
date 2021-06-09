@@ -23,10 +23,10 @@ class SampleDisplay extends StatelessWidget {
         children: [
           TextSpan(
             text: [
-              "",
+              '',
               sample.translation,
               ...scholar ? [sample.ipa, sample.glossed] : [],
-            ].where((t) => t != null).join(row ? " " : "\n"),
+            ].where((t) => t != null).join(row ? ' ' : '\n'),
             style: TextStyle(
               wordSpacing: row ? 4 : null,
               color: Colors.black54,
