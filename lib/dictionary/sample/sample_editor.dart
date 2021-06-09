@@ -2,11 +2,11 @@ import 'package:avzag/dictionary/sample/sample.dart';
 import 'package:flutter/material.dart';
 
 class SampleEditor extends StatefulWidget {
-  final Sample value;
+  final Sample sample;
   final String title;
   final bool translation;
   SampleEditor(
-    this.value, {
+    this.sample, {
     this.title = "Sample editor",
     this.translation = true,
   });
@@ -22,7 +22,7 @@ class _SampleEditorState extends State<SampleEditor> {
   @override
   void initState() {
     super.initState();
-    sample = Sample.fromJson(widget.value.toJson());
+    sample = Sample.fromJson(widget.sample.toJson());
   }
 
   @override

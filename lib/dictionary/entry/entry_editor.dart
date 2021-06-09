@@ -14,9 +14,9 @@ import '../sample/sample_editor.dart';
 import 'entry.dart';
 
 class EntryEditor extends StatefulWidget {
-  final Entry sourceEntry;
+  final Entry entry;
 
-  EntryEditor(this.sourceEntry);
+  EntryEditor(this.entry);
 
   @override
   _EntryEditorState createState() => _EntryEditorState();
@@ -31,7 +31,7 @@ class _EntryEditorState extends State<EntryEditor>
   @override
   void initState() {
     super.initState();
-    entry = Entry.fromJson(widget.sourceEntry.toJson());
+    entry = Entry.fromJson(widget.entry.toJson());
     tabController = TabController(length: 3, vsync: this);
     tabController.addListener(
       () => setState(() {
