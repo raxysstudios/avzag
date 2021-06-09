@@ -23,12 +23,11 @@ class UseDisplay extends StatelessWidget {
           use.note,
           padding: const EdgeInsets.only(top: 4),
         ),
-        if (use.samples != null)
-          for (final s in use.samples!)
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: SampleDisplay(s, scholar: scholar),
-            )
+        for (final s in use.samples ?? [])
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: SampleDisplay(s, scholar: scholar),
+          )
       ],
     );
   }
