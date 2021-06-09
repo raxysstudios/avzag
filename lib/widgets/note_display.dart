@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class NoteList extends StatelessWidget {
+class NoteDisplay extends StatelessWidget {
   final String? note;
   final EdgeInsetsGeometry padding;
 
-  NoteList(
+  NoteDisplay(
     this.note, {
     this.padding = const EdgeInsets.all(0),
   });

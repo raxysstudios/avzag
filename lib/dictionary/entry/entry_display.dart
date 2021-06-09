@@ -117,7 +117,7 @@ class _EntryDisplayState extends State<EntryDisplay>
                               ),
                             ),
                           ),
-                        NoteList(widget.entry.note),
+                        NoteDisplay(widget.entry.note),
                       ],
                     ),
                   ),
