@@ -1,6 +1,6 @@
 import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/home/store.dart';
-import 'package:avzag/utils.dart';
+import 'package:avzag/navigation/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -45,22 +45,24 @@ class EditorStore {
     _language = value;
   }
 
-  static final Map<String, Iterable<String>> _admins = {};
-  static Map<String, Iterable<String>> get admins => _admins;
+  static Map<String, EditorUser> admins = {};
   static String? get email => FirebaseAuth.instance.currentUser?.email;
-  static bool get isAdmin => _admins[email]?.contains(language) ?? false;
+
+  static canEdit(String language) {
+    final editor = admins[email]?.editor;
+    if (editor == null) return false;
+    return editor.contains(language);
+  }
 
   static Future load() async {
     final prefs = await SharedPreferences.getInstance();
     setLanguage(prefs.getString('editor'));
 
-    _admins.clear();
-    await FirebaseFirestore.instance
-        .doc('meta/users')
-        .get()
-        .then((d) => d.data()!['admins'] as Map<String, dynamic>)
-        .then((data) {
-      for (final d in data.entries) _admins[d.key] = json2list(d.value)!;
+    admins.clear();
+    await FirebaseFirestore.instance.doc('meta/users').get().then((d) {
+      for (final u in d.data()!.entries) {
+        admins[u.key] = EditorUser.fromJson(u.value, u.key);
+      }
     });
   }
 }
