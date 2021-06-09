@@ -18,8 +18,7 @@ class Use {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     data['concept'] = concept;
-    if (samples != null)
-      data['samples'] = samples!.map((v) => v.toJson()).toList();
+    if (samples != null) data['samples'] = samples!.map((v) => v.toJson());
     if (note?.isNotEmpty ?? false) data['note'] = note;
     return data;
   }
