@@ -89,6 +89,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                       builder: (context) {
                         return EntryDisplay(
                           e,
+                          language: l.key,
                           scholar: useScholar,
                           toggleScholar: () => setState(() {
                             useScholar = !useScholar;

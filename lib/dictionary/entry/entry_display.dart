@@ -1,5 +1,6 @@
 import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/use/use_display.dart';
+import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/note_display.dart';
@@ -9,10 +10,16 @@ import 'entry_editor.dart';
 
 class EntryDisplay extends StatefulWidget {
   final Entry entry;
+  final String language;
   final bool scholar;
   final void Function()? toggleScholar;
 
-  EntryDisplay(this.entry, {this.scholar = false, this.toggleScholar});
+  EntryDisplay(
+    this.entry, {
+    required this.language,
+    this.scholar = false,
+    this.toggleScholar,
+  });
 
   @override
   _EntryDisplayState createState() => _EntryDisplayState();
@@ -56,23 +63,21 @@ class _EntryDisplayState extends State<EntryDisplay>
                   ),
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EntryEditor(
-                        widget.entry,
+              if (widget.language == EditorStore.language)
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EntryEditor(
+                          widget.entry,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                icon: Icon(
-                  Icons.edit_outlined,
-                  color: Colors.black,
+                    );
+                  },
+                  icon: Icon(Icons.edit_outlined),
+                  tooltip: 'Edit this entry',
                 ),
-                tooltip: 'Edit this entry',
-              ),
               IconButton(
                 onPressed: () {
                   setState(() {
@@ -82,7 +87,7 @@ class _EntryDisplayState extends State<EntryDisplay>
                 },
                 icon: Icon(
                   Icons.school_outlined,
-                  color: scholar ? Colors.blue : Colors.black,
+                  color: scholar ? Colors.blue : null,
                 ),
                 tooltip: 'Toggle Scholar mode',
               ),
