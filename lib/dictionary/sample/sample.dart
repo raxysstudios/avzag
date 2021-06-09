@@ -18,8 +18,8 @@ class Sample {
     final Map<String, dynamic> data = {};
     data['plain'] = plain;
     if (ipa?.isNotEmpty ?? false) data['ipa'] = ipa;
-    if (glossed?.isNotEmpty ?? false) data['glossed'] = ipa;
-    if (translation?.isNotEmpty ?? false) data['translation'] = ipa;
+    if (glossed?.isNotEmpty ?? false) data['glossed'] = glossed;
+    if (translation?.isNotEmpty ?? false) data['translation'] = translation;
     return data;
   }
 }
