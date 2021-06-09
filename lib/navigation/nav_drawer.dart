@@ -52,7 +52,7 @@ class NavDraver extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    'Developed in Dagestan, North Caucasus.',
+                    'Greetings from Dagestan, North Caucasus.',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black54),
                   ),
@@ -60,11 +60,11 @@ class NavDraver extends StatelessWidget {
                 Divider(height: 0),
                 EditorSwitch(),
                 ListTile(
-                  leading: Icon(Icons.email_outlined),
+                  leading: Icon(Icons.send_outlined),
                   title: Text('Developer contact'),
                   trailing: Icon(Icons.open_in_new_outlined),
                   onTap: () => launch(
-                    'mailto:alkaitagi@outlook.com?subject=Avzag',
+                    'https://t.me/alkaitagi',
                   ),
                 ),
                 ListTile(
