@@ -4,8 +4,6 @@ import 'package:avzag/home/language.dart';
 import 'package:avzag/home/store.dart';
 import 'package:flutter/material.dart';
 
-String docDir = "";
-
 class LanguageFlag extends StatelessWidget {
   final Language language;
   final double width;
