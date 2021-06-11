@@ -1,10 +1,20 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:avzag/home/language.dart';
+import 'package:avzag/home/store.dart';
 import 'package:flutter/material.dart';
 
 String docDir = "";
 
 class LanguageFlag extends StatelessWidget {
+  final Language language;
+  final double width;
+  final double height;
+  final bool circle;
+  final double rotation;
+  final Offset offset;
+  final double scale;
+
   const LanguageFlag(
     this.language, {
     this.width = 16,
@@ -14,13 +24,8 @@ class LanguageFlag extends StatelessWidget {
     this.scale = 18,
     this.circle = false,
   });
-  final Language language;
-  final double width;
-  final double height;
-  final bool circle;
-  final double rotation;
-  final Offset offset;
-  final double scale;
+
+  Uint8List? get flag => HomeStore.flags[language.flag];
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +38,18 @@ class LanguageFlag extends StatelessWidget {
           angle: rotation,
           child: Transform.scale(
             scale: scale,
-            child: Image.network(
-              language.flag,
-              repeat: ImageRepeat.repeatX,
-              errorBuilder: (
-                BuildContext context,
-                Object exception,
-                StackTrace? stackTrace,
-              ) =>
-                  Container(),
-            ),
+            child: flag == null
+                ? null
+                : Image.memory(
+                    flag!,
+                    repeat: ImageRepeat.repeatX,
+                    errorBuilder: (
+                      BuildContext context,
+                      Object exception,
+                      StackTrace? stackTrace,
+                    ) =>
+                        Container(),
+                  ),
           ),
         ),
       ),
