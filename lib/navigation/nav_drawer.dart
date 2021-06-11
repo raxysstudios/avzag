@@ -1,6 +1,7 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
 import 'package:avzag/navigation/editor_toggle.dart';
+import 'package:avzag/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +36,7 @@ class NavDraver extends StatelessWidget {
 
   Widget buildTitle(String text, {bool disabled = false}) {
     return Text(
-      text,
+      capitalize(text),
       style: TextStyle(fontSize: 18),
     );
   }
@@ -89,37 +90,37 @@ class NavDraver extends StatelessWidget {
           Divider(height: 0),
           ListTile(
             leading: Icon(Icons.map_outlined),
-            title: buildTitle('Home'),
+            title: buildTitle('home'),
             selected: title == 'home',
             onTap: () => navigate(context, 'home'),
           ),
           ListTile(
             leading: Icon(Icons.music_note_outlined),
-            title: buildTitle('Phonology'),
+            title: buildTitle('phonology'),
             trailing: Icon(Icons.construction_outlined),
             enabled: false,
           ),
           ListTile(
             leading: Icon(Icons.switch_left_outlined),
-            title: buildTitle('Converter'),
+            title: buildTitle('converter'),
             trailing: Icon(Icons.construction_outlined),
             enabled: false,
           ),
           ListTile(
             leading: Icon(Icons.chat_outlined),
-            title: buildTitle('Phrasebook'),
+            title: buildTitle('phrasebook'),
             trailing: Icon(Icons.construction_outlined),
             enabled: false,
           ),
           ListTile(
             leading: Icon(Icons.book_outlined),
-            title: buildTitle('Dictionary'),
+            title: buildTitle('dictionary'),
             selected: title == 'dictionary',
             onTap: () => navigate(context, 'dictionary'),
           ),
           ListTile(
             leading: Icon(Icons.local_library_outlined),
-            title: buildTitle('Bootcamp'),
+            title: buildTitle('bootcamp'),
             trailing: Icon(Icons.construction_outlined),
             enabled: false,
           ),
