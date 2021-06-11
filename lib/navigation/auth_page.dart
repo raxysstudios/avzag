@@ -1,3 +1,5 @@
+import 'package:avzag/home/language_avatar.dart';
+import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -104,6 +106,10 @@ class _AuthPageState extends State<AuthPage> {
                   final canEdit = EditorStore.canEdit(l);
                   final editing = l == EditorStore.language;
                   return ListTile(
+                    leading: Padding(
+                      padding: EdgeInsets.only(top: canEdit ? 8 : 0),
+                      child: LanguageAvatar(HomeStore.languages[l]!),
+                    ),
                     title: Text(
                       capitalize(l),
                       style: TextStyle(
