@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:avzag/home/language.dart';
 import 'package:avzag/home/store.dart';
 import 'package:flutter/material.dart';
