@@ -8,7 +8,6 @@ class LanguageAvatar extends StatelessWidget {
   final Language language;
   final double radius;
   static const double R = 12;
-  Uint8List? get flag => HomeStore.flags[language.flag];
 
   const LanguageAvatar(
     this.language, {
@@ -21,7 +20,9 @@ class LanguageAvatar extends StatelessWidget {
       scale: radius / R,
       child: CircleAvatar(
         radius: R,
-        backgroundImage: flag == null ? null : MemoryImage(flag!),
+        backgroundImage: MemoryImage(
+          HomeStore.getFlag(language),
+        ),
       ),
     );
   }

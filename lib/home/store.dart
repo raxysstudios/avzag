@@ -5,11 +5,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class HomeStore {
   static final Map<String, Language> languages = {};
-  static final Map<String, Uint8List> flags = {};
+
+  static final Map<String, Uint8List?> _flags = {};
+  static Uint8List getFlag(Language language) {
+    return _flags[language.flag] ?? Uint8List(0);
+  }
 
   static Future<void> load(List<String> langs) async {
     languages.clear();
-    flags.clear();
+    _flags.clear();
     await FirebaseFirestore.instance
         .collection('languages')
         .orderBy('family')
@@ -22,12 +26,8 @@ class HomeStore {
         .then((d) async {
       for (final d in d.docs) {
         final l = d.data();
-        if (flags[l.flag] == null) {
-          final flag = await FirebaseStorage.instance
-              .ref('flags/${l.flag}.png')
-              .getData();
-          if (flag != null) flags[l.flag] = flag;
-        }
+        _flags[l.flag] ??=
+            await FirebaseStorage.instance.ref('flags/${l.flag}.png').getData();
         languages[d.id] = l;
       }
     });
