@@ -18,9 +18,7 @@ class LanguageAvatar extends StatelessWidget {
       scale: radius / R,
       child: CircleAvatar(
         radius: R,
-        backgroundImage: MemoryImage(
-          HomeStore.getFlag(language),
-        ),
+        backgroundImage: NetworkImage(language.flagUrl),
       ),
     );
   }

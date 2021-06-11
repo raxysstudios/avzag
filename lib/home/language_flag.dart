@@ -33,8 +33,8 @@ class LanguageFlag extends StatelessWidget {
           angle: rotation,
           child: Transform.scale(
             scale: scale,
-            child: Image.memory(
-              HomeStore.getFlag(language),
+            child: Image.network(
+              language.flagUrl,
               repeat: ImageRepeat.repeatX,
               errorBuilder: (
                 BuildContext context,

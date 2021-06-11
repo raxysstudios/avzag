@@ -3,6 +3,7 @@ import 'package:avzag/utils.dart';
 class Language {
   final String name;
   final String flag;
+  late final flagUrl;
   final List<String>? family;
   final List<String>? tags;
 
