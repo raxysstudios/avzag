@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:avzag/home/language_flag.dart';
-import 'package:avzag/home/models.dart';
+import 'package:avzag/home/language.dart';
 import 'package:flutter/material.dart';
 
 class LanguageAvatar extends StatelessWidget {
@@ -20,9 +20,7 @@ class LanguageAvatar extends StatelessWidget {
       scale: radius / R,
       child: CircleAvatar(
         radius: R,
-        backgroundImage: FileImage(
-          File(docDir + flagPath(language)),
-        ),
+        backgroundImage: NetworkImage(language.flagUrl),
       ),
     );
   }

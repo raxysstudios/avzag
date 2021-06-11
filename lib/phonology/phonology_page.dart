@@ -1,4 +1,4 @@
-import 'package:avzag/home/models.dart';
+import 'package:avzag/home/language.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,8 +25,6 @@ class _PhonologyPageState extends State<PhonologyPage> {
         BuildContext context,
         AsyncSnapshot<QuerySnapshot<Language>> snapshot,
       ) {
-        final languages = snapshot.data?.docs.map((l) => l.data());
-        languages?.forEach(donwloadFlag);
         return Scaffold(
           appBar: AppBar(
             title: Text(

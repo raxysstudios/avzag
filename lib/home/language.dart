@@ -1,26 +1,23 @@
-// import 'package:latlong/latlong.dart';
-import '../utils.dart';
+import 'package:avzag/utils.dart';
 
 class Language {
   final String name;
-  final String? flag;
-  // final LatLng? location;
+  final String flag;
+  late final flagUrl;
   final List<String>? family;
   final List<String>? tags;
 
   Language({
     required this.name,
-    // this.location,
+    required this.flag,
     this.tags,
     this.family,
-    this.flag,
   });
 
   Language.fromJson(Map<String, Object?> json)
       : this(
           name: json['name'] as String,
           flag: json['flag'] as String,
-          // location: json['location'] as LatLng,
           family: json2list(json['family']),
           tags: json2list(json['tags']),
         );
@@ -28,7 +25,7 @@ class Language {
   Map<String, Object?> toJson() {
     final Map<String, dynamic> data = {};
     data['name'] = name;
-    if (flag != null) data['flag'] = flag;
+    data['flag'] = flag;
     if (family != null) data['family'] = family;
     if (tags != null) data['tags'] = tags;
     return data;
