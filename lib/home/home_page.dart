@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Home'),
       ),
-      drawer: NavDraver(title: 'Home'),
+      drawer: NavDraver(title: 'home'),
       body: Column(
         children: [
           TextField(

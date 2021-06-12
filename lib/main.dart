@@ -31,7 +31,7 @@ class _AppState extends State<App> {
               .then((_) => BaseStore.load(context))
               .then((_) => SharedPreferences.getInstance())
               .then((prefs) => prefs.getString('module') ?? 'home')
-              .then((title) => toHome(context));
+              .then((title) => navigate(context, 'home'));
           return Scaffold();
         },
       ),

@@ -49,7 +49,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
           SizedBox(width: 4),
         ],
       ),
-      drawer: NavDraver(title: 'Dictionary'),
+      drawer: NavDraver(title: 'dictionary'),
       body: ListView(
         children: [
           SearchController(searcher),

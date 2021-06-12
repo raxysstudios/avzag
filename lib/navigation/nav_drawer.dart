@@ -9,13 +9,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'expandable_title.dart';
 
-void toHome(BuildContext context) => _navigate(context, 'home');
-
-void _navigate(
+void navigate(
   BuildContext context,
   String title,
 ) async {
   late Widget Function(BuildContext) builder;
+  title = title.toLowerCase();
   if (title == 'home')
     builder = (_) => HomePage();
   else if (title == 'dictionary')
@@ -47,7 +46,7 @@ class _NavModule {
       ),
       trailing: enabled ? null : Icon(Icons.construction_outlined),
       selected: selected,
-      onTap: enabled ? () => _navigate(context, text) : null,
+      onTap: enabled ? () => navigate(context, text) : null,
       enabled: enabled,
     );
   }
