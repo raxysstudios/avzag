@@ -9,10 +9,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'expandable_title.dart';
 
-void navigate(
+void toHome(BuildContext context) => _navigate(context, 'home');
+
+void _navigate(
   BuildContext context,
   String title,
-) {
+) async {
   late Widget Function(BuildContext) builder;
   if (title == 'home')
     builder = (_) => HomePage();
@@ -21,25 +23,55 @@ void navigate(
   else
     builder = (_) => Text("NO ROUTE FOUND");
 
-  Navigator.pushReplacement(
+  await Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: builder),
   );
-  SharedPreferences.getInstance().then(
+  await SharedPreferences.getInstance().then(
     (prefs) => prefs.setString('module', title),
   );
+}
+
+class _NavModule {
+  final IconData icon;
+  final String text;
+  final bool enabled;
+  _NavModule(this.icon, this.text, this.enabled);
+
+  Widget build(BuildContext context, bool selected) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(
+        capitalize(text),
+        style: TextStyle(fontSize: 18),
+      ),
+      trailing: enabled ? null : Icon(Icons.construction_outlined),
+      selected: selected,
+      onTap: enabled ? () => _navigate(context, text) : null,
+      enabled: enabled,
+    );
+  }
+}
+
+class _NavLink {
+  final IconData icon;
+  final String text;
+  final String url;
+  _NavLink(this.icon, this.text, this.url);
+
+  Widget build() {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(capitalize(text)),
+      trailing: Icon(Icons.open_in_new_outlined),
+      onTap: () => launch(url),
+    );
+  }
 }
 
 class NavDraver extends StatelessWidget {
   NavDraver({this.title});
   final String? title;
-
-  Widget buildTitle(String text, {bool disabled = false}) {
-    return Text(
-      capitalize(text),
-      style: TextStyle(fontSize: 18),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,70 +92,28 @@ class NavDraver extends StatelessWidget {
                 ),
                 Divider(height: 0),
                 EditorSwitch(),
-                ListTile(
-                  leading: Icon(Icons.send_outlined),
-                  title: Text('Developer contact'),
-                  trailing: Icon(Icons.open_in_new_outlined),
-                  onTap: () => launch(
+                ...[
+                  _NavLink(
+                    Icons.send_outlined,
+                    'developer contact',
                     'https://t.me/alkaitagi',
                   ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.forum_outlined),
-                  title: Text('Telegram channel'),
-                  trailing: Icon(Icons.open_in_new_outlined),
-                  onTap: () => launch(
-                    'https://t.me/avzag',
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.code_outlined),
-                  title: Text('GitHub repository'),
-                  trailing: Icon(Icons.open_in_new_outlined),
-                  onTap: () => launch(
-                    'https://github.com/alkaitagi/avzag_flutter',
-                  ),
-                ),
+                  _NavLink(Icons.forum_outlined, 'telegram channel',
+                      'https://t.me/avzag'),
+                  _NavLink(Icons.code_outlined, 'GitHub repository',
+                      'https://github.com/alkaitagi/avzag_flutter'),
+                ].map((e) => e.build()),
               ],
             ),
           ),
           Divider(height: 0),
-          ListTile(
-            leading: Icon(Icons.map_outlined),
-            title: buildTitle('home'),
-            selected: title == 'home',
-            onTap: () => navigate(context, 'home'),
-          ),
-          ListTile(
-            leading: Icon(Icons.music_note_outlined),
-            title: buildTitle('phonology'),
-            trailing: Icon(Icons.construction_outlined),
-            enabled: false,
-          ),
-          ListTile(
-            leading: Icon(Icons.switch_left_outlined),
-            title: buildTitle('converter'),
-            trailing: Icon(Icons.construction_outlined),
-            enabled: false,
-          ),
-          ListTile(
-            leading: Icon(Icons.chat_outlined),
-            title: buildTitle('phrasebook'),
-            trailing: Icon(Icons.construction_outlined),
-            enabled: false,
-          ),
-          ListTile(
-            leading: Icon(Icons.book_outlined),
-            title: buildTitle('dictionary'),
-            selected: title == 'dictionary',
-            onTap: () => navigate(context, 'dictionary'),
-          ),
-          ListTile(
-            leading: Icon(Icons.local_library_outlined),
-            title: buildTitle('bootcamp'),
-            trailing: Icon(Icons.construction_outlined),
-            enabled: false,
-          ),
+          ...[
+            _NavModule(Icons.map_outlined, 'home', true),
+            _NavModule(Icons.music_note_outlined, 'phonology', false),
+            _NavModule(Icons.switch_left_outlined, 'converter', false),
+            _NavModule(Icons.book_outlined, 'dictionary', true),
+            _NavModule(Icons.construction_outlined, 'bootcamp', false),
+          ].map((e) => e.build(context, e.text == title))
         ],
       ),
     );
