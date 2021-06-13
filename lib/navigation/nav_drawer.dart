@@ -14,8 +14,7 @@ Future<void> navigate(
   String? title,
 ) async {
   final prefs = await SharedPreferences.getInstance();
-  title =
-      title == null ? prefs.getString('module') ?? 'home' : title.toLowerCase();
+  title ??= prefs.getString('module') ?? 'dictionary';
 
   late Widget Function(BuildContext) builder;
   if (title == 'home') {
