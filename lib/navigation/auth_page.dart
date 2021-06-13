@@ -83,7 +83,7 @@ class _AuthPageState extends State<AuthPage> {
               },
               icon: Icon(Icons.account_circle_outlined),
               label: Text(
-                EditorStore.user?.email ?? "Sign in to see your options",
+                EditorStore.user?.email ?? 'Sign in to see your options',
               ),
             ),
           ),
