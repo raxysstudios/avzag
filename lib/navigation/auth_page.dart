@@ -41,7 +41,7 @@ class _AuthPageState extends State<AuthPage> {
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
-    EditorStore.setLanguage(null);
+    await EditorStore.setLanguage(null);
   }
 
   Widget contactButton(String language) {
