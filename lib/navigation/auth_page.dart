@@ -35,7 +35,6 @@ class _AuthPageState extends State<AuthPage> {
     );
 
     final userCred = await FirebaseAuth.instance.signInWithCredential(authCred);
-    setState(() {});
     return userCred.user?.email;
   }
 
@@ -43,7 +42,6 @@ class _AuthPageState extends State<AuthPage> {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
     EditorStore.setLanguage(null);
-    setState(() {});
   }
 
   Widget contactButton(String language) {
@@ -78,12 +76,13 @@ class _AuthPageState extends State<AuthPage> {
             padding: const EdgeInsets.all(8),
             child: ElevatedButton.icon(
               onPressed: () async {
-                if (EditorStore.user != null) {
+                if (EditorStore.user == null) {
                   await signOut();
-                  await EditorStore.setLanguage(null);
-                  setState(() {});
+                  await signIn();
+                } else {
+                  await signOut();
                 }
-                await signIn();
+                setState(() {});
               },
               icon: Icon(Icons.account_circle_outlined),
               label: Text(
