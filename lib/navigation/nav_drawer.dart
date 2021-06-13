@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'expandable_title.dart';
 
-void navigate(
+Future<void> navigate(
   BuildContext context,
   String? title,
 ) async {
@@ -18,18 +18,19 @@ void navigate(
       title == null ? prefs.getString('module') ?? 'home' : title.toLowerCase();
 
   late Widget Function(BuildContext) builder;
-  if (title == 'home')
+  if (title == 'home') {
     builder = (_) => HomePage();
-  else if (title == 'dictionary')
+    title = null;
+  } else if (title == 'dictionary')
     builder = (_) => DictionaryPage();
   else
-    builder = (_) => Text("NO ROUTE FOUND");
+    builder = (_) => Text("No Route");
 
   await Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: builder),
   );
-  await prefs.setString('module', title);
+  if (title != null) await prefs.setString('module', title);
 }
 
 class _NavModule {

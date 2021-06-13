@@ -55,9 +55,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () async {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setStringList(
+              'languages',
+              selected.toList(),
+            );
+            await BaseStore.load(context);
+            await navigate(context, null);
+          },
+        ),
         title: Text('Home'),
       ),
-      drawer: NavDraver(title: 'home'),
       body: Column(
         children: [
           TextField(
@@ -72,18 +82,6 @@ class _HomePageState extends State<HomePage> {
                       icon: Icon(Icons.clear),
                     ),
             ),
-          ),
-          ElevatedButton.icon(
-            onPressed: () async {
-              var prefs = await SharedPreferences.getInstance();
-              await prefs.setStringList(
-                'languages',
-                selected.toList(),
-              );
-              await BaseStore.load(context);
-            },
-            icon: Icon(Icons.cloud_download_outlined),
-            label: Text('Download Selected'),
           ),
           Divider(height: 0),
           Expanded(
