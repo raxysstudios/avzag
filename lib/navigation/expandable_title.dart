@@ -2,8 +2,8 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
 class ExpandableTitle extends StatelessWidget {
-  final Widget child;
-  const ExpandableTitle(this.child);
+  final Iterable<Widget> children;
+  const ExpandableTitle(this.children);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,30 @@ class ExpandableTitle extends StatelessWidget {
         ),
       ),
       collapsed: Offstage(),
-      expanded: child,
+      expanded: Column(
+        children: [
+          Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.landscape_outlined,
+                  color: Colors.black54,
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'Made with honor in\nDagestan, North Caucasus.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.black54),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
+          ...children,
+        ],
+      ),
     );
   }
 }

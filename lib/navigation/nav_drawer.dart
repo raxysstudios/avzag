@@ -80,32 +80,20 @@ class NavDraver extends StatelessWidget {
       child: ListView(
         children: [
           ExpandableTitle(
-            Column(
-              children: [
-                Divider(height: 0),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    'Made with honor in\nDagestan, North Caucasus.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black54),
-                  ),
+            [
+              EditorSwitch(),
+              ...[
+                _NavLink(
+                  Icons.send_outlined,
+                  'developer contact',
+                  'https://t.me/alkaitagi',
                 ),
-                Divider(height: 0),
-                EditorSwitch(),
-                ...[
-                  _NavLink(
-                    Icons.send_outlined,
-                    'developer contact',
-                    'https://t.me/alkaitagi',
-                  ),
-                  _NavLink(Icons.forum_outlined, 'telegram channel',
-                      'https://t.me/avzag'),
-                  _NavLink(Icons.code_outlined, 'GitHub repository',
-                      'https://github.com/alkaitagi/avzag_flutter'),
-                ].map((e) => e.build()),
-              ],
-            ),
+                _NavLink(Icons.forum_outlined, 'telegram channel',
+                    'https://t.me/avzag'),
+                _NavLink(Icons.code_outlined, 'GitHub repository',
+                    'https://github.com/alkaitagi/avzag_flutter'),
+              ].map((e) => e.build()),
+            ],
           ),
           Divider(height: 0),
           ...[
