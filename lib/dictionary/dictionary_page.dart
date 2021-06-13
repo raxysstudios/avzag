@@ -120,20 +120,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
             ),
           ),
           if (EditorStore.language != null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (c) => EntryEditor(),
-                    ),
-                  ),
-                  icon: Icon(Icons.add_box_outlined),
-                  label: Text('New Entry'),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (c) => EntryEditor(),
                 ),
-              ],
+              ),
+              icon: Icon(Icons.add_outlined),
+              label: Text('New Entry'),
             ),
         ],
       ),
