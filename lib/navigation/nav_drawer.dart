@@ -84,7 +84,7 @@ class NavDraver extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    'Greetings from Dagestan, North Caucasus.',
+                    'Made with honor in Dagestan, North Caucasus.',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.black54),
                   ),
