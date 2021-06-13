@@ -24,7 +24,7 @@ class _EditorSwitchState extends State<EditorSwitch> {
         child: Icon(Icons.edit_outlined),
       ),
       onChanged: (e) async {
-        await Navigator.push(
+        await Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => AuthPage(),

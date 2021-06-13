@@ -1,5 +1,6 @@
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/home/store.dart';
+import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,6 +67,9 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () => navigate(context, null),
+        ),
         title: Text('Editors'),
       ),
       body: ListView(
