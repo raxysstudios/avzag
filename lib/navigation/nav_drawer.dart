@@ -11,10 +11,13 @@ import 'expandable_title.dart';
 
 void navigate(
   BuildContext context,
-  String title,
+  String? title,
 ) async {
+  final prefs = await SharedPreferences.getInstance();
+  title =
+      title == null ? prefs.getString('module') ?? 'home' : title.toLowerCase();
+
   late Widget Function(BuildContext) builder;
-  title = title.toLowerCase();
   if (title == 'home')
     builder = (_) => HomePage();
   else if (title == 'dictionary')
@@ -26,9 +29,7 @@ void navigate(
     context,
     MaterialPageRoute(builder: builder),
   );
-  await SharedPreferences.getInstance().then(
-    (prefs) => prefs.setString('module', title),
-  );
+  await prefs.setString('module', title);
 }
 
 class _NavModule {
