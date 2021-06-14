@@ -14,34 +14,20 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  String get hintMessage {
-    if (EditorStore.email == null)
-      return 'Sign in with Google to see your options.';
-
-    var text =
-        'With any question regarding the language materials, contact the correspondng editors below.';
-    if (EditorStore.admin?.editor?.isNotEmpty ?? false)
-      text += ' Or you can edit ' +
-          capitalize(EditorStore.admin!.editor!.join(',')) +
-          ' yourself.';
-    return text;
-  }
-
   Future<void> signIn() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
     await EditorStore.setLanguage(null);
 
     final user = await GoogleSignIn().signIn();
-    if (user?.authentication != null) {
-      final auth = await user!.authentication;
-      final cred = GoogleAuthProvider.credential(
-        accessToken: auth.accessToken,
-        idToken: auth.idToken,
-      );
-      await FirebaseAuth.instance.signInWithCredential(cred);
-    }
-    setState(() {});
+    if (user?.authentication == null) return;
+
+    final auth = await user!.authentication;
+    final cred = GoogleAuthProvider.credential(
+      accessToken: auth.accessToken,
+      idToken: auth.idToken,
+    );
+    await FirebaseAuth.instance.signInWithCredential(cred);
   }
 
   Widget? contactButton(String language) {
@@ -74,7 +60,7 @@ class _AuthPageState extends State<AuthPage> {
           Padding(
             padding: const EdgeInsets.all(8),
             child: ElevatedButton.icon(
-              onPressed: signIn,
+              onPressed: () => signIn().then((_) => setState(() {})),
               icon: Icon(Icons.person_outlined),
               label: Text(
                 EditorStore.email ?? 'Sign In',
@@ -82,13 +68,32 @@ class _AuthPageState extends State<AuthPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-            child: Text(
-              hintMessage,
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
+            child: RichText(
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
+              text: TextSpan(
+                style: TextStyle(color: Colors.black87),
+                children: EditorStore.email == null
+                    ? [
+                        TextSpan(
+                          text: 'Sign in with Google to see your options.',
+                        ),
+                      ]
+                    : [
+                        TextSpan(
+                          text:
+                              'With any question regarding the language materials, contact the correspondng editors below.',
+                        ),
+                        if (EditorStore.admin?.editor?.isNotEmpty ?? false) ...[
+                          TextSpan(text: '\n\nOr you can edit '),
+                          for (final l in EditorStore.admin!.editor!)
+                            TextSpan(
+                              text: capitalize(l),
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          TextSpan(text: ' youself.'),
+                        ],
+                      ],
               ),
             ),
           ),
@@ -115,17 +120,14 @@ class _AuthPageState extends State<AuthPage> {
                     subtitle: canEdit
                         ? Text(
                             editing
-                                ? 'Editing this language'
+                                ? 'You are editing this language'
                                 : 'You can edit this language',
                           )
                         : null,
                     onTap: canEdit
-                        ? () async {
-                            await EditorStore.setLanguage(
+                        ? () => EditorStore.setLanguage(
                               editing ? null : l,
-                            );
-                            setState(() {});
-                          }
+                            ).then((_) => setState(() {}))
                         : null,
                     selected: editing,
                     trailing: contactButton(l),
