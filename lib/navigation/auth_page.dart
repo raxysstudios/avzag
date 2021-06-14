@@ -27,21 +27,20 @@ class _AuthPageState extends State<AuthPage> {
     return text;
   }
 
-  Future<String?> signIn() async {
+  Future<void> signIn() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
     await EditorStore.setLanguage(null);
 
     final user = await GoogleSignIn().signIn();
-    if (user?.authentication == null) return null;
-
-    final auth = await user!.authentication;
-    final cred = GoogleAuthProvider.credential(
-      accessToken: auth.accessToken,
-      idToken: auth.idToken,
-    );
-
-    await FirebaseAuth.instance.signInWithCredential(cred);
+    if (user?.authentication != null) {
+      final auth = await user!.authentication;
+      final cred = GoogleAuthProvider.credential(
+        accessToken: auth.accessToken,
+        idToken: auth.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(cred);
+    }
     setState(() {});
   }
 
