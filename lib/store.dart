@@ -46,11 +46,11 @@ class EditorStore {
   }
 
   static Map<String, EditorUser> admins = {};
-  static EditorUser? get user =>
-      admins[FirebaseAuth.instance.currentUser?.email];
+  static String? get email => FirebaseAuth.instance.currentUser?.email;
+  static EditorUser? get admin => admins[email];
 
   static canEdit(String language) {
-    return user?.editor?.contains(language) ?? false;
+    return admin?.editor?.contains(language) ?? false;
   }
 
   static Future load() async {
