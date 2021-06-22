@@ -30,22 +30,6 @@ class _AuthPageState extends State<AuthPage> {
     await FirebaseAuth.instance.signInWithCredential(cred);
   }
 
-  Widget? contactButton(String language) {
-    String? contact;
-    for (final user in EditorStore.admins.values)
-      if (user.editor?.contains(language) ?? false) {
-        contact = user.contact;
-        break;
-      }
-    if (contact != null)
-      return IconButton(
-        onPressed: () => launch(contact!),
-        icon: Icon(Icons.send_outlined),
-        color: Colors.black,
-        tooltip: "Contact editor",
-      );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,12 +86,13 @@ class _AuthPageState extends State<AuthPage> {
             for (final l in BaseStore.languages)
               Builder(
                 builder: (context) {
+                  final language = HomeStore.languages[l]!;
                   final canEdit = EditorStore.canEdit(l);
                   final editing = l == EditorStore.language;
                   return ListTile(
                     leading: Padding(
                       padding: EdgeInsets.only(top: canEdit ? 8 : 0),
-                      child: LanguageAvatar(HomeStore.languages[l]!),
+                      child: LanguageAvatar(language),
                     ),
                     title: Text(
                       capitalize(l),
@@ -130,7 +115,14 @@ class _AuthPageState extends State<AuthPage> {
                             ).then((_) => setState(() {}))
                         : null,
                     selected: editing,
-                    trailing: contactButton(l),
+                    trailing: language.contact == null
+                        ? null
+                        : IconButton(
+                            onPressed: () => launch(language.contact!),
+                            icon: Icon(Icons.send_outlined),
+                            color: Colors.black,
+                            tooltip: "Contact editor",
+                          ),
                   );
                 },
               ),
