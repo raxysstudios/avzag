@@ -1,6 +1,5 @@
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/home/store.dart';
-import 'package:avzag/loading_dialog.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
