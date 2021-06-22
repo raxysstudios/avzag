@@ -12,7 +12,7 @@ class _EditorSwitchState extends State<EditorSwitch> {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-      title: Text('Editor mode'),
+      title: Text('Editor Mode'),
       subtitle: Text(
         EditorStore.language == null
             ? 'Off'
