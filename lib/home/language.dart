@@ -20,7 +20,7 @@ class Language {
       : this(
           name: json['name'] as String,
           flag: json['flag'] as String,
-          contact: json['contact'] as String,
+          contact: json['contact'] as String?,
           family: json2list(json['family']),
           tags: json2list(json['tags']),
         );

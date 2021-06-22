@@ -58,7 +58,7 @@ class EditorStore {
     setLanguage(prefs.getString('editor'));
 
     editors.clear();
-    await FirebaseFirestore.instance.doc('meta/users').get().then((d) {
+    await FirebaseFirestore.instance.doc('meta/editors').get().then((d) {
       for (final u in d.data()!.entries) {
         editors[u.key] = json2list(u.value)!;
       }
