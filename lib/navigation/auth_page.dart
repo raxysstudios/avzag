@@ -68,9 +68,9 @@ class _AuthPageState extends State<AuthPage> {
                           text:
                               'With any question regarding the language materials, contact the correspondng editors below.',
                         ),
-                        if (EditorStore.admin?.editor?.isNotEmpty ?? false) ...[
+                        if (EditorStore.editing?.isNotEmpty ?? false) ...[
                           TextSpan(text: '\n\nOr you can edit '),
-                          for (final l in EditorStore.admin!.editor!)
+                          for (final l in EditorStore.editing!)
                             TextSpan(
                               text: capitalize(l),
                               style: TextStyle(fontWeight: FontWeight.bold),

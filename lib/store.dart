@@ -1,6 +1,6 @@
 import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/home/store.dart';
-import 'package:avzag/navigation/user.dart';
+import 'package:avzag/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -45,22 +45,22 @@ class EditorStore {
     _language = value;
   }
 
-  static Map<String, EditorUser> admins = {};
+  static Map<String, List<String>> editors = {};
   static String? get email => FirebaseAuth.instance.currentUser?.email;
-  static EditorUser? get admin => admins[email];
+  static List<String>? get editing => editors[email];
 
   static canEdit(String language) {
-    return admin?.editor?.contains(language) ?? false;
+    return editing?.contains(language) ?? false;
   }
 
   static Future load() async {
     final prefs = await SharedPreferences.getInstance();
     setLanguage(prefs.getString('editor'));
 
-    admins.clear();
+    editors.clear();
     await FirebaseFirestore.instance.doc('meta/users').get().then((d) {
       for (final u in d.data()!.entries) {
-        admins[u.key] = EditorUser.fromJson(u.value, u.key);
+        editors[u.key] = json2list(u.value)!;
       }
     });
   }
