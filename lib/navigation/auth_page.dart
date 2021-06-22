@@ -70,11 +70,10 @@ class _AuthPageState extends State<AuthPage> {
                         ),
                         if (EditorStore.editing?.isNotEmpty ?? false) ...[
                           TextSpan(text: '\n\nOr you can edit '),
-                          for (final l in EditorStore.editing!)
-                            TextSpan(
-                              text: capitalize(l),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                          TextSpan(
+                            text: capitalize(EditorStore.editing!.join(', ')),
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           TextSpan(text: ' youself.'),
                         ],
                       ],
