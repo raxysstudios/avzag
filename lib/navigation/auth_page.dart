@@ -1,5 +1,6 @@
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/home/store.dart';
+import 'package:avzag/loading_dialog.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
@@ -44,7 +45,10 @@ class _AuthPageState extends State<AuthPage> {
           Padding(
             padding: const EdgeInsets.all(8),
             child: ElevatedButton.icon(
-              onPressed: () => signIn().then((_) => setState(() {})),
+              onPressed: () => showLoadingDialog(
+                context: context,
+                future: signIn().then((_) => setState(() {})),
+              ),
               icon: Icon(Icons.person_outlined),
               label: Text(
                 EditorStore.email ?? 'Sign In',
