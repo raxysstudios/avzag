@@ -26,15 +26,14 @@ class _AuthPageState extends State<AuthPage> {
     await EditorStore.setLanguage(null);
 
     final user = await GoogleSignIn().signIn();
-    if (user?.authentication == null) return;
-
-    final auth = await user!.authentication;
-    final cred = GoogleAuthProvider.credential(
-      accessToken: auth.accessToken,
-      idToken: auth.idToken,
-    );
-    await FirebaseAuth.instance.signInWithCredential(cred);
-
+    if (user?.authentication != null) {
+      final auth = await user!.authentication;
+      final cred = GoogleAuthProvider.credential(
+        accessToken: auth.accessToken,
+        idToken: auth.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(cred);
+    }
     setState(() {
       signing = false;
     });
