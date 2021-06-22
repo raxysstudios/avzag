@@ -26,8 +26,8 @@ class _AuthPageState extends State<AuthPage> {
     await EditorStore.setLanguage(null);
 
     final user = await GoogleSignIn().signIn();
-    if (user?.authentication != null) {
-      final auth = await user!.authentication;
+    if (user != null) {
+      final auth = await user.authentication;
       final cred = GoogleAuthProvider.credential(
         accessToken: auth.accessToken,
         idToken: auth.idToken,
