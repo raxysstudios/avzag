@@ -1,3 +1,4 @@
+import 'package:avzag/dictionary/help_button.dart';
 import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/searcher.dart';
 import 'package:avzag/dictionary/store.dart';
@@ -24,28 +25,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
     searcher = Searcher(DictionaryStore.dictionaries, setState);
   }
 
-  void showHelp() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: [],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dictionaries'),
         actions: [
-          IconButton(
-            onPressed: showHelp,
-            icon: Icon(Icons.help_outline_outlined),
-            tooltip: 'Show help',
-          ),
+          HelpButton(),
           SizedBox(width: 4),
         ],
       ),
