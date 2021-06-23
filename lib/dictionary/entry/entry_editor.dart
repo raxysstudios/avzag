@@ -233,7 +233,7 @@ class _EntryEditorState extends State<EntryEditor>
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    "An entry must have at least one form.",
+                    "Must have at least one form.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black54,
@@ -250,11 +250,11 @@ class _EntryEditorState extends State<EntryEditor>
           ),
           ListView(
             children: [
-              if (entry.forms.isEmpty)
+              if (entry.uses.isEmpty)
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    "An entry must use at least one concept.",
+                    "Must use at least one concept.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black54,
