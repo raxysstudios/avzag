@@ -1,3 +1,4 @@
+import 'package:avzag/column_tile.dart';
 import 'package:avzag/dictionary/concept/concept_selector.dart';
 import 'package:avzag/dictionary/sample/sample.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
@@ -157,6 +158,8 @@ class _EntryEditorState extends State<EntryEditor>
     Function(T i) onTap,
     Widget Function(T i) builder, {
     List<PopupMenuItem<Function(T)>>? actions,
+    bool narrow = false,
+    bool leadingSpace = true,
   }) {
     if (actions == null) actions = [];
     actions.add(PopupMenuItem(
@@ -178,10 +181,12 @@ class _EntryEditorState extends State<EntryEditor>
     ));
     return [
       for (final i in list)
-        ListTile(
-          title: builder(i),
+        ColumnTile(
+          builder(i),
           onTap: () => onTap(i),
-          contentPadding: const EdgeInsets.only(left: 16, right: 4),
+          padding: EdgeInsets.only(left: narrow ? 0 : 16, right: 4),
+          minVerticalPadding: narrow ? 0 : 16,
+          leadingSpace: leadingSpace,
           trailing: PopupMenuButton<Function(T)>(
             onSelected: (a) => a(i),
             itemBuilder: (BuildContext context) => actions!,
@@ -245,6 +250,7 @@ class _EntryEditorState extends State<EntryEditor>
                 entry.forms,
                 (f) => selectForm(form: f),
                 (i) => SampleDisplay(i, row: true),
+                leadingSpace: false,
               )
             ],
           ),
@@ -264,27 +270,28 @@ class _EntryEditorState extends State<EntryEditor>
                 ),
               ...buildList<Use>(
                 entry.uses,
-                (u) => selectSample(use: u),
+                (u) => selectConcept(use: u),
                 (u) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: u.samples?.isEmpty ?? true ? 0 : 16,
-                      ),
-                      child: ConceptDisplay(
-                        DictionaryStore.concepts[u.concept]!,
-                        scholar: true,
-                      ),
+                    ConceptDisplay(
+                      DictionaryStore.concepts[u.concept]!,
+                      scholar: true,
                     ),
                     if (u.samples != null)
                       ...buildList<Sample>(
                         u.samples!,
                         (s) => selectSample(use: u, sample: s),
-                        (s) => SampleDisplay(s, scholar: true),
+                        (s) => ColumnTile(
+                          SampleDisplay(s, scholar: true),
+                          leadingSpace: false,
+                          padding: const EdgeInsets.all(0),
+                          minVerticalPadding: 0,
+                        ),
                       ),
                   ],
                 ),
+                narrow: true,
+                leadingSpace: false,
                 actions: [
                   PopupMenuItem(
                     value: (u) => selectSample(use: u),

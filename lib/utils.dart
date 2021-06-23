@@ -6,6 +6,9 @@ String capitalize(String value) => value
     .map((w) => w[0].toUpperCase() + w.substring(1))
     .join(' ');
 
+String? prettyTags(Iterable<String>? tags) =>
+    tags == null ? null : capitalize(tags.join(' • '));
+
 List<String>? json2list(Object? array) {
   return (array as Iterable<dynamic>?)?.map((i) => i as String).toList();
 }

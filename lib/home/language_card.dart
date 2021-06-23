@@ -39,9 +39,7 @@ class LanguageCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              subtitle: Text(
-                capitalize(language.family?.join(' • ') ?? ''),
-              ),
+              subtitle: Text(prettyTags(language.family ?? [])!),
             ),
           ],
         ),

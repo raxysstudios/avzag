@@ -15,22 +15,24 @@ class SampleDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        text: sample.plain,
         style: TextStyle(
-          color: Colors.black,
-          fontSize: 16,
+          color: Colors.black54,
+          fontSize: 14,
         ),
         children: [
+          TextSpan(
+            text: sample.plain,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
           TextSpan(
             text: [
               '',
               sample.translation,
               ...scholar ? [sample.ipa, sample.glossed] : [],
             ].where((t) => t != null).join(row ? ' ' : '\n'),
-            style: TextStyle(
-              wordSpacing: row ? 4 : null,
-              color: Colors.black54,
-            ),
           )
         ],
       ),

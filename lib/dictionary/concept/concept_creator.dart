@@ -70,7 +70,7 @@ class _ConceptCreatorState extends State<ConceptCreator> {
           children: [
             uploading
                 ? CircularProgressIndicator()
-                : OutlinedButton.icon(
+                : ElevatedButton.icon(
                     onPressed: uploadConcept,
                     icon: Icon(Icons.check_outlined),
                     label: Text('Save & Select'),

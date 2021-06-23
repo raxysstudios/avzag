@@ -1,3 +1,4 @@
+import 'package:avzag/column_tile.dart';
 import 'package:avzag/dictionary/concept/concept_display.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/store.dart';
@@ -18,11 +19,13 @@ class UseDisplay extends StatelessWidget {
           DictionaryStore.concepts[use.concept]!,
           scholar: scholar,
         ),
-        for (final s in use.samples ?? [])
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: SampleDisplay(s, scholar: scholar),
-          )
+        if (use.samples != null)
+          for (final s in use.samples!) ...[
+            ColumnTile(
+              SampleDisplay(s, scholar: scholar),
+              minVerticalPadding: 8,
+            )
+          ]
       ],
     );
   }

@@ -59,7 +59,7 @@ class _SampleEditorState extends State<SampleEditor> {
                   decoration: InputDecoration(labelText: "Translation"),
                   onChanged: (s) => sample.translation = s,
                 ),
-              OutlinedButton.icon(
+              ElevatedButton.icon(
                 onPressed: () {
                   if (formKey.currentState!.validate())
                     Navigator.pop(context, sample);

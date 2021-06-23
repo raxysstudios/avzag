@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class NoteDisplay extends StatelessWidget {
@@ -8,7 +6,7 @@ class NoteDisplay extends StatelessWidget {
 
   NoteDisplay(
     this.note, {
-    this.padding = const EdgeInsets.all(0),
+    this.padding = EdgeInsets.zero,
   });
 
   @override
@@ -19,7 +17,9 @@ class NoteDisplay extends StatelessWidget {
             padding: padding,
             child: Text(
               note!,
-              style: TextStyle(fontStyle: FontStyle.italic),
+              style: TextStyle(
+                fontSize: 14,
+              ),
             ),
           );
   }

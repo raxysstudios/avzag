@@ -42,7 +42,7 @@ class _ConceptSelectState extends State<ConceptSelect> {
                   children: [
                     Text('Cannot find what you need?'),
                     SizedBox(height: 8),
-                    OutlinedButton.icon(
+                    ElevatedButton.icon(
                       onPressed: () => setState(() {
                         creating = true;
                       }),
@@ -54,8 +54,8 @@ class _ConceptSelectState extends State<ConceptSelect> {
               : ListView(
                   children: [
                     for (final c in filtered)
-                      ListTile(
-                        title: ConceptDisplay(c.value),
+                      ConceptDisplay(
+                        c.value,
                         onTap: () => Navigator.pop(context, c.key),
                       ),
                   ],
@@ -69,9 +69,10 @@ class _ConceptSelectState extends State<ConceptSelect> {
   Widget build(BuildContext context) {
     return SimpleDialog(
       title: Text(creating ? 'Add concept' : 'Select concept'),
+      contentPadding: EdgeInsets.zero,
       children: [
         Container(
-          height: 320,
+          height: 512,
           child: creating ? ConceptCreator(query) : buildSearch(),
         ),
       ],

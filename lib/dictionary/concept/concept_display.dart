@@ -1,3 +1,4 @@
+import 'package:avzag/column_tile.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 import 'concept.dart';
@@ -5,35 +6,24 @@ import 'concept.dart';
 class ConceptDisplay extends StatelessWidget {
   final Concept concept;
   final bool scholar;
+  final Function()? onTap;
 
   const ConceptDisplay(
     this.concept, {
     this.scholar = true,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        text: capitalize(concept.meaning),
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-        children: scholar && concept.tags != null
-            ? [
-                TextSpan(
-                  text: ["", ...concept.tags!].join(" "),
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ]
-            : null,
+    return ColumnTile(
+      Text(
+        capitalize(concept.meaning),
+        style: TextStyle(fontSize: 16),
       ),
+      subtitle: prettyTags(scholar ? concept.tags : null),
+      leading: Icon(Icons.lightbulb_outline),
+      onTap: onTap,
     );
   }
 }

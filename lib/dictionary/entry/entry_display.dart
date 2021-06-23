@@ -1,160 +1,78 @@
+import 'package:avzag/column_tile.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/use/use_display.dart';
-import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/note_display.dart';
 import '../../utils.dart';
 import 'entry.dart';
-import 'entry_editor.dart';
 
-class EntryDisplay extends StatefulWidget {
+class EntryDisplay extends StatelessWidget {
   final Entry entry;
   final String language;
   final bool scholar;
-  final void Function()? toggleScholar;
+  final Widget? leading;
+  final Widget? trailing;
+  final Widget? bottom;
 
   EntryDisplay(
     this.entry, {
     required this.language,
+    this.leading,
+    this.trailing,
+    this.bottom,
     this.scholar = false,
-    this.toggleScholar,
   });
 
-  @override
-  _EntryDisplayState createState() => _EntryDisplayState();
-}
-
-class _EntryDisplayState extends State<EntryDisplay>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  late bool scholar;
-
-  @override
-  void initState() {
-    scholar = widget.scholar;
-    super.initState();
-    _tabController = new TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 512,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    capitalize(widget.entry.forms[0].plain),
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              if (widget.language == EditorStore.language)
-                IconButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EntryEditor(
-                          entry: widget.entry,
-                        ),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.edit_outlined),
-                  tooltip: 'Edit this entry',
-                ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    scholar = !scholar;
-                  });
-                  widget.toggleScholar?.call();
-                },
-                icon: Icon(
-                  Icons.school_outlined,
-                  color: scholar ? Colors.blue : null,
-                ),
-                tooltip: 'Toggle Scholar mode',
-              ),
-              SizedBox(width: 4),
-            ],
-          ),
-          Divider(height: 0),
-          Expanded(
-            child: ListView(
-              children: [
-                if (scholar && widget.entry.tags != null ||
-                    (widget.entry.note?.isNotEmpty ?? false)) ...[
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (scholar && widget.entry.tags != null)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Text(
-                              widget.entry.tags!.join(' '),
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        NoteDisplay(widget.entry.note),
-                      ],
-                    ),
-                  ),
-                  Divider(height: 0),
-                ],
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      for (final u in widget.entry.uses) ...[
-                        UseDisplay(u, scholar: scholar),
-                        SizedBox(height: 4),
-                      ],
-                    ],
-                  ),
-                ),
-                Divider(height: 0),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      for (final f in widget.entry.forms)
-                        SampleDisplay(
-                          f,
-                          scholar: scholar,
-                          row: true,
-                        ),
-                    ],
-                  ),
-                ),
-              ],
+    return Column(
+      children: [
+        ColumnTile(
+          Text(
+            capitalize(entry.forms[0].plain),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
           ),
-        ],
-      ),
+          subtitle: prettyTags(scholar ? entry.tags : null),
+          leading: leading,
+          trailing: trailing,
+          gap: 20,
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+        ),
+        Divider(height: 0),
+        Expanded(
+          child: ListView(
+            children: [
+              if (scholar && entry.tags != null ||
+                  (entry.note?.isNotEmpty ?? false)) ...[
+                if (entry.note != null)
+                  ColumnTile(
+                    NoteDisplay(entry.note),
+                    leading: Icon(Icons.info_outline),
+                  ),
+              ],
+              for (final u in entry.uses) UseDisplay(u, scholar: scholar),
+              ColumnTile(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (final f in entry.forms)
+                      SampleDisplay(
+                        f,
+                        scholar: scholar,
+                        row: true,
+                      ),
+                  ],
+                ),
+                leading: Icon(Icons.tune_outlined),
+              ),
+              if (bottom != null) bottom!,
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
