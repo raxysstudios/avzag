@@ -14,12 +14,10 @@ Concept getConcept(Use use) {
 
 Iterable<Concept> checkTag(Entry entry, String tag) {
   tag = tag.substring(1);
-  if (entry.tags?.contains(tag) ?? false)
-    return entry.uses?.map(getConcept) ?? [];
+  if (entry.tags?.contains(tag) ?? false) return entry.uses.map(getConcept);
   return entry.uses
-          ?.map(getConcept)
-          .where((c) => c.tags?.contains(tag) ?? false) ??
-      [];
+      .map(getConcept)
+      .where((c) => c.tags?.contains(tag) ?? false);
 }
 
 bool checkSegment(String area, String segment) {
@@ -35,19 +33,14 @@ bool checkSegment(String area, String segment) {
   }
 }
 
-Iterable<Concept> checkToken(
-    Entry entry, String token, bool forms, bool uses) {
+Iterable<Concept> checkToken(Entry entry, String token, bool forms, bool uses) {
   if (token[0] == "#") return checkTag(entry, token);
   final List<Concept> concepts = [];
-  if (forms &&
-      entry.uses != null &&
-      entry.forms.any((f) => checkSegment(f.plain, token)))
-    concepts.addAll(entry.uses!.map(getConcept));
-  if (uses && entry.uses != null)
+  if (forms && entry.forms.any((f) => checkSegment(f.plain, token)))
+    concepts.addAll(entry.uses.map(getConcept));
+  if (uses)
     concepts.addAll(
-      entry.uses!
-          .map(getConcept)
-          .where((c) => checkSegment(c.meaning, token)),
+      entry.uses.map(getConcept).where((c) => checkSegment(c.meaning, token)),
     );
   return concepts;
 }
@@ -60,7 +53,7 @@ Iterable<Concept> checkQueries(
 ) {
   final concepts = Set<Concept>();
   for (final query in queries) {
-    Iterable<Concept> _concepts = entry.uses?.map(getConcept) ?? [];
+    Iterable<Concept> _concepts = entry.uses.map(getConcept);
     for (final token in query) {
       final fits = checkToken(entry, token, forms, uses);
       _concepts = _concepts.where((m) => fits.contains(m));

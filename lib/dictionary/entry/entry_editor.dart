@@ -31,7 +31,7 @@ class _EntryEditorState extends State<EntryEditor>
   void initState() {
     super.initState();
     entry = widget.entry == null
-        ? Entry(id: '', forms: [])
+        ? Entry(id: '', forms: [], uses: [])
         : Entry.fromJson(
             widget.entry!.toJson(),
             id: widget.entry!.id,
@@ -64,9 +64,8 @@ class _EntryEditorState extends State<EntryEditor>
     ).then((result) {
       if (result == null) return;
       if (use == null) {
-        if (entry.uses == null) entry.uses = [];
         setState(
-          () => entry.uses!.add(
+          () => entry.uses.add(
             Use(concept: result),
           ),
         );
@@ -202,7 +201,8 @@ class _EntryEditorState extends State<EntryEditor>
         ),
         actions: [
           IconButton(
-            onPressed: entry.forms.isEmpty ? null : uploadEntry,
+            onPressed:
+                entry.forms.isEmpty || entry.uses.isEmpty ? null : uploadEntry,
             icon: Icon(Icons.cloud_upload_outlined),
           ),
           SizedBox(width: 4),
@@ -250,44 +250,55 @@ class _EntryEditorState extends State<EntryEditor>
           ),
           ListView(
             children: [
-              if (entry.uses != null)
-                ...buildList<Use>(
-                  entry.uses!,
-                  (u) => selectSample(use: u),
-                  (u) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: u.samples?.isEmpty ?? true ? 0 : 16,
-                        ),
-                        child: ConceptDisplay(
-                          DictionaryStore.concepts[u.concept]!,
-                          scholar: true,
-                        ),
-                      ),
-                      if (u.samples != null)
-                        ...buildList<Sample>(
-                          u.samples!,
-                          (s) => selectSample(use: u, sample: s),
-                          (s) => SampleDisplay(s, scholar: true),
-                        ),
-                    ],
+              if (entry.forms.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    "An entry must use at least one concept.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 24,
+                    ),
                   ),
-                  actions: [
-                    PopupMenuItem(
-                      value: (u) => selectSample(use: u),
-                      child: ListTile(
-                        visualDensity: const VisualDensity(
-                          vertical: -4,
-                          horizontal: -4,
-                        ),
-                        leading: Icon(Icons.add_outlined),
-                        title: Text('Add sample'),
+                ),
+              ...buildList<Use>(
+                entry.uses,
+                (u) => selectSample(use: u),
+                (u) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: u.samples?.isEmpty ?? true ? 0 : 16,
                       ),
-                    )
+                      child: ConceptDisplay(
+                        DictionaryStore.concepts[u.concept]!,
+                        scholar: true,
+                      ),
+                    ),
+                    if (u.samples != null)
+                      ...buildList<Sample>(
+                        u.samples!,
+                        (s) => selectSample(use: u, sample: s),
+                        (s) => SampleDisplay(s, scholar: true),
+                      ),
                   ],
                 ),
+                actions: [
+                  PopupMenuItem(
+                    value: (u) => selectSample(use: u),
+                    child: ListTile(
+                      visualDensity: const VisualDensity(
+                        vertical: -4,
+                        horizontal: -4,
+                      ),
+                      leading: Icon(Icons.add_outlined),
+                      title: Text('Add sample'),
+                    ),
+                  )
+                ],
+              ),
             ],
           ),
           ListView(

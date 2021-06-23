@@ -127,14 +127,12 @@ class _EntryDisplayState extends State<EntryDisplay>
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: widget.entry.uses == null
-                        ? [Text('No uses data.')]
-                        : [
-                            for (final u in widget.entry.uses!) ...[
-                              UseDisplay(u, scholar: scholar),
-                              SizedBox(height: 4),
-                            ],
-                          ],
+                    children: [
+                      for (final u in widget.entry.uses) ...[
+                        UseDisplay(u, scholar: scholar),
+                        SizedBox(height: 4),
+                      ],
+                    ],
                   ),
                 ),
                 Divider(height: 0),
