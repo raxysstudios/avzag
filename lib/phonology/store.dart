@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'phoneme/phoneme.dart';
 
 class PhonologyStore {
@@ -19,9 +20,16 @@ class PhonologyStore {
             .get()
             .then((d) {
           if (d.docs.isEmpty) return null;
-          for (final p in d.docs.map((e) => e.data())) {
-            if (phonemes[p.ipa] == null) phonemes[p.ipa] = {};
-            phonemes[p.ipa]![l] = p;
+          for (final d in d.docs) {
+            final phoneme = d.data();
+            phoneme.samples?.forEach((s) async {
+              s.audioUrl = await FirebaseStorage.instance
+                  .ref('$l/phonology/${s.word}.m4a')
+                  .getDownloadURL();
+            });
+            final ipa = phoneme.ipa;
+            if (phonemes[ipa] == null) phonemes[ipa] = {};
+            phonemes[ipa]![l] = phoneme;
           }
         });
       }),

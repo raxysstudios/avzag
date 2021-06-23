@@ -2,8 +2,9 @@ class Sample {
   final String letter;
   final String word;
   final String? ipa;
+  String? audioUrl;
 
-  const Sample({
+  Sample({
     required this.letter,
     required this.word,
     this.ipa,
