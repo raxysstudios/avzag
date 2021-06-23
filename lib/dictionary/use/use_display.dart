@@ -23,7 +23,6 @@ class UseDisplay extends StatelessWidget {
           for (final s in use.samples!) ...[
             ColumnTile(
               SampleDisplay(s, scholar: scholar),
-              minVerticalPadding: 8,
             )
           ]
       ],
