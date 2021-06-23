@@ -17,19 +17,25 @@ class _AuthPageState extends State<AuthPage> {
   bool signing = false;
 
   Future<void> signIn() async {
+    setState(() {
+      signing = true;
+    });
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
     await EditorStore.setLanguage(null);
 
     final user = await GoogleSignIn().signIn();
-    if (user == null) return;
-
-    final auth = await user.authentication;
-    final cred = GoogleAuthProvider.credential(
-      accessToken: auth.accessToken,
-      idToken: auth.idToken,
-    );
-    await FirebaseAuth.instance.signInWithCredential(cred);
+    if (user != null) {
+      final auth = await user.authentication;
+      final cred = GoogleAuthProvider.credential(
+        accessToken: auth.accessToken,
+        idToken: auth.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(cred);
+    }
+    setState(() {
+      signing = false;
+    });
   }
 
   @override
@@ -46,16 +52,7 @@ class _AuthPageState extends State<AuthPage> {
           Padding(
             padding: const EdgeInsets.all(8),
             child: ElevatedButton.icon(
-              onPressed: () {
-                setState(() {
-                  signing = false;
-                });
-                signIn().whenComplete(
-                  () => setState(() {
-                    signing = true;
-                  }),
-                );
-              },
+              onPressed: () => signIn(),
               icon: Icon(Icons.person_outlined),
               label: Text(
                 EditorStore.email ?? 'Sign In',
