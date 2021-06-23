@@ -74,7 +74,7 @@ class _AuthPageState extends State<AuthPage> {
                     : [
                         TextSpan(
                           text:
-                              'With any question regarding the language materials, contact the correspondng editors below.',
+                              'With any question regarding the language materials, contact the corresponding editors below.',
                         ),
                         if (EditorStore.editing?.isNotEmpty ?? false) ...[
                           TextSpan(text: '\n\nOr you can edit '),
@@ -82,7 +82,7 @@ class _AuthPageState extends State<AuthPage> {
                             text: capitalize(EditorStore.editing!.join(', ')),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          TextSpan(text: ' youself.'),
+                          TextSpan(text: ' yourself.'),
                         ],
                       ],
               ),
