@@ -1,3 +1,5 @@
+import 'package:avzag/utils.dart';
+
 import '../sample.dart';
 
 class Phoneme {
@@ -15,7 +17,7 @@ class Phoneme {
       : this(
           ipa: json['ipa'],
           note: json['note'],
-          samples: json['samples'],
+          samples: listFromJson(json['samples'], (j) => Sample.fromJson(j)),
         );
 
   Map<String, dynamic> toJson() {
