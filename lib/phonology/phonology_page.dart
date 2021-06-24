@@ -46,19 +46,24 @@ class _PhonologyPageState extends State<PhonologyPage> {
       body: PageView(
         controller: _pageController,
         children: [
-          ListView(
-            children: [
-              for (final p in PhonologyStore.phonemes.entries)
-                PhonemeButton(
-                  p.key,
-                  onTap: () {
-                    setState(() {
-                      phoneme = p;
-                    });
-                    openPage(1);
-                  },
-                ),
-            ],
+          GridView.builder(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 80,
+              childAspectRatio: 1.25,
+            ),
+            itemCount: PhonologyStore.phonemes.length,
+            itemBuilder: (_, i) {
+              final p = PhonologyStore.phonemes.entries.elementAt(i);
+              return PhonemeButton(
+                p.key,
+                onTap: () {
+                  setState(() {
+                    phoneme = p;
+                  });
+                  openPage(1);
+                },
+              );
+            },
           ),
           Column(
             children: [
