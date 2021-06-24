@@ -545,7 +545,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.3"
+    version: "2.2.4"
   xdg_directories:
     dependency: transitive
     description:
