@@ -3,6 +3,7 @@ import 'package:avzag/sound_manager.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/phonology/phoneme/phoneme_button.dart';
 import 'package:avzag/phonology/phoneme/phoneme_card.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/widgets/column_tile.dart';
 import 'package:flutter/material.dart';
 import 'store.dart';
@@ -13,13 +14,21 @@ class PhonologyPage extends StatefulWidget {
 }
 
 class _PhonologyPageState extends State<PhonologyPage> {
-  final _pageController = PageController();
   late MapEntry<String, Map<String, Phoneme>> phoneme;
+  int page = 0;
+  final _pageController = PageController();
 
   @override
   void initState() {
     super.initState();
     phoneme = PhonologyStore.phonemes.entries.first;
+    _pageController.addListener(() {
+      final page = _pageController.page?.round();
+      if (page != null && page != this.page)
+        setState(() {
+          this.page = page;
+        });
+    });
   }
 
   @override
@@ -36,6 +45,17 @@ class _PhonologyPageState extends State<PhonologyPage> {
     );
   }
 
+  void openEditor(Phoneme? phoneme) {
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (c) => EntryEditor(
+    //       entry: entry,
+    //     ),
+    //   ),
+    // );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +63,17 @@ class _PhonologyPageState extends State<PhonologyPage> {
         title: Text('Phonology'),
       ),
       drawer: NavDraver(title: 'phonology'),
+      floatingActionButton: EditorStore.language == null
+          ? null
+          : FloatingActionButton(
+              onPressed: () => openEditor(
+                page == 0 ? null : phoneme.value[EditorStore.language],
+              ),
+              child: Icon(
+                page == 0 ? Icons.add_outlined : Icons.edit_outlined,
+              ),
+              tooltip: page == 0 ? 'Add new phoneme' : 'Edit this phoneme',
+            ),
       body: PageView(
         controller: _pageController,
         children: [
