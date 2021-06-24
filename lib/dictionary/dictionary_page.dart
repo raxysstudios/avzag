@@ -21,18 +21,20 @@ class _DictionaryPageState extends State<DictionaryPage> {
   Entry? entry;
   String language = '';
   bool useScholar = false;
-  bool searchPage = true;
+  int page = 0;
   final _pageController = PageController();
 
   @override
   void initState() {
     super.initState();
     searcher = Searcher(DictionaryStore.dictionaries, setState);
-    _pageController.addListener(
-      () => setState(() {
-        searchPage = _pageController.page == 0;
-      }),
-    );
+    _pageController.addListener(() {
+      final page = _pageController.page?.round();
+      if (page != null && page != this.page)
+        setState(() {
+          this.page = page;
+        });
+    });
   }
 
   @override
@@ -75,12 +77,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
           ? null
           : FloatingActionButton(
               onPressed: () => openEditor(
-                searchPage ? null : entry,
+                page == 0 ? null : entry,
               ),
               child: Icon(
-                searchPage ? Icons.add_outlined : Icons.edit_outlined,
+                page == 0 ? Icons.add_outlined : Icons.edit_outlined,
               ),
-              tooltip: searchPage ? 'Add new entry' : 'Edit this entry',
+              tooltip: page == 0 ? 'Add new entry' : 'Edit this entry',
             ),
       body: PageView(
         controller: _pageController,
