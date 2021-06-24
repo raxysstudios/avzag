@@ -1,3 +1,4 @@
+import 'package:avzag/widgets/column_tile.dart';
 import 'package:flutter/material.dart';
 
 class NoteDisplay extends StatelessWidget {
@@ -13,14 +14,14 @@ class NoteDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return note == null
         ? Offstage()
-        : Padding(
-            padding: padding,
-            child: Text(
+        : ColumnTile(
+            Text(
               note!,
               style: TextStyle(
                 fontSize: 14,
               ),
             ),
+            leading: Icon(Icons.info_outline),
           );
   }
 }

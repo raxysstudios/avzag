@@ -1,4 +1,4 @@
-import 'package:avzag/column_tile.dart';
+import 'package:avzag/widgets/column_tile.dart';
 import 'package:avzag/dictionary/entry/entry.dart';
 import 'package:avzag/dictionary/help_button.dart';
 import 'package:avzag/dictionary/search_controller.dart';

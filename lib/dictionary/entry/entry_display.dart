@@ -1,4 +1,4 @@
-import 'package:avzag/column_tile.dart';
+import 'package:avzag/widgets/column_tile.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/use/use_display.dart';
 import 'package:flutter/material.dart';
@@ -43,14 +43,7 @@ class EntryDisplay extends StatelessWidget {
         Expanded(
           child: ListView(
             children: [
-              if (scholar && entry.tags != null ||
-                  (entry.note?.isNotEmpty ?? false)) ...[
-                if (entry.note != null)
-                  ColumnTile(
-                    NoteDisplay(entry.note),
-                    leading: Icon(Icons.info_outline),
-                  ),
-              ],
+              NoteDisplay(entry.note),
               for (final u in entry.uses) UseDisplay(u, scholar: scholar),
               ColumnTile(
                 Column(
