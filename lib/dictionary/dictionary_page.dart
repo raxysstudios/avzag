@@ -21,12 +21,24 @@ class _DictionaryPageState extends State<DictionaryPage> {
   Entry? entry;
   String language = '';
   bool useScholar = false;
+  bool searchPage = true;
   final _pageController = PageController();
 
   @override
   void initState() {
     super.initState();
     searcher = Searcher(DictionaryStore.dictionaries, setState);
+    _pageController.addListener(
+      () => setState(() {
+        searchPage = _pageController.page == 0;
+      }),
+    );
+  }
+
+  @override
+  dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   void openPage(int index) {
@@ -37,7 +49,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
     );
   }
 
-  void openEditor({Entry? entry}) {
+  void openEditor(Entry? entry) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -59,6 +71,17 @@ class _DictionaryPageState extends State<DictionaryPage> {
         ],
       ),
       drawer: NavDraver(title: 'dictionary'),
+      floatingActionButton: EditorStore.language == null
+          ? null
+          : FloatingActionButton(
+              onPressed: () => openEditor(
+                searchPage ? null : entry,
+              ),
+              child: Icon(
+                searchPage ? Icons.add_outlined : Icons.edit_outlined,
+              ),
+              tooltip: searchPage ? 'Add new entry' : 'Edit this entry',
+            ),
       body: PageView(
         controller: _pageController,
         children: [
@@ -125,15 +148,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
                         ),
                       ),
                     ),
-                    if (EditorStore.language != null)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ElevatedButton.icon(
-                          onPressed: openEditor,
-                          icon: Icon(Icons.add_outlined),
-                          label: Text('Add New Entry'),
-                        ),
-                      ),
                   ],
                 ),
               ),
@@ -173,16 +187,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 ),
                 tooltip: 'Toggle Scholar Mode',
               ),
-              bottom: language != EditorStore.language
-                  ? null
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ElevatedButton.icon(
-                        onPressed: () => openEditor(entry: entry),
-                        icon: Icon(Icons.edit_outlined),
-                        label: Text('Edit This Entry'),
-                      ),
-                    ),
               scholar: useScholar,
             ),
         ],

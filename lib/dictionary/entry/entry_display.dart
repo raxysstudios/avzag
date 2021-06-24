@@ -13,14 +13,12 @@ class EntryDisplay extends StatelessWidget {
   final bool scholar;
   final Widget? leading;
   final Widget? trailing;
-  final Widget? bottom;
 
   EntryDisplay(
     this.entry, {
     required this.language,
     this.leading,
     this.trailing,
-    this.bottom,
     this.scholar = false,
   });
 
@@ -68,7 +66,6 @@ class EntryDisplay extends StatelessWidget {
                 ),
                 leading: Icon(Icons.tune_outlined),
               ),
-              if (bottom != null) bottom!,
             ],
           ),
         ),
