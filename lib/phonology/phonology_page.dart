@@ -2,7 +2,7 @@ import 'package:avzag/phonology/phoneme/phoneme.dart';
 import 'package:avzag/sound_manager.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/phonology/phoneme/phoneme_button.dart';
-import 'package:avzag/phonology/phoneme/phoneme_card.dart';
+import 'package:avzag/phonology/phoneme/phoneme_display.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/column_tile.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +122,7 @@ class _PhonologyPageState extends State<PhonologyPage> {
                 child: ListView.separated(
                   itemBuilder: (_, i) {
                     final p = phoneme.value.entries.elementAt(i);
-                    return PhonemeCard(
+                    return PhonemeDisplay(
                       p.value,
                       language: p.key,
                       playing: SoundManager.url,

@@ -6,13 +6,13 @@ import 'package:avzag/phonology/phoneme/phoneme.dart';
 import 'package:avzag/widgets/note_display.dart';
 import 'package:flutter/material.dart';
 
-class PhonemeCard extends StatelessWidget {
+class PhonemeDisplay extends StatelessWidget {
   final Phoneme phoneme;
   final String language;
   final String? playing;
   final Function(String)? onPlay;
 
-  const PhonemeCard(
+  const PhonemeDisplay(
     this.phoneme, {
     required this.language,
     this.playing,
@@ -32,13 +32,15 @@ class PhonemeCard extends StatelessWidget {
             ),
           ),
           leading: LanguageAvatar(HomeStore.languages[language]!),
-          trailing: Text(
-            phoneme.samples?.map((s) => s.letter).join(' ') ?? '',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          trailing: phoneme.samples == null
+              ? null
+              : Text(
+                  Set.from(phoneme.samples!.map((s) => s.letter)).join(' '),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
         ),
         if (phoneme.samples != null)
           for (final s in phoneme.samples!)
