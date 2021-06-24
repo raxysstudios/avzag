@@ -24,14 +24,14 @@ class PhonemeButton extends StatelessWidget {
               Text(
                 letter!,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             Text(
               phoneme,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: letter == null ? 20 : 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
