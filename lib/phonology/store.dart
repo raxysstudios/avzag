@@ -22,11 +22,6 @@ class PhonologyStore {
           if (d.docs.isEmpty) return null;
           for (final d in d.docs) {
             final phoneme = d.data();
-            phoneme.samples?.forEach((s) async {
-              s.audioUrl = await FirebaseStorage.instance
-                  .ref('$l/phonology/${s.word}.m4a')
-                  .getDownloadURL();
-            });
             final ipa = phoneme.ipa;
             if (phonemes[ipa] == null) phonemes[ipa] = {};
             phonemes[ipa]![l] = phoneme;

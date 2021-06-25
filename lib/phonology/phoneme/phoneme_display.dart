@@ -4,6 +4,7 @@ import 'package:avzag/utils.dart';
 import 'package:avzag/widgets/column_tile.dart';
 import 'package:avzag/phonology/phoneme/phoneme.dart';
 import 'package:avzag/widgets/note_display.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class PhonemeDisplay extends StatelessWidget {
@@ -54,14 +55,20 @@ class PhonemeDisplay extends StatelessWidget {
                 style: TextStyle(color: Colors.black54),
               ),
               leading: Icon(
-                playing == s.audioUrl
+                playing == s.audioUrl && s.audioUrl != null
                     ? Icons.pause_outlined
                     : Icons.play_arrow_outlined,
                 color: Colors.black,
               ),
-              onTap: s.audioUrl == null || onPlay == null
+              onTap: onPlay == null
                   ? null
-                  : () => onPlay!(s.audioUrl!),
+                  : () async {
+                      if (s.audioUrl == null)
+                        s.audioUrl = await FirebaseStorage.instance
+                            .ref('$language/phonology/${s.word}.m4a')
+                            .getDownloadURL();
+                      onPlay!(s.audioUrl!);
+                    },
             ),
         NoteDisplay(phoneme.note),
       ],

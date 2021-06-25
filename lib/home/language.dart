@@ -4,7 +4,7 @@ class Language {
   final String name;
   final String flag;
   final String? contact;
-  late final flagUrl;
+  String? flagUrl;
   final List<String>? family;
   final List<String>? tags;
 

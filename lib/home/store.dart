@@ -1,6 +1,5 @@
 import 'package:avzag/home/language.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class HomeStore {
   static final Map<String, Language> languages = {};
@@ -17,13 +16,7 @@ class HomeStore {
         )
         .get()
         .then((d) async {
-      for (final d in d.docs) {
-        final l = d.data();
-        l.flagUrl = await FirebaseStorage.instance
-            .ref('flags/${l.flag}.png')
-            .getDownloadURL();
-        languages[d.id] = l;
-      }
+      for (final d in d.docs) languages[d.id] = d.data();
     });
   }
 }

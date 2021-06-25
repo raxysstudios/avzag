@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'package:avzag/home/language.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-class LanguageFlag extends StatelessWidget {
+class LanguageFlag extends StatefulWidget {
   final Language language;
   final double width;
   final double height;
@@ -22,18 +23,38 @@ class LanguageFlag extends StatelessWidget {
   });
 
   @override
+  _LanguageFlagState createState() => _LanguageFlagState();
+}
+
+class _LanguageFlagState extends State<LanguageFlag> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.language.flagUrl == null)
+      FirebaseStorage.instance
+          .ref('flags/${widget.language.flag}.png')
+          .getDownloadURL()
+          .then(
+            (u) => setState(() {
+              widget.language.flagUrl = u;
+            }),
+          );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (widget.language.flagUrl == null) return Offstage();
     return Container(
-      width: width,
-      height: height,
+      width: widget.width,
+      height: widget.height,
       child: Transform.translate(
-        offset: offset,
+        offset: widget.offset,
         child: Transform.rotate(
-          angle: rotation,
+          angle: widget.rotation,
           child: Transform.scale(
-            scale: scale,
+            scale: widget.scale,
             child: Image.network(
-              language.flagUrl,
+              widget.language.flagUrl!,
               repeat: ImageRepeat.repeatX,
               errorBuilder: (
                 BuildContext context,

@@ -4,6 +4,7 @@ import 'package:avzag/phonology/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'loading_dialog.dart';
@@ -12,6 +13,12 @@ class BaseStore {
   static final List<String> languages = [];
 
   static Future<void> load(BuildContext context) async {
+    FirebaseFirestore.instance.settings = Settings(
+      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+    );
+    FirebaseStorage.instance.setMaxOperationRetryTime(
+      Duration(milliseconds: 100),
+    );
     return await showLoadingDialog(
       context: context,
       future: _loadStores(),
