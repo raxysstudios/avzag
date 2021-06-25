@@ -18,17 +18,6 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   @override
-  void initState() {
-    super.initState();
-    FirebaseFirestore.instance.settings = Settings(
-      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
-    );
-    FirebaseStorage.instance.setMaxOperationRetryTime(
-      Duration(milliseconds: 100),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Avzag',
@@ -41,6 +30,14 @@ class _AppState extends State<App> {
       home: Builder(
         builder: (context) {
           Firebase.initializeApp()
+              .then((_) {
+                FirebaseFirestore.instance.settings = Settings(
+                  cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+                );
+                FirebaseStorage.instance.setMaxOperationRetryTime(
+                  Duration(milliseconds: 100),
+                );
+              })
               .then((_) => BaseStore.load(context))
               .then((_) => SharedPreferences.getInstance())
               .then((prefs) => prefs.getString('module') ?? 'home')
