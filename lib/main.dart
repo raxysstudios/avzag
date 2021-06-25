@@ -1,5 +1,7 @@
 import 'package:avzag/store.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'navigation/nav_drawer.dart';
@@ -15,6 +17,17 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance.settings = Settings(
+      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+    );
+    FirebaseStorage.instance.setMaxOperationRetryTime(
+      Duration(milliseconds: 100),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

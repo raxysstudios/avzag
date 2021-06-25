@@ -4,7 +4,6 @@ import 'package:avzag/phonology/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'loading_dialog.dart';
@@ -12,32 +11,41 @@ import 'loading_dialog.dart';
 class BaseStore {
   static final List<String> languages = [];
 
-  static Future<void> load(BuildContext context) async {
-    FirebaseFirestore.instance.settings = Settings(
-      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
-    );
-    FirebaseStorage.instance.setMaxOperationRetryTime(
-      Duration(milliseconds: 100),
-    );
+  static Future<void> load(
+    BuildContext context, {
+    Iterable<String>? languages,
+  }) async {
     return await showLoadingDialog(
       context: context,
-      future: _loadStores(),
+      future: _loadStores(languages),
     );
   }
 
-  static Future<void> _loadStores() async {
+  static Future<void> _loadStores(
+    Iterable<String>? languages,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
-    languages
-      ..clear()
-      ..addAll(prefs.getStringList('languages') ?? []);
-    if (languages.isEmpty) languages.add('kaitag');
+    var saving = false;
+
+    if (languages == null) {
+      BaseStore.languages
+        ..clear()
+        ..addAll(prefs.getStringList('languages') ?? []);
+      if (BaseStore.languages.isEmpty) BaseStore.languages.add('kaitag');
+    } else
+      saving = true;
 
     await Future.wait([
-      HomeStore.load(languages),
+      HomeStore.load(BaseStore.languages),
       EditorStore.load(),
-      PhonologyStore.load(languages),
-      DictionaryStore.load(languages),
+      PhonologyStore.load(BaseStore.languages),
+      DictionaryStore.load(BaseStore.languages),
     ]);
+    if (saving)
+      await prefs.setStringList(
+        'languages',
+        languages!.toList(),
+      );
   }
 }
 

@@ -57,12 +57,10 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () async {
-            final prefs = await SharedPreferences.getInstance();
-            await prefs.setStringList(
-              'languages',
-              selected.toList(),
+            await BaseStore.load(
+              context,
+              languages: selected,
             );
-            await BaseStore.load(context);
             await navigate(context, null);
           },
         ),
