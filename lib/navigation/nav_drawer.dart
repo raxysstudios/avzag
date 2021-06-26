@@ -109,7 +109,7 @@ class NavDraver extends StatelessWidget {
           Divider(height: 0),
           ...[
             _NavModule(Icons.map_outlined, 'home', true),
-            _NavModule(Icons.music_note_outlined, 'phonology', true),
+            _NavModule(Icons.music_note_outlined, 'phonology', false),
             _NavModule(Icons.switch_left_outlined, 'converter', false),
             _NavModule(Icons.book_outlined, 'dictionary', true),
             _NavModule(Icons.local_library_outlined, 'bootcamp', false),
