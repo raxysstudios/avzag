@@ -50,122 +50,90 @@ class SearchControllerState extends State<SearchController> {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Row(
         children: [
-          ...preset == null
-              ? [
-                  IconButton(
-                    onPressed: () => setState(
-                      () {
-                        inputController.clear();
-                        preset = DictionaryStore.presets[0];
-                        search();
-                      },
+          PopupMenuButton<String>(
+            icon: Icon(Icons.library_books_outlined),
+            tooltip: "Select preset",
+            onSelected: (p) => setState(() {
+              inputController.text = p;
+              language = '';
+              search();
+            }),
+            itemBuilder: (BuildContext context) {
+              return DictionaryStore.presets.map((p) {
+                return PopupMenuItem(
+                  value: p.query,
+                  child: ListTile(
+                    visualDensity: const VisualDensity(
+                      vertical: -4,
+                      horizontal: -4,
                     ),
-                    icon: Icon(Icons.library_books_outlined),
-                    tooltip: "View presets",
+                    title: Text(capitalize(p.title)),
+                    selected: p.query == inputController.text,
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                      ),
-                      child: TextField(
-                        controller: inputController,
-                        decoration: InputDecoration(
-                          labelText: language.isEmpty
-                              ? "Search in English"
-                              : "Search in " + capitalize(language),
-                          suffixIcon: inputController.text.isEmpty
-                              ? null
-                              : IconButton(
-                                  onPressed: () => inputController.clear(),
-                                  icon: Icon(Icons.clear),
-                                ),
+                );
+              }).toList();
+            },
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 4,
+              ),
+              child: TextField(
+                controller: inputController,
+                decoration: InputDecoration(
+                  labelText: language.isEmpty
+                      ? "Search in English"
+                      : "Search in " + capitalize(language),
+                  suffixIcon: inputController.text.isEmpty
+                      ? null
+                      : IconButton(
+                          onPressed: () => inputController.clear(),
+                          icon: Icon(Icons.clear),
                         ),
-                      ),
+                ),
+              ),
+            ),
+          ),
+          PopupMenuButton<String>(
+            icon: language.isEmpty
+                ? Icon(Icons.language_outlined)
+                : LanguageAvatar(HomeStore.languages[language]!),
+            tooltip: "Select language",
+            onSelected: (l) => setState(() {
+              language = l;
+              inputController.clear();
+              search();
+            }),
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  value: '',
+                  child: ListTile(
+                    visualDensity: const VisualDensity(
+                      vertical: -4,
+                      horizontal: -4,
                     ),
+                    leading: Icon(
+                      Icons.language_outlined,
+                    ),
+                    title: Text('English'),
+                    selected: language.isEmpty,
                   ),
-                  PopupMenuButton<String>(
-                    icon: language.isEmpty
-                        ? Icon(Icons.language_outlined)
-                        : LanguageAvatar(HomeStore.languages[language]!),
-                    tooltip: "Select language",
-                    onSelected: (l) => setState(() {
-                      language = l;
-                      inputController.clear();
-                      search();
-                    }),
-                    itemBuilder: (BuildContext context) {
-                      return [
-                        PopupMenuItem(
-                          value: '',
-                          child: ListTile(
-                            visualDensity: const VisualDensity(
-                              vertical: -4,
-                              horizontal: -4,
-                            ),
-                            leading: Icon(
-                              Icons.language_outlined,
-                            ),
-                            title: Text('English'),
-                            selected: language.isEmpty,
-                          ),
-                        ),
-                        PopupMenuDivider(),
-                        ...BaseStore.languages.map((l) {
-                          return PopupMenuItem(
-                            value: l,
-                            child: LanguageTile(
-                              HomeStore.languages[l]!,
-                              selected: language == l,
-                            ),
-                          );
-                        })
-                      ];
-                    },
-                  ),
-                ]
-              : [
-                  IconButton(
-                    onPressed: () => setState(
-                      () {
-                        preset = null;
-                        search();
-                      },
+                ),
+                PopupMenuDivider(),
+                ...BaseStore.languages.map((l) {
+                  return PopupMenuItem(
+                    value: l,
+                    child: LanguageTile(
+                      HomeStore.languages[l]!,
+                      selected: language == l,
                     ),
-                    icon: Icon(
-                      Icons.search_outlined,
-                    ),
-                    tooltip: "Free search",
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 11,
-                        left: 4,
-                        right: 12,
-                      ),
-                      child: DropdownButtonFormField<SearchPreset>(
-                        value: preset,
-                        isExpanded: true,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(
-                            bottom: 11,
-                          ),
-                        ),
-                        items: DictionaryStore.presets.map((p) {
-                          return DropdownMenuItem(
-                            value: p,
-                            child: Text(capitalize(p.title)),
-                          );
-                        }).toList(),
-                        onChanged: (p) => setState(() {
-                          preset = p;
-                          search();
-                        }),
-                      ),
-                    ),
-                  )
-                ],
+                  );
+                })
+              ];
+            },
+          ),
         ],
       ),
     );
