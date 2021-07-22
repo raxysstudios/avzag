@@ -9,8 +9,9 @@ const index = algoliasearch(
 )
     .initIndex("dictionary");
 
-export const addToIndex = functions.firestore
-    .document("languages/{language}/dictionary/{entryID}")
+export const addToIndex = functions
+    .region("europe-central2")
+    .firestore.document("languages/{language}/dictionary/{entryID}")
     .onCreate(async (change, context) => {
       const data = change.data();
       const baseEntry = {
