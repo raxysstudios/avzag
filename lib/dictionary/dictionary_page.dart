@@ -1,5 +1,4 @@
 import 'package:avzag/widgets/column_tile.dart';
-import 'package:avzag/dictionary/entry/entry.dart';
 import 'package:avzag/dictionary/help_button.dart';
 import 'search/search_controller.dart';
 import 'package:avzag/store.dart';
@@ -18,7 +17,7 @@ class DictionaryPage extends StatefulWidget {
 class _DictionaryPageState extends State<DictionaryPage> {
   bool useScholar = false;
   int page = 0;
-  EntryHitSearch search = {};
+  EntryHitSearch? search = {};
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +28,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
           HelpButton(),
           SizedBox(width: 4),
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(4),
+          child: LinearProgressIndicator(
+            value: search == null ? null : 0,
+          ),
+        ),
       ),
       drawer: NavDraver(title: 'dictionary'),
       floatingActionButton: EditorStore.language == null
@@ -50,72 +55,75 @@ class _DictionaryPageState extends State<DictionaryPage> {
           SearchController(
             (s) => setState(() {
               search = s;
+              print('###$s');
             }),
           ),
           Divider(height: 0),
-          Expanded(
-            child: ListView(
-              children: [
-                for (final es in search.values) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: Text(
-                      capitalize(es.first.meaning),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 16,
+          if (search != null)
+            Expanded(
+              child: ListView(
+                children: [
+                  for (final es in search!.values) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                    ),
-                  ),
-                  for (final e in es)
-                    ColumnTile(
-                      Text(
-                        capitalize(e.form),
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      trailing: Text(
-                        capitalize(e.language),
+                      child: Text(
+                        capitalize(es.first.meaning),
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black54,
-                          fontSize: 14,
+                          fontSize: 16,
                         ),
                       ),
-                      leadingSpace: false,
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (_) {
-                            return EntryDisplay(
-                              e,
-                              actions: [
-                                IconButton(
-                                  onPressed: () => setState(() {
-                                    useScholar = !useScholar;
-                                  }),
-                                  icon: Icon(
-                                    Icons.school_outlined,
-                                    color:
-                                        useScholar ? Colors.blue : Colors.black,
-                                  ),
-                                  tooltip: 'Toggle Scholar Mode',
-                                ),
-                              ],
-                              scholar: useScholar,
-                            );
-                          },
-                        );
-                      },
                     ),
-                  Divider(height: 0),
+                    for (final e in es)
+                      ColumnTile(
+                        Text(
+                          capitalize(e.form),
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        trailing: Text(
+                          capitalize(e.language),
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14,
+                          ),
+                        ),
+                        leadingSpace: false,
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (_) {
+                              return EntryDisplay(
+                                e,
+                                actions: [
+                                  IconButton(
+                                    onPressed: () => setState(() {
+                                      useScholar = !useScholar;
+                                    }),
+                                    icon: Icon(
+                                      Icons.school_outlined,
+                                      color: useScholar
+                                          ? Colors.blue
+                                          : Colors.black,
+                                    ),
+                                    tooltip: 'Toggle Scholar Mode',
+                                  ),
+                                ],
+                                scholar: useScholar,
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    Divider(height: 0),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
         ],
       ),
     );

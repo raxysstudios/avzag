@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'entry_hit.dart';
 
 class SearchController extends StatefulWidget {
-  final ValueSetter<EntryHitSearch> onSearch;
+  final ValueSetter<EntryHitSearch?> onSearch;
   const SearchController(this.onSearch);
 
   @override
@@ -36,6 +36,12 @@ class SearchControllerState extends State<SearchController> {
   }
 
   void search() async {
+    if (inputController.text.isEmpty) {
+      widget.onSearch({});
+      return;
+    }
+    widget.onSearch(null);
+
     final query = BaseStore.algolia.instance
         .index('dictionary')
         .query(inputController.text);
@@ -43,7 +49,7 @@ class SearchControllerState extends State<SearchController> {
     // query = query.facetFilter('status:published');
     // query = query.facetFilter('isDelete:false');
 
-    final result = {} as EntryHitSearch;
+    final result = <String, List<EntryHit>>{};
     final snap = await query.getObjects();
     for (final hit in snap.hits) {
       final entry = EntryHit.fromAlgoliaHitData(hit.data);

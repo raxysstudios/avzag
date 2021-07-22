@@ -22,7 +22,7 @@ class EntryDisplay extends StatelessWidget {
     this.scholar = false,
   }) {
     doc = FirebaseFirestore.instance
-        .doc('meta/dictionary/concepts/${hit.entryID}')
+        .doc('languages/${hit.language}/dictionary/${hit.entryID}')
         .withConverter(
           fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
           toFirestore: (Entry object, _) => object.toJson(),
