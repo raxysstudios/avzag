@@ -1,8 +1,5 @@
 import 'package:avzag/dictionary/models.dart';
 import 'package:avzag/dictionary/store.dart';
-import 'package:avzag/home/language_avatar.dart';
-import 'package:avzag/home/language_tile.dart';
-import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
@@ -98,57 +95,14 @@ class SearchControllerState extends State<SearchController> {
               child: TextField(
                 controller: inputController,
                 decoration: InputDecoration(
-                  labelText: language.isEmpty
-                      ? "Search in English"
-                      : "Search in " + capitalize(language),
-                  suffixIcon: inputController.text.isEmpty
-                      ? null
-                      : IconButton(
-                          onPressed: () => inputController.clear(),
-                          icon: Icon(Icons.clear),
-                        ),
+                  labelText: "Search by meaning, forms, tag...",
                 ),
               ),
             ),
           ),
-          PopupMenuButton<String>(
-            icon: language.isEmpty
-                ? Icon(Icons.language_outlined)
-                : LanguageAvatar(HomeStore.languages[language]!),
-            tooltip: "Select language",
-            onSelected: (l) => setState(() {
-              language = l;
-              inputController.clear();
-              search();
-            }),
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem(
-                  value: '',
-                  child: ListTile(
-                    visualDensity: const VisualDensity(
-                      vertical: -4,
-                      horizontal: -4,
-                    ),
-                    leading: Icon(
-                      Icons.language_outlined,
-                    ),
-                    title: Text('English'),
-                    selected: language.isEmpty,
-                  ),
-                ),
-                PopupMenuDivider(),
-                ...BaseStore.languages.map((l) {
-                  return PopupMenuItem(
-                    value: l,
-                    child: LanguageTile(
-                      HomeStore.languages[l]!,
-                      selected: language == l,
-                    ),
-                  );
-                })
-              ];
-            },
+          IconButton(
+            onPressed: () => inputController.clear(),
+            icon: Icon(Icons.clear),
           ),
         ],
       ),
