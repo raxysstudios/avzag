@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'models.dart';
 
 class DictionaryStore {
@@ -7,34 +7,20 @@ class DictionaryStore {
   static final List<String> grammarTags = [];
   static final List<String> semanticTags = [];
 
-  static Future<void> load(List<String> langs) async {
-    final docs =
-        await FirebaseFirestore.instance.collectionGroup('dictionary').get();
-    // final docs = await FirebaseFirestore.instance
-    //     .collection('languages/kaitag/dictionary')
-    //     .where('forms', isEqualTo: 'бизи')
-    //     .get();
+  static bool _scholar = false;
+  static bool get scholar => _scholar;
+  static set scholar(bool value) {
+    _scholar = value;
+    SharedPreferences.getInstance().then(
+      (prefs) => prefs.setBool('dictionary.scholar', value),
+    );
+  }
 
-    // dictionaries.clear();
-    // await Future.wait(
-    //   langs.map((l) {
-    //     return FirebaseFirestore.instance
-    //         .collection('languages/$l/dictionary')
-    //         .withConverter(
-    //           fromFirestore: (snapshot, _) => Entry.fromJson(
-    //             snapshot.data()!,
-    //             id: snapshot.id,
-    //           ),
-    //           toFirestore: (Entry object, _) => object.toJson(),
-    //         )
-    //         .get()
-    //         .then((d) {
-    //       if (d.docs.isEmpty) return null;
-    //       dictionaries[l] = d.docs.map((e) => e.data()).toList();
-    //     });
-    //   }),
-    // );
-    // concepts.clear();
+  static Future<void> load(List<String> langs) async {
+    SharedPreferences.getInstance().then((prefs) {
+      _scholar = prefs.getBool('dictionary.scholar') ?? false;
+    });
+
     // await FirebaseFirestore.instance
     //     .collection('meta/dictionary/concepts')
     //     .withConverter(

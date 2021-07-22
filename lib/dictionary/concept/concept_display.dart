@@ -10,24 +10,22 @@ class ConceptDisplay extends StatelessWidget {
   final bool scholar;
   final Function()? onTap;
 
-  late final DocumentReference<Concept>? doc;
+  late final Future<DocumentSnapshot<Concept>>? loader = id == null
+      ? null
+      : FirebaseFirestore.instance
+          .doc('meta/dictionary/concepts/$id')
+          .withConverter(
+            fromFirestore: (snapshot, _) => Concept.fromJson(snapshot.data()!),
+            toFirestore: (Concept object, _) => object.toJson(),
+          )
+          .get();
 
   ConceptDisplay({
     this.id,
     this.concept,
     this.scholar = true,
     this.onTap,
-  }) {
-    doc = id == null
-        ? null
-        : FirebaseFirestore.instance
-            .doc('meta/dictionary/concepts/$id')
-            .withConverter(
-              fromFirestore: (snapshot, _) =>
-                  Concept.fromJson(snapshot.data()!),
-              toFirestore: (Concept object, _) => object.toJson(),
-            );
-  }
+  });
 
   Widget showConcept(Concept? concept) {
     return ColumnTile(
@@ -46,7 +44,7 @@ class ConceptDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     if (concept != null) return showConcept(concept!);
     return FutureBuilder<DocumentSnapshot<Concept>>(
-      future: doc?.get(),
+      future: loader,
       builder: (context, snapshot) {
         return showConcept(snapshot.data?.data());
       },
