@@ -3,7 +3,6 @@ import 'package:avzag/utils.dart';
 import 'package:avzag/widgets/tag_selection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'concept.dart';
 
 class ConceptCreator extends StatefulWidget {
@@ -81,18 +80,15 @@ class _ConceptCreatorState extends State<ConceptCreator> {
     );
   }
 
-  void uploadConcept() {
+  void uploadConcept() async {
     if (!formKey.currentState!.validate()) return;
     setState(() {
       uploading = true;
     });
     final concept = Concept(meaning: meaning, tags: tags);
-    FirebaseFirestore.instance
+    final ref = await FirebaseFirestore.instance
         .collection('meta/dictionary/concepts')
-        .add(concept.toJson())
-        .then((d) {
-      DictionaryStore.concepts[d.id] = concept;
-      Navigator.pop(context, d.id);
-    });
+        .add(concept.toJson());
+    Navigator.pop(context, ref.id);
   }
 }

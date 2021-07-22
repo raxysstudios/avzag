@@ -1,11 +1,17 @@
+import 'package:algolia/algolia.dart';
 import 'package:avzag/store.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'navigation/nav_drawer.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  BaseStore.algolia = Algolia.init(
+    applicationId: 'NYVVAA43NI',
+    apiKey: 'cf52a68ac340fc555978892202ce37df',
+  );
   runApp(App());
 }
 

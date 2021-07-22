@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'concept/concept.dart';
-import 'entry/entry.dart';
+
 import 'models.dart';
 
 class DictionaryStore {
-  static final Map<String, List<Entry>> dictionaries = {};
-  static final Map<String, Concept> concepts = {};
   static final List<SearchPreset> presets = [];
   static final List<String> grammarTags = [];
   static final List<String> semanticTags = [];
@@ -17,7 +14,6 @@ class DictionaryStore {
     //     .collection('languages/kaitag/dictionary')
     //     .where('forms', isEqualTo: 'бизи')
     //     .get();
-    print('### QUERY ${docs.docs.length}');
 
     // dictionaries.clear();
     // await Future.wait(

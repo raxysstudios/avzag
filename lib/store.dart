@@ -1,3 +1,4 @@
+import 'package:algolia/algolia.dart';
 import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/home/store.dart';
 import 'package:avzag/utils.dart';
@@ -8,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'loading_dialog.dart';
 
 class BaseStore {
+  static late final Algolia algolia;
   static final List<String> languages = [];
 
   static Future<void> load(
@@ -37,7 +39,6 @@ class BaseStore {
     await Future.wait([
       HomeStore.load(BaseStore.languages),
       EditorStore.load(),
-      // PhonologyStore.load(BaseStore.languages),
       DictionaryStore.load(BaseStore.languages),
     ]);
     if (saving)

@@ -1,5 +1,4 @@
 import 'package:avzag/dictionary/models.dart';
-import 'package:avzag/dictionary/searcher.dart';
 import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/home/language_tile.dart';
@@ -7,10 +6,11 @@ import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
+import 'entry_hit.dart';
 
 class SearchController extends StatefulWidget {
-  final Searcher searcher;
-  const SearchController(this.searcher);
+  final ValueSetter<EntryHitSearch> onSearch;
+  const SearchController(this.onSearch);
 
   @override
   SearchControllerState createState() => SearchControllerState();
@@ -35,13 +35,23 @@ class SearchControllerState extends State<SearchController> {
     super.dispose();
   }
 
-  void search() {
-    setState(() {
-      if (preset == null)
-        widget.searcher.search(language, inputController.text);
-      else
-        widget.searcher.search('', preset!.query);
-    });
+  void search() async {
+    final query = BaseStore.algolia.instance
+        .index('dictionary')
+        .query(inputController.text);
+    // Perform multiple facetFilters
+    // query = query.facetFilter('status:published');
+    // query = query.facetFilter('isDelete:false');
+
+    final result = {} as EntryHitSearch;
+    final snap = await query.getObjects();
+    for (final hit in snap.hits) {
+      final entry = EntryHit.fromAlgoliaHitData(hit.data);
+      final id = entry.conceptID;
+      if (!result.containsKey(id)) result[id] = [];
+      result[id]!.add(entry);
+    }
+    widget.onSearch(result);
   }
 
   @override

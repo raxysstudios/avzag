@@ -8,7 +8,6 @@ import 'package:avzag/store.dart';
 import 'package:avzag/widgets/tag_selection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../concept/concept_display.dart';
 import '../store.dart';
 import '../sample/sample_editor.dart';
@@ -16,7 +15,8 @@ import 'entry.dart';
 
 class EntryEditor extends StatefulWidget {
   final Entry? entry;
-  EntryEditor({this.entry});
+  final String? id;
+  EntryEditor({this.entry, this.id});
 
   @override
   _EntryEditorState createState() => _EntryEditorState();
@@ -32,11 +32,8 @@ class _EntryEditorState extends State<EntryEditor>
   void initState() {
     super.initState();
     entry = widget.entry == null
-        ? Entry(id: '', forms: [], uses: [])
-        : Entry.fromJson(
-            widget.entry!.toJson(),
-            id: widget.entry!.id,
-          );
+        ? Entry(forms: [], uses: [])
+        : Entry.fromJson(widget.entry!.toJson());
 
     tabController = TabController(length: 3, vsync: this);
     tabController.addListener(
@@ -128,25 +125,10 @@ class _EntryEditorState extends State<EntryEditor>
   void uploadEntry() async {
     final collection = FirebaseFirestore.instance
         .collection('languages/${EditorStore.language}/dictionary');
-    final dictionary = DictionaryStore.dictionaries[EditorStore.language]!;
     final json = entry.toJson();
-    final future = widget.entry == null
-        ? collection.add(json).then((d) {
-            dictionary.add(
-              Entry.fromJson(
-                json,
-                id: d.id,
-              ),
-            );
-          })
-        : collection.doc(entry.id).update(json).then((_) {
-            final i = dictionary.indexWhere((e) => e.id == entry.id);
-            if (i >= 0)
-              dictionary[i] = Entry.fromJson(
-                json,
-                id: entry.id,
-              );
-          });
+    final future = widget.id == null
+        ? collection.add(json)
+        : collection.doc(widget.id).update(json);
     await showLoadingDialog(
       context: context,
       future: future.then((_) => Navigator.pop(context)),
@@ -273,10 +255,7 @@ class _EntryEditorState extends State<EntryEditor>
                 (u) => selectConcept(use: u),
                 (u) => Column(
                   children: [
-                    ConceptDisplay(
-                      DictionaryStore.concepts[u.concept]!,
-                      scholar: true,
-                    ),
+                    ConceptDisplay(id: u.concept),
                     if (u.samples != null)
                       ...buildList<Sample>(
                         u.samples!,

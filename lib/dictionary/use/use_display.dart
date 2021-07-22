@@ -1,7 +1,6 @@
 import 'package:avzag/widgets/column_tile.dart';
 import 'package:avzag/dictionary/concept/concept_display.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
-import 'package:avzag/dictionary/store.dart';
 import 'package:flutter/material.dart';
 import 'use.dart';
 
@@ -15,10 +14,7 @@ class UseDisplay extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ConceptDisplay(
-          DictionaryStore.concepts[use.concept]!,
-          scholar: scholar,
-        ),
+        ConceptDisplay(id: use.concept, scholar: scholar),
         if (use.samples != null)
           for (final s in use.samples!) ...[
             ColumnTile(
