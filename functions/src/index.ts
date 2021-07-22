@@ -1,9 +1,12 @@
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import * as algoliasearch from "algoliasearch";
+import algoliasearch from "algoliasearch";
 
 admin.initializeApp();
-const index = algoliasearch(...functions.config().algolia)
+const index = algoliasearch(
+        functions.config().algolia.app,
+        functions.config().algolia.key
+    )
     .initIndex('dictionary');
     
 export const addToIndex = functions.firestore
@@ -25,7 +28,7 @@ export const addToIndex = functions.firestore
             entries.push(Object.assign({ conceptID, ...concept }, baseEntry));
         }
 
-        return index.addObjects(entries, { autoGenerateObjectIDIfNotExist: true });
+        return index.saveObjects(entries, { autoGenerateObjectIDIfNotExist: true });
     });
 
 // // Start writing Firebase Functions
