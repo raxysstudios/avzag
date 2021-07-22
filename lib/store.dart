@@ -1,6 +1,5 @@
 import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/home/store.dart';
-import 'package:avzag/phonology/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,7 +37,7 @@ class BaseStore {
     await Future.wait([
       HomeStore.load(BaseStore.languages),
       EditorStore.load(),
-      PhonologyStore.load(BaseStore.languages),
+      // PhonologyStore.load(BaseStore.languages),
       DictionaryStore.load(BaseStore.languages),
     ]);
     if (saving)

@@ -2,7 +2,6 @@ import 'package:avzag/home/language.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'store.dart';
 import 'language_card.dart';
 
