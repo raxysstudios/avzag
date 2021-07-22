@@ -17,11 +17,11 @@ export const addToIndex = functions
       const baseEntry = {
         entryID: context.params.entryID,
         language: context.params.language,
-        forms: data.forms,
+        forms: data.forms.map(({plain}: never) => plain),
       };
 
       const entries = [];
-      for (const {conceptID} of data.uses) {
+      for (const {concept: conceptID} of data.uses) {
         const concept = await admin.firestore()
             .doc("meta/dictionary/concepts/" + conceptID)
             .get()
