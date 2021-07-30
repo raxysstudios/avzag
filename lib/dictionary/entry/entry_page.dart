@@ -1,5 +1,4 @@
 import 'package:avzag/dictionary/search/entry_hit.dart';
-import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/column_tile.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
@@ -41,7 +40,7 @@ class _EntryPageState extends State<EntryPage> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: capitalize(widget.hit.form) + '\n',
+                    text: capitalize(widget.hit.forms.first) + '\n',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -59,19 +58,19 @@ class _EntryPageState extends State<EntryPage> {
                 ],
               ),
             ),
-            actions: [
-              IconButton(
-                visualDensity: VisualDensity(horizontal: 2),
-                onPressed: () => setState(() {
-                  DictionaryStore.scholar = !DictionaryStore.scholar;
-                }),
-                icon: Icon(
-                  Icons.school_outlined,
-                  color: DictionaryStore.scholar ? Colors.blue : Colors.black,
-                ),
-                tooltip: 'Toggle Scholar Mode',
-              )
-            ],
+            // actions: [
+            //   IconButton(
+            //     visualDensity: VisualDensity(horizontal: 2),
+            //     onPressed: () => setState(() {
+            //       DictionaryStore.scholar = !DictionaryStore.scholar;
+            //     }),
+            //     icon: Icon(
+            //       Icons.school_outlined,
+            //       color: DictionaryStore.scholar ? Colors.blue : Colors.black,
+            //     ),
+            //     tooltip: 'Toggle Scholar Mode',
+            //   )
+            // ],
           ),
           floatingActionButton: EditorStore.language == null || !done
               ? null
@@ -91,25 +90,20 @@ class _EntryPageState extends State<EntryPage> {
           body: done
               ? ListView(
                   children: [
-                    if (DictionaryStore.scholar && entry!.tags != null)
+                    if (entry!.tags != null)
                       ColumnTile(
                         Offstage(),
                         subtitle: prettyTags(entry.tags),
-                        leading: Icon(Icons.label_outline),
+                        leading: Icon(Icons.tag_outlined),
                       ),
-                    NoteDisplay(entry!.note),
-                    for (final u in entry.uses)
-                      UseDisplay(u, scholar: DictionaryStore.scholar),
+                    NoteDisplay(entry.note),
+                    for (final u in entry.uses) UseDisplay(u),
                     ColumnTile(
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           for (final f in entry.forms)
-                            SampleDisplay(
-                              f,
-                              scholar: DictionaryStore.scholar,
-                              row: true,
-                            ),
+                            SampleDisplay(f, row: true),
                         ],
                       ),
                       leading: Icon(Icons.tune_outlined),

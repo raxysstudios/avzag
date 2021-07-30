@@ -1,5 +1,4 @@
 import 'package:algolia/algolia.dart';
-import 'package:avzag/dictionary/store.dart';
 import 'package:avzag/home/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,7 +38,6 @@ class BaseStore {
     await Future.wait([
       HomeStore.load(BaseStore.languages),
       EditorStore.load(),
-      DictionaryStore.load(BaseStore.languages),
     ]);
     if (saving)
       await prefs.setStringList(

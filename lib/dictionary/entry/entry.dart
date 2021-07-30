@@ -4,9 +4,9 @@ import 'package:avzag/utils.dart';
 
 class Entry {
   List<Sample> forms;
-  List<Use> uses;
   List<String>? tags;
   String? note;
+  List<Use> uses;
 
   Entry({
     required this.forms,
@@ -26,9 +26,9 @@ class Entry {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['forms'] = forms.map((v) => v.toJson()).toList();
-    data['uses'] = uses.map((v) => v.toJson()).toList();
-    if (tags != null) data['tags'] = tags;
+    if (tags?.isNotEmpty ?? false) data['tags'] = tags;
     if (note?.isNotEmpty ?? false) data['note'] = note;
+    data['uses'] = uses.map((v) => v.toJson()).toList();
     return data;
   }
 }

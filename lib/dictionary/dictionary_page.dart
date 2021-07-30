@@ -63,14 +63,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
               Expanded(
                 child: ListView(
                   children: [
-                    for (final es in search!.values) ...[
+                    for (final es in search!.entries) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 8,
                         ),
                         child: Text(
-                          capitalize(es.first.meaning),
+                          capitalize(es.key),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.black54,
@@ -78,12 +78,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
                           ),
                         ),
                       ),
-                      for (final e in es)
+                      for (final e in es.value)
                         ColumnTile(
                           Text(
-                            capitalize(e.form),
+                            capitalize(e.forms.first),
                             style: TextStyle(fontSize: 16),
                           ),
+                          subtitle: prettyTags(e.tags),
                           trailing: Text(
                             capitalize(e.language),
                             style: TextStyle(

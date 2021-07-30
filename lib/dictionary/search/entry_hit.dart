@@ -1,25 +1,30 @@
+import 'package:avzag/utils.dart';
+
 class EntryHit {
-  final String form;
   final String entryID;
+  final List<String> forms;
   final String language;
-  final String meaning;
-  final String conceptID;
+  final String term;
+  final String? definition;
+  final List<String>? tags;
 
   const EntryHit({
-    required this.form,
     required this.entryID,
+    required this.forms,
     required this.language,
-    required this.meaning,
-    required this.conceptID,
+    required this.term,
+    this.definition,
+    this.tags,
   });
 
   EntryHit.fromAlgoliaHitData(Map<String, dynamic> json)
       : this(
-          form: (json['forms'] as List<dynamic>).first,
           entryID: json['entryID'],
-          meaning: json['meaning'],
+          forms: json2list(json['forms'])!,
           language: json['language'],
-          conceptID: json['conceptID'],
+          term: json['term'],
+          definition: json['definition'],
+          tags: json2list(json['tags'])?.map((e) => e.substring(1)).toList(),
         );
 }
 

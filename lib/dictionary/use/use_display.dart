@@ -1,6 +1,7 @@
+import 'package:avzag/utils.dart';
 import 'package:avzag/widgets/column_tile.dart';
-import 'package:avzag/dictionary/concept/concept_display.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
+import 'package:avzag/widgets/note_display.dart';
 import 'package:flutter/material.dart';
 import 'use.dart';
 
@@ -14,13 +15,20 @@ class UseDisplay extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ConceptDisplay(id: use.concept, scholar: scholar),
+        Text(use.term),
+        if (use.definition != null) Text(use.definition!),
+        if (use.tags != null)
+          ColumnTile(
+            Offstage(),
+            subtitle: prettyTags(use.tags),
+            leading: Icon(Icons.tag_outlined),
+          ),
+        NoteDisplay(use.note),
         if (use.samples != null)
-          for (final s in use.samples!) ...[
+          for (final s in use.samples!)
             ColumnTile(
               SampleDisplay(s, scholar: scholar),
             )
-          ]
       ],
     );
   }
