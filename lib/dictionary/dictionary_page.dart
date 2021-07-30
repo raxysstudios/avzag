@@ -17,11 +17,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
   EntryHitSearch? search = {};
 
   void viewEntry(EntryHit entry) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => EntryPage(entry),
-      ),
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => EntryPage(entry),
     );
   }
 
@@ -58,7 +57,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 search = s;
               }),
             ),
-            Divider(height: 0),
             if (search != null)
               Expanded(
                 child: ListView(
@@ -75,13 +73,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
                           style: TextStyle(
                             color: Colors.black54,
                             fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
                       for (final e in es.value)
                         ColumnTile(
                           Text(
-                            capitalize(e.forms.first),
+                            capitalize(e.headword),
                             style: TextStyle(fontSize: 16),
                           ),
                           subtitle: e.definition,

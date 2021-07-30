@@ -13,18 +13,27 @@ class SearchController extends StatefulWidget {
 
 class SearchControllerState extends State<SearchController> {
   final inputController = TextEditingController();
-  Timer? searchTimer;
+  Timer searchTimer = Timer(Duration.zero, () {});
+  String text = "";
 
   @override
   void initState() {
     super.initState();
     inputController.addListener(() {
-      // searchTimer?.cancel();
-      // searchTimer = Timer(
-      //   Duration(milliseconds: 200),
-      //   search,
-      // );
-      search();
+      final text = inputController.text
+          .split(' ')
+          .where((e) => e.isNotEmpty && e != '#')
+          .join(' ');
+      if (this.text != text) {
+        searchTimer.cancel();
+        searchTimer = Timer(
+          Duration(milliseconds: 200),
+          search,
+        );
+        setState(() {
+          this.text = text;
+        });
+      }
     });
   }
 
@@ -35,10 +44,6 @@ class SearchControllerState extends State<SearchController> {
   }
 
   void search() async {
-    final text = inputController.text
-        .split(' ')
-        .where((e) => e.isNotEmpty && e != '#')
-        .join(' ');
     if (text.isEmpty) {
       widget.onSearch({});
       return;

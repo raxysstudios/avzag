@@ -1,4 +1,6 @@
 import 'package:avzag/dictionary/search/entry_hit.dart';
+import 'package:avzag/home/language_flag.dart';
+import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/column_tile.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
@@ -40,7 +42,7 @@ class _EntryPageState extends State<EntryPage> {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: capitalize(widget.hit.forms.first) + '\n',
+                    text: capitalize(widget.hit.headword) + '\n',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -58,19 +60,13 @@ class _EntryPageState extends State<EntryPage> {
                 ],
               ),
             ),
-            // actions: [
-            //   IconButton(
-            //     visualDensity: VisualDensity(horizontal: 2),
-            //     onPressed: () => setState(() {
-            //       DictionaryStore.scholar = !DictionaryStore.scholar;
-            //     }),
-            //     icon: Icon(
-            //       Icons.school_outlined,
-            //       color: DictionaryStore.scholar ? Colors.blue : Colors.black,
-            //     ),
-            //     tooltip: 'Toggle Scholar Mode',
-            //   )
-            // ],
+            actions: [
+              LanguageFlag(
+                HomeStore.languages[widget.hit.language]!,
+                offset: Offset(-30, 0),
+                scale: 7,
+              ),
+            ],
           ),
           floatingActionButton: EditorStore.language == null || !done
               ? null
