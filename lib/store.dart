@@ -9,7 +9,6 @@ class BaseStore {
   static List<String> _languages = [];
   static List<String> get languages => _languages;
   static set languages(List<String> value) {
-    print('LNGS $value');
     value = value
         .where(
           (n) => HomeStore.languages.values.any(
@@ -18,7 +17,6 @@ class BaseStore {
         )
         .toList();
     _languages = value;
-    print('LNGS $value');
     SharedPreferences.getInstance().then((prefs) {
       prefs.setStringList('languages', value);
     });
