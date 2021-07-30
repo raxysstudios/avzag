@@ -15,6 +15,8 @@ class SearchControllerState extends State<SearchController> {
   final inputController = TextEditingController();
   Timer searchTimer = Timer(Duration.zero, () {});
   String text = "";
+  final String filters =
+      BaseStore.languages.map((e) => 'language:$e').join(' OR ');
 
   @override
   void initState() {
@@ -50,10 +52,16 @@ class SearchControllerState extends State<SearchController> {
     }
     widget.onSearch(null);
 
-    var query = BaseStore.algolia.instance.index('dictionary').query(text);
-    query = query.filters(
-      BaseStore.languages.map((e) => 'language:$e').join(' OR '),
-    );
+    var query = BaseStore.algolia.instance
+        .index('dictionary')
+        .query(text)
+        .filters(filters);
+    if (!text.contains('#'))
+      query = query.setRestrictSearchableAttributes([
+        'term',
+        'forms',
+      ]);
+
     final result = <String, List<EntryHit>>{};
     final snap = await query.getObjects();
 
