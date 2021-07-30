@@ -13,20 +13,20 @@ export const addToIndex = functions
     .region("europe-central2")
     .firestore.document("languages/{language}/dictionary/{entryID}")
     .onCreate(async (change, context) => {
-      const data = change.data();
-      const baseEntry = {
+      const entry = change.data();
+      const base = {
         entryID: context.params.entryID,
         language: context.params.language,
-        forms: data.forms.map(({plain}: never) => plain),
+        forms: entry.forms.map(({plain}: never) => plain),
       };
 
       const entries = [];
-      for (const {concept: conceptID} of data.uses) {
-        const concept = await admin.firestore()
-            .doc("meta/dictionary/concepts/" + conceptID)
-            .get()
-            .then((d) => d.data());
-        entries.push(Object.assign({conceptID, ...concept}, baseEntry));
+      for (const use of entry.uses) {
+        entries.push(Object.assign({
+          term: use.term,
+          definition: use.definition,
+          tags: entry.tags.concat(use.tags).map((t: string) => "#" + t),
+        }, base));
       }
 
       return index.saveObjects(entries, {autoGenerateObjectIDIfNotExist: true});
