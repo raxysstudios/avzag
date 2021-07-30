@@ -2,13 +2,13 @@ import 'package:avzag/dictionary/search/entry_hit.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
+import 'package:avzag/utils.dart';
 import 'package:avzag/widgets/column_tile.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/use/use_display.dart';
+import 'package:avzag/widgets/note_display.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/note_display.dart';
-import '../../utils.dart';
 import 'entry.dart';
 import 'entry_editor.dart';
 
@@ -38,29 +38,33 @@ class _EntryPageState extends State<EntryPage> {
         final entry = snapshot.data?.data();
         return Scaffold(
           appBar: AppBar(
-            title: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: capitalize(widget.hit.headword) + '\n',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
+            title: Center(
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: capitalize(widget.hit.headword) + '\n',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: capitalize(widget.hit.language),
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  )
-                ],
+                    TextSpan(
+                      text: capitalize(widget.hit.language),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             actions: [
+              SizedBox(width: 40),
               LanguageFlag(
                 HomeStore.languages[widget.hit.language]!,
                 offset: Offset(-30, 0),

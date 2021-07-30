@@ -1,8 +1,8 @@
 import 'package:avzag/widgets/column_tile.dart';
+import 'entry/entry_page.dart';
 import 'search/search_controller.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
-import 'entry/entry_page.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:flutter/material.dart';
 import 'entry/entry_editor.dart';
@@ -15,14 +15,6 @@ class DictionaryPage extends StatefulWidget {
 
 class _DictionaryPageState extends State<DictionaryPage> {
   EntryHitSearch? search = {};
-
-  void viewEntry(EntryHit entry) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) => EntryPage(entry),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +84,16 @@ class _DictionaryPageState extends State<DictionaryPage> {
                             ),
                           ),
                           leadingSpace: false,
-                          onTap: () => viewEntry(e),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                builder: (context) {
+                                  return EntryPage(e);
+                                },
+                              ),
+                            );
+                          },
                         ),
                       Divider(height: 0),
                     ],
