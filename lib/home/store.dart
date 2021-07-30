@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class HomeStore {
   static final Map<String, Language> languages = {};
 
-  static Future<void> load(List<String> langs) async {
+  static Future<void> load() async {
     languages.clear();
     await FirebaseFirestore.instance
         .collection('languages')

@@ -15,6 +15,10 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   bool signing = false;
+  List<String> get canEdit => HomeStore.languages.values
+      .where((l) => l.editors?.contains(EditorStore.email) ?? false)
+      .map((l) => l.name)
+      .toList();
 
   Future<void> signIn() async {
     setState(() {
@@ -76,10 +80,10 @@ class _AuthPageState extends State<AuthPage> {
                           text:
                               'With any question regarding the language materials, contact the corresponding editors below.',
                         ),
-                        if (EditorStore.editing?.isNotEmpty ?? false) ...[
+                        if (canEdit.isNotEmpty) ...[
                           TextSpan(text: '\n\nOr you can edit '),
                           TextSpan(
-                            text: capitalize(EditorStore.editing!.join(', ')),
+                            text: capitalize(canEdit.join(', ')),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(text: ' yourself.'),
@@ -98,7 +102,7 @@ class _AuthPageState extends State<AuthPage> {
               Builder(
                 builder: (context) {
                   final language = HomeStore.languages[l]!;
-                  final canEdit = EditorStore.canEdit(l);
+                  final canEdit = this.canEdit.contains(l);
                   final editing = l == EditorStore.language;
                   return ListTile(
                     leading: Padding(

@@ -1,7 +1,5 @@
 import 'package:algolia/algolia.dart';
 import 'package:avzag/home/store.dart';
-import 'package:avzag/utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +34,7 @@ class BaseStore {
       saving = true;
 
     await Future.wait([
-      HomeStore.load(BaseStore.languages),
+      HomeStore.load(),
       EditorStore.load(),
     ]);
     if (saving)
@@ -60,23 +58,10 @@ class EditorStore {
     _language = value;
   }
 
-  static Map<String, List<String>> editors = {};
   static String? get email => FirebaseAuth.instance.currentUser?.email;
-  static List<String>? get editing => editors[email];
-
-  static canEdit(String language) {
-    return editing?.contains(language) ?? false;
-  }
 
   static Future load() async {
     final prefs = await SharedPreferences.getInstance();
     setLanguage(prefs.getString('editor'));
-
-    editors.clear();
-    await FirebaseFirestore.instance.doc('meta/editors').get().then((d) {
-      for (final u in d.data()!.entries) {
-        editors[u.key] = json2list(u.value)!;
-      }
-    });
   }
 }

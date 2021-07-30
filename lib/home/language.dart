@@ -4,6 +4,7 @@ class Language {
   final String name;
   final String flag;
   final String? contact;
+  final List<String>? editors;
   String? flagUrl;
   final List<String>? family;
   final List<String>? tags;
@@ -11,6 +12,7 @@ class Language {
   Language({
     required this.name,
     required this.flag,
+    this.editors,
     this.contact,
     this.tags,
     this.family,
@@ -21,6 +23,7 @@ class Language {
           name: json['name'] as String,
           flag: json['flag'] as String,
           contact: json['contact'] as String?,
+          editors: json2list(json['editors']),
           family: json2list(json['family']),
           tags: json2list(json['tags']),
         );
@@ -29,9 +32,10 @@ class Language {
     final Map<String, dynamic> data = {};
     data['name'] = name;
     data['flag'] = flag;
-    data['contact'] = contact;
-    if (family != null) data['family'] = family;
-    if (tags != null) data['tags'] = tags;
+    if (contact?.isNotEmpty ?? false) data['contact'] = contact;
+    if (editors?.isNotEmpty ?? false) data['editors'] = editors;
+    if (family?.isNotEmpty ?? false) data['family'] = family;
+    if (tags?.isNotEmpty ?? false) data['tags'] = tags;
     return data;
   }
 }
