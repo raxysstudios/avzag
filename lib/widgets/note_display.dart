@@ -1,4 +1,3 @@
-import 'package:avzag/widgets/column_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
@@ -13,20 +12,18 @@ class NoteDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return note == null
-        ? Offstage()
-        : ColumnTile(
-            MarkdownBody(
-              data: note!,
-              selectable: true,
-            ),
-            // Text(
-            //   note!,
-            //   style: TextStyle(
-            //     fontSize: 14,
-            //   ),
-            // ),
-            leading: Icon(Icons.info_outline),
-          );
+    if (note == null) return Offstage();
+    return ListTile(
+      leading: Icon(Icons.info_outline),
+      title: MarkdownBody(
+        data: note!,
+        selectable: true,
+        styleSheet: MarkdownStyleSheet(
+          p: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
   }
 }

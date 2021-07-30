@@ -13,8 +13,8 @@ class SampleDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
+    return SelectableText.rich(
+      TextSpan(
         style: TextStyle(
           color: Colors.black54,
           fontSize: 14,
@@ -23,17 +23,26 @@ class SampleDisplay extends StatelessWidget {
           TextSpan(
             text: sample.plain,
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.black87,
               fontSize: 16,
             ),
           ),
-          TextSpan(
-            text: [
-              '',
-              sample.translation,
-              ...scholar ? [sample.ipa, sample.glossed] : [],
-            ].where((t) => t != null).join(row ? ' ' : '\n'),
-          )
+          if (sample.translation != null)
+            TextSpan(
+              text: '\n' + sample.translation!,
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 16,
+              ),
+            ),
+          if (scholar)
+            TextSpan(
+              text: [
+                '',
+                sample.ipa,
+                sample.glossed,
+              ].where((t) => t != null).join(row ? ' • ' : '\n'),
+            )
         ],
       ),
     );

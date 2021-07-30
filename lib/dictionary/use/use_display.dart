@@ -15,29 +15,46 @@ class UseDisplay extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ColumnTile(
-          Text(
+        ListTile(
+          leading: Icon(Icons.lightbulb_outline),
+          title: Text(
             capitalize(use.term),
             style: TextStyle(
-              color: Colors.black,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
-              fontSize: 16,
             ),
           ),
-          subtitle: use.definition,
-          leading: Icon(Icons.lightbulb_outline),
+          subtitle: use.definition == null
+              ? null
+              : Text(
+                  use.definition!,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
         ),
         if (use.tags != null)
-          ColumnTile(
-            Offstage(),
-            subtitle: prettyTags(use.tags),
+          ListTile(
             leading: Icon(Icons.tag_outlined),
+            title: Text(
+              prettyTags(use.tags)!,
+              style: TextStyle(color: Colors.black54),
+            ),
           ),
         NoteDisplay(use.note),
         if (use.samples != null)
-          for (final s in use.samples!)
-            ColumnTile(
-              SampleDisplay(s, scholar: scholar),
+          for (var i = 0; i < use.samples!.length; i++)
+            ListTile(
+              leading: Icon(
+                Icons.bookmark_outline,
+                color: i == 0 ? null : Colors.transparent,
+              ),
+              title: SampleDisplay(
+                use.samples![i],
+                scholar: scholar,
+              ),
             )
       ],
     );

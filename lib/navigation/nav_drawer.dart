@@ -113,7 +113,6 @@ class NavDraver extends StatelessWidget {
             _NavModule(Icons.switch_left_outlined, 'converter', false),
             _NavModule(Icons.book_outlined, 'dictionary', true),
             _NavModule(Icons.local_library_outlined, 'bootcamp', false),
-            _NavModule(Icons.tour_outlined, 'quests', false),
           ].map((e) => e.build(context, e.text == title))
         ],
       ),

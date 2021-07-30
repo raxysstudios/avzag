@@ -3,7 +3,6 @@ import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
-import 'package:avzag/widgets/column_tile.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/use/use_display.dart';
 import 'package:avzag/widgets/note_display.dart';
@@ -38,33 +37,29 @@ class _EntryPageState extends State<EntryPage> {
         final entry = snapshot.data?.data();
         return Scaffold(
           appBar: AppBar(
-            title: Center(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: capitalize(widget.hit.headword) + '\n',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
+            title: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: capitalize(widget.hit.headword) + '\n',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w500,
                     ),
-                    TextSpan(
-                      text: capitalize(widget.hit.language),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  TextSpan(
+                    text: capitalize(widget.hit.language),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
               ),
             ),
             actions: [
-              SizedBox(width: 40),
               LanguageFlag(
                 HomeStore.languages[widget.hit.language]!,
                 offset: Offset(-30, 0),
@@ -89,22 +84,25 @@ class _EntryPageState extends State<EntryPage> {
                 ),
           body: done
               ? ListView(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   children: [
-                    ColumnTile(
-                      Column(
+                    ListTile(
+                      leading: Icon(Icons.tune_outlined),
+                      title: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           for (final f in entry!.forms)
                             SampleDisplay(f, row: true),
                         ],
                       ),
-                      leading: Icon(Icons.tune_outlined),
                     ),
                     if (entry.tags != null)
-                      ColumnTile(
-                        Offstage(),
-                        subtitle: prettyTags(entry.tags),
+                      ListTile(
                         leading: Icon(Icons.tag_outlined),
+                        title: Text(
+                          prettyTags(entry.tags)!,
+                          style: TextStyle(color: Colors.black54),
+                        ),
                       ),
                     NoteDisplay(entry.note),
                     for (final u in entry.uses) ...[

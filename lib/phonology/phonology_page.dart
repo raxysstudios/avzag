@@ -4,7 +4,6 @@ import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/phonology/phoneme/phoneme_button.dart';
 import 'package:avzag/phonology/phoneme/phoneme_display.dart';
 import 'package:avzag/store.dart';
-import 'package:avzag/widgets/column_tile.dart';
 import 'package:flutter/material.dart';
 import 'store.dart';
 
@@ -98,48 +97,48 @@ class _PhonologyPageState extends State<PhonologyPage> {
           ),
           Column(
             children: [
-              ColumnTile(
-                Text(
-                  phoneme.key,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                subtitle: 'Phoneme Tags will be here.',
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back_outlined,
-                    color: Colors.black,
-                  ),
-                  onPressed: () => openPage(0),
-                ),
-                gap: 20,
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-              ),
-              Divider(height: 0),
-              Expanded(
-                child: ListView.separated(
-                  itemBuilder: (_, i) {
-                    final p = phoneme.value.entries.elementAt(i);
-                    return PhonemeDisplay(
-                      p.value,
-                      language: p.key,
-                      playing: SoundManager.url,
-                      onPlay: (url) => SoundManager.playUrl(
-                        url,
-                        onStart: () => setState(() {}),
-                      ).then(
-                        (_) => setState(() {}),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (_, __) => Divider(
-                    height: 0,
-                  ),
-                  itemCount: phoneme.value.length,
-                ),
-              ),
+              // ColumnTile(
+              //   Text(
+              //     phoneme.key,
+              //     style: TextStyle(
+              //       fontSize: 18,
+              //       fontWeight: FontWeight.w600,
+              //     ),
+              //   ),
+              //   subtitle: 'Phoneme Tags will be here.',
+              //   leading: IconButton(
+              //     icon: Icon(
+              //       Icons.arrow_back_outlined,
+              //       color: Colors.black,
+              //     ),
+              //     onPressed: () => openPage(0),
+              //   ),
+              //   gap: 20,
+              //   padding: const EdgeInsets.symmetric(horizontal: 4),
+              // ),
+              // Divider(height: 0),
+              // Expanded(
+              //   child: ListView.separated(
+              //     itemBuilder: (_, i) {
+              //       final p = phoneme.value.entries.elementAt(i);
+              //       return PhonemeDisplay(
+              //         p.value,
+              //         language: p.key,
+              //         playing: SoundManager.url,
+              //         onPlay: (url) => SoundManager.playUrl(
+              //           url,
+              //           onStart: () => setState(() {}),
+              //         ).then(
+              //           (_) => setState(() {}),
+              //         ),
+              //       );
+              //     },
+              //     separatorBuilder: (_, __) => Divider(
+              //       height: 0,
+              //     ),
+              //     itemCount: phoneme.value.length,
+              //   ),
+              // ),
             ],
           ),
         ],
