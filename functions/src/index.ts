@@ -9,14 +9,7 @@ const index = algoliasearch(
 )
     .initIndex("dictionary");
 
-/**
- * Perform indexation
- * @constructor
- * @param {functions.firestore.QueryDocumentSnapshot} change
- * - The title of the book.
- * @param {functions.EventContext} context
- *  - The author of the book.
- */
+// eslint-disable-next-line require-jsdoc
 function applyIndexing(
     change: functions.firestore.QueryDocumentSnapshot,
     context: functions.EventContext
