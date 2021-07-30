@@ -19,11 +19,13 @@ function applyIndexing(
     entryID: context.params.entryID,
     language: context.params.language,
     forms: entry.forms.map(({plain}: never) => plain),
+    headword: entry.forms[0].plain,
   };
 
   type Record = {
     entryID: string;
     language: string;
+    headword: string,
     forms: string[]
     term: string;
     definition: string | undefined;
