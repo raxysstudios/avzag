@@ -35,7 +35,7 @@ function applyIndexing(
     const record = Object.assign({term: use.term}, base) as Record;
     const tags = [].concat(...(entry.tags ?? []), ...(use.tags ?? []));
     if (tags?.length) {
-      record.tags = tags;
+      record.tags = tags.map((t) => "#"+t);
     }
     if (use.definition) {
       record.definition = use.definition;
