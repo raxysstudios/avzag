@@ -51,7 +51,9 @@ class SearchControllerState extends State<SearchController> {
     widget.onSearch(null);
 
     var query = BaseStore.algolia.instance.index('dictionary').query(text);
-    // .filters(BaseStore.languages.map((e) => 'language:$e').join(' OR '));
+    query = query.filters(
+      BaseStore.languages.map((e) => 'language:$e').join(' OR '),
+    );
     final result = <String, List<EntryHit>>{};
     final snap = await query.getObjects();
 
@@ -70,7 +72,7 @@ class SearchControllerState extends State<SearchController> {
       child: TextField(
         controller: inputController,
         decoration: InputDecoration(
-          labelText: "Search by meaning, forms, tag...",
+          labelText: "Search by terms, forms, tags...",
           prefixIcon: Icon(Icons.search_outlined),
           suffixIcon: inputController.text.isEmpty
               ? null
