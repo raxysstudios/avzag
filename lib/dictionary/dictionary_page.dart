@@ -84,7 +84,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                             capitalize(e.forms.first),
                             style: TextStyle(fontSize: 16),
                           ),
-                          subtitle: prettyTags(e.tags),
+                          subtitle: e.definition,
                           trailing: Text(
                             capitalize(e.language),
                             style: TextStyle(

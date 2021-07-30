@@ -15,8 +15,18 @@ class UseDisplay extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(use.term),
-        if (use.definition != null) Text(use.definition!),
+        ColumnTile(
+          Text(
+            capitalize(use.term),
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
+          ),
+          subtitle: use.definition,
+          leading: Icon(Icons.lightbulb_outline),
+        ),
         if (use.tags != null)
           ColumnTile(
             Offstage(),

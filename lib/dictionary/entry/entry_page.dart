@@ -90,24 +90,27 @@ class _EntryPageState extends State<EntryPage> {
           body: done
               ? ListView(
                   children: [
-                    if (entry!.tags != null)
+                    ColumnTile(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (final f in entry!.forms)
+                            SampleDisplay(f, row: true),
+                        ],
+                      ),
+                      leading: Icon(Icons.tune_outlined),
+                    ),
+                    if (entry.tags != null)
                       ColumnTile(
                         Offstage(),
                         subtitle: prettyTags(entry.tags),
                         leading: Icon(Icons.tag_outlined),
                       ),
                     NoteDisplay(entry.note),
-                    for (final u in entry.uses) UseDisplay(u),
-                    ColumnTile(
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          for (final f in entry.forms)
-                            SampleDisplay(f, row: true),
-                        ],
-                      ),
-                      leading: Icon(Icons.tune_outlined),
-                    ),
+                    for (final u in entry.uses) ...[
+                      Divider(),
+                      UseDisplay(u),
+                    ],
                   ],
                 )
               : Center(

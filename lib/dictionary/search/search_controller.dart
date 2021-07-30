@@ -19,11 +19,12 @@ class SearchControllerState extends State<SearchController> {
   void initState() {
     super.initState();
     inputController.addListener(() {
-      searchTimer?.cancel();
-      searchTimer = Timer(
-        Duration(milliseconds: 200),
-        search,
-      );
+      // searchTimer?.cancel();
+      // searchTimer = Timer(
+      //   Duration(milliseconds: 200),
+      //   search,
+      // );
+      search();
     });
   }
 
@@ -38,16 +39,14 @@ class SearchControllerState extends State<SearchController> {
         .split(' ')
         .where((e) => e.isNotEmpty && e != '#')
         .join(' ');
-    if (text.isNotEmpty) {
+    if (text.isEmpty) {
       widget.onSearch({});
       return;
     }
     widget.onSearch(null);
 
-    var query = BaseStore.algolia.instance
-        .index('dictionary')
-        .query(inputController.text)
-        .filters(BaseStore.languages.map((e) => 'language:$e').join(' OR '));
+    var query = BaseStore.algolia.instance.index('dictionary').query(text);
+    // .filters(BaseStore.languages.map((e) => 'language:$e').join(' OR '));
     final result = <String, List<EntryHit>>{};
     final snap = await query.getObjects();
 
@@ -65,14 +64,16 @@ class SearchControllerState extends State<SearchController> {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: TextField(
         controller: inputController,
-        // decoration: InputDecoration(
-        //   labelText: "Search by meaning, forms, tag...",
-        //   prefixIcon: Icon(Icons.search_outlined),
-        //   suffix: IconButton(
-        //     onPressed: () => inputController.clear(),
-        //     icon: Icon(Icons.clear),
-        //   ),
-        // ),
+        decoration: InputDecoration(
+          labelText: "Search by meaning, forms, tag...",
+          prefixIcon: Icon(Icons.search_outlined),
+          suffixIcon: inputController.text.isEmpty
+              ? null
+              : IconButton(
+                  onPressed: () => inputController.clear(),
+                  icon: Icon(Icons.clear),
+                ),
+        ),
       ),
     );
   }
