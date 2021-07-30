@@ -20,16 +20,31 @@ export const addToIndex = functions
         forms: entry.forms.map(({plain}: never) => plain),
       };
 
-      const entries = [];
+      type SearchObject = {
+        entryID: string;
+        language: string;
+        forms: string[]
+        term: string;
+        definition: string | undefined;
+        tags: string[] | undefined;
+      };
+      const searchObjects = [];
       for (const use of entry.uses) {
-        entries.push(Object.assign({
-          term: use.term,
-          definition: use.definition,
-          tags: entry.tags.concat(use.tags).map((t: string) => "#" + t),
-        }, base));
+        const tags = [].concat(...(entry.tags ?? []), ...(use.tags ?? []));
+        const object = Object.assign({term: use.term}, base) as SearchObject;
+        if (tags?.length) {
+          object.tags = tags;
+        }
+        if (use.definition) {
+          object.definition = use.definition;
+        }
+        searchObjects.push(object);
       }
 
-      return index.saveObjects(entries, {autoGenerateObjectIDIfNotExist: true});
+      return index.saveObjects(
+          searchObjects,
+          {autoGenerateObjectIDIfNotExist: true}
+      );
     });
 
 // // Start writing Firebase Functions
