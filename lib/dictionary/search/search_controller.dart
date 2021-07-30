@@ -63,20 +63,16 @@ class SearchControllerState extends State<SearchController> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Row(
-        children: [
-          TextField(
-            controller: inputController,
-            decoration: InputDecoration(
-              labelText: "Search by meaning, forms, tag...",
-              prefixIcon: Icon(Icons.search_outlined),
-              suffix: IconButton(
-                onPressed: () => inputController.clear(),
-                icon: Icon(Icons.clear),
-              ),
-            ),
-          ),
-        ],
+      child: TextField(
+        controller: inputController,
+        // decoration: InputDecoration(
+        //   labelText: "Search by meaning, forms, tag...",
+        //   prefixIcon: Icon(Icons.search_outlined),
+        //   suffix: IconButton(
+        //     onPressed: () => inputController.clear(),
+        //     icon: Icon(Icons.clear),
+        //   ),
+        // ),
       ),
     );
   }

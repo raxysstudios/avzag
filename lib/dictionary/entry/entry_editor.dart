@@ -2,7 +2,6 @@ import 'package:avzag/widgets/column_tile.dart';
 import 'package:avzag/dictionary/sample/sample.dart';
 import 'package:avzag/dictionary/sample/sample_display.dart';
 import 'package:avzag/dictionary/use/use.dart';
-import 'package:avzag/loading_dialog.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/tag_selection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -123,13 +122,10 @@ class _EntryEditorState extends State<EntryEditor>
     final collection = FirebaseFirestore.instance
         .collection('languages/${EditorStore.language}/dictionary');
     final json = entry.toJson();
-    final future = widget.id == null
-        ? collection.add(json)
-        : collection.doc(widget.id).update(json);
-    await showLoadingDialog(
-      context: context,
-      future: future.then((_) => Navigator.pop(context)),
-    );
+    widget.id == null
+        ? await collection.add(json)
+        : await collection.doc(widget.id).update(json);
+    Navigator.pop(context);
   }
 
   List<Widget> buildList<T>(

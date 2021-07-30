@@ -3,7 +3,6 @@ import 'package:avzag/home/store.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'loading_dialog.dart';
 
 class BaseStore {
   static late final Algolia algolia;
@@ -12,12 +11,8 @@ class BaseStore {
   static Future<void> load(
     BuildContext context, {
     Iterable<String>? languages,
-  }) async {
-    return await showLoadingDialog(
-      context: context,
-      future: _loadStores(languages),
-    );
-  }
+  }) async =>
+      await _loadStores(languages);
 
   static Future<void> _loadStores(
     Iterable<String>? languages,
