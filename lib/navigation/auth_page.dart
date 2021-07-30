@@ -26,7 +26,7 @@ class _AuthPageState extends State<AuthPage> {
     });
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
-    await EditorStore.setLanguage(null);
+    EditorStore.language = null;
 
     final user = await GoogleSignIn().signIn();
     if (user != null) {
@@ -125,9 +125,9 @@ class _AuthPageState extends State<AuthPage> {
                           )
                         : null,
                     onTap: canEdit
-                        ? () => EditorStore.setLanguage(
-                              editing ? null : l,
-                            ).then((_) => setState(() {}))
+                        ? () => setState(() {
+                              EditorStore.language = editing ? null : l;
+                            })
                         : null,
                     selected: editing,
                     trailing: language.contact == null

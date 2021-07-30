@@ -48,20 +48,20 @@ class BaseStore {
 class EditorStore {
   static String? _language;
   static String? get language => _language;
-  static Future<void> setLanguage(String? value) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (!BaseStore.languages.contains(value)) value = null;
-    if (value == null)
-      await prefs.remove('editor');
-    else
-      await prefs.setString('editor', value);
-    _language = value;
-  }
+  static set language(String? value) =>
+      SharedPreferences.getInstance().then((prefs) {
+        if (!BaseStore.languages.contains(value)) value = null;
+        if (value == null)
+          prefs.remove('editor');
+        else
+          prefs.setString('editor', value!);
+        _language = value;
+      });
 
   static String? get email => FirebaseAuth.instance.currentUser?.email;
 
   static Future load() async {
     final prefs = await SharedPreferences.getInstance();
-    setLanguage(prefs.getString('editor'));
+    language = prefs.getString('editor');
   }
 }
