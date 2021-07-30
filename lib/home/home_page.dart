@@ -33,6 +33,12 @@ class _HomePageState extends State<HomePage> {
     filterLanguages();
   }
 
+  @override
+  void dispose() {
+    BaseStore.languages = selected.toList();
+    super.dispose();
+  }
+
   void filterLanguages() {
     final query =
         inputController.text.trim().split(' ').where((s) => s.isNotEmpty);
@@ -70,7 +76,7 @@ class _HomePageState extends State<HomePage> {
           TextField(
             controller: inputController,
             decoration: InputDecoration(
-              labelText: "Search by names, tags, families",
+              labelText: "Search by names, tags, families...",
               prefixIcon: Icon(Icons.search_outlined),
               suffixIcon: inputController.text.isEmpty
                   ? null
