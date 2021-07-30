@@ -28,31 +28,32 @@ function applyIndexing(
     forms: entry.forms.map(({plain}: never) => plain),
   };
 
-      type SearchObject = {
-        entryID: string;
-        language: string;
-        forms: string[]
-        term: string;
-        definition: string | undefined;
-        tags: string[] | undefined;
-      };
-      const searchObjects = [];
-      for (const use of entry.uses) {
-        const tags = [].concat(...(entry.tags ?? []), ...(use.tags ?? []));
-        const object = Object.assign({term: use.term}, base) as SearchObject;
-        if (tags?.length) {
-          object.tags = tags;
-        }
-        if (use.definition) {
-          object.definition = use.definition;
-        }
-        searchObjects.push(object);
-      }
+  type Record = {
+    entryID: string;
+    language: string;
+    forms: string[]
+    term: string;
+    definition: string | undefined;
+    tags: string[] | undefined;
+  };
+  const records = [];
 
-      return index.saveObjects(
-          searchObjects,
-          {autoGenerateObjectIDIfNotExist: true}
-      );
+  for (const use of entry.uses) {
+    const record = Object.assign({term: use.term}, base) as Record;
+    const tags = [].concat(...(entry.tags ?? []), ...(use.tags ?? []));
+    if (tags?.length) {
+      record.tags = tags;
+    }
+    if (use.definition) {
+      record.definition = use.definition;
+    }
+    records.push(record);
+  }
+
+  return index.saveObjects(
+      records,
+      {autoGenerateObjectIDIfNotExist: true}
+  );
 }
 
 export const addToIndex = functions
