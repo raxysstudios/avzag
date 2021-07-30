@@ -33,6 +33,7 @@ dependencies:
   google_sign_in: ^5.0.4
   just_audio: ^0.8.0
   algolia: ^1.0.1
+  flutter_markdown: ^0.6.3
 
 dev_dependencies:
   flutter_test:

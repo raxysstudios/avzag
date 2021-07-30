@@ -1,5 +1,6 @@
 import 'package:avzag/widgets/column_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class NoteDisplay extends StatelessWidget {
   final String? note;
@@ -15,12 +16,16 @@ class NoteDisplay extends StatelessWidget {
     return note == null
         ? Offstage()
         : ColumnTile(
-            Text(
-              note!,
-              style: TextStyle(
-                fontSize: 14,
-              ),
+            MarkdownBody(
+              data: note!,
+              selectable: true,
             ),
+            // Text(
+            //   note!,
+            //   style: TextStyle(
+            //     fontSize: 14,
+            //   ),
+            // ),
             leading: Icon(Icons.info_outline),
           );
   }
