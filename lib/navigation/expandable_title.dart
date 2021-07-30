@@ -63,6 +63,26 @@ class ExpandableTitle extends StatelessWidget {
             ),
           ),
           Divider(height: 0),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                FlutterLogo(size: 32),
+                Image.asset(
+                  'firebase.png',
+                  width: 32,
+                  height: 32,
+                ),
+                Image.asset(
+                  'algolia.png',
+                  width: 32,
+                  height: 32,
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 0),
           ...children,
         ],
       ),
