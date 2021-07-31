@@ -13,10 +13,12 @@ class SearchController extends StatefulWidget {
 
 class SearchControllerState extends State<SearchController> {
   final inputController = TextEditingController();
-  Timer searchTimer = Timer(Duration.zero, () {});
+  Timer timer = Timer(Duration.zero, () {});
   String text = "";
   final String filters =
       BaseStore.languages.map((e) => 'language:$e').join(' OR ');
+  bool searching = false;
+  bool extended = false;
 
   @override
   void initState() {
@@ -27,8 +29,8 @@ class SearchControllerState extends State<SearchController> {
           .where((e) => e.isNotEmpty && e != '#')
           .join(' ');
       if (this.text != text) {
-        searchTimer.cancel();
-        searchTimer = Timer(
+        timer.cancel();
+        timer = Timer(
           Duration(milliseconds: 200),
           search,
         );
@@ -52,16 +54,22 @@ class SearchControllerState extends State<SearchController> {
     }
     widget.onSearch(null);
 
+    setState(() {
+      searching = true;
+    });
+
     var query = BaseStore.algolia.instance
         .index('dictionary')
         .query(text)
         .filters(filters);
-    if (!text.contains('#'))
-      query = query.setRestrictSearchableAttributes([
+    if (!text.contains('#')) {
+      final attrs = [
         'term',
         'forms',
-      ]);
-
+      ];
+      if (extended) attrs.add('definition');
+      query = query.setRestrictSearchableAttributes(attrs);
+    }
     final result = <String, List<EntryHit>>{};
     final snap = await query.getObjects();
 
@@ -71,25 +79,62 @@ class SearchControllerState extends State<SearchController> {
       result[entry.term]!.add(entry);
     }
     widget.onSearch(result);
+
+    setState(() {
+      searching = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: TextField(
-        controller: inputController,
-        decoration: InputDecoration(
-          labelText: "Search by terms, forms, tags...",
-          prefixIcon: Icon(Icons.search_outlined),
-          suffixIcon: inputController.text.isEmpty
-              ? null
-              : IconButton(
-                  onPressed: () => inputController.clear(),
-                  icon: Icon(Icons.clear),
-                ),
+    return Column(
+      children: [
+        TextField(
+          controller: inputController,
+          decoration: InputDecoration(
+            isDense: true,
+            border: InputBorder.none,
+            labelText: "Search by terms, forms, tags...",
+            prefixIcon: Icon(
+              Icons.search_outlined,
+              size: 24,
+            ),
+            suffixIcon: inputController.text.isEmpty
+                ? null
+                : IconButton(
+                    onPressed: () {
+                      inputController.clear();
+                      timer.cancel();
+                      search();
+                    },
+                    icon: Icon(Icons.clear),
+                  ),
+          ),
         ),
-      ),
+        SizedBox(
+          height: 32,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            // padding: const EdgeInsets.all(4),
+            children: [
+              FilterChip(
+                avatar: Icon(Icons.lightbulb_outline),
+                label: Text('Definitions'),
+                selected: extended,
+                onSelected: (value) {
+                  extended = value;
+                  search();
+                },
+              ),
+            ],
+          ),
+        ),
+        Divider(height: 0),
+        LinearProgressIndicator(
+          value: searching ? null : 0,
+          backgroundColor: Colors.transparent,
+        ),
+      ],
     );
   }
 }

@@ -40,10 +40,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
       body: SafeArea(
         child: Column(
           children: [
-            LinearProgressIndicator(
-              value: search == null ? null : 0,
-              backgroundColor: Colors.transparent,
-            ),
             SearchController(
               (s) => setState(() {
                 search = s;
