@@ -1,13 +1,11 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
 import 'package:avzag/navigation/editor_toggle.dart';
-import 'package:avzag/phonology/phonology_page.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'expandable_title.dart';
 
 Future<void> navigate(
@@ -24,9 +22,7 @@ Future<void> navigate(
   if (title == 'home') {
     builder = (_) => HomePage();
     title = null;
-  } else if (title == 'phonology')
-    builder = (_) => PhonologyPage();
-  else if (title == 'dictionary')
+  } else if (title == 'dictionary')
     builder = (_) => DictionaryPage();
   else
     builder = (_) => Text("No Route");

@@ -1,12 +1,12 @@
-import 'package:avzag/dictionary/sample/sample.dart';
 import 'package:avzag/utils.dart';
+import 'package:avzag/widgets/text_sample.dart';
 
 class Use {
   String term;
   String? definition;
   List<String>? tags;
   String? note;
-  List<Sample>? samples;
+  List<TextSample>? samples;
 
   Use({
     required this.term,
@@ -24,7 +24,7 @@ class Use {
           note: json['note'],
           samples: listFromJson(
             json['samples'],
-            (j) => Sample.fromJson(j),
+            (j) => TextSample.fromJson(j),
           ),
         );
 

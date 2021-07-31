@@ -1,12 +1,10 @@
 import 'package:avzag/widgets/column_tile.dart';
-import 'entry/entry_page.dart';
-import 'search/search_controller.dart';
-import 'package:avzag/store.dart';
+import 'entry_page.dart';
+import 'search_controller.dart';
 import 'package:avzag/utils.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:flutter/material.dart';
-import 'entry/entry_editor.dart';
-import 'search/entry_hit.dart';
+import 'entry_hit.dart';
 
 class DictionaryPage extends StatefulWidget {
   @override
@@ -23,20 +21,20 @@ class _DictionaryPageState extends State<DictionaryPage> {
         title: Text('Dictionary'),
       ),
       drawer: NavDraver(title: 'dictionary'),
-      floatingActionButton: EditorStore.language == null
-          ? null
-          : FloatingActionButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => EntryEditor(),
-                ),
-              ),
-              child: Icon(
-                Icons.add_outlined,
-              ),
-              tooltip: 'Add new entry',
-            ),
+      // floatingActionButton: EditorStore.language == null
+      //     ? null
+      //     : FloatingActionButton(
+      //         onPressed: () => Navigator.push(
+      //           context,
+      //           MaterialPageRoute(
+      //             builder: (_) => EntryEditor(),
+      //           ),
+      //         ),
+      //         child: Icon(
+      //           Icons.add_outlined,
+      //         ),
+      //         tooltip: 'Add new entry',
+      //       ),
       body: SafeArea(
         child: Column(
           children: [

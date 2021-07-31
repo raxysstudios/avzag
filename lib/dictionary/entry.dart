@@ -1,9 +1,9 @@
-import 'package:avzag/dictionary/sample/sample.dart';
-import 'package:avzag/dictionary/use/use.dart';
+import 'package:avzag/widgets/text_sample.dart';
+import 'package:avzag/dictionary/use.dart';
 import 'package:avzag/utils.dart';
 
 class Entry {
-  List<Sample> forms;
+  List<TextSample> forms;
   List<String>? tags;
   String? note;
   List<Use> uses;
@@ -17,7 +17,7 @@ class Entry {
 
   Entry.fromJson(Map<String, dynamic> json)
       : this(
-          forms: listFromJson(json['forms'], (j) => Sample.fromJson(j))!,
+          forms: listFromJson(json['forms'], (j) => TextSample.fromJson(j))!,
           uses: listFromJson(json['uses'], (j) => Use.fromJson(j))!,
           tags: json2list(json['tags']),
           note: json['note'],

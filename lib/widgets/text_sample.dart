@@ -1,11 +1,36 @@
-import 'package:avzag/dictionary/sample/sample.dart';
 import 'package:flutter/material.dart';
 
-class SampleDisplay extends StatelessWidget {
-  final Sample sample;
+class TextSample {
+  String plain;
+  String? ipa;
+  String? glossed;
+  String? translation;
+
+  TextSample({required this.plain, this.ipa, this.glossed, this.translation});
+
+  TextSample.fromJson(Map<String, dynamic> json)
+      : this(
+          plain: json['plain'],
+          ipa: json['ipa'],
+          glossed: json['glossed'],
+          translation: json['translation'],
+        );
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['plain'] = plain;
+    if (ipa?.isNotEmpty ?? false) data['ipa'] = ipa;
+    if (glossed?.isNotEmpty ?? false) data['glossed'] = glossed;
+    if (translation?.isNotEmpty ?? false) data['translation'] = translation;
+    return data;
+  }
+}
+
+class TextSampleWidget extends StatelessWidget {
+  final TextSample sample;
   final bool scholar;
   final bool row;
-  SampleDisplay(
+  TextSampleWidget(
     this.sample, {
     this.scholar = true,
     this.row = false,
