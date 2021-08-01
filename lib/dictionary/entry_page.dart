@@ -1,7 +1,6 @@
 import 'package:avzag/dictionary/concept_tile.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/page_title.dart';
-import 'entry_hit.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/home/store.dart';
 import 'package:avzag/utils.dart';
@@ -9,6 +8,7 @@ import 'package:avzag/widgets/text_sample.dart';
 import 'package:avzag/widgets/note_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'entry_hit.dart';
 import 'entry.dart';
 
 //   @override
@@ -127,8 +127,8 @@ class _EntryPageState extends State<EntryPage> {
                 NoteTile(
                   entry!.note,
                   onEdited: editing
-                      ? (note) => setState(() {
-                            entry!.note = note;
+                      ? (result) => setState(() {
+                            entry!.note = result;
                           })
                       : null,
                 ),
@@ -137,12 +137,12 @@ class _EntryPageState extends State<EntryPage> {
                   ConceptTile(
                     u,
                     onEdited: editing
-                        ? (values) => setState(() {
-                              if (values == null)
+                        ? (result) => setState(() {
+                              if (result == null)
                                 entry!.uses.remove(u);
                               else {
-                                u.term = values[0];
-                                u.definition = values[1];
+                                u.term = result[0]!;
+                                u.definition = result[1];
                               }
                             })
                         : null,

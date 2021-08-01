@@ -1,69 +1,13 @@
 import 'use.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:avzag/widgets/editor_dialog.dart';
 
 class ConceptTile extends StatelessWidget {
   final Use use;
-  final ValueSetter<List<String>?>? onEdited;
+  final ValueSetter<List<String?>?>? onEdited;
 
   ConceptTile(this.use, {this.onEdited});
-
-  void edit(BuildContext context) {
-    showDialog<List<String>>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        final concept = [use.term, use.definition];
-        return AlertDialog(
-          title: Text('Edit entry concept'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFormField(
-                  initialValue: use.term,
-                  onChanged: (text) {
-                    concept[0] = text;
-                  },
-                ),
-                SizedBox(height: 8),
-                TextFormField(
-                  initialValue: use.definition,
-                  onChanged: (text) {
-                    concept[1] = text;
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(
-                    Icons.delete_outline,
-                    color: Colors.red,
-                  ),
-                ),
-                Spacer(),
-                TextButton(
-                  onPressed: () => Navigator.pop(
-                    context,
-                    [use.term, use.definition],
-                  ),
-                  child: Text('CANCEL'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, concept),
-                  child: Text('SAVE'),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    ).then((value) => onEdited!(value));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +30,39 @@ class ConceptTile extends StatelessWidget {
                 fontWeight: FontWeight.normal,
               ),
             ),
-      onTap: onEdited == null ? null : () => edit(context),
+      onTap: onEdited == null
+          ? null
+          : () {
+              final result = EditorDialogResult([
+                use.term,
+                use.definition,
+              ]);
+              showEditorDialog(
+                context,
+                result: result,
+                setter: onEdited!,
+                title: 'Edit entry concept',
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        initialValue: use.term,
+                        onChanged: (text) {
+                          result.value![0] = text;
+                        },
+                      ),
+                      SizedBox(height: 8),
+                      TextFormField(
+                        initialValue: use.definition,
+                        onChanged: (text) {
+                          result.value![1] = text;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
     );
   }
 }
