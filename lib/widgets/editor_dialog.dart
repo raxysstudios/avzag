@@ -32,18 +32,28 @@ Future<EditorDialogResult<T>?> showEditorDialog<T>(
                   Icons.delete_outline,
                   color: Colors.red,
                 ),
+                highlightColor: Colors.transparent,
+                splashColor: Colors.red.shade50,
               ),
               Spacer(),
-              TextButton(
+              TextButton.icon(
                 onPressed: () => Navigator.pop(context),
-                child: Text('CANCEL'),
+                icon: Icon(Icons.close_outlined),
+                label: Text('CANCEL'),
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(Colors.blueGrey),
+                  overlayColor: MaterialStateProperty.all(
+                    Colors.blueGrey.shade50,
+                  ),
+                ),
               ),
-              TextButton(
+              TextButton.icon(
                 onPressed: () {
                   Navigator.pop(context);
                   setter(result.value);
                 },
-                child: Text('SAVE'),
+                icon: Icon(Icons.done),
+                label: Text('SAVE'),
               ),
             ],
           ),
