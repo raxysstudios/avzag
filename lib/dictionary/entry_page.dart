@@ -149,7 +149,7 @@ class _EntryPageState extends State<EntryPage> {
                             })
                         : null,
                     icon: Icons.format_list_bulleted_outlined,
-                    translation: false,
+                    noEmpty: true,
                   ),
                   TagsTile(
                     entry!.tags,
@@ -199,6 +199,7 @@ class _EntryPageState extends State<EntryPage> {
                               })
                           : null,
                       icon: Icons.bookmark_outline,
+                      translation: true,
                     ),
                   ],
                 ],

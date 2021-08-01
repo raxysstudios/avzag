@@ -32,12 +32,14 @@ class TextSampleTiles extends StatefulWidget {
   final ValueSetter<List<TextSample>?>? onEdited;
   final IconData? icon;
   final bool translation;
+  final bool noEmpty;
 
   const TextSampleTiles({
     this.samples,
     this.onEdited,
     this.icon,
-    this.translation = true,
+    this.translation = false,
+    this.noEmpty = false,
   });
 
   @override
@@ -138,14 +140,16 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
                   icon: Icon(Icons.add_outlined),
                   tooltip: 'Add sample',
                 )
-              : IconButton(
-                  onPressed: () {
-                    widget.samples!.removeAt(index);
-                    widget.onEdited!(widget.samples);
-                  },
-                  icon: Icon(Icons.remove_outlined),
-                  tooltip: 'Remove sample',
-                ),
+              : widget.samples!.length == 1 && widget.noEmpty
+                  ? null
+                  : IconButton(
+                      onPressed: () {
+                        widget.samples!.removeAt(index);
+                        widget.onEdited!(widget.samples);
+                      },
+                      icon: Icon(Icons.remove_outlined),
+                      tooltip: 'Remove sample',
+                    ),
     );
   }
 
