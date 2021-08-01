@@ -69,7 +69,7 @@ class _EntryPageState extends State<EntryPage> {
                 TextButton.icon(
                   onPressed: () => Navigator.pop(context, true),
                   icon: Icon(Icons.delete_outline),
-                  label: Text('DISCARD'),
+                  label: Text('Discard'),
                   style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(Colors.red),
                     overlayColor: MaterialStateProperty.all(Colors.red.shade50),
@@ -78,7 +78,7 @@ class _EntryPageState extends State<EntryPage> {
                 TextButton.icon(
                   onPressed: () => Navigator.pop(context),
                   icon: Icon(Icons.edit_outlined),
-                  label: Text('EDIT'),
+                  label: Text('Edit'),
                 ),
               ],
             );

@@ -39,7 +39,7 @@ void showEditorDialog<T>(
                 TextButton.icon(
                   onPressed: () => Navigator.pop(context),
                   icon: Icon(Icons.close_outlined),
-                  label: Text('CANCEL'),
+                  label: Text('Cancel'),
                   style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(Colors.blueGrey),
                     overlayColor: MaterialStateProperty.all(
@@ -53,7 +53,7 @@ void showEditorDialog<T>(
                     setter(result.value);
                   },
                   icon: Icon(Icons.done),
-                  label: Text('SAVE'),
+                  label: Text('Save'),
                 ),
               ],
             ),
