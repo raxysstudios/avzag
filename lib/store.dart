@@ -34,21 +34,18 @@ class BaseStore {
     final prefs = await SharedPreferences.getInstance();
     var saving = false;
 
-    await Future.wait([
-      HomeStore.load(),
-      EditorStore.load(),
-    ]);
-
     if (languages == null) {
       BaseStore.languages
         ..clear()
         ..addAll(prefs.getStringList('languages') ?? []);
-      if (BaseStore.languages.isEmpty)
-        BaseStore.languages.add(
-          HomeStore.languages.values.first.name,
-        );
+      if (BaseStore.languages.isEmpty) BaseStore.languages.add('iron');
     } else
       saving = true;
+
+    await Future.wait([
+      HomeStore.load(),
+      EditorStore.load(),
+    ]);
 
     if (saving)
       await prefs.setStringList(
