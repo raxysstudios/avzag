@@ -13,7 +13,7 @@ class PageTitle extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            text: capitalize(title) + '\n',
+            text: capitalize(title),
             style: TextStyle(
               fontSize: 20,
               color: Colors.black87,

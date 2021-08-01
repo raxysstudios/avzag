@@ -1,4 +1,3 @@
-import 'package:avzag/widgets/column_tile.dart';
 import 'entry_page.dart';
 import 'search_controller.dart';
 import 'package:avzag/utils.dart';
@@ -64,12 +63,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
                         ),
                       ),
                       for (final e in es.value)
-                        ColumnTile(
-                          Text(
+                        ListTile(
+                          title: Text(
                             capitalize(e.headword),
                             style: TextStyle(fontSize: 16),
                           ),
-                          subtitle: e.definition,
+                          subtitle:
+                              e.definition == null ? null : Text(e.definition!),
                           trailing: Text(
                             capitalize(e.language),
                             style: TextStyle(
@@ -77,7 +77,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
                               fontSize: 14,
                             ),
                           ),
-                          leadingSpace: false,
                           onTap: () {
                             Navigator.push(
                               context,
