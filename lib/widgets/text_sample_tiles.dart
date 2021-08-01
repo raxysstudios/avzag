@@ -43,40 +43,31 @@ class TextSampleTiles extends StatelessWidget {
     this.row = false,
   });
 
-  SelectableText buildText(TextSample sample) {
-    return SelectableText.rich(
-      TextSpan(
-        style: TextStyle(
-          color: Colors.black54,
-          fontSize: 14,
-        ),
-        children: [
-          TextSpan(
-            text: sample.plain,
-            style: TextStyle(
-              color: Colors.black87,
-              fontSize: 16,
-            ),
-          ),
-          if (sample.translation != null)
-            TextSpan(
-              text: '\n' + sample.translation!,
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-              ),
-            ),
-          if (scholar)
-            TextSpan(
-              text: [
-                '',
-                sample.ipa,
-                sample.glossed,
-              ].where((t) => t != null).join(row ? ' • ' : '\n'),
-            )
-        ],
+  Widget buildText(TextSample sample) {
+    final span = TextSpan(
+      style: TextStyle(
+        color: Colors.black54,
+        fontSize: 16,
       ),
+      children: [
+        TextSpan(
+          text: sample.plain,
+          style: TextStyle(
+            color: Colors.black87,
+          ),
+        ),
+        if (scholar)
+          TextSpan(
+            text: [
+              '',
+              sample.translation,
+              if (scholar && sample.ipa != null) '/${sample.ipa}/',
+              if (scholar) sample.glossed,
+            ].where((t) => t != null).join(row ? ' • ' : '\n'),
+          )
+      ],
     );
+    return onEdited == null ? SelectableText.rich(span) : RichText(text: span);
   }
 
   void showEditor(BuildContext context, int index) {
