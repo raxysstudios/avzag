@@ -1,4 +1,4 @@
-import 'package:avzag/dictionary/concept_tile.dart';
+import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/home/language_flag.dart';
