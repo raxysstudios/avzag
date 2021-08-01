@@ -24,7 +24,7 @@ class TagsTile extends StatelessWidget {
                 color: Colors.black54,
               ),
             )
-          : Text(
+          : SelectableText(
               prettyTags(tags)!,
               style: TextStyle(color: Colors.black54),
             ),
