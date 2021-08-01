@@ -26,7 +26,7 @@ class NoteTile extends StatelessWidget {
             )
           : MarkdownBody(
               data: note!,
-              selectable: true,
+              selectable: onEdited == null,
               styleSheet: MarkdownStyleSheet(
                 p: TextStyle(
                   fontSize: 16,
