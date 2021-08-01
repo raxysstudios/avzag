@@ -31,11 +31,13 @@ class TextSampleTiles extends StatefulWidget {
   final List<TextSample>? samples;
   final ValueSetter<List<TextSample>?>? onEdited;
   final IconData? icon;
+  final bool translation;
 
   const TextSampleTiles({
     this.samples,
     this.onEdited,
     this.icon,
+    this.translation = true,
   });
 
   @override
@@ -81,6 +83,8 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
       [sample.plain, (text) => sample.plain = text],
       [sample.ipa, (text) => sample.ipa = text],
       [sample.glossed, (text) => sample.glossed = text],
+      if (widget.translation)
+        [sample.translation, (text) => sample.translation = text],
     ];
 
     showEditorDialog(
