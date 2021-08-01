@@ -39,7 +39,6 @@ class EntryPage extends StatefulWidget {
 class _EntryPageState extends State<EntryPage> {
   Entry? entry;
   bool editing = false;
-  String test = '';
 
   @override
   void initState() {
@@ -135,9 +134,7 @@ class _EntryPageState extends State<EntryPage> {
                         tooltip: 'Edit entry',
                       ),
             body: ListView(
-              padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
-                Text(test),
                 if (!done)
                   LinearProgressIndicator()
                 else ...[
