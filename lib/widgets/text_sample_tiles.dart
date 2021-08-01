@@ -66,7 +66,10 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
     ].where((t) => t != null);
 
     return TextSpan(
-      style: TextStyle(color: Colors.black54),
+      style: TextStyle(
+        color: Colors.black54,
+        fontSize: 16,
+      ),
       children: [
         TextSpan(
           text: sample.plain,
@@ -124,7 +127,6 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
 
   ListTile buildTile(BuildContext context, int index) {
     return ListTile(
-      minVerticalPadding: 16,
       leading: Icon(
         widget.icon,
         color: index == 0 ? null : Colors.transparent,
