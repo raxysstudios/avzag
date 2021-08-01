@@ -58,119 +58,155 @@ class _EntryPageState extends State<EntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<DocumentSnapshot<Entry>>(
-      future: widget.ref,
-      builder: (context, snapshot) {
-        final data = snapshot.data?.data();
-        if (data != null && entry == null) entry = data;
-        final done =
-            snapshot.connectionState == ConnectionState.done && entry != null;
+    return WillPopScope(
+      onWillPop: () async {
+        if (!editing) return true;
+        final result = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Discard edits?'),
+              actions: [
+                TextButton.icon(
+                  onPressed: () => Navigator.pop(context, true),
+                  icon: Icon(Icons.delete_outline),
+                  label: Text('DISCARD'),
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(Colors.red),
+                    overlayColor: MaterialStateProperty.all(Colors.red.shade50),
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(Icons.edit_outlined),
+                  label: Text('EDIT'),
+                ),
+              ],
+            );
+          },
+        );
+        return result ?? false;
+      },
+      child: FutureBuilder<DocumentSnapshot<Entry>>(
+        future: widget.ref,
+        builder: (context, snapshot) {
+          final data = snapshot.data?.data();
+          if (data != null && entry == null) entry = data;
+          final done =
+              snapshot.connectionState == ConnectionState.done && entry != null;
 
-        return Scaffold(
-          appBar: AppBar(
-            title: editing
-                ? Text('Editing entry')
-                : PageTitle(
-                    title: widget.hit.headword,
-                    subtitle: widget.hit.language,
-                  ),
-            actions: [
-              LanguageFlag(
-                HomeStore.languages[widget.hit.language]!,
-                offset: Offset(-30, 0),
-                scale: 7,
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () => Navigator.maybePop(context),
+                icon: Icon(
+                  editing ? Icons.close_outlined : Icons.arrow_back_outlined,
+                ),
               ),
-            ],
-          ),
-          floatingActionButton: EditorStore.language == null || !done
-              ? null
-              : editing
-                  ? FloatingActionButton(
-                      onPressed: entry!.uses.isEmpty || entry!.forms.isEmpty
-                          ? null
-                          : submit,
-                      child: Icon(Icons.cloud_upload_outlined),
-                      tooltip: 'Submit changes',
-                    )
-                  : FloatingActionButton(
-                      onPressed: () => setState(() {
-                        editing = true;
-                      }),
-                      child: Icon(Icons.edit_outlined),
-                      tooltip: 'Edit entry',
+              title: editing
+                  ? Text('Editing entry')
+                  : PageTitle(
+                      title: widget.hit.headword,
+                      subtitle: widget.hit.language,
                     ),
-          body: ListView(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            children: [
-              Text(test),
-              if (!done)
-                LinearProgressIndicator()
-              else ...[
-                ListTile(
-                  leading: Icon(Icons.tune_outlined),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      for (final f in entry!.forms)
-                        TextSampleWidget(f, row: true),
-                    ],
-                  ),
+              actions: [
+                LanguageFlag(
+                  HomeStore.languages[widget.hit.language]!,
+                  offset: Offset(-30, 0),
+                  scale: 7,
                 ),
-                if (entry!.tags != null)
+              ],
+            ),
+            floatingActionButton: EditorStore.language == null || !done
+                ? null
+                : editing
+                    ? FloatingActionButton(
+                        onPressed: entry!.uses.isEmpty || entry!.forms.isEmpty
+                            ? null
+                            : submit,
+                        child: Icon(Icons.cloud_upload_outlined),
+                        tooltip: 'Submit changes',
+                      )
+                    : FloatingActionButton(
+                        onPressed: () => setState(() {
+                          editing = true;
+                        }),
+                        child: Icon(Icons.edit_outlined),
+                        tooltip: 'Edit entry',
+                      ),
+            body: ListView(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              children: [
+                Text(test),
+                if (!done)
+                  LinearProgressIndicator()
+                else ...[
                   ListTile(
-                    leading: Icon(Icons.tag_outlined),
-                    title: Text(
-                      prettyTags(entry!.tags)!,
-                      style: TextStyle(color: Colors.black54),
+                    leading: Icon(Icons.tune_outlined),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        for (final f in entry!.forms)
+                          TextSampleWidget(f, row: true),
+                      ],
                     ),
                   ),
-                NoteTile(
-                  entry!.note,
-                  onEdited: editing
-                      ? (result) => setState(() {
-                            entry!.note = result;
-                          })
-                      : null,
-                ),
-                for (final u in entry!.uses) ...[
-                  Divider(),
-                  ConceptTile(
-                    u,
-                    onEdited: editing
-                        ? (result) => setState(() {
-                              if (result == null)
-                                entry!.uses.remove(u);
-                              else {
-                                u.term = result[0]!;
-                                u.definition = result[1];
-                              }
-                            })
-                        : null,
-                  ),
-                  if (u.tags != null)
+                  if (entry!.tags != null)
                     ListTile(
                       leading: Icon(Icons.tag_outlined),
                       title: Text(
-                        prettyTags(u.tags)!,
+                        prettyTags(entry!.tags)!,
                         style: TextStyle(color: Colors.black54),
                       ),
                     ),
-                  NoteTile(u.note),
-                  if (u.samples != null)
-                    for (var i = 0; i < u.samples!.length; i++)
+                  NoteTile(
+                    entry!.note,
+                    onEdited: editing
+                        ? (result) => setState(() {
+                              entry!.note = result;
+                            })
+                        : null,
+                  ),
+                  for (final u in entry!.uses) ...[
+                    Divider(),
+                    ConceptTile(
+                      u,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                if (result == null)
+                                  entry!.uses.remove(u);
+                                else {
+                                  u.term = result[0]!;
+                                  u.definition = result[1];
+                                }
+                              })
+                          : null,
+                    ),
+                    if (u.tags != null)
                       ListTile(
-                        leading: Icon(
-                          Icons.bookmark_outline,
-                          color: i == 0 ? null : Colors.transparent,
+                        leading: Icon(Icons.tag_outlined),
+                        title: Text(
+                          prettyTags(u.tags)!,
+                          style: TextStyle(color: Colors.black54),
                         ),
-                        title: TextSampleWidget(u.samples![i]),
-                      )
+                      ),
+                    NoteTile(u.note),
+                    if (u.samples != null)
+                      for (var i = 0; i < u.samples!.length; i++)
+                        ListTile(
+                          leading: Icon(
+                            Icons.bookmark_outline,
+                            color: i == 0 ? null : Colors.transparent,
+                          ),
+                          title: TextSampleWidget(u.samples![i]),
+                        )
+                  ],
                 ],
               ],
-            ],
-          ),
-        );
-      },
+            ),
+          );
+        },
+      ),
     );
   }
 }
