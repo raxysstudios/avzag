@@ -6,7 +6,10 @@ class NoteTile extends StatelessWidget {
   final String? note;
   final ValueSetter<String?>? onEdited;
 
-  NoteTile(this.note, {this.onEdited});
+  const NoteTile(
+    this.note, {
+    this.onEdited,
+  });
 
   @override
   Widget build(BuildContext context) {

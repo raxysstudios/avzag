@@ -6,7 +6,10 @@ class TagsTile extends StatelessWidget {
   final List<String>? tags;
   final ValueSetter<List<String>?>? onEdited;
 
-  TagsTile(this.tags, {this.onEdited});
+  const TagsTile(
+    this.tags, {
+    this.onEdited,
+  });
 
   @override
   Widget build(BuildContext context) {

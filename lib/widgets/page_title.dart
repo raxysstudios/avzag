@@ -5,7 +5,10 @@ class PageTitle extends StatelessWidget {
   final String title;
   final String? subtitle;
 
-  const PageTitle({required this.title, this.subtitle});
+  const PageTitle({
+    required this.title,
+    this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {

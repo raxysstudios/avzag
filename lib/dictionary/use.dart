@@ -1,5 +1,5 @@
 import 'package:avzag/utils.dart';
-import 'package:avzag/widgets/text_sample.dart';
+import 'package:avzag/widgets/text_sample_tiles.dart';
 
 class Use {
   String term;

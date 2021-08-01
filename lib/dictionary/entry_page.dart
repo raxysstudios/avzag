@@ -4,7 +4,7 @@ import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/home/store.dart';
 import 'package:avzag/widgets/tags_tile.dart';
-import 'package:avzag/widgets/text_sample.dart';
+import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/widgets/note_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -147,7 +147,7 @@ class _EntryPageState extends State<EntryPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         for (final f in entry!.forms)
-                          TextSampleWidget(f, row: true),
+                          TextSampleTiles(f, row: true),
                       ],
                     ),
                   ),
@@ -198,7 +198,7 @@ class _EntryPageState extends State<EntryPage> {
                             Icons.bookmark_outline,
                             color: i == 0 ? null : Colors.transparent,
                           ),
-                          title: TextSampleWidget(u.samples![i]),
+                          title: TextSampleTiles(u.samples![i]),
                         )
                   ],
                 ],

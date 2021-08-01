@@ -1,4 +1,4 @@
-import 'package:avzag/widgets/text_sample.dart';
+import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/dictionary/use.dart';
 import 'package:avzag/utils.dart';
 

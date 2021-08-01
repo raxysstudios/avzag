@@ -7,7 +7,10 @@ class ConceptTile extends StatelessWidget {
   final Use use;
   final ValueSetter<List<String?>?>? onEdited;
 
-  ConceptTile(this.use, {this.onEdited});
+  const ConceptTile(
+    this.use, {
+    this.onEdited,
+  });
 
   @override
   Widget build(BuildContext context) {
