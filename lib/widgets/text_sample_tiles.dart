@@ -31,13 +31,11 @@ class TextSampleTiles extends StatefulWidget {
   final List<TextSample>? samples;
   final ValueSetter<List<TextSample>?>? onEdited;
   final IconData? icon;
-  final bool row;
 
   const TextSampleTiles({
     this.samples,
     this.onEdited,
     this.icon,
-    this.row = false,
   });
 
   @override
@@ -47,36 +45,30 @@ class TextSampleTiles extends StatefulWidget {
 class _TextSampleTilesState extends State<TextSampleTiles> {
   bool advanced = false;
 
-  Widget buildText(TextSample sample) {
+  TextSpan getTextSpan(int index) {
     final extended = this.advanced || widget.onEdited != null;
+    final sample = widget.samples![index];
     final fields = [
-      if (sample.translation != null) sample.translation,
-      if (extended && sample.ipa != null) '/${sample.ipa}/',
-      if (extended) sample.glossed,
-    ];
+      sample.translation,
+      if (extended) ...[
+        sample.ipa == null ? null : '/${sample.ipa}/',
+        sample.glossed,
+      ]
+    ].where((t) => t != null);
 
-    final span = TextSpan(
-      style: TextStyle(
-        color: Colors.black54,
-        fontSize: 16,
-      ),
+    return TextSpan(
+      style: TextStyle(color: Colors.black54),
       children: [
         TextSpan(
           text: sample.plain,
-          style: TextStyle(
-            color: Colors.black87,
-          ),
+          style: TextStyle(color: Colors.black87),
         ),
         if (fields.length > 0)
           TextSpan(
-            text: ['', ...fields].join(widget.row ? ' • ' : '\n'),
+            text: ['', ...fields].join(' • '),
           )
       ],
     );
-
-    return widget.onEdited == null
-        ? SelectableText.rich(span)
-        : RichText(text: span);
   }
 
   void showEditor(BuildContext context, int index) {
@@ -114,6 +106,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
 
   ListTile buildTile(BuildContext context, int index) {
     return ListTile(
+      minVerticalPadding: 16,
       leading: Icon(
         widget.icon,
         color: index == 0 ? null : Colors.transparent,
@@ -126,7 +119,9 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
                 color: Colors.black54,
               ),
             )
-          : buildText(widget.samples![index]),
+          : widget.onEdited == null
+              ? SelectableText.rich(getTextSpan(index))
+              : RichText(text: getTextSpan(index)),
       onTap: widget.onEdited == null ? null : () => showEditor(context, index),
       trailing: widget.onEdited == null
           ? null
@@ -153,7 +148,25 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
   @override
   Widget build(BuildContext context) {
     if (widget.samples == null && widget.onEdited == null) return Offstage();
-    final tiles = Column(
+    if (widget.onEdited == null)
+      return ListTile(
+        onTap: () => setState(() {
+          advanced = !advanced;
+        }),
+        leading: Icon(widget.icon),
+        title: SelectableText.rich(
+          TextSpan(
+            children: [
+              getTextSpan(0),
+              for (var i = 1; i < widget.samples!.length; i++) ...[
+                TextSpan(text: '\n'),
+                getTextSpan(i),
+              ],
+            ],
+          ),
+        ),
+      );
+    return Column(
       children: [
         buildTile(context, 0),
         if (widget.samples != null)
@@ -161,13 +174,5 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
             buildTile(context, i),
       ],
     );
-    return widget.onEdited == null
-        ? InkWell(
-            onTap: () => setState(() {
-              advanced = !advanced;
-            }),
-            child: tiles,
-          )
-        : tiles;
   }
 }

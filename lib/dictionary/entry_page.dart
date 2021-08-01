@@ -104,7 +104,7 @@ class _EntryPageState extends State<EntryPage> {
                 ),
               ),
               title: editing
-                  ? Text('Editing entry')
+                  ? Text('Entry editor')
                   : PageTitle(
                       title: widget.hit.headword,
                       subtitle: widget.hit.language,
@@ -149,7 +149,6 @@ class _EntryPageState extends State<EntryPage> {
                             })
                         : null,
                     icon: Icons.format_list_bulleted_outlined,
-                    row: true,
                   ),
                   TagsTile(
                     entry!.tags,
@@ -167,41 +166,53 @@ class _EntryPageState extends State<EntryPage> {
                             })
                         : null,
                   ),
-                  for (final u in entry!.uses) ...[
+                  for (final use in entry!.uses) ...[
                     Divider(),
                     ConceptTile(
-                      u,
+                      use,
                       onEdited: editing
                           ? (result) => setState(() {
                                 if (result == null)
-                                  entry!.uses.remove(u);
+                                  entry!.uses.remove(use);
                                 else {
-                                  u.term = result[0]!;
-                                  u.definition = result[1];
+                                  use.term = result[0]!;
+                                  use.definition = result[1];
                                 }
                               })
                           : null,
                     ),
                     TagsTile(
-                      u.tags,
+                      use.tags,
                       onEdited: editing
                           ? (result) => setState(() {
-                                u.tags = result;
+                                use.tags = result;
                               })
                           : null,
                     ),
-                    NoteTile(u.note),
+                    NoteTile(use.note),
                     TextSampleTiles(
-                      samples: u.samples,
+                      samples: use.samples,
                       onEdited: editing
                           ? (result) => setState(() {
-                                u.samples = result;
+                                use.samples = result;
                               })
                           : null,
                       icon: Icons.bookmark_outline,
                     ),
                   ],
                 ],
+                if (editing) ...[
+                  Divider(height: 0),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: TextButton.icon(
+                      onPressed: () {},
+                      icon: Icon(Icons.add_outlined),
+                      label: Text('Add use'),
+                    ),
+                  ),
+                ] else
+                  SizedBox(height: 32)
               ],
             ),
           );
