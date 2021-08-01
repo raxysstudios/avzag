@@ -62,14 +62,13 @@ class SearchControllerState extends State<SearchController> {
         .index('dictionary')
         .query(text)
         .filters(filters);
-    if (!text.contains('#')) {
-      final attrs = [
+    if (!text.contains('#'))
+      query = query.setRestrictSearchableAttributes([
         'term',
         'forms',
-      ];
-      if (extended) attrs.add('definition');
-      query = query.setRestrictSearchableAttributes(attrs);
-    }
+        if (extended) 'definition',
+      ]);
+
     final result = <String, List<EntryHit>>{};
     final snap = await query.getObjects();
 
