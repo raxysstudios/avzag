@@ -141,15 +141,15 @@ class _EntryPageState extends State<EntryPage> {
                 if (!done)
                   LinearProgressIndicator()
                 else ...[
-                  ListTile(
-                    leading: Icon(Icons.tune_outlined),
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        for (final f in entry!.forms)
-                          TextSampleTiles(f, row: true),
-                      ],
-                    ),
+                  TextSampleTiles(
+                    samples: entry!.forms,
+                    onEdited: editing
+                        ? (result) => setState(() {
+                              entry!.forms = result!;
+                            })
+                        : null,
+                    icon: Icons.format_list_bulleted_outlined,
+                    row: true,
                   ),
                   TagsTile(
                     entry!.tags,
@@ -191,15 +191,15 @@ class _EntryPageState extends State<EntryPage> {
                           : null,
                     ),
                     NoteTile(u.note),
-                    if (u.samples != null)
-                      for (var i = 0; i < u.samples!.length; i++)
-                        ListTile(
-                          leading: Icon(
-                            Icons.bookmark_outline,
-                            color: i == 0 ? null : Colors.transparent,
-                          ),
-                          title: TextSampleTiles(u.samples![i]),
-                        )
+                    TextSampleTiles(
+                      samples: u.samples,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                u.samples = result;
+                              })
+                          : null,
+                      icon: Icons.bookmark_outline,
+                    ),
                   ],
                 ],
               ],
