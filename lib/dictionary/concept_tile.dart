@@ -48,14 +48,14 @@ class ConceptTile extends StatelessWidget {
                       TextFormField(
                         initialValue: use.term,
                         onChanged: (text) {
-                          result.value![0] = text;
+                          result.value![0] = text.trim();
                         },
                       ),
                       SizedBox(height: 8),
                       TextFormField(
                         initialValue: use.definition,
                         onChanged: (text) {
-                          result.value![1] = text;
+                          result.value![1] = text.trim();
                         },
                       ),
                     ],

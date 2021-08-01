@@ -3,7 +3,7 @@ import 'package:avzag/store.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/home/store.dart';
-import 'package:avzag/utils.dart';
+import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample.dart';
 import 'package:avzag/widgets/note_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -151,14 +151,14 @@ class _EntryPageState extends State<EntryPage> {
                       ],
                     ),
                   ),
-                  if (entry!.tags != null)
-                    ListTile(
-                      leading: Icon(Icons.tag_outlined),
-                      title: Text(
-                        prettyTags(entry!.tags)!,
-                        style: TextStyle(color: Colors.black54),
-                      ),
-                    ),
+                  TagsTile(
+                    entry!.tags,
+                    onEdited: editing
+                        ? (result) => setState(() {
+                              entry!.tags = result;
+                            })
+                        : null,
+                  ),
                   NoteTile(
                     entry!.note,
                     onEdited: editing
@@ -182,14 +182,14 @@ class _EntryPageState extends State<EntryPage> {
                               })
                           : null,
                     ),
-                    if (u.tags != null)
-                      ListTile(
-                        leading: Icon(Icons.tag_outlined),
-                        title: Text(
-                          prettyTags(u.tags)!,
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                      ),
+                    TagsTile(
+                      u.tags,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                u.tags = result;
+                              })
+                          : null,
+                    ),
                     NoteTile(u.note),
                     if (u.samples != null)
                       for (var i = 0; i < u.samples!.length; i++)

@@ -42,7 +42,7 @@ class NoteTile extends StatelessWidget {
                 content: TextFormField(
                   initialValue: note,
                   onChanged: (value) {
-                    result.value = value;
+                    result.value = value.trim();
                   },
                 ),
               );
