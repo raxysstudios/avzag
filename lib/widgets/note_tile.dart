@@ -41,6 +41,7 @@ class NoteTile extends StatelessWidget {
                 title: 'Edit markdown note',
                 content: TextFormField(
                   initialValue: note,
+                  maxLines: null,
                   onChanged: (value) {
                     result.value = value.trim();
                   },
