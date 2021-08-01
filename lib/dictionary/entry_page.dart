@@ -115,6 +115,12 @@ class _EntryPageState extends State<EntryPage> {
                   scale: 7,
                 ),
               ],
+              bottom: done
+                  ? null
+                  : PreferredSize(
+                      preferredSize: Size.fromHeight(4),
+                      child: LinearProgressIndicator(),
+                    ),
             ),
             floatingActionButton: EditorStore.language == null || !done
                 ? null
@@ -133,87 +139,85 @@ class _EntryPageState extends State<EntryPage> {
                         child: Icon(Icons.edit_outlined),
                         tooltip: 'Edit entry',
                       ),
-            body: ListView(
-              children: [
-                if (!done)
-                  LinearProgressIndicator()
-                else ...[
-                  TextSampleTiles(
-                    samples: entry!.forms,
-                    onEdited: editing
-                        ? (result) => setState(() {
-                              entry!.forms = result!;
-                            })
-                        : null,
-                    icon: Icons.format_list_bulleted_outlined,
-                    noEmpty: true,
-                  ),
-                  TagsTile(
-                    entry!.tags,
-                    onEdited: editing
-                        ? (result) => setState(() {
-                              entry!.tags = result;
-                            })
-                        : null,
-                  ),
-                  NoteTile(
-                    entry!.note,
-                    onEdited: editing
-                        ? (result) => setState(() {
-                              entry!.note = result;
-                            })
-                        : null,
-                  ),
-                  for (final use in entry!.uses) ...[
-                    Divider(),
-                    ConceptTile(
-                      use,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                if (result == null)
-                                  entry!.uses.remove(use);
-                                else {
-                                  use.term = result[0]!;
-                                  use.definition = result[1];
-                                }
-                              })
-                          : null,
-                    ),
-                    TagsTile(
-                      use.tags,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                use.tags = result;
-                              })
-                          : null,
-                    ),
-                    NoteTile(use.note),
-                    TextSampleTiles(
-                      samples: use.samples,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                use.samples = result;
-                              })
-                          : null,
-                      icon: Icons.bookmark_outline,
-                      translation: true,
-                    ),
-                  ],
-                ],
-                if (editing) ...[
-                  Divider(height: 0),
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: TextButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.add_outlined),
-                      label: Text('Add use'),
-                    ),
-                  ),
-                ] else
-                  SizedBox(height: 32)
-              ],
-            ),
+            body: done
+                ? ListView(
+                    children: [
+                      TextSampleTiles(
+                        samples: entry!.forms,
+                        onEdited: editing
+                            ? (result) => setState(() {
+                                  entry!.forms = result!;
+                                })
+                            : null,
+                        icon: Icons.format_list_bulleted_outlined,
+                        noEmpty: true,
+                      ),
+                      TagsTile(
+                        entry!.tags,
+                        onEdited: editing
+                            ? (result) => setState(() {
+                                  entry!.tags = result;
+                                })
+                            : null,
+                      ),
+                      NoteTile(
+                        entry!.note,
+                        onEdited: editing
+                            ? (result) => setState(() {
+                                  entry!.note = result;
+                                })
+                            : null,
+                      ),
+                      for (final use in entry!.uses) ...[
+                        Divider(),
+                        ConceptTile(
+                          use,
+                          onEdited: editing
+                              ? (result) => setState(() {
+                                    if (result == null)
+                                      entry!.uses.remove(use);
+                                    else {
+                                      use.term = result[0]!;
+                                      use.definition = result[1];
+                                    }
+                                  })
+                              : null,
+                        ),
+                        TagsTile(
+                          use.tags,
+                          onEdited: editing
+                              ? (result) => setState(() {
+                                    use.tags = result;
+                                  })
+                              : null,
+                        ),
+                        NoteTile(use.note),
+                        TextSampleTiles(
+                          samples: use.samples,
+                          onEdited: editing
+                              ? (result) => setState(() {
+                                    use.samples = result;
+                                  })
+                              : null,
+                          icon: Icons.bookmark_outline,
+                          translation: true,
+                        ),
+                      ],
+                      if (editing) ...[
+                        Divider(height: 0),
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: TextButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.add_outlined),
+                            label: Text('Add use'),
+                          ),
+                        ),
+                      ] else
+                        SizedBox(height: 32)
+                    ],
+                  )
+                : null,
           );
         },
       ),
