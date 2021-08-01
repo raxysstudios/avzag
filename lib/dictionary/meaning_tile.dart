@@ -53,6 +53,9 @@ class ConceptTile extends StatelessWidget {
                         onChanged: (text) {
                           result.value![0] = text.trim();
                         },
+                        decoration: InputDecoration(
+                          labelText: 'General term',
+                        ),
                       ),
                       SizedBox(height: 8),
                       TextFormField(
@@ -60,6 +63,9 @@ class ConceptTile extends StatelessWidget {
                         onChanged: (text) {
                           result.value![1] = text.trim();
                         },
+                        decoration: InputDecoration(
+                          labelText: 'Specific definition',
+                        ),
                       ),
                     ],
                   ),

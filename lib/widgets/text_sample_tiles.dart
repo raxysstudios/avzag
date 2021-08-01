@@ -7,11 +7,16 @@ class TextSample {
   String? glossed;
   String? translation;
 
-  TextSample({required this.plain, this.ipa, this.glossed, this.translation});
+  TextSample(
+    this.plain, {
+    this.ipa,
+    this.glossed,
+    this.translation,
+  });
 
   TextSample.fromJson(Map<String, dynamic> json)
       : this(
-          plain: json['plain'],
+          json['plain'],
           ipa: json['ipa'],
           glossed: json['glossed'],
           translation: json['translation'],
@@ -77,16 +82,20 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
 
   void showEditor(BuildContext context, int index) {
     final samples = widget.samples ?? [];
-    if (index == samples.length) samples.add(TextSample(plain: 'sample'));
+    if (index == samples.length) samples.add(TextSample('sample'));
 
     final result = EditorDialogResult(samples);
     final sample = samples[index];
     final inputs = [
-      [sample.plain, (text) => sample.plain = text],
-      [sample.ipa, (text) => sample.ipa = text],
-      [sample.glossed, (text) => sample.glossed = text],
+      [sample.plain, (text) => sample.plain = text, 'Plain text'],
+      [sample.ipa, (text) => sample.ipa = text, 'IPA (glossed)'],
+      [sample.glossed, (text) => sample.glossed = text, 'Leipzig-glossed'],
       if (widget.translation)
-        [sample.translation, (text) => sample.translation = text],
+        [
+          sample.translation,
+          (text) => sample.translation = text,
+          'Translation'
+        ],
     ];
 
     showEditorDialog(
@@ -102,6 +111,9 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
                 initialValue: input[0] as String?,
                 onChanged: (text) => (input[1] as ValueSetter<String>)(
                   text.trim(),
+                ),
+                decoration: InputDecoration(
+                  labelText: input[2] as String,
                 ),
               ),
           ],

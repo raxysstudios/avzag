@@ -41,13 +41,16 @@ class NoteTile extends StatelessWidget {
                 context,
                 result: result,
                 setter: onEdited!,
-                title: 'Edit markdown note',
+                title: 'Edit note',
                 content: TextFormField(
                   initialValue: note,
                   maxLines: null,
                   onChanged: (value) {
                     result.value = value.trim();
                   },
+                  decoration: InputDecoration(
+                    labelText: 'Note (markdown supported)',
+                  ),
                 ),
               );
             },

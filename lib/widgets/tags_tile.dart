@@ -43,6 +43,9 @@ class TagsTile extends StatelessWidget {
                     value = value.trim();
                     result.value = value.isEmpty ? null : value.split(' ');
                   },
+                  decoration: InputDecoration(
+                    labelText: 'Space-separated tags',
+                  ),
                 ),
               );
             },
