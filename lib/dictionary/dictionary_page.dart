@@ -1,3 +1,6 @@
+import 'package:avzag/widgets/loading_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'entry.dart';
 import 'entry_page.dart';
 import 'search_controller.dart';
 import 'package:avzag/utils.dart';
@@ -12,6 +15,26 @@ class DictionaryPage extends StatefulWidget {
 
 class _DictionaryPageState extends State<DictionaryPage> {
   EntryHitSearch? search = {};
+
+  void openEntry(EntryHit hit) {
+    showLoadingDialog<Entry>(
+      context,
+      FirebaseFirestore.instance
+          .doc('languages/${hit.language}/dictionary/${hit.entryID}')
+          .withConverter(
+            fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
+            toFirestore: (Entry object, _) => object.toJson(),
+          )
+          .get()
+          .then((snapshot) => Future.value(snapshot.data())),
+      (result) => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EntryPage(result, hit),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,16 +100,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                               fontSize: 14,
                             ),
                           ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                builder: (context) {
-                                  return EntryPage(e);
-                                },
-                              ),
-                            );
-                          },
+                          onTap: () => openEntry(e),
                         ),
                       Divider(height: 0),
                     ],
