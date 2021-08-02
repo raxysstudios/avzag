@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 void showLoadingDialog<T>(
   BuildContext context,
   Future<T?> future,
-  ValueSetter<T> callback,
-) {
+  ValueSetter<T> callback, {
+  dismissible = true,
+}) {
   var dismissed = false;
   showDialog(
     context: context,
+    barrierDismissible: dismissible,
     builder: (context) {
       return Center(
         child: Card(

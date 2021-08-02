@@ -1,6 +1,7 @@
 import 'package:avzag/dictionary/entry_hit.dart';
 import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/store.dart';
+import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/home/store.dart';
@@ -11,10 +12,9 @@ import 'package:avzag/widgets/note_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'entry.dart';
-import 'use.dart';
 
 class EntryPage extends StatefulWidget {
-  final Entry? entry;
+  final Entry entry;
   final EntryHit hit;
 
   const EntryPage(
@@ -27,25 +27,33 @@ class EntryPage extends StatefulWidget {
 }
 
 class _EntryPageState extends State<EntryPage> {
-  late final Entry entry;
-  late bool editing;
+  late Entry entry;
+  bool editing = false;
+
+  void startEditing() {
+    editing = true;
+    entry = Entry.fromJson(entry.toJson());
+  }
 
   @override
   void initState() {
     super.initState();
-    entry = widget.entry == null ? Entry(forms: [], uses: []) : widget.entry!;
-    // Entry.fromJson(widget.entry!.toJson());
-    editing = widget.entry == null;
+    entry = widget.entry;
+    if (entry.forms.isEmpty) startEditing();
   }
 
   void submit() async {
-    // final collection = FirebaseFirestore.instance
-    //     .collection('languages/${EditorStore.language}/dictionary');
-    // final json = entry!.toJson();
-    // widget.hit == null
-    //     ? await collection.add(json)
-    //     : await collection.doc(widget.hit.entryID).update(json);
-    // Navigator.pop(context);
+    final collection = FirebaseFirestore.instance
+        .collection('languages/${EditorStore.language}/dictionary');
+    final json = entry.toJson();
+    showLoadingDialog(
+      context,
+      widget.hit.entryID.isEmpty
+          ? collection.add(json)
+          : collection.doc(widget.hit.entryID).update(json),
+      (_) => Navigator.pop(context),
+      dismissible: false,
+    );
   }
 
   @override
@@ -107,15 +115,28 @@ class _EntryPageState extends State<EntryPage> {
               : editing
                   ? FloatingActionButton(
                       onPressed: entry.uses.isEmpty || entry.forms.isEmpty
-                          ? null
+                          ? () => ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.error_outline_outlined,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        'Must have at least one form and one use.',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
                           : submit,
                       child: Icon(Icons.cloud_upload_outlined),
                       tooltip: 'Submit changes',
                     )
                   : FloatingActionButton(
-                      onPressed: () => setState(() {
-                        editing = true;
-                      }),
+                      onPressed: startEditing,
                       child: Icon(Icons.edit_outlined),
                       tooltip: 'Edit entry',
                     ),

@@ -1,3 +1,4 @@
+import 'package:avzag/store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/segment_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,20 +45,28 @@ class _DictionaryPageState extends State<DictionaryPage> {
         title: Text('Dictionary'),
       ),
       drawer: NavDraver(title: 'dictionary'),
-      // floatingActionButton: EditorStore.language == null
-      //     ? null
-      //     : FloatingActionButton(
-      //         onPressed: () => Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //             builder: (_) => EntryEditor(),
-      //           ),
-      //         ),
-      //         child: Icon(
-      //           Icons.add_outlined,
-      //         ),
-      //         tooltip: 'Add new entry',
-      //       ),
+      floatingActionButton: EditorStore.language == null
+          ? null
+          : FloatingActionButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EntryPage(
+                    Entry(forms: [], uses: []),
+                    EntryHit(
+                      entryID: '',
+                      headword: '',
+                      language: EditorStore.language!,
+                      term: '',
+                    ),
+                  ),
+                ),
+              ),
+              child: Icon(
+                Icons.add_outlined,
+              ),
+              tooltip: 'Add new entry',
+            ),
       backgroundColor: Colors.blueGrey.shade50,
       body: Column(
         children: [
