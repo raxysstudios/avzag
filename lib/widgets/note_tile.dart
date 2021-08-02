@@ -15,6 +15,7 @@ class NoteTile extends StatelessWidget {
   Widget build(BuildContext context) {
     if (note == null && onEdited == null) return Offstage();
     return ListTile(
+      minVerticalPadding: 12,
       leading: Icon(Icons.info_outline),
       title: note?.isEmpty ?? true
           ? Text(

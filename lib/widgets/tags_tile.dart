@@ -15,6 +15,7 @@ class TagsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     if (tags == null && onEdited == null) return Offstage();
     return ListTile(
+      minVerticalPadding: 12,
       leading: Icon(Icons.tag_outlined),
       title: (tags?.isEmpty ?? true)
           ? Text(

@@ -127,6 +127,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
 
   ListTile buildTile(BuildContext context, int index) {
     return ListTile(
+      minVerticalPadding: 8,
       leading: Icon(
         widget.icon,
         color: index == 0 ? null : Colors.transparent,
@@ -172,6 +173,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
     if (widget.samples == null && widget.onEdited == null) return Offstage();
     if (widget.onEdited == null)
       return ListTile(
+        minVerticalPadding: 12,
         onTap: () => setState(() {
           advanced = !advanced;
         }),

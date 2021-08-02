@@ -15,6 +15,7 @@ class ConceptTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      minVerticalPadding: 12,
       leading: Icon(Icons.lightbulb_outline),
       title: Text(
         capitalize(use.term),
