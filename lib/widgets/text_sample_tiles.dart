@@ -35,6 +35,7 @@ class TextSample {
 class TextSampleTiles extends StatefulWidget {
   final List<TextSample>? samples;
   final ValueSetter<List<TextSample>?>? onEdited;
+  final String name;
   final IconData? icon;
   final bool translation;
   final bool noEmpty;
@@ -45,6 +46,7 @@ class TextSampleTiles extends StatefulWidget {
     this.icon,
     this.translation = false,
     this.noEmpty = false,
+    this.name = 'sample',
   });
 
   @override
@@ -86,8 +88,8 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
   void showEditor(BuildContext context, int index) {
     final samples = widget.samples ?? [];
     final result = index < samples.length
-        ? TextSample('')
-        : TextSample.fromJson(samples[index].toJson());
+        ? TextSample.fromJson(samples[index].toJson())
+        : TextSample('');
     showEditorDialog(
       context,
       result: () {
@@ -98,7 +100,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
         return samples;
       },
       callback: widget.onEdited!,
-      title: 'Edit sample',
+      title: 'Edit ${widget.name}',
       children: [
         TextFormField(
           autofocus: true,
@@ -144,7 +146,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
       ),
       title: widget.samples?.isEmpty ?? true
           ? Text(
-              'Tap to add samples',
+              'Tap to add ${widget.name}s',
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 color: Colors.black54,

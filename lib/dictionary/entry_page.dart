@@ -136,7 +136,7 @@ class _EntryPageState extends State<EntryPage> {
                       tooltip: 'Submit changes',
                     )
                   : FloatingActionButton(
-                      onPressed: startEditing,
+                      onPressed: () => setState(() => startEditing()),
                       child: Icon(Icons.edit_outlined),
                       tooltip: 'Edit entry',
                     ),
@@ -154,6 +154,7 @@ class _EntryPageState extends State<EntryPage> {
                         : null,
                     icon: Icons.format_list_bulleted_outlined,
                     noEmpty: true,
+                    name: 'form',
                   ),
                   TagsTile(
                     entry.tags,
