@@ -32,6 +32,9 @@ class NoteTile extends StatelessWidget {
                 p: TextStyle(
                   fontSize: 16,
                 ),
+                strong: TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
       onTap: onEdited == null
