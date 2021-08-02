@@ -165,7 +165,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
                     widget.samples?.length ?? 0,
                   ),
                   icon: Icon(Icons.add_outlined),
-                  tooltip: 'Add sample',
+                  tooltip: 'Add ${widget.name}',
                 )
               : widget.samples!.length == 1 && widget.noEmpty
                   ? null
@@ -175,7 +175,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
                         widget.onEdited!(widget.samples);
                       },
                       icon: Icon(Icons.remove_outlined),
-                      tooltip: 'Remove sample',
+                      tooltip: 'Remove ${widget.name}',
                     ),
     );
   }
