@@ -154,7 +154,7 @@ class _EntryPageState extends State<EntryPage> {
               for (final use in entry.uses)
                 SegmentCard(
                   [
-                    ConceptTile(
+                    MeaningTile(
                       use,
                       onEdited: editing
                           ? (result) => setState(() {

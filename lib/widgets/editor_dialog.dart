@@ -5,6 +5,7 @@ void showEditorDialog<T>(
   BuildContext context, {
   required ValueGetter<T?> result,
   required ValueSetter<T?> callback,
+  ValueGetter<bool>? validator,
   required String title,
   required Widget content,
 }) =>
@@ -44,8 +45,10 @@ void showEditorDialog<T>(
                 ),
                 TextButton.icon(
                   onPressed: () {
-                    Navigator.pop(context);
-                    callback(result());
+                    if (validator?.call() ?? true) {
+                      Navigator.pop(context);
+                      callback(result());
+                    }
                   },
                   icon: Icon(Icons.done),
                   label: Text('Save'),
