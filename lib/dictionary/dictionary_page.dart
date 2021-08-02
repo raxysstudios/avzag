@@ -29,7 +29,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
           )
           .get()
           .then((snapshot) => Future.value(snapshot.data())),
-      (result) => Navigator.push(
+      callback: (result) => Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => EntryPage(result, hit),

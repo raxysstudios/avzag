@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 
 void showLoadingDialog<T>(
   BuildContext context,
-  Future<T?> future,
-  ValueSetter<T> callback, {
-  dismissible = true,
+  Future<T?> future, {
+  ValueSetter<T>? callback,
 }) {
   var dismissed = false;
   showDialog(
     context: context,
-    barrierDismissible: dismissible,
+    barrierDismissible: callback != null,
     builder: (context) {
       return Center(
         child: Card(
@@ -31,7 +30,7 @@ void showLoadingDialog<T>(
   future.then((result) {
     if (!dismissed) {
       Navigator.pop(context);
-      if (result != null) callback(result);
+      if (result != null) callback?.call(result);
     }
   });
 }

@@ -46,13 +46,12 @@ class _EntryPageState extends State<EntryPage> {
     final collection = FirebaseFirestore.instance
         .collection('languages/${EditorStore.language}/dictionary');
     final json = entry.toJson();
+    final upload = widget.hit.entryID.isEmpty
+        ? collection.add(json)
+        : collection.doc(widget.hit.entryID).update(json);
     showLoadingDialog(
       context,
-      widget.hit.entryID.isEmpty
-          ? collection.add(json)
-          : collection.doc(widget.hit.entryID).update(json),
-      (_) => Navigator.pop(context),
-      dismissible: false,
+      upload.then((_) => Navigator.pop(context)),
     );
   }
 
@@ -132,7 +131,7 @@ class _EntryPageState extends State<EntryPage> {
                                 ),
                               )
                           : submit,
-                      child: Icon(Icons.cloud_upload_outlined),
+                      child: Icon(Icons.publish_outlined),
                       tooltip: 'Submit changes',
                     )
                   : FloatingActionButton(
