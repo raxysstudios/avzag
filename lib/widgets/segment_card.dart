@@ -5,8 +5,8 @@ class SegmentCard extends StatelessWidget {
   final double marginTop;
 
   const SegmentCard(
-    this.children, {
-    this.marginTop = 16,
+    {required this.children,
+    this.marginTop = 16, 
   });
 
   @override

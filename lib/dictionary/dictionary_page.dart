@@ -82,7 +82,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 children: [
                   for (final hits in search!.entries)
                     SegmentCard(
-                      [
+                      children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,

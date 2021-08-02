@@ -143,7 +143,7 @@ class _EntryPageState extends State<EntryPage> {
             padding: const EdgeInsets.only(bottom: 64),
             children: [
               SegmentCard(
-                [
+                children: [
                   TextSampleTiles(
                     samples: entry.forms,
                     onEdited: editing
@@ -175,7 +175,7 @@ class _EntryPageState extends State<EntryPage> {
               ),
               for (final use in entry.uses)
                 SegmentCard(
-                  [
+                  children: [
                     MeaningTile(
                       use,
                       onEdited: editing
