@@ -128,7 +128,6 @@ class SearchControllerState extends State<SearchController> {
             ],
           ),
         ),
-        Divider(height: 0),
         LinearProgressIndicator(
           value: searching ? null : 0,
           backgroundColor: Colors.transparent,

@@ -4,6 +4,7 @@ import 'package:avzag/store.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/home/store.dart';
+import 'package:avzag/widgets/segment_card.dart';
 import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/widgets/note_tile.dart';
@@ -118,82 +119,74 @@ class _EntryPageState extends State<EntryPage> {
                       tooltip: 'Edit entry',
                     ),
           body: ListView(
-            padding: const EdgeInsets.only(top: 16, bottom: 64),
+            padding: const EdgeInsets.only(bottom: 64),
             children: [
-              Card(
-                margin: EdgeInsets.zero,
-                shape: RoundedRectangleBorder(),
-                child: Column(
-                  children: [
-                    TextSampleTiles(
-                      samples: entry.forms,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                entry.forms = result!;
-                              })
-                          : null,
-                      icon: Icons.format_list_bulleted_outlined,
-                      noEmpty: true,
-                    ),
-                    TagsTile(
-                      entry.tags,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                entry.tags = result;
-                              })
-                          : null,
-                    ),
-                    NoteTile(
-                      entry.note,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                entry.note = result;
-                              })
-                          : null,
-                    ),
-                  ],
-                ),
+              SegmentCard(
+                [
+                  TextSampleTiles(
+                    samples: entry.forms,
+                    onEdited: editing
+                        ? (result) => setState(() {
+                              entry.forms = result!;
+                            })
+                        : null,
+                    icon: Icons.format_list_bulleted_outlined,
+                    noEmpty: true,
+                  ),
+                  TagsTile(
+                    entry.tags,
+                    onEdited: editing
+                        ? (result) => setState(() {
+                              entry.tags = result;
+                            })
+                        : null,
+                  ),
+                  NoteTile(
+                    entry.note,
+                    onEdited: editing
+                        ? (result) => setState(() {
+                              entry.note = result;
+                            })
+                        : null,
+                  ),
+                ],
               ),
               for (final use in entry.uses)
-                Card(
-                  margin: const EdgeInsets.only(top: 16),
-                  shape: RoundedRectangleBorder(),
-                  child: Column(
-                    children: [
-                      ConceptTile(
-                        use,
-                        onEdited: editing
-                            ? (result) => setState(() {
-                                  if (result == null)
-                                    entry.uses.remove(use);
-                                  else {
-                                    use.term = result[0]!;
-                                    use.definition = result[1];
-                                  }
-                                })
-                            : null,
-                      ),
-                      TagsTile(
-                        use.tags,
-                        onEdited: editing
-                            ? (result) => setState(() {
-                                  use.tags = result;
-                                })
-                            : null,
-                      ),
-                      NoteTile(use.note),
-                      TextSampleTiles(
-                        samples: use.samples,
-                        onEdited: editing
-                            ? (result) => setState(() {
-                                  use.samples = result;
-                                })
-                            : null,
-                        icon: Icons.bookmark_outline,
-                        translation: true,
-                      ),
-                    ],
-                  ),
+                SegmentCard(
+                  [
+                    ConceptTile(
+                      use,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                if (result == null)
+                                  entry.uses.remove(use);
+                                else {
+                                  use.term = result[0]!;
+                                  use.definition = result[1];
+                                }
+                              })
+                          : null,
+                    ),
+                    TagsTile(
+                      use.tags,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                use.tags = result;
+                              })
+                          : null,
+                    ),
+                    NoteTile(use.note),
+                    TextSampleTiles(
+                      samples: use.samples,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                use.samples = result;
+                              })
+                          : null,
+                      icon: Icons.bookmark_outline,
+                      translation: true,
+                    ),
+                  ],
                 ),
               if (editing)
                 Padding(

@@ -1,4 +1,5 @@
 import 'package:avzag/widgets/loading_dialog.dart';
+import 'package:avzag/widgets/segment_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'entry.dart';
 import 'entry_page.dart';
@@ -57,58 +58,61 @@ class _DictionaryPageState extends State<DictionaryPage> {
       //         ),
       //         tooltip: 'Add new entry',
       //       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            SearchController(
-              (s) => setState(() {
-                search = s;
-              }),
-            ),
-            if (search != null)
-              Expanded(
-                child: ListView(
-                  children: [
-                    for (final es in search!.entries) ...[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        child: Text(
-                          capitalize(es.key),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+      backgroundColor: Colors.blueGrey.shade50,
+      body: Column(
+        children: [
+          SearchController(
+            (s) => setState(() {
+              search = s;
+            }),
+          ),
+          if (search != null)
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.only(bottom: 64),
+                children: [
+                  for (final hits in search!.entries)
+                    SegmentCard(
+                      [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
                           ),
-                        ),
-                      ),
-                      for (final e in es.value)
-                        ListTile(
-                          title: Text(
-                            capitalize(e.headword),
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          subtitle:
-                              e.definition == null ? null : Text(e.definition!),
-                          trailing: Text(
-                            capitalize(e.language),
+                          child: Text(
+                            capitalize(hits.key),
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 14,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                          onTap: () => openEntry(e),
                         ),
-                      Divider(height: 0),
-                    ],
-                  ],
-                ),
+                        for (final hit in hits.value)
+                          ListTile(
+                            title: Text(
+                              capitalize(hit.headword),
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            subtitle: hit.definition == null
+                                ? null
+                                : Text(hit.definition!),
+                            trailing: Text(
+                              capitalize(hit.language),
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 14,
+                              ),
+                            ),
+                            onTap: () => openEntry(hit),
+                          ),
+                      ],
+                    )
+                ],
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
