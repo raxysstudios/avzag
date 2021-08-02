@@ -42,6 +42,7 @@ class TagsTile extends StatelessWidget {
       title: 'Edit tags',
       children: [
         TextFormField(
+          autofocus: true,
           initialValue: tags?.join(' '),
           onChanged: (value) {
             result = value.trim();

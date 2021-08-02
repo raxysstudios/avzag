@@ -50,6 +50,7 @@ class NoteTile extends StatelessWidget {
       title: 'Edit note',
       children: [
         TextFormField(
+          autofocus: true,
           initialValue: note,
           maxLines: null,
           onChanged: (value) {

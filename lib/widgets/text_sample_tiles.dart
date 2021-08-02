@@ -85,18 +85,23 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
 
   void showEditor(BuildContext context, int index) {
     final samples = widget.samples ?? [];
-    if (index == samples.length) samples.add(TextSample(''));
-    final result = TextSample.fromJson(samples[index].toJson());
+    final result = index < samples.length
+        ? TextSample('')
+        : TextSample.fromJson(samples[index].toJson());
     showEditorDialog(
       context,
       result: () {
-        samples[index] = result;
+        if (index < samples.length)
+          samples[index] = result;
+        else
+          samples.add(result);
         return samples;
       },
       callback: widget.onEdited!,
       title: 'Edit sample',
       children: [
         TextFormField(
+          autofocus: true,
           initialValue: result.plain,
           onChanged: (value) => result.plain = value.trim(),
           decoration: InputDecoration(
