@@ -25,10 +25,13 @@ class TagsTile extends StatelessWidget {
                 color: Colors.black54,
               ),
             )
-          : SelectableText(
-              prettyTags(tags)!,
-              style: TextStyle(color: Colors.black54),
-            ),
+          : Builder(builder: (context) {
+              const style = const TextStyle(color: Colors.black54);
+              final data = prettyTags(tags)!;
+              return onEdited == null
+                  ? SelectableText(data, style: style)
+                  : Text(data, style: style);
+            }),
       onTap: onEdited == null ? null : () => showEditor(context),
     );
   }

@@ -196,7 +196,14 @@ class _EntryPageState extends State<EntryPage> {
                               })
                           : null,
                     ),
-                    NoteTile(use.note),
+                    NoteTile(
+                      use.note,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                use.note = result;
+                              })
+                          : null,
+                    ),
                     TextSampleTiles(
                       samples: use.samples,
                       onEdited: editing
