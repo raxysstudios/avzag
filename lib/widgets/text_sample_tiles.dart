@@ -85,43 +85,48 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
 
   void showEditor(BuildContext context, int index) {
     final samples = widget.samples ?? [];
-    if (index == samples.length) samples.add(TextSample('sample'));
-
-    final result = samples;
-    final sample = samples[index];
-    final inputs = [
-      [sample.plain, (text) => sample.plain = text, 'Plain text'],
-      [sample.ipa, (text) => sample.ipa = text, 'IPA (glossed)'],
-      [sample.glossed, (text) => sample.glossed = text, 'Leipzig-glossed'],
-      if (widget.translation)
-        [
-          sample.translation,
-          (text) => sample.translation = text,
-          'Translation'
-        ],
-    ];
-
+    if (index == samples.length) samples.add(TextSample(''));
+    final result = TextSample.fromJson(samples[index].toJson());
     showEditorDialog(
       context,
-      result: () => result,
+      result: () {
+        samples[index] = result;
+        return samples;
+      },
       callback: widget.onEdited!,
       title: 'Edit sample',
-      content: SingleChildScrollView(
-        child: Column(
-          children: [
-            for (final input in inputs)
-              TextFormField(
-                initialValue: input[0] as String?,
-                onChanged: (text) => (input[1] as ValueSetter<String>)(
-                  text.trim(),
-                ),
-                decoration: InputDecoration(
-                  labelText: input[2] as String,
-                ),
-              ),
-          ],
+      children: [
+        TextFormField(
+          initialValue: result.plain,
+          onChanged: (value) => result.plain = value.trim(),
+          decoration: InputDecoration(
+            labelText: 'Plain text',
+          ),
+          validator: emptyValidator,
         ),
-      ),
+        TextFormField(
+          initialValue: result.ipa,
+          onChanged: (value) => result.ipa = value.trim(),
+          decoration: InputDecoration(
+            labelText: 'IPA (glossed)',
+          ),
+        ),
+        TextFormField(
+          initialValue: result.glossed,
+          onChanged: (value) => result.glossed = value.trim(),
+          decoration: InputDecoration(
+            labelText: 'Leipzig-glossed',
+          ),
+        ),
+        if (widget.translation)
+          TextFormField(
+            initialValue: result.translation,
+            onChanged: (value) => result.translation = value.trim(),
+            decoration: InputDecoration(
+              labelText: 'Translation',
+            ),
+          ),
+      ],
     );
   }
 

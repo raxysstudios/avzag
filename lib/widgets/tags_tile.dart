@@ -29,27 +29,29 @@ class TagsTile extends StatelessWidget {
               prettyTags(tags)!,
               style: TextStyle(color: Colors.black54),
             ),
-      onTap: onEdited == null
-          ? null
-          : () {
-              var result = tags;
-              showEditorDialog(
-                context,
-                result: () => result,
-                callback: onEdited!,
-                title: 'Edit tags',
-                content: TextFormField(
-                  initialValue: tags?.join(' '),
-                  onChanged: (value) {
-                    value = value.trim();
-                    result = value.isEmpty ? null : value.split(' ');
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Space-separated tags',
-                  ),
-                ),
-              );
-            },
+      onTap: onEdited == null ? null : () => showEditor(context),
+    );
+  }
+
+  void showEditor(BuildContext context) {
+    var result = tags?.join(' ');
+    showEditorDialog(
+      context,
+      result: () => result!.split(' ').where((e) => e.isNotEmpty).toList(),
+      callback: onEdited!,
+      title: 'Edit tags',
+      children: [
+        TextFormField(
+          initialValue: tags?.join(' '),
+          onChanged: (value) {
+            result = value.trim();
+          },
+          decoration: InputDecoration(
+            labelText: 'Space-separated tags',
+          ),
+          validator: emptyValidator,
+        ),
+      ],
     );
   }
 }

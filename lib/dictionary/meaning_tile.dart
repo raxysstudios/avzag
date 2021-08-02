@@ -49,48 +49,35 @@ class MeaningTile extends StatelessWidget {
     Use? use,
     required ValueSetter<Use?> callback,
   }) {
-    final form = GlobalKey<FormState>();
-    final value = use == null ? Use(term: '') : Use.fromJson(use.toJson());
+    final result = use == null ? Use(term: '') : Use.fromJson(use.toJson());
     showEditorDialog(
       context,
-      result: () => value,
+      result: () => result,
       callback: callback,
-      validator: () => form.currentState?.validate() ?? false,
       title: 'Edit entry concept',
-      content: SingleChildScrollView(
-        child: Form(
-          key: form,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          child: Column(
-            children: [
-              TextFormField(
-                autofocus: true,
-                initialValue: value.term,
-                onChanged: (text) {
-                  value.term = text.trim();
-                },
-                decoration: InputDecoration(
-                  labelText: 'General term',
-                ),
-                validator: (value) {
-                  value = value?.trim() ?? '';
-                  if (value.isEmpty) return 'Cannot be empty';
-                },
-              ),
-              SizedBox(height: 8),
-              TextFormField(
-                initialValue: value.definition,
-                onChanged: (text) {
-                  value.definition = text.trim();
-                },
-                decoration: InputDecoration(
-                  labelText: 'Specific definition',
-                ),
-              ),
-            ],
+      children: [
+        TextFormField(
+          autofocus: true,
+          initialValue: result.term,
+          onChanged: (text) {
+            result.term = text.trim();
+          },
+          decoration: InputDecoration(
+            labelText: 'General term',
+          ),
+          validator: emptyValidator,
+        ),
+        SizedBox(height: 8),
+        TextFormField(
+          initialValue: result.definition,
+          onChanged: (text) {
+            result.definition = text.trim();
+          },
+          decoration: InputDecoration(
+            labelText: 'Specific definition',
           ),
         ),
-      ),
+      ],
     );
   }
 }

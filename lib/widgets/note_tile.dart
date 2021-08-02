@@ -37,27 +37,30 @@ class NoteTile extends StatelessWidget {
                 ),
               ),
             ),
-      onTap: onEdited == null
-          ? null
-          : () {
-              var result = note;
-              showEditorDialog(
-                context,
-                result: () => result,
-                callback: onEdited!,
-                title: 'Edit note',
-                content: TextFormField(
-                  initialValue: note,
-                  maxLines: null,
-                  onChanged: (value) {
-                    result = value.trim();
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Note (markdown supported)',
-                  ),
-                ),
-              );
-            },
+      onTap: onEdited == null ? null : () => showEditor(context),
+    );
+  }
+
+  void showEditor(BuildContext context) {
+    var result = note;
+    showEditorDialog(
+      context,
+      result: () => result,
+      callback: onEdited!,
+      title: 'Edit note',
+      children: [
+        TextFormField(
+          initialValue: note,
+          maxLines: null,
+          onChanged: (value) {
+            result = value.trim();
+          },
+          decoration: InputDecoration(
+            labelText: 'Note (markdown supported)',
+          ),
+          validator: emptyValidator,
+        ),
+      ],
     );
   }
 }
