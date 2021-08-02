@@ -146,7 +146,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
       ),
       title: widget.samples?.isEmpty ?? true
           ? Text(
-              'Tap to add ${widget.name}s',
+              'Tap to add ${widget.name}',
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 color: Colors.black54,
