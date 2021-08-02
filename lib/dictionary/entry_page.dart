@@ -11,6 +11,7 @@ import 'package:avzag/widgets/note_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'entry.dart';
+import 'use.dart';
 
 class EntryPage extends StatefulWidget {
   final Entry? entry;
@@ -157,13 +158,11 @@ class _EntryPageState extends State<EntryPage> {
                     MeaningTile(
                       use,
                       onEdited: editing
-                          ? (result) => setState(() {
-                                if (result == null)
+                          ? (value) => setState(() {
+                                if (value == null)
                                   entry.uses.remove(use);
-                                else {
-                                  use.term = result[0]!;
-                                  use.definition = result[1];
-                                }
+                                else
+                                  entry.uses.add(value);
                               })
                           : null,
                     ),
@@ -192,7 +191,15 @@ class _EntryPageState extends State<EntryPage> {
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: TextButton.icon(
-                    onPressed: () {},
+                    onPressed: () => MeaningTile.showEditor(
+                      context: context,
+                      callback: (value) {
+                        if (value != null)
+                          setState(() {
+                            entry.uses.add(value);
+                          });
+                      },
+                    ),
                     icon: Icon(Icons.add_outlined),
                     label: Text('Add use'),
                   ),

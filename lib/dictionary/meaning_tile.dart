@@ -5,7 +5,7 @@ import 'package:avzag/widgets/editor_dialog.dart';
 
 class MeaningTile extends StatelessWidget {
   final Use use;
-  final ValueSetter<List<String?>?>? onEdited;
+  final ValueSetter<Use?>? onEdited;
 
   const MeaningTile(
     this.use, {
@@ -34,20 +34,27 @@ class MeaningTile extends StatelessWidget {
                 fontWeight: FontWeight.normal,
               ),
             ),
-      onTap: onEdited == null ? null : () => showEditor(context),
+      onTap: onEdited == null
+          ? null
+          : () => showEditor(
+                context: context,
+                use: use,
+                callback: onEdited!,
+              ),
     );
   }
 
-  void showEditor(BuildContext context) {
+  static void showEditor({
+    required BuildContext context,
+    Use? use,
+    required ValueSetter<Use?> callback,
+  }) {
     final form = GlobalKey<FormState>();
-    final result = [
-      use.term,
-      use.definition,
-    ];
+    final value = use == null ? Use(term: '') : Use.fromJson(use.toJson());
     showEditorDialog(
       context,
-      result: () => result,
-      callback: onEdited!,
+      result: () => value,
+      callback: callback,
       validator: () => form.currentState?.validate() ?? false,
       title: 'Edit entry concept',
       content: SingleChildScrollView(
@@ -58,9 +65,9 @@ class MeaningTile extends StatelessWidget {
             children: [
               TextFormField(
                 autofocus: true,
-                initialValue: use.term,
+                initialValue: value.term,
                 onChanged: (text) {
-                  result[0] = text.trim();
+                  value.term = text.trim();
                 },
                 decoration: InputDecoration(
                   labelText: 'General term',
@@ -72,9 +79,9 @@ class MeaningTile extends StatelessWidget {
               ),
               SizedBox(height: 8),
               TextFormField(
-                initialValue: use.definition,
+                initialValue: value.definition,
                 onChanged: (text) {
-                  result[1] = text.trim();
+                  value.definition = text.trim();
                 },
                 decoration: InputDecoration(
                   labelText: 'Specific definition',
