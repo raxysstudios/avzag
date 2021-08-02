@@ -37,14 +37,14 @@ class ConceptTile extends StatelessWidget {
       onTap: onEdited == null
           ? null
           : () {
-              final result = EditorDialogResult([
+              final result = [
                 use.term,
                 use.definition,
-              ]);
+              ];
               showEditorDialog(
                 context,
-                result: result,
-                setter: onEdited!,
+                result: () => result,
+                callback: onEdited!,
                 title: 'Edit entry concept',
                 content: SingleChildScrollView(
                   child: Column(
@@ -52,7 +52,7 @@ class ConceptTile extends StatelessWidget {
                       TextFormField(
                         initialValue: use.term,
                         onChanged: (text) {
-                          result.value![0] = text.trim();
+                          result[0] = text.trim();
                         },
                         decoration: InputDecoration(
                           labelText: 'General term',
@@ -62,7 +62,7 @@ class ConceptTile extends StatelessWidget {
                       TextFormField(
                         initialValue: use.definition,
                         onChanged: (text) {
-                          result.value![1] = text.trim();
+                          result[1] = text.trim();
                         },
                         decoration: InputDecoration(
                           labelText: 'Specific definition',

@@ -87,7 +87,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
     final samples = widget.samples ?? [];
     if (index == samples.length) samples.add(TextSample('sample'));
 
-    final result = EditorDialogResult(samples);
+    final result = samples;
     final sample = samples[index];
     final inputs = [
       [sample.plain, (text) => sample.plain = text, 'Plain text'],
@@ -103,8 +103,8 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
 
     showEditorDialog(
       context,
-      result: result,
-      setter: widget.onEdited!,
+      result: () => result,
+      callback: widget.onEdited!,
       title: 'Edit sample',
       content: SingleChildScrollView(
         child: Column(

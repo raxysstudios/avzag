@@ -32,17 +32,17 @@ class TagsTile extends StatelessWidget {
       onTap: onEdited == null
           ? null
           : () {
-              final result = EditorDialogResult(tags);
+              var result = tags;
               showEditorDialog(
                 context,
-                result: result,
-                setter: onEdited!,
+                result: () => result,
+                callback: onEdited!,
                 title: 'Edit tags',
                 content: TextFormField(
                   initialValue: tags?.join(' '),
                   onChanged: (value) {
                     value = value.trim();
-                    result.value = value.isEmpty ? null : value.split(' ');
+                    result = value.isEmpty ? null : value.split(' ');
                   },
                   decoration: InputDecoration(
                     labelText: 'Space-separated tags',

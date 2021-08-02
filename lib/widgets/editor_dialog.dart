@@ -1,15 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class EditorDialogResult<T> {
-  T? value;
-  EditorDialogResult(this.value);
-}
-
 void showEditorDialog<T>(
   BuildContext context, {
-  required EditorDialogResult<T> result,
-  required ValueSetter<T?> setter,
+  required ValueGetter<T?> result,
+  required ValueSetter<T?> callback,
   required String title,
   required Widget content,
 }) =>
@@ -26,7 +21,7 @@ void showEditorDialog<T>(
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    setter(null);
+                    callback(null);
                   },
                   icon: Icon(
                     Icons.delete_outline,
@@ -50,7 +45,7 @@ void showEditorDialog<T>(
                 TextButton.icon(
                   onPressed: () {
                     Navigator.pop(context);
-                    setter(result.value);
+                    callback(result());
                   },
                   icon: Icon(Icons.done),
                   label: Text('Save'),

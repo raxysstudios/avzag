@@ -40,17 +40,17 @@ class NoteTile extends StatelessWidget {
       onTap: onEdited == null
           ? null
           : () {
-              final result = EditorDialogResult(note);
+              var result = note;
               showEditorDialog(
                 context,
-                result: result,
-                setter: onEdited!,
+                result: () => result,
+                callback: onEdited!,
                 title: 'Edit note',
                 content: TextFormField(
                   initialValue: note,
                   maxLines: null,
                   onChanged: (value) {
-                    result.value = value.trim();
+                    result = value.trim();
                   },
                   decoration: InputDecoration(
                     labelText: 'Note (markdown supported)',
