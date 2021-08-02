@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 void showLoadingDialog<T>(
   BuildContext context,
-  Future<T> future,
-  ValueSetter<T?> callback,
+  Future<T?> future,
+  ValueSetter<T> callback,
 ) {
-  var cancelled = false;
+  var dismissed = false;
   showDialog(
     context: context,
     builder: (context) {
@@ -25,11 +25,11 @@ void showLoadingDialog<T>(
         ),
       );
     },
-  ).then((_) => cancelled = true);
+  ).then((_) => dismissed = true);
   future.then((result) {
-    if (!cancelled) {
+    if (!dismissed) {
       Navigator.pop(context);
-      callback(result);
+      if (result != null) callback(result);
     }
   });
 }
