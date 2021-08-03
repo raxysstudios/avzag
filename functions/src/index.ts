@@ -9,15 +9,15 @@ const index = algoliasearch(
 )
     .initIndex("dictionary");
 
-  type Record = {
-    entryID: string;
-    language: string;
-    headword: string,
-    forms: string[]
-    term: string;
-    definition: string | undefined;
-    tags: string[] | undefined;
-  };
+type Record = {
+  entryID: string;
+  language: string;
+  headword: string,
+  forms: string[]
+  term: string;
+  definition: string | undefined;
+  tags: string[] | undefined;
+};
 
 export const indexDictionary = functions
     .region("europe-central2")
