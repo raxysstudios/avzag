@@ -51,7 +51,7 @@ class TagsTile extends StatelessWidget {
             result = value.trim();
           },
           decoration: InputDecoration(
-            labelText: 'Space-separated tags',
+            labelText: 'Space-separated, without the #-character',
           ),
           validator: emptyValidator,
         ),
