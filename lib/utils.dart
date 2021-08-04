@@ -9,9 +9,11 @@ String capitalize(String value) => value
 String? prettyTags(
   Iterable<String>? tags, {
   separator = ' • ',
+  capitalized = true,
 }) {
   if (tags == null) return null;
-  return capitalize(tags.join(separator));
+  final text = tags.join(separator);
+  return capitalized ? capitalize(text) : text;
 }
 
 List<String>? json2list(Object? array) {

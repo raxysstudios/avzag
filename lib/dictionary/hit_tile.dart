@@ -56,6 +56,7 @@ class HitTile extends StatelessWidget {
             style: TextStyle(
               color: Colors.black54,
               fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -103,6 +104,7 @@ class HitTile extends StatelessWidget {
                 text: prettyTags(
                   hit.tags!,
                   separator: ' ',
+                  capitalized: false,
                 )!,
               ),
             ]
