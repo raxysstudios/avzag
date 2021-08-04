@@ -31,7 +31,7 @@ class EntryHit {
 
 class HitTile extends StatelessWidget {
   final EntryHit hit;
-  final void Function()? onTap;
+  final VoidCallback? onTap;
 
   const HitTile(
     this.hit, {

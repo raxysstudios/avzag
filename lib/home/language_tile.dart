@@ -7,7 +7,7 @@ class LanguageTile extends StatelessWidget {
   final Language language;
   final bool selected;
   final bool dense;
-  final void Function()? onTap;
+  final VoidCallback? onTap;
 
   const LanguageTile(
     this.language, {
