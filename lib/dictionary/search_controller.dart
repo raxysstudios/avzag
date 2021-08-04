@@ -69,9 +69,10 @@ class SearchControllerState extends State<SearchController> {
         .index(language.isEmpty ? 'dictionary' : 'dictionary_headword')
         .query(text)
         .filters(
-          (language.isEmpty ? BaseStore.languages : [language])
-              .map((l) => 'language:$l')
-              .join(' OR '),
+          filterOr(
+            'language',
+            language.isEmpty ? BaseStore.languages : [language],
+          ),
         )
         .setRestrictSearchableAttributes([
       'term',
@@ -81,13 +82,19 @@ class SearchControllerState extends State<SearchController> {
     ]);
 
     final result = <String, List<EntryHit>>{};
-    final snap = await query.getObjects().then((snapshot) async {
-      if (language.isEmpty || BaseStore.languages.length == 1) return snapshot;
-      return await BaseStore.algolia.instance
-          .index('dictionary')
-          .filters(snapshot.hits.map((hit) => hit.data['term']).join(' OR '))
-          .getObjects();
-    });
+    final snap = await query.getObjects().then(
+          (snapshot) async => language.isEmpty
+              ? await BaseStore.algolia.instance
+                  .index('dictionary')
+                  .filters(
+                    filterOr(
+                      'term',
+                      snapshot.hits.map((hit) => hit.data['term']),
+                    ),
+                  )
+                  .getObjects()
+              : snapshot,
+        );
 
     for (final hit in snap.hits) {
       final entry = EntryHit.fromAlgoliaHitData(hit.data);
