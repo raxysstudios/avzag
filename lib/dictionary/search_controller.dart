@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:avzag/home/language_avatar.dart';
-import 'package:avzag/home/language_tile.dart';
 import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
@@ -134,14 +133,15 @@ class SearchControllerState extends State<SearchController> {
                   inputController.clear();
                 },
                 itemBuilder: (BuildContext context) {
+                  const density = const VisualDensity(
+                    vertical: VisualDensity.minimumDensity,
+                    horizontal: VisualDensity.minimumDensity,
+                  );
                   return [
                     PopupMenuItem(
                       value: 'English',
                       child: ListTile(
-                        visualDensity: const VisualDensity(
-                          vertical: -4,
-                          horizontal: -4,
-                        ),
+                        visualDensity: density,
                         leading: Icon(Icons.language_outlined),
                         title: Text('English'),
                         selected: language == null,
@@ -150,21 +150,25 @@ class SearchControllerState extends State<SearchController> {
                     PopupMenuItem(
                       value: '',
                       child: ListTile(
-                        visualDensity: const VisualDensity(
-                          vertical: -4,
-                          horizontal: -4,
-                        ),
+                        visualDensity: density,
                         leading: Icon(Icons.auto_awesome_outlined),
                         title: Text('Multilingual'),
                         selected: language?.isEmpty ?? false,
                       ),
                     ),
-                    PopupMenuDivider(height: 0),
+                    PopupMenuDivider(),
                     for (final l in BaseStore.languages)
                       PopupMenuItem(
                         value: l,
-                        child: LanguageTile(
-                          HomeStore.languages[l]!,
+                        child: ListTile(
+                          visualDensity: density,
+                          leading: LanguageAvatar(HomeStore.languages[l]!),
+                          title: Text(
+                            capitalize(HomeStore.languages[l]!.name),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                           selected: language == l,
                         ),
                       ),
