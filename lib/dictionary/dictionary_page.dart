@@ -70,6 +70,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
             pinned: true,
             snap: true,
             floating: true,
+            forceElevated: true,
             title: Text('Dictionary'),
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(64),
