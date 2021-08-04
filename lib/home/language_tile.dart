@@ -29,7 +29,7 @@ class LanguageTile extends StatelessWidget {
       title: Text(
         capitalize(language.name),
         style: TextStyle(
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
         ),
       ),
       selected: selected,
