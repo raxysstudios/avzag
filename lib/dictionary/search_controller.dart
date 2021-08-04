@@ -152,7 +152,7 @@ class SearchControllerState extends State<SearchController> {
                       child: ListTile(
                         visualDensity: density,
                         leading: Icon(Icons.auto_awesome_outlined),
-                        title: Text('Multilingual'),
+                        title: Text('Cross-lingual'),
                         selected: language?.isEmpty ?? false,
                       ),
                     ),
