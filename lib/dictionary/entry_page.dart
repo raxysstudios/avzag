@@ -152,7 +152,6 @@ class _EntryPageState extends State<EntryPage> {
                             })
                         : null,
                     icon: Icons.format_list_bulleted_outlined,
-                    noEmpty: true,
                     name: 'form',
                   ),
                   TagsTile(
