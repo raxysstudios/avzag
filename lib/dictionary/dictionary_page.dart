@@ -1,4 +1,3 @@
-import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/segment_card.dart';
@@ -6,10 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'entry.dart';
 import 'entry_page.dart';
 import 'search_controller.dart';
-import 'package:avzag/utils.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:flutter/material.dart';
-import 'entry_hit.dart';
+import 'hit_tile.dart';
 
 class DictionaryPage extends StatefulWidget {
   @override
@@ -95,28 +93,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
                         ? 16
                         : 0,
                     children: [
-                      ListTile(
-                        title: Text(
-                          capitalize(hit.headword),
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        subtitle: MeaningTile.buildRichText(
-                          hit.term,
-                          hit.definition,
-                          subtitle: true,
-                        ),
-                        trailing: hits.key.isEmpty
-                            ? Text(
-                                capitalize(hit.language),
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 14,
-                                ),
-                              )
-                            : null,
+                      HitTile(
+                        hit,
                         onTap: () => openEntry(hit),
                       ),
                     ],

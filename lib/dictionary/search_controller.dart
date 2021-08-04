@@ -5,7 +5,7 @@ import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
-import 'entry_hit.dart';
+import 'hit_tile.dart';
 
 class SearchController extends StatefulWidget {
   final ValueSetter<MapEntry<String, List<EntryHit>>> onSearch;

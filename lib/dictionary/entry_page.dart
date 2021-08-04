@@ -1,4 +1,3 @@
-import 'package:avzag/dictionary/entry_hit.dart';
 import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
@@ -11,6 +10,7 @@ import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/widgets/note_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'hit_tile.dart';
 import 'entry.dart';
 
 class EntryPage extends StatefulWidget {
