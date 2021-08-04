@@ -17,7 +17,7 @@ class DictionaryPage extends StatefulWidget {
 }
 
 class _DictionaryPageState extends State<DictionaryPage> {
-  EntryHitSearch search = {};
+  var hits = MapEntry('', <EntryHit>[]);
 
   void openEntry(EntryHit hit) {
     showLoadingDialog<Entry>(
@@ -77,44 +77,50 @@ class _DictionaryPageState extends State<DictionaryPage> {
               preferredSize: Size.fromHeight(64),
               child: SearchController(
                 (s) => setState(() {
-                  search = s;
+                  hits = s;
                 }),
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                for (final hits in search.entries)
-                  SegmentCard(
-                    marginTop: 0,
+          SliverPadding(
+            padding: const EdgeInsets.only(bottom: 64),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final hit = hits.value[index];
+                  return SegmentCard(
+                    marginTop: index == 0 ||
+                            (hits.key.isEmpty &&
+                                hits.value[index - 1].term != hit.term)
+                        ? 16
+                        : 0,
                     children: [
-                      for (final hit in hits.value)
-                        ListTile(
-                          title: Text(
-                            capitalize(hit.headword),
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          subtitle: MeaningTile.buildRichText(
-                            hit.term,
-                            hit.definition,
-                            subtitle: true,
-                          ),
-                          trailing: hits.key.isEmpty
-                              ? null
-                              : Text(
-                                  capitalize(hit.language),
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                          onTap: () => openEntry(hit),
+                      ListTile(
+                        title: Text(
+                          capitalize(hit.headword),
+                          style: TextStyle(fontSize: 16),
                         ),
+                        subtitle: MeaningTile.buildRichText(
+                          hit.term,
+                          hit.definition,
+                          subtitle: true,
+                        ),
+                        trailing: hits.key.isEmpty
+                            ? Text(
+                                capitalize(hit.language),
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 14,
+                                ),
+                              )
+                            : null,
+                        onTap: () => openEntry(hit),
+                      ),
                     ],
-                  ),
-                SizedBox(height: 64),
-              ],
+                  );
+                },
+                childCount: hits.value.length,
+              ),
             ),
           ),
         ],

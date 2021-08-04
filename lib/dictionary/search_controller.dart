@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'entry_hit.dart';
 
 class SearchController extends StatefulWidget {
-  final ValueSetter<EntryHitSearch> onSearch;
+  final ValueSetter<MapEntry<String, List<EntryHit>>> onSearch;
   const SearchController(this.onSearch);
 
   @override
@@ -56,14 +56,11 @@ class SearchControllerState extends State<SearchController> {
       values.map((v) => '$filter:$v').join(' OR ');
 
   void search() async {
-    if (text.isEmpty) {
-      widget.onSearch({});
-      return;
-    }
-    widget.onSearch({});
     setState(() {
-      searching = true;
+      searching = text.isNotEmpty;
     });
+    widget.onSearch(MapEntry(language, []));
+    if (!searching) return;
 
     var query = BaseStore.algolia.instance
         .index(language.isEmpty ? 'dictionary' : 'dictionary_headword')
@@ -81,7 +78,6 @@ class SearchControllerState extends State<SearchController> {
       if (text.contains('#')) 'tags',
     ]);
 
-    final result = <String, List<EntryHit>>{};
     final snap = await query.getObjects().then(
           (snapshot) async => language.isEmpty
               ? await BaseStore.algolia.instance
@@ -96,17 +92,15 @@ class SearchControllerState extends State<SearchController> {
               : snapshot,
         );
 
-    for (final hit in snap.hits) {
-      final entry = EntryHit.fromAlgoliaHitData(hit.data);
-      final key = language.isEmpty ? entry.term : '';
-      if (!result.containsKey(key)) result[key] = [];
-      result[key]!.add(entry);
-    }
-
-    widget.onSearch(result);
     setState(() {
       searching = false;
     });
+    widget.onSearch(
+      MapEntry(
+        language,
+        snap.hits.map((h) => EntryHit.fromAlgoliaHitData(h.data)).toList(),
+      ),
+    );
   }
 
   @override

@@ -22,5 +22,3 @@ class EntryHit {
           definition: json['definition'],
         );
 }
-
-typedef EntryHitSearch = Map<String, List<EntryHit>>;
