@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'package:avzag/home/language_avatar.dart';
+import 'package:avzag/home/language_tile.dart';
+import 'package:avzag/home/store.dart';
 import 'package:avzag/store.dart';
+import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 import 'entry_hit.dart';
 
@@ -15,10 +19,8 @@ class SearchControllerState extends State<SearchController> {
   final inputController = TextEditingController();
   Timer timer = Timer(Duration.zero, () {});
   String text = "";
-  final String filters =
-      BaseStore.languages.map((e) => 'language:$e').join(' OR ');
   bool searching = false;
-  bool extended = false;
+  String language = '';
 
   @override
   void initState() {
@@ -31,7 +33,7 @@ class SearchControllerState extends State<SearchController> {
       if (this.text != text) {
         timer.cancel();
         timer = Timer(
-          Duration(milliseconds: 200),
+          Duration(milliseconds: 300),
           search,
         );
         setState(() {
@@ -47,6 +49,12 @@ class SearchControllerState extends State<SearchController> {
     super.dispose();
   }
 
+  void clear() {
+    inputController.clear();
+    timer.cancel();
+    search();
+  }
+
   void search() async {
     if (text.isEmpty) {
       widget.onSearch({});
@@ -59,18 +67,28 @@ class SearchControllerState extends State<SearchController> {
     });
 
     var query = BaseStore.algolia.instance
-        .index('dictionary')
+        .index('dictionary' + (language.isEmpty ? '' : '_headword'))
         .query(text)
-        .filters(filters);
+        .filters(language.isEmpty
+            ? BaseStore.languages.map((e) => 'language:$e').join(' OR ')
+            : 'language:$language');
+
+    // TODO move restriction above
     if (!text.contains('#'))
       query = query.setRestrictSearchableAttributes([
         'term',
         'forms',
-        if (extended) 'definition',
+        'definition',
       ]);
 
     final result = <String, List<EntryHit>>{};
-    final snap = await query.getObjects();
+    final snap = await query.getObjects().then((snapshot) async {
+      if (language.isEmpty || BaseStore.languages.length == 1) return snapshot;
+      return await BaseStore.algolia.instance
+          .index('dictionary')
+          .filters(snapshot.hits.map((hit) => hit.data['term']).join(' OR '))
+          .getObjects();
+    });
 
     for (final hit in snap.hits) {
       final entry = EntryHit.fromAlgoliaHitData(hit.data);
@@ -88,42 +106,58 @@ class SearchControllerState extends State<SearchController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextField(
-          controller: inputController,
-          decoration: InputDecoration(
-            isDense: true,
-            border: InputBorder.none,
-            labelText: "Search by terms, forms, tags...",
-            prefixIcon: Icon(
-              Icons.search_outlined,
-              size: 24,
-            ),
-            suffixIcon: inputController.text.isEmpty
-                ? null
-                : IconButton(
-                    onPressed: () {
-                      inputController.clear();
-                      timer.cancel();
-                      search();
-                    },
-                    icon: Icon(Icons.clear),
-                  ),
-          ),
-        ),
-        SizedBox(
-          height: 32,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            // padding: const EdgeInsets.all(4),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
             children: [
-              FilterChip(
-                avatar: Icon(Icons.lightbulb_outline),
-                label: Text('Definitions'),
-                selected: extended,
-                onSelected: (value) {
-                  extended = value;
-                  search();
+              PopupMenuButton<String>(
+                icon: language.isEmpty
+                    ? Icon(Icons.auto_awesome_outlined)
+                    : LanguageAvatar(HomeStore.languages[language]!),
+                tooltip: 'Select search mode',
+                onSelected: (l) {
+                  language = l;
+                  clear();
                 },
+                itemBuilder: (BuildContext context) {
+                  return [
+                    PopupMenuItem(
+                      value: '',
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.auto_awesome_outlined,
+                        ),
+                        title: Text('Multilingual'),
+                        selected: language.isEmpty,
+                      ),
+                    ),
+                    for (final language in BaseStore.languages)
+                      PopupMenuItem(
+                        value: language,
+                        child: LanguageTile(
+                          HomeStore.languages[language]!,
+                          selected: language == language,
+                        ),
+                      ),
+                  ];
+                },
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 4),
+                  child: TextField(
+                    controller: inputController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText:
+                          'Search in by terms, forms, tags ${language.isEmpty ? "" : "in ${capitalize(language)}"}}...',
+                    ),
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: inputController.text.isEmpty ? null : clear,
+                icon: Icon(Icons.clear),
               ),
             ],
           ),

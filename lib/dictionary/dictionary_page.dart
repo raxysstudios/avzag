@@ -43,6 +43,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dictionary'),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(64),
+          child: SearchController(
+            (s) => setState(() {
+              search = s;
+            }),
+          ),
+        ),
       ),
       drawer: NavDraver(title: 'dictionary'),
       floatingActionButton: EditorStore.language == null
@@ -68,59 +76,46 @@ class _DictionaryPageState extends State<DictionaryPage> {
               tooltip: 'Add new entry',
             ),
       backgroundColor: Colors.blueGrey.shade50,
-      body: Column(
+      body: ListView(
+        padding: const EdgeInsets.only(bottom: 64),
         children: [
-          SearchController(
-            (s) => setState(() {
-              search = s;
-            }),
-          ),
-          if (search != null)
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.only(bottom: 64),
-                children: [
-                  for (final hits in search!.entries)
-                    SegmentCard(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          child: Text(
-                            capitalize(hits.key),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        for (final hit in hits.value)
-                          ListTile(
-                            title: Text(
-                              capitalize(hit.headword),
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            subtitle: hit.definition == null
-                                ? null
-                                : Text(hit.definition!),
-                            trailing: Text(
-                              capitalize(hit.language),
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 14,
-                              ),
-                            ),
-                            onTap: () => openEntry(hit),
-                          ),
-                      ],
-                    )
-                ],
-              ),
-            ),
+          for (final hits in search!.entries)
+            SegmentCard(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Text(
+                    capitalize(hits.key),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                for (final hit in hits.value)
+                  ListTile(
+                    title: Text(
+                      capitalize(hit.headword),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    subtitle:
+                        hit.definition == null ? null : Text(hit.definition!),
+                    trailing: Text(
+                      capitalize(hit.language),
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 14,
+                      ),
+                    ),
+                    onTap: () => openEntry(hit),
+                  ),
+              ],
+            )
         ],
       ),
     );
