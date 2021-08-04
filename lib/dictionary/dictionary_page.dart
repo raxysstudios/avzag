@@ -42,17 +42,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Dictionary'),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(64),
-          child: SearchController(
-            (s) => setState(() {
-              search = s;
-            }),
-          ),
-        ),
-      ),
       drawer: NavDraver(title: 'dictionary'),
       floatingActionButton: EditorStore.language == null
           ? null
@@ -77,52 +66,57 @@ class _DictionaryPageState extends State<DictionaryPage> {
               tooltip: 'Add new entry',
             ),
       backgroundColor: Colors.blueGrey.shade50,
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: 64),
-        children: [
-          for (final hits in search.entries)
-            SegmentCard(
-              children: [
-                if (hits.key.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: Text(
-                      capitalize(hits.key),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                for (final hit in hits.value)
-                  ListTile(
-                    title: Text(
-                      capitalize(hit.headword),
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    subtitle: MeaningTile.buildRichText(
-                      hit.term,
-                      hit.definition,
-                      subtitle: true,
-                    ),
-                    trailing: hits.key.isEmpty
-                        ? null
-                        : Text(
-                            capitalize(hit.language),
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 14,
-                            ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            snap: true,
+            floating: true,
+            title: Text('Dictionary'),
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(64),
+              child: SearchController(
+                (s) => setState(() {
+                  search = s;
+                }),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                for (final hits in search.entries)
+                  SegmentCard(
+                    marginTop: 0,
+                    children: [
+                      for (final hit in hits.value)
+                        ListTile(
+                          title: Text(
+                            capitalize(hit.headword),
+                            style: TextStyle(fontSize: 16),
                           ),
-                    onTap: () => openEntry(hit),
+                          subtitle: MeaningTile.buildRichText(
+                            hit.term,
+                            hit.definition,
+                            subtitle: true,
+                          ),
+                          trailing: hits.key.isEmpty
+                              ? null
+                              : Text(
+                                  capitalize(hit.language),
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                          onTap: () => openEntry(hit),
+                        ),
+                    ],
                   ),
+                SizedBox(height: 64),
               ],
-            )
+            ),
+          ),
         ],
       ),
     );
