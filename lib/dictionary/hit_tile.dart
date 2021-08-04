@@ -102,7 +102,7 @@ class HitTile extends StatelessWidget {
               ),
               TextSpan(
                 text: prettyTags(
-                  hit.tags!,
+                  hit.tags,
                   separator: ' ',
                   capitalized: false,
                 )!,
