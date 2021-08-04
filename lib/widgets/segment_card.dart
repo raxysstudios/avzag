@@ -4,9 +4,9 @@ class SegmentCard extends StatelessWidget {
   final List<Widget> children;
   final double marginTop;
 
-  const SegmentCard(
-    {required this.children,
-    this.marginTop = 16, 
+  const SegmentCard({
+    required this.children,
+    this.marginTop = 16,
   });
 
   @override
@@ -14,7 +14,10 @@ class SegmentCard extends StatelessWidget {
     return Card(
       margin: EdgeInsets.only(top: marginTop),
       shape: RoundedRectangleBorder(),
-      child: Column(children: children),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
     );
   }
 }

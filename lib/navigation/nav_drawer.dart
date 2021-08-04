@@ -90,11 +90,6 @@ class NavDraver extends StatelessWidget {
                   'https://t.me/alkaitagi',
                 ),
                 _NavLink(
-                  Icons.forum_outlined,
-                  'telegram channel',
-                  'https://t.me/avzag',
-                ),
-                _NavLink(
                   Icons.code_outlined,
                   'GitHub repository',
                   'https://github.com/alkaitagi/avzag_flutter',
