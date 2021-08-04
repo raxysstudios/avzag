@@ -98,8 +98,9 @@ class SearchControllerState extends State<SearchController> {
 
     for (final hit in snap.hits) {
       final entry = EntryHit.fromAlgoliaHitData(hit.data);
-      if (!result.containsKey(entry.term)) result[entry.term] = [];
-      result[entry.term]!.add(entry);
+      final key = language.isEmpty ? entry.term : '';
+      if (!result.containsKey(key)) result[key] = [];
+      result[key]!.add(entry);
     }
 
     widget.onSearch(result);
@@ -175,7 +176,6 @@ class SearchControllerState extends State<SearchController> {
         ),
         LinearProgressIndicator(
           value: searching ? null : 0,
-          backgroundColor: Colors.transparent,
         ),
       ],
     );

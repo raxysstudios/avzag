@@ -1,3 +1,4 @@
+import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/segment_card.dart';
@@ -82,36 +83,42 @@ class _DictionaryPageState extends State<DictionaryPage> {
           for (final hits in search.entries)
             SegmentCard(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Text(
-                    capitalize(hits.key),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                if (hits.key.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    child: Text(
+                      capitalize(hits.key),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                ),
                 for (final hit in hits.value)
                   ListTile(
                     title: Text(
                       capitalize(hit.headword),
                       style: TextStyle(fontSize: 16),
                     ),
-                    subtitle:
-                        hit.definition == null ? null : Text(hit.definition!),
-                    trailing: Text(
-                      capitalize(hit.language),
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 14,
-                      ),
+                    subtitle: MeaningTile.buildRichText(
+                      hit.term,
+                      hit.definition,
+                      subtitle: true,
                     ),
+                    trailing: hits.key.isEmpty
+                        ? null
+                        : Text(
+                            capitalize(hit.language),
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 14,
+                            ),
+                          ),
                     onTap: () => openEntry(hit),
                   ),
               ],

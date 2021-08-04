@@ -12,28 +12,37 @@ class MeaningTile extends StatelessWidget {
     this.onEdited,
   });
 
+  static buildRichText(
+    String term,
+    String? definition, {
+    subtitle = false,
+  }) {
+    return RichText(
+      text: TextSpan(
+        style: TextStyle(
+          fontSize: subtitle ? 14 : 16,
+          color: subtitle ? Colors.black54 : Colors.black87,
+        ),
+        children: [
+          TextSpan(
+            text: capitalize(term),
+            style: TextStyle(
+              fontSize: subtitle ? 14 : 18,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          if (definition != null) TextSpan(text: ' ' + definition),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
       minVerticalPadding: 12,
       leading: Icon(Icons.lightbulb_outline),
-      title: Text(
-        capitalize(use.term),
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-      subtitle: use.definition == null
-          ? null
-          : Text(
-              use.definition!,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black87,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
+      title: buildRichText(use.term, use.definition),
       onTap: onEdited == null
           ? null
           : () => showEditor(
