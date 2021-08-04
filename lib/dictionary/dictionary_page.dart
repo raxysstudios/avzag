@@ -15,7 +15,7 @@ class DictionaryPage extends StatefulWidget {
 }
 
 class _DictionaryPageState extends State<DictionaryPage> {
-  var hits = MapEntry('', <EntryHit>[]);
+  var hits = <List<EntryHit>>[];
 
   void openEntry(EntryHit hit) {
     showLoadingDialog<Entry>(
@@ -85,22 +85,17 @@ class _DictionaryPageState extends State<DictionaryPage> {
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final hit = hits.value[index];
                   return SegmentCard(
-                    marginTop: index == 0 ||
-                            (hits.key.isEmpty &&
-                                hits.value[index - 1].term != hit.term)
-                        ? 16
-                        : 0,
                     children: [
-                      HitTile(
-                        hit,
-                        onTap: () => openEntry(hit),
-                      ),
+                      for (final hit in hits[index])
+                        HitTile(
+                          hit,
+                          onTap: () => openEntry(hit),
+                        ),
                     ],
                   );
                 },
-                childCount: hits.value.length,
+                childCount: hits.length,
               ),
             ),
           ),

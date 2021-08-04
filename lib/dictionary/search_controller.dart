@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'hit_tile.dart';
 
 class SearchController extends StatefulWidget {
-  final ValueSetter<MapEntry<String, List<EntryHit>>> onSearch;
+  final ValueSetter<List<List<EntryHit>>> onSearch;
   const SearchController(this.onSearch);
 
   @override
@@ -20,7 +20,7 @@ class SearchControllerState extends State<SearchController> {
   Timer timer = Timer(Duration.zero, () {});
   String text = "";
   bool searching = false;
-  String language = '';
+  String? language;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class SearchControllerState extends State<SearchController> {
           .split(' ')
           .where((e) => e.isNotEmpty && e != '#')
           .join(' ');
-      if (this.text != text || text.isEmpty) {
+      if (this.text != text) {
         timer.cancel();
         setState(() {
           this.text = text;
@@ -59,16 +59,18 @@ class SearchControllerState extends State<SearchController> {
     setState(() {
       searching = text.isNotEmpty;
     });
-    widget.onSearch(MapEntry(language, []));
+    widget.onSearch(<List<EntryHit>>[]);
     if (!searching) return;
 
     var query = BaseStore.algolia.instance
-        .index(language.isEmpty ? 'dictionary' : 'dictionary_headword')
+        .index(
+          (language?.isEmpty ?? true) ? 'dictionary' : 'dictionary_headword',
+        )
         .query(text)
         .filters(
           filterOr(
             'language',
-            language.isEmpty ? BaseStore.languages : [language],
+            (language?.isEmpty ?? true) ? BaseStore.languages : [language!],
           ),
         )
         .setRestrictSearchableAttributes([
@@ -79,7 +81,7 @@ class SearchControllerState extends State<SearchController> {
     ]);
 
     final snap = await query.getObjects().then(
-          (snapshot) async => language.isEmpty
+          (snapshot) async => (language?.isEmpty ?? false)
               ? await BaseStore.algolia.instance
                   .index('dictionary')
                   .filters(
@@ -92,15 +94,22 @@ class SearchControllerState extends State<SearchController> {
               : snapshot,
         );
 
+    final hits =
+        snap.hits.map((h) => EntryHit.fromAlgoliaHitData(h.data)).toList();
+    if (language?.isNotEmpty ?? false)
+      widget.onSearch([hits]);
+    else {
+      final groups = <String, List<EntryHit>>{};
+      for (final hit in hits) {
+        final key = hit.term;
+        if (!groups.containsKey(key)) groups[key] = [];
+        groups[key]!.add(hit);
+      }
+      widget.onSearch(groups.values.toList());
+    }
     setState(() {
       searching = false;
     });
-    widget.onSearch(
-      MapEntry(
-        language,
-        snap.hits.map((h) => EntryHit.fromAlgoliaHitData(h.data)).toList(),
-      ),
-    );
   }
 
   @override
@@ -111,17 +120,33 @@ class SearchControllerState extends State<SearchController> {
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
-              PopupMenuButton<String>(
-                icon: language.isEmpty
-                    ? Icon(Icons.auto_awesome_outlined)
-                    : LanguageAvatar(HomeStore.languages[language]!),
+              PopupMenuButton<String?>(
+                icon: language == null
+                    ? Icon(Icons.language_outlined)
+                    : language!.isEmpty
+                        ? Icon(Icons.auto_awesome_outlined)
+                        : LanguageAvatar(HomeStore.languages[language]!),
                 tooltip: 'Select search mode',
                 onSelected: (l) {
-                  language = l;
+                  setState(() {
+                    language = l == 'English' ? null : l;
+                  });
                   inputController.clear();
                 },
                 itemBuilder: (BuildContext context) {
                   return [
+                    PopupMenuItem(
+                      value: 'English',
+                      child: ListTile(
+                        visualDensity: const VisualDensity(
+                          vertical: -4,
+                          horizontal: -4,
+                        ),
+                        leading: Icon(Icons.language_outlined),
+                        title: Text('English'),
+                        selected: language == null,
+                      ),
+                    ),
                     PopupMenuItem(
                       value: '',
                       child: ListTile(
@@ -131,9 +156,10 @@ class SearchControllerState extends State<SearchController> {
                         ),
                         leading: Icon(Icons.auto_awesome_outlined),
                         title: Text('Multilingual'),
-                        selected: language.isEmpty,
+                        selected: language?.isEmpty ?? false,
                       ),
                     ),
+                    PopupMenuDivider(height: 0),
                     for (final l in BaseStore.languages)
                       PopupMenuItem(
                         value: l,
@@ -153,9 +179,9 @@ class SearchControllerState extends State<SearchController> {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       labelText: 'Search by terms, forms, tags' +
-                          (language.isEmpty
+                          (language?.isEmpty ?? true
                               ? ''
-                              : ' in ${capitalize(language)}'),
+                              : ' in ${capitalize(language!)}'),
                     ),
                   ),
                 ),
