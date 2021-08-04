@@ -98,7 +98,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
                       ListTile(
                         title: Text(
                           capitalize(hit.headword),
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                         subtitle: MeaningTile.buildRichText(
                           hit.term,
