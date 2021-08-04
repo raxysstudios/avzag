@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'entry_hit.dart';
 
 class SearchController extends StatefulWidget {
-  final ValueSetter<EntryHitSearch?> onSearch;
+  final ValueSetter<EntryHitSearch> onSearch;
   const SearchController(this.onSearch);
 
   @override
@@ -30,15 +30,18 @@ class SearchControllerState extends State<SearchController> {
           .split(' ')
           .where((e) => e.isNotEmpty && e != '#')
           .join(' ');
-      if (this.text != text) {
+      if (this.text != text || text.isEmpty) {
         timer.cancel();
-        timer = Timer(
-          Duration(milliseconds: 300),
-          search,
-        );
         setState(() {
           this.text = text;
         });
+        if (text.isEmpty)
+          search();
+        else
+          timer = Timer(
+            Duration(milliseconds: 300),
+            search,
+          );
       }
     });
   }
@@ -49,37 +52,33 @@ class SearchControllerState extends State<SearchController> {
     super.dispose();
   }
 
-  void clear() {
-    inputController.clear();
-    timer.cancel();
-    search();
-  }
+  String filterOr(String filter, Iterable<String> values) =>
+      values.map((v) => '$filter:$v').join(' OR ');
 
   void search() async {
     if (text.isEmpty) {
       widget.onSearch({});
       return;
     }
-    widget.onSearch(null);
-
+    widget.onSearch({});
     setState(() {
       searching = true;
     });
 
     var query = BaseStore.algolia.instance
-        .index('dictionary' + (language.isEmpty ? '' : '_headword'))
+        .index(language.isEmpty ? 'dictionary' : 'dictionary_headword')
         .query(text)
-        .filters(language.isEmpty
-            ? BaseStore.languages.map((e) => 'language:$e').join(' OR ')
-            : 'language:$language');
-
-    // TODO move restriction above
-    if (!text.contains('#'))
-      query = query.setRestrictSearchableAttributes([
-        'term',
-        'forms',
-        'definition',
-      ]);
+        .filters(
+          (language.isEmpty ? BaseStore.languages : [language])
+              .map((l) => 'language:$l')
+              .join(' OR '),
+        )
+        .setRestrictSearchableAttributes([
+      'term',
+      'forms',
+      'definition',
+      if (text.contains('#')) 'tags',
+    ]);
 
     final result = <String, List<EntryHit>>{};
     final snap = await query.getObjects().then((snapshot) async {
@@ -95,8 +94,8 @@ class SearchControllerState extends State<SearchController> {
       if (!result.containsKey(entry.term)) result[entry.term] = [];
       result[entry.term]!.add(entry);
     }
-    widget.onSearch(result);
 
+    widget.onSearch(result);
     setState(() {
       searching = false;
     });
@@ -117,7 +116,7 @@ class SearchControllerState extends State<SearchController> {
                 tooltip: 'Select search mode',
                 onSelected: (l) {
                   language = l;
-                  clear();
+                  inputController.clear();
                 },
                 itemBuilder: (BuildContext context) {
                   return [
@@ -149,14 +148,17 @@ class SearchControllerState extends State<SearchController> {
                     controller: inputController,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      labelText:
-                          'Search in by terms, forms, tags ${language.isEmpty ? "" : "in ${capitalize(language)}"}}...',
+                      labelText: 'Search by terms, forms, tags' +
+                          (language.isEmpty
+                              ? ''
+                              : ' in ${capitalize(language)}'),
                     ),
                   ),
                 ),
               ),
               IconButton(
-                onPressed: inputController.text.isEmpty ? null : clear,
+                onPressed:
+                    inputController.text.isEmpty ? null : inputController.clear,
                 icon: Icon(Icons.clear),
               ),
             ],

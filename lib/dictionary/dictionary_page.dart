@@ -16,7 +16,7 @@ class DictionaryPage extends StatefulWidget {
 }
 
 class _DictionaryPageState extends State<DictionaryPage> {
-  EntryHitSearch? search = {};
+  EntryHitSearch search = {};
 
   void openEntry(EntryHit hit) {
     showLoadingDialog<Entry>(
@@ -79,7 +79,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
       body: ListView(
         padding: const EdgeInsets.only(bottom: 64),
         children: [
-          for (final hits in search!.entries)
+          for (final hits in search.entries)
             SegmentCard(
               children: [
                 Padding(
