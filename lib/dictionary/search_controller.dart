@@ -123,19 +123,21 @@ class SearchControllerState extends State<SearchController> {
                     PopupMenuItem(
                       value: '',
                       child: ListTile(
-                        leading: Icon(
-                          Icons.auto_awesome_outlined,
+                        visualDensity: const VisualDensity(
+                          vertical: -4,
+                          horizontal: -4,
                         ),
+                        leading: Icon(Icons.auto_awesome_outlined),
                         title: Text('Multilingual'),
                         selected: language.isEmpty,
                       ),
                     ),
-                    for (final language in BaseStore.languages)
+                    for (final l in BaseStore.languages)
                       PopupMenuItem(
-                        value: language,
+                        value: l,
                         child: LanguageTile(
-                          HomeStore.languages[language]!,
-                          selected: language == language,
+                          HomeStore.languages[l]!,
+                          selected: language == l,
                         ),
                       ),
                   ];
