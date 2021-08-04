@@ -104,7 +104,7 @@ class _EntryPageState extends State<EntryPage> {
               LanguageFlag(
                 HomeStore.languages[widget.hit.language]!,
                 offset: Offset(-30, 0),
-                scale: 7,
+                scale: 11,
               ),
             ],
           ),

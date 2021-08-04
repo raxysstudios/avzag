@@ -7,7 +7,6 @@ class LanguageFlag extends StatefulWidget {
   final Language language;
   final double width;
   final double height;
-  final bool circle;
   final double rotation;
   final Offset offset;
   final double scale;
@@ -19,7 +18,6 @@ class LanguageFlag extends StatefulWidget {
     this.rotation = -pi / 4,
     this.offset = const Offset(0, 0),
     this.scale = 18,
-    this.circle = false,
   });
 
   @override
