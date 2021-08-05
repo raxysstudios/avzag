@@ -150,8 +150,8 @@ class _AuthPageState extends State<AuthPage> {
                         final canEdit = editable.contains(l);
                         final editing = l == EditorStore.language;
                         return ListTile(
-                          leading: Padding(
-                            padding: EdgeInsets.only(top: canEdit ? 8 : 0),
+                          leading: Opacity(
+                            opacity: canEdit ? 1 : 0.4,
                             child: LanguageAvatar(
                               language.name,
                               child: editing ? Icon(Icons.edit_outlined) : null,
