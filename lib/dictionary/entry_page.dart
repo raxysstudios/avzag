@@ -119,7 +119,7 @@ class _EntryPageState extends State<EntryPage> {
                                   content: Row(
                                     children: [
                                       Icon(
-                                        Icons.error_outline_outlined,
+                                        Icons.warning_outlined,
                                         color: Colors.white,
                                       ),
                                       SizedBox(width: 8),
