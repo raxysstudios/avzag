@@ -27,7 +27,7 @@ class TagsTile extends StatelessWidget {
             )
           : Builder(builder: (context) {
               const style = const TextStyle(color: Colors.black54);
-              final data = prettyTags(tags)!;
+              final data = prettyTags(tags, capitalized: false)!;
               return onEdited == null
                   ? SelectableText(data, style: style)
                   : Text(data, style: style);

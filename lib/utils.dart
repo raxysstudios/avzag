@@ -8,8 +8,8 @@ String capitalize(String value) => value
 
 String? prettyTags(
   Iterable<String>? tags, {
-  separator = ' • ',
-  capitalized = true,
+  String separator = ' • ',
+  bool capitalized = true,
 }) {
   if (tags == null) return null;
   final text = tags.join(separator);
