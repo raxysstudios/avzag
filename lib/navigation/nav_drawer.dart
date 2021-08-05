@@ -77,35 +77,53 @@ class NavDraver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        children: [
-          ExpandableTitle(
-            [
-              EditorSwitch(),
-              ...[
-                _NavLink(
-                  Icons.send_outlined,
-                  'developer contact',
-                  'https://t.me/alkaitagi',
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Drawer(
+        child: Container(
+          color: Colors.blueGrey.shade50,
+          child: ListView(
+            children: [
+              Material(
+                color: Colors.transparent,
+                child: ExpandableTitle(
+                  [
+                    Card(
+                      child: Column(
+                        children: [
+                          EditorSwitch(),
+                          ...[
+                            _NavLink(
+                              Icons.send_outlined,
+                              'developer contact',
+                              'https://t.me/alkaitagi',
+                            ),
+                            _NavLink(
+                              Icons.code_outlined,
+                              'GitHub repository',
+                              'https://github.com/alkaitagi/avzag_flutter',
+                            ),
+                          ].map((e) => e.build()),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                _NavLink(
-                  Icons.code_outlined,
-                  'GitHub repository',
-                  'https://github.com/alkaitagi/avzag_flutter',
+              ),
+              Card(
+                child: Column(
+                  children: [
+                    _NavModule(Icons.map_outlined, 'home', true),
+                    _NavModule(Icons.music_note_outlined, 'phonology', false),
+                    _NavModule(Icons.switch_left_outlined, 'converter', false),
+                    _NavModule(Icons.book_outlined, 'dictionary', true),
+                    _NavModule(Icons.local_library_outlined, 'bootcamp', false),
+                  ].map((e) => e.build(context, e.text == title)).toList(),
                 ),
-              ].map((e) => e.build()),
+              )
             ],
           ),
-          Divider(height: 0),
-          ...[
-            _NavModule(Icons.map_outlined, 'home', true),
-            _NavModule(Icons.music_note_outlined, 'phonology', false),
-            _NavModule(Icons.switch_left_outlined, 'converter', false),
-            _NavModule(Icons.book_outlined, 'dictionary', true),
-            _NavModule(Icons.local_library_outlined, 'bootcamp', false),
-          ].map((e) => e.build(context, e.text == title))
-        ],
+        ),
       ),
     );
   }

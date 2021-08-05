@@ -10,7 +10,7 @@ class ExpandableTitle extends StatelessWidget {
     return ExpandablePanel(
       header: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: 16,
+          horizontal: 20,
           vertical: 14,
         ),
         child: Row(
@@ -22,7 +22,7 @@ class ExpandableTitle extends StatelessWidget {
                 radius: 12,
               ),
             ),
-            SizedBox(width: 32),
+            SizedBox(width: 34),
             Text(
               'Ævzag',
               style: TextStyle(
@@ -37,53 +37,57 @@ class ExpandableTitle extends StatelessWidget {
         expandIcon: Icons.expand_more_outlined,
         collapseIcon: Icons.expand_more_outlined,
         iconPadding: const EdgeInsets.only(
-          right: 16,
+          right: 20,
           top: 16,
         ),
       ),
       collapsed: Offstage(),
       expanded: Column(
         children: [
-          Divider(height: 0),
-          Padding(
-            padding: const EdgeInsets.all(16),
+          Card(
             child: Column(
               children: [
-                Icon(
-                  Icons.landscape_outlined,
-                  color: Colors.black54,
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.landscape_outlined,
+                        color: Colors.black54,
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Made with honor in Dagestan, North Caucasus.',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 4),
-                Text(
-                  'Made with honor in\nDagestan, North Caucasus.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black54),
+                Divider(height: 0),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FlutterLogo(size: 24),
+                      Image.asset(
+                        'firebase.png',
+                        width: 24,
+                        height: 24,
+                      ),
+                      Image.asset(
+                        'algolia.png',
+                        width: 24,
+                        height: 24,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-          Divider(height: 0),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FlutterLogo(size: 32),
-                Image.asset(
-                  'firebase.png',
-                  width: 32,
-                  height: 32,
-                ),
-                Image.asset(
-                  'algolia.png',
-                  width: 32,
-                  height: 32,
-                ),
-              ],
-            ),
-          ),
-          Divider(height: 0),
-          ...children,
+          ...children
         ],
       ),
     );
