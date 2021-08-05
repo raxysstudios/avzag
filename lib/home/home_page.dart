@@ -91,7 +91,6 @@ class _HomePageState extends State<HomePage> {
                     'Select languages below',
                     style: TextStyle(
                       color: Colors.black54,
-                      fontStyle: FontStyle.italic,
                       fontSize: 16,
                     ),
                   )
