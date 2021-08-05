@@ -5,11 +5,10 @@ class Language {
   final String flag;
   final String? contact;
   final List<String>? editors;
-  String? flagUrl;
   final List<String>? family;
   final List<String>? tags;
 
-  Language({
+  const Language({
     required this.name,
     required this.flag,
     this.editors,

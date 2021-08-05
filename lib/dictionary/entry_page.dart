@@ -102,7 +102,7 @@ class _EntryPageState extends State<EntryPage> {
                   ),
             actions: [
               LanguageFlag(
-                HomeStore.languages[widget.hit.language]!,
+                widget.hit.language,
                 offset: Offset(-40, 4),
                 scale: 9,
               ),

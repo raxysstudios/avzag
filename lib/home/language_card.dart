@@ -5,10 +5,15 @@ import 'language_flag.dart';
 import 'package:flutter/material.dart';
 
 class LanguageCard extends StatelessWidget {
-  const LanguageCard(this.language, {this.selected = false, this.onTap});
   final Language language;
   final bool selected;
-  final Function()? onTap;
+  final VoidCallback? onTap;
+
+  const LanguageCard(
+    this.language, {
+    this.selected = false,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +29,7 @@ class LanguageCard extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: LanguageFlag(
-                  language,
+                  language.name,
                   offset: Offset(-30, 36),
                 ),
               ),

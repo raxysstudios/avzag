@@ -124,7 +124,7 @@ class SearchControllerState extends State<SearchController> {
                     ? Icon(Icons.language_outlined)
                     : language!.isEmpty
                         ? Icon(Icons.auto_awesome_outlined)
-                        : LanguageAvatar(HomeStore.languages[language]!),
+                        : LanguageAvatar(language!),
                 tooltip: 'Select search mode',
                 onSelected: (l) {
                   setState(() {
@@ -162,7 +162,7 @@ class SearchControllerState extends State<SearchController> {
                         value: l,
                         child: ListTile(
                           visualDensity: density,
-                          leading: LanguageAvatar(HomeStore.languages[l]!),
+                          leading: LanguageAvatar(l),
                           title: Text(
                             capitalize(HomeStore.languages[l]!.name),
                             style: TextStyle(

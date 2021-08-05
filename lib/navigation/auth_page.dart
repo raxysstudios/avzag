@@ -112,7 +112,7 @@ class _AuthPageState extends State<AuthPage> {
                       return ListTile(
                         leading: Padding(
                           padding: EdgeInsets.only(top: canEdit ? 8 : 0),
-                          child: LanguageAvatar(language),
+                          child: LanguageAvatar(language.name),
                         ),
                         title: Text(
                           capitalize(l),
