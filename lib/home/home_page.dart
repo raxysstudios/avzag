@@ -67,6 +67,8 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           children: [
             IconButton(
+              tooltip: 'Toggle map',
+              icon: Icon(Icons.map_outlined),
               onPressed: () => showDialog(
                 context: context,
                 builder: (context) {
@@ -81,7 +83,6 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              icon: Icon(Icons.map_outlined),
             ),
             Expanded(
               child: Padding(

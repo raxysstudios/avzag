@@ -115,6 +115,7 @@ class SearchControllerState extends State<SearchController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Divider(height: 0),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
