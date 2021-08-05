@@ -1,13 +1,11 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
-import 'package:avzag/navigation/editor_toggle.dart';
-import 'package:avzag/phonology/phonology_page.dart';
+import 'package:avzag/navigation/editor_switch.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'expandable_title.dart';
 
 Future<void> navigate(
@@ -24,9 +22,7 @@ Future<void> navigate(
   if (title == 'home') {
     builder = (_) => HomePage();
     title = null;
-  } else if (title == 'phonology')
-    builder = (_) => PhonologyPage();
-  else if (title == 'dictionary')
+  } else if (title == 'dictionary')
     builder = (_) => DictionaryPage();
   else
     builder = (_) => Text("No Route");
@@ -82,40 +78,49 @@ class NavDraver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
-        children: [
-          ExpandableTitle(
-            [
-              EditorSwitch(),
-              ...[
-                _NavLink(
-                  Icons.send_outlined,
-                  'developer contact',
-                  'https://t.me/alkaitagi',
-                ),
-                _NavLink(
-                  Icons.forum_outlined,
-                  'telegram channel',
-                  'https://t.me/avzag',
-                ),
-                _NavLink(
-                  Icons.code_outlined,
-                  'GitHub repository',
-                  'https://github.com/alkaitagi/avzag_flutter',
-                ),
-              ].map((e) => e.build()),
-            ],
-          ),
-          Divider(height: 0),
-          ...[
-            _NavModule(Icons.map_outlined, 'home', true),
-            _NavModule(Icons.music_note_outlined, 'phonology', false),
-            _NavModule(Icons.switch_left_outlined, 'converter', false),
-            _NavModule(Icons.book_outlined, 'dictionary', true),
-            _NavModule(Icons.local_library_outlined, 'bootcamp', false),
-            _NavModule(Icons.tour_outlined, 'quests', false),
-          ].map((e) => e.build(context, e.text == title))
-        ],
+      child: Container(
+        color: Colors.blueGrey.shade50,
+        child: ListView(
+          children: [
+            Material(
+              color: Colors.transparent,
+              child: ExpandableTitle(
+                [
+                  Card(
+                    child: Column(
+                      children: [
+                        EditorSwitch(),
+                        ...[
+                          _NavLink(
+                            Icons.send_outlined,
+                            'developer contact',
+                            'https://t.me/alkaitagi',
+                          ),
+                          _NavLink(
+                            Icons.code_outlined,
+                            'GitHub repository',
+                            'https://github.com/alkaitagi/avzag_flutter',
+                          ),
+                        ].map((e) => e.build()),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Card(
+              child: Column(
+                children: [
+                  _NavModule(Icons.map_outlined, 'home', true),
+                  _NavModule(Icons.music_note_outlined, 'phonology', false),
+                  _NavModule(Icons.switch_left_outlined, 'converter', false),
+                  _NavModule(Icons.book_outlined, 'dictionary', true),
+                  _NavModule(Icons.local_library_outlined, 'bootcamp', false),
+                ].map((e) => e.build(context, e.text == title)).toList(),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

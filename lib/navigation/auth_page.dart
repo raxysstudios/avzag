@@ -4,6 +4,7 @@ import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,15 +15,40 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  bool signing = false;
+  bool loading = false;
+  List<String> editable = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (FirebaseAuth.instance.currentUser != null) {
+      setState(() {
+        loading = true;
+      });
+      updateEditable().then(
+        (_) => setState(() {
+          loading = false;
+        }),
+      );
+    }
+  }
+
+  Future<void> updateEditable() async {
+    final token =
+        await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
+    setState(() {
+      editable = json2list(token?.claims?['languages']) ?? [];
+      if (!editable.contains(EditorStore.language)) EditorStore.language = null;
+    });
+  }
 
   Future<void> signIn() async {
     setState(() {
-      signing = true;
+      loading = true;
     });
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
-    await EditorStore.setLanguage(null);
+    EditorStore.language = null;
 
     final user = await GoogleSignIn().signIn();
     if (user != null) {
@@ -32,9 +58,10 @@ class _AuthPageState extends State<AuthPage> {
         idToken: auth.idToken,
       );
       await FirebaseAuth.instance.signInWithCredential(cred);
+      await updateEditable();
     }
     setState(() {
-      signing = false;
+      loading = false;
     });
   }
 
@@ -42,102 +69,115 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => navigate(context, null),
-        ),
+        automaticallyImplyLeading: false,
         title: Text('Editors'),
+        centerTitle: true,
+        bottom: PreferredSize(
+          child: LinearProgressIndicator(value: loading ? null : 0),
+          preferredSize: Size.fromHeight(4),
+        ),
       ),
+      backgroundColor: Colors.blueGrey.shade50,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => navigate(context, null),
+        icon: Icon(
+          EditorStore.language == null
+              ? Icons.edit_off_outlined
+              : Icons.edit_outlined,
+        ),
+        label: Text('Continue'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: ListView(
+        padding: const EdgeInsets.only(bottom: 64),
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: ElevatedButton.icon(
-              onPressed: () => signIn(),
-              icon: Icon(Icons.person_outlined),
-              label: Text(
-                EditorStore.email ?? 'Sign In',
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                style: TextStyle(color: Colors.black87),
-                children: EditorStore.email == null
-                    ? [
+          Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: ElevatedButton.icon(
+                    onPressed: loading ? null : signIn,
+                    icon: Icon(Icons.person_outlined),
+                    label: Text(
+                      EditorStore.email ?? 'Sign In',
+                    ),
+                  ),
+                ),
+                if (EditorStore.email == null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      'Sign in with Google to see your options.',
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                else ...[
+                  Text(
+                    'With any question regarding the language materials, contact the corresponding editors below.',
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 8),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.black87),
+                      children: [
+                        TextSpan(text: 'You can edit '),
                         TextSpan(
-                          text: 'Sign in with Google to see your options.',
-                        ),
-                      ]
-                    : [
-                        TextSpan(
-                          text:
-                              'With any question regarding the language materials, contact the corresponding editors below.',
-                        ),
-                        if (EditorStore.editing?.isNotEmpty ?? false) ...[
-                          TextSpan(text: '\n\nOr you can edit '),
-                          TextSpan(
-                            text: capitalize(EditorStore.editing!.join(', ')),
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          text: capitalize(editable.join(', ')),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
                           ),
-                          TextSpan(text: ' yourself.'),
-                        ],
+                        ),
+                        TextSpan(text: ' yourself.'),
                       ],
-              ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                ],
+              ],
             ),
           ),
-          if (signing)
-            Center(
-              child: CircularProgressIndicator(),
-            ),
-          if (EditorStore.email != null) ...[
-            Divider(height: 0),
-            for (final l in BaseStore.languages)
-              Builder(
-                builder: (context) {
-                  final language = HomeStore.languages[l]!;
-                  final canEdit = EditorStore.canEdit(l);
-                  final editing = l == EditorStore.language;
-                  return ListTile(
-                    leading: Padding(
-                      padding: EdgeInsets.only(top: canEdit ? 8 : 0),
-                      child: LanguageAvatar(language),
-                    ),
-                    title: Text(
-                      capitalize(l),
-                      style: TextStyle(
-                        color: canEdit ? null : Colors.black54,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    subtitle: canEdit
-                        ? Text(
-                            editing
-                                ? 'You are editing this language'
-                                : 'You can edit this language',
-                          )
-                        : null,
-                    onTap: canEdit
-                        ? () => EditorStore.setLanguage(
-                              editing ? null : l,
-                            ).then((_) => setState(() {}))
-                        : null,
-                    selected: editing,
-                    trailing: language.contact == null
-                        ? null
-                        : IconButton(
-                            onPressed: () => launch(language.contact!),
-                            icon: Icon(Icons.send_outlined),
-                            color: Colors.black,
-                            tooltip: "Contact editor",
+          if (EditorStore.email != null)
+            Card(
+              child: Column(
+                children: [
+                  for (final l in BaseStore.languages)
+                    Builder(
+                      builder: (context) {
+                        final language = HomeStore.languages[l]!;
+                        final canEdit = editable.contains(l);
+                        final editing = l == EditorStore.language;
+                        return ListTile(
+                          leading: LanguageAvatar(language.name),
+                          title: Text(
+                            capitalize(l),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
                           ),
-                  );
-                },
+                          onTap: canEdit
+                              ? () => setState(() {
+                                    EditorStore.language = editing ? null : l;
+                                  })
+                              : language.contact == null
+                                  ? null
+                                  : () => launch(language.contact!),
+                          selected: editing,
+                          trailing: canEdit
+                              ? Icon(Icons.edit_outlined)
+                              : language.contact == null
+                                  ? null
+                                  : Icon(Icons.send_outlined),
+                        );
+                      },
+                    ),
+                ],
               ),
-          ],
+            ),
         ],
       ),
     );

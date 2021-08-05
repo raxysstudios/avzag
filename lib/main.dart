@@ -1,13 +1,17 @@
+import 'package:algolia/algolia.dart';
 import 'package:avzag/store.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'navigation/nav_drawer.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  BaseStore.algolia = Algolia.init(
+    applicationId: 'NYVVAA43NI',
+    apiKey: 'cf52a68ac340fc555978892202ce37df',
+  );
   runApp(App());
 }
 
@@ -30,14 +34,6 @@ class _AppState extends State<App> {
       home: Builder(
         builder: (context) {
           Firebase.initializeApp()
-              .then((_) {
-                FirebaseFirestore.instance.settings = Settings(
-                  cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
-                );
-                FirebaseStorage.instance.setMaxOperationRetryTime(
-                  Duration(milliseconds: 100),
-                );
-              })
               .then((_) => BaseStore.load(context))
               .then((_) => SharedPreferences.getInstance())
               .then((prefs) => prefs.getString('module') ?? 'home')

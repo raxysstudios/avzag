@@ -2,48 +2,53 @@ import 'dart:math';
 import 'package:avzag/home/language.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'store.dart';
 
 class LanguageFlag extends StatefulWidget {
-  final Language language;
+  late final Language language;
   final double width;
   final double height;
-  final bool circle;
   final double rotation;
   final Offset offset;
   final double scale;
 
-  const LanguageFlag(
-    this.language, {
+  static final Map<String, String> urls = {};
+
+  LanguageFlag(
+    String language, {
     this.width = 16,
     this.height = 4,
     this.rotation = -pi / 4,
     this.offset = const Offset(0, 0),
     this.scale = 18,
-    this.circle = false,
-  });
+  }) {
+    this.language = HomeStore.languages[language]!;
+  }
 
   @override
   _LanguageFlagState createState() => _LanguageFlagState();
 }
 
 class _LanguageFlagState extends State<LanguageFlag> {
+  String? get url => LanguageFlag.urls[widget.language.name];
+
   @override
   void initState() {
     super.initState();
-    if (widget.language.flagUrl == null)
+    if (url == null)
       FirebaseStorage.instance
           .ref('flags/${widget.language.flag}.png')
           .getDownloadURL()
           .then(
             (u) => setState(() {
-              widget.language.flagUrl = u;
+              LanguageFlag.urls[widget.language.name] = u;
             }),
           );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.language.flagUrl == null) return Offstage();
+    if (url == null) return Offstage();
     return Container(
       width: widget.width,
       height: widget.height,
@@ -54,12 +59,12 @@ class _LanguageFlagState extends State<LanguageFlag> {
           child: Transform.scale(
             scale: widget.scale,
             child: Image.network(
-              widget.language.flagUrl!,
+              url!,
               repeat: ImageRepeat.repeatX,
               errorBuilder: (
-                BuildContext context,
-                Object exception,
-                StackTrace? stackTrace,
+                context,
+                exception,
+                stackTrace,
               ) =>
                   Container(),
             ),

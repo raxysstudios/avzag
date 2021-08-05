@@ -1,45 +1,50 @@
 import 'package:avzag/home/language.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'language_flag.dart';
+import 'store.dart';
 
 class LanguageAvatar extends StatefulWidget {
-  final Language language;
+  late final Language language;
   final double radius;
   static const double R = 12;
 
-  const LanguageAvatar(
-    this.language, {
+  LanguageAvatar(
+    String language, {
     this.radius = 1.5 * R,
-  });
+  }) {
+    this.language = HomeStore.languages[language]!;
+  }
 
   @override
   _LanguageAvatarState createState() => _LanguageAvatarState();
 }
 
 class _LanguageAvatarState extends State<LanguageAvatar> {
+  String? get url => LanguageFlag.urls[widget.language.name];
+
   @override
   void initState() {
     super.initState();
-    if (widget.language.flagUrl == null)
+    if (url == null)
       FirebaseStorage.instance
           .ref('flags/${widget.language.flag}.png')
           .getDownloadURL()
           .then(
             (u) => setState(() {
-              widget.language.flagUrl = u;
+              LanguageFlag.urls[widget.language.name] = u;
             }),
           );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.language.flagUrl == null)
-      return Icon(Icons.auto_awesome_outlined);
+    if (url == null) return Icon(Icons.flag_outlined);
     return Transform.scale(
       scale: widget.radius / LanguageAvatar.R,
       child: CircleAvatar(
         radius: LanguageAvatar.R,
-        backgroundImage: NetworkImage(widget.language.flagUrl!),
+        backgroundImage: NetworkImage(url!),
       ),
     );
   }
