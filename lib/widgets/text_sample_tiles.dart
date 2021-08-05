@@ -165,6 +165,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
                 widget.samples?.length ?? 0,
               ),
               icon: Icon(Icons.add_outlined),
+              color: Colors.black87,
               tooltip: 'Add ${widget.name}',
             ),
     );

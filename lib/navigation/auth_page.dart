@@ -93,6 +93,7 @@ class _AuthPageState extends State<AuthPage> {
         children: [
           Card(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8),
@@ -124,7 +125,9 @@ class _AuthPageState extends State<AuthPage> {
                             TextSpan(text: '\n\nOr you can edit '),
                             TextSpan(
                               text: capitalize(editable.join(', ')),
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             TextSpan(text: ' yourself.'),
                           ],
@@ -149,23 +152,19 @@ class _AuthPageState extends State<AuthPage> {
                         return ListTile(
                           leading: Padding(
                             padding: EdgeInsets.only(top: canEdit ? 8 : 0),
-                            child: LanguageAvatar(language.name),
+                            child: LanguageAvatar(
+                              language.name,
+                              child: editing ? Icon(Icons.edit_outlined) : null,
+                            ),
                           ),
                           title: Text(
                             capitalize(l),
                             style: TextStyle(
                               color: canEdit ? null : Colors.black54,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
                               fontSize: 18,
                             ),
                           ),
-                          subtitle: canEdit
-                              ? Text(
-                                  editing
-                                      ? 'You are editing this language'
-                                      : 'You can edit this language',
-                                )
-                              : null,
                           onTap: canEdit
                               ? () => setState(() {
                                     EditorStore.language = editing ? null : l;
@@ -177,7 +176,7 @@ class _AuthPageState extends State<AuthPage> {
                               : IconButton(
                                   onPressed: () => launch(language.contact!),
                                   icon: Icon(Icons.send_outlined),
-                                  color: Colors.black,
+                                  color: Colors.black87,
                                   tooltip: "Contact editor",
                                 ),
                         );

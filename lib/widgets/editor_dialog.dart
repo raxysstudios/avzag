@@ -50,7 +50,7 @@ void showEditorDialog<T>(
                 icon: Icon(Icons.close_outlined),
                 label: Text('Cancel'),
                 style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(Colors.blueGrey),
+                  foregroundColor: MaterialStateProperty.all(Colors.black54),
                   overlayColor: MaterialStateProperty.all(
                     Colors.blueGrey.shade50,
                   ),

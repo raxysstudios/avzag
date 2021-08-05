@@ -40,11 +40,13 @@ class LanguageCard extends StatelessWidget {
                   title: Text(
                     capitalize(language.name),
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  subtitle: Text(prettyTags(language.family ?? [])!),
+                  subtitle: language.family?.isNotEmpty ?? false
+                      ? Text(prettyTags(language.family)!)
+                      : null,
                 ),
               ],
             ),

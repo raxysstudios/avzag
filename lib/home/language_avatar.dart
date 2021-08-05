@@ -6,11 +6,13 @@ import 'store.dart';
 
 class LanguageAvatar extends StatefulWidget {
   late final Language language;
+  final Widget? child;
   final double radius;
   static const double R = 12;
 
   LanguageAvatar(
     String language, {
+    this.child,
     this.radius = 1.5 * R,
   }) {
     this.language = HomeStore.languages[language]!;
