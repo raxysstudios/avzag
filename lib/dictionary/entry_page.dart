@@ -3,7 +3,6 @@ import 'package:avzag/store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/home/language_flag.dart';
-import 'package:avzag/home/store.dart';
 import 'package:avzag/widgets/segment_card.dart';
 import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
