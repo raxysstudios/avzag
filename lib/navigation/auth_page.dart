@@ -136,7 +136,6 @@ class _AuthPageState extends State<AuthPage> {
           if (EditorStore.email != null)
             SegmentCard(
               children: [
-                Divider(height: 0),
                 for (final l in BaseStore.languages)
                   Builder(
                     builder: (context) {
