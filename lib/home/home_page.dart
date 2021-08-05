@@ -61,104 +61,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        titleSpacing: 4,
-        centerTitle: true,
-        toolbarHeight: 104,
-        title: selected.isEmpty
-            ? Text(
-                'Select languages below',
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 16,
-                ),
-              )
-            : Container(
-                height: 40,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 2),
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: InputChip(
-                        avatar: Icon(Icons.cancel),
-                        label: Text('Clear'),
-                        pressElevation: 4,
-                        onPressed: () => setState(() {
-                          selected.clear();
-                        }),
-                      ),
-                    ),
-                    for (final language in selected) ...[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
-                        child: InputChip(
-                          avatar: LanguageAvatar(
-                            language,
-                            radius: 12,
-                          ),
-                          label: Text(
-                            capitalize(language),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          pressElevation: 4,
-                          onPressed: () => setState(() {
-                            selected.remove(language);
-                          }),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(64),
-          child: Row(
-            children: [
-              IconButton(
-                tooltip: 'Toggle map',
-                icon: Icon(Icons.map_outlined),
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('The map comes soon'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text('Close'),
-                        )
-                      ],
-                    );
-                  },
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 8),
-                  child: TextField(
-                    controller: inputController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      labelText: "Search by names, tags, families",
-                    ),
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed:
-                    inputController.text.isEmpty ? null : inputController.clear,
-                icon: Icon(Icons.clear),
-              ),
-            ],
-          ),
-        ),
-      ),
       backgroundColor: Colors.blueGrey.shade50,
       floatingActionButton: selected.isEmpty
           ? null
@@ -174,24 +76,171 @@ class _HomePageState extends State<HomePage> {
               label: Text('Continue'),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: ListView(
-        padding: const EdgeInsets.only(bottom: 64),
-        children: [
-          for (final l in languages)
-            Builder(
-              builder: (context) {
-                final contains = selected.contains(l.name);
-                return LanguageCard(
-                  l,
-                  selected: contains,
-                  onTap: () => setState(
-                    () => contains
-                        ? selected.remove(l.name)
-                        : selected.add(l.name),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            snap: true,
+            floating: true,
+            forceElevated: true,
+            automaticallyImplyLeading: false,
+            titleSpacing: 0,
+            centerTitle: true,
+            title: selected.isEmpty
+                ? Text(
+                    'Select languages below',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 16,
+                    ),
+                  )
+                : Container(
+                    height: 64,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.only(right: 2),
+                      children: [
+                        IconButton(
+                          onPressed: () => setState(() {
+                            selected.clear();
+                          }),
+                          icon: Icon(Icons.cancel_outlined),
+                          tooltip: 'Unselect all',
+                        ),
+                        for (final language in selected) ...[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: InputChip(
+                              avatar: LanguageAvatar(
+                                language,
+                                radius: 12,
+                              ),
+                              label: Text(
+                                capitalize(language),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onPressed: () => setState(() {
+                                selected.remove(language);
+                              }),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
-                );
-              },
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(59),
+              child: Row(
+                children: [
+                  IconButton(
+                    tooltip: 'Toggle map',
+                    icon: Icon(Icons.map_outlined),
+                    onPressed: () => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('The map comes soon'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('Close'),
+                            )
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 8),
+                      child: TextField(
+                        controller: inputController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: "Search by names, tags, families",
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: inputController.text.isEmpty
+                        ? null
+                        : inputController.clear,
+                    icon: Icon(Icons.clear),
+                  ),
+                ],
+              ),
             ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(bottom: 64),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final language = languages[index];
+                  final name = language.name;
+                  final selected = this.selected.contains(name);
+                  return LanguageCard(
+                    language,
+                    selected: selected,
+                    onTap: () => setState(
+                      () => selected
+                          ? this.selected.remove(name)
+                          : this.selected.add(name),
+                    ),
+                  );
+                },
+                childCount: languages.length,
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(bottom: 64),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final language = languages[index];
+                  final name = language.name;
+                  final selected = this.selected.contains(name);
+                  return LanguageCard(
+                    language,
+                    selected: selected,
+                    onTap: () => setState(
+                      () => selected
+                          ? this.selected.remove(name)
+                          : this.selected.add(name),
+                    ),
+                  );
+                },
+                childCount: languages.length,
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(bottom: 64),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final language = languages[index];
+                  final name = language.name;
+                  final selected = this.selected.contains(name);
+                  return LanguageCard(
+                    language,
+                    selected: selected,
+                    onTap: () => setState(
+                      () => selected
+                          ? this.selected.remove(name)
+                          : this.selected.add(name),
+                    ),
+                  );
+                },
+                childCount: languages.length,
+              ),
+            ),
+          ),
         ],
       ),
     );
