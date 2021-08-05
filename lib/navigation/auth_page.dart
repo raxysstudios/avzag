@@ -3,9 +3,9 @@ import 'package:avzag/home/store.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
-import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/segment_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,15 +16,35 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  bool signing = false;
-  List<String> get canEdit => HomeStore.languages.values
-      .where((l) => l.editors?.contains(EditorStore.email) ?? false)
-      .map((l) => l.name)
-      .toList();
+  bool loading = false;
+  List<String> editable = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (FirebaseAuth.instance.currentUser != null) {
+      setState(() {
+        loading = true;
+      });
+      updateEditable().then(
+        (_) => setState(() {
+          loading = false;
+        }),
+      );
+    }
+  }
+
+  Future<void> updateEditable() async {
+    final token =
+        await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
+    setState(() {
+      editable = json2list(token?.claims?['languages']) ?? [];
+    });
+  }
 
   Future<void> signIn() async {
     setState(() {
-      signing = true;
+      loading = true;
     });
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
@@ -38,45 +58,44 @@ class _AuthPageState extends State<AuthPage> {
         idToken: auth.idToken,
       );
       await FirebaseAuth.instance.signInWithCredential(cred);
+      await updateEditable();
     }
     setState(() {
-      signing = false;
+      loading = false;
     });
   }
-
-  final claims = FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => navigate(context, null),
-        ),
+        automaticallyImplyLeading: false,
         title: Text('Editors'),
+        centerTitle: true,
+        bottom: PreferredSize(
+          child: LinearProgressIndicator(value: loading ? null : 0),
+          preferredSize: Size.fromHeight(4),
+        ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => navigate(context, null),
+        icon: Icon(
+          EditorStore.language == null
+              ? Icons.edit_off_outlined
+              : Icons.edit_outlined,
+        ),
+        label: Text('Continue'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: ListView(
         padding: const EdgeInsets.only(bottom: 64),
         children: [
-          FutureBuilder<IdTokenResult>(
-            future: claims,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done ||
-                  snapshot.data == null) return LinearProgressIndicator();
-              final languages = json2list(snapshot.data?.claims?['languages']);
-              return Text(
-                languages?.isEmpty ?? true
-                    ? 'No languages'
-                    : prettyTags(languages)!,
-              );
-            },
-          ),
           SegmentCard(
             children: [
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: ElevatedButton.icon(
-                  onPressed: () => showLoadingDialog(context, signIn()),
+                  onPressed: loading ? null : signIn,
                   icon: Icon(Icons.person_outlined),
                   label: Text(
                     EditorStore.email ?? 'Sign In',
@@ -99,10 +118,10 @@ class _AuthPageState extends State<AuthPage> {
                           text:
                               'With any question regarding the language materials, contact the corresponding editors below.',
                         ),
-                        if (canEdit.isNotEmpty) ...[
+                        if (editable.isNotEmpty) ...[
                           TextSpan(text: '\n\nOr you can edit '),
                           TextSpan(
-                            text: capitalize(canEdit.join(', ')),
+                            text: capitalize(editable.join(', ')),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextSpan(text: ' yourself.'),
@@ -122,7 +141,7 @@ class _AuthPageState extends State<AuthPage> {
                   Builder(
                     builder: (context) {
                       final language = HomeStore.languages[l]!;
-                      final canEdit = this.canEdit.contains(l);
+                      final canEdit = editable.contains(l);
                       final editing = l == EditorStore.language;
                       return ListTile(
                         leading: Padding(
@@ -144,7 +163,7 @@ class _AuthPageState extends State<AuthPage> {
                                     : 'You can edit this language',
                               )
                             : null,
-                        onTap: true
+                        onTap: canEdit
                             ? () => setState(() {
                                   EditorStore.language = editing ? null : l;
                                 })
