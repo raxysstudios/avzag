@@ -63,6 +63,7 @@ class HitTile extends StatelessWidget {
       ),
       subtitle: RichText(
         maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         text: TextSpan(
           style: TextStyle(
             fontSize: 14,
