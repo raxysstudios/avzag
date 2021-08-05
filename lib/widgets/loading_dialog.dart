@@ -33,8 +33,12 @@ void showLoadingDialog<T>(
   ).then((_) => dismissed = true);
 
   future.then((result) {
-    if (!dismissed) if (result != null) callback?.call(result);
+    if (!dismissed) {
+      Navigator.pop(context);
+      if (result != null) callback?.call(result);
+    }
   }).catchError((error) {
+    if (!dismissed) Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
@@ -53,7 +57,5 @@ void showLoadingDialog<T>(
         ),
       ),
     );
-  }).whenComplete(() {
-    if (!dismissed) Navigator.pop(context);
   });
 }
