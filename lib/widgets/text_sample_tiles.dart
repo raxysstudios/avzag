@@ -88,7 +88,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
     final result = index < samples.length
         ? TextSample.fromJson(samples[index].toJson())
         : TextSample('');
-    showEditorDialog(
+    showEditorDialog<List<TextSample>>(
       context,
       result: () {
         if (index < samples.length)
@@ -97,7 +97,10 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
           samples.add(result);
         return samples;
       },
-      callback: widget.onEdited!,
+      callback: (result) {
+        if (result == null && index < samples.length) samples.removeAt(index);
+        widget.onEdited!.call(samples);
+      },
       title: 'Edit ${widget.name}',
       children: [
         TextFormField(
