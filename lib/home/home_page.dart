@@ -107,6 +107,7 @@ class _HomePageState extends State<HomePage> {
                           icon: Icon(Icons.cancel_outlined),
                           tooltip: 'Unselect all',
                         ),
+                        SizedBox(width: 18),
                         for (final language in selected) ...[
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 2),
