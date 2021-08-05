@@ -197,50 +197,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.only(bottom: 64),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final language = languages[index];
-                  final name = language.name;
-                  final selected = this.selected.contains(name);
-                  return LanguageCard(
-                    language,
-                    selected: selected,
-                    onTap: () => setState(
-                      () => selected
-                          ? this.selected.remove(name)
-                          : this.selected.add(name),
-                    ),
-                  );
-                },
-                childCount: languages.length,
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.only(bottom: 64),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final language = languages[index];
-                  final name = language.name;
-                  final selected = this.selected.contains(name);
-                  return LanguageCard(
-                    language,
-                    selected: selected,
-                    onTap: () => setState(
-                      () => selected
-                          ? this.selected.remove(name)
-                          : this.selected.add(name),
-                    ),
-                  );
-                },
-                childCount: languages.length,
-              ),
-            ),
-          ),
         ],
       ),
     );
