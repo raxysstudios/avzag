@@ -1,3 +1,4 @@
+
 # Compiled JavaScript files
 lib/**/*.js
 lib/**/*.js.map
@@ -7,3 +8,6 @@ typings/
 
 # Node.js dependency directory
 node_modules/
+
+# Sensitive data
+security
