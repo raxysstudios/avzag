@@ -1,6 +1,6 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/home/home_page.dart';
-import 'package:avzag/navigation/editor_toggle.dart';
+import 'package:avzag/navigation/editor_switch.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

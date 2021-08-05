@@ -105,37 +105,38 @@ class _AuthPageState extends State<AuthPage> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
-                  child: RichText(
+                if (EditorStore.email == null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      'Sign in with Google to see your options.',
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                else ...[
+                  Text(
+                    'With any question regarding the language materials, contact the corresponding editors below.',
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 8),
+                  RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
                       style: TextStyle(color: Colors.black87),
                       children: [
-                        if (EditorStore.email == null)
-                          TextSpan(
-                            text: 'Sign in with Google to see your options.',
-                          )
-                        else ...[
-                          TextSpan(
-                            text:
-                                'With any question regarding the language materials, contact the corresponding editors below.',
+                        TextSpan(text: 'You can edit '),
+                        TextSpan(
+                          text: capitalize(editable.join(', ')),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
                           ),
-                          if (editable.isNotEmpty) ...[
-                            TextSpan(text: '\n\nOr you can edit '),
-                            TextSpan(
-                              text: capitalize(editable.join(', ')),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            TextSpan(text: ' yourself.'),
-                          ],
-                        ],
+                        ),
+                        TextSpan(text: ' yourself.'),
                       ],
                     ),
                   ),
-                ),
+                  SizedBox(height: 16),
+                ],
               ],
             ),
           ),
@@ -150,17 +151,10 @@ class _AuthPageState extends State<AuthPage> {
                         final canEdit = editable.contains(l);
                         final editing = l == EditorStore.language;
                         return ListTile(
-                          leading: Opacity(
-                            opacity: canEdit ? 1 : 0.4,
-                            child: LanguageAvatar(
-                              language.name,
-                              child: editing ? Icon(Icons.edit_outlined) : null,
-                            ),
-                          ),
+                          leading: LanguageAvatar(language.name),
                           title: Text(
                             capitalize(l),
                             style: TextStyle(
-                              color: canEdit ? null : Colors.black54,
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
                             ),
@@ -169,16 +163,15 @@ class _AuthPageState extends State<AuthPage> {
                               ? () => setState(() {
                                     EditorStore.language = editing ? null : l;
                                   })
-                              : null,
+                              : language.contact == null
+                                  ? null
+                                  : () => launch(language.contact!),
                           selected: editing,
-                          trailing: language.contact == null
-                              ? null
-                              : IconButton(
-                                  onPressed: () => launch(language.contact!),
-                                  icon: Icon(Icons.send_outlined),
-                                  color: Colors.black87,
-                                  tooltip: "Contact editor",
-                                ),
+                          trailing: canEdit
+                              ? Icon(Icons.edit_outlined)
+                              : language.contact == null
+                                  ? null
+                                  : Icon(Icons.send_outlined),
                         );
                       },
                     ),
