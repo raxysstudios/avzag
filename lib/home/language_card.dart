@@ -17,36 +17,39 @@ class LanguageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      // color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        child: Stack(
-          children: [
-            AnimatedOpacity(
-              opacity: selected ? 1 : 0.4,
-              duration: Duration(milliseconds: 250),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: LanguageFlag(
-                  language.name,
-                  offset: Offset(-30, 36),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: onTap,
+            child: Stack(
+              children: [
+                AnimatedOpacity(
+                  opacity: selected ? 1 : 0.4,
+                  duration: Duration(milliseconds: 250),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: LanguageFlag(
+                      language.name,
+                      offset: Offset(-30, 36),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            ListTile(
-              selected: selected,
-              minVerticalPadding: 16,
-              title: Text(
-                capitalize(language.name),
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
+                ListTile(
+                  selected: selected,
+                  minVerticalPadding: 16,
+                  title: Text(
+                    capitalize(language.name),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  subtitle: Text(prettyTags(language.family ?? [])!),
                 ),
-              ),
-              subtitle: Text(prettyTags(language.family ?? [])!),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

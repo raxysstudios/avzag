@@ -3,7 +3,6 @@ import 'package:avzag/store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/home/language_flag.dart';
-import 'package:avzag/widgets/segment_card.dart';
 import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/widgets/note_tile.dart';
@@ -141,77 +140,81 @@ class _EntryPageState extends State<EntryPage> {
           body: ListView(
             padding: const EdgeInsets.only(bottom: 64),
             children: [
-              SegmentCard(
-                children: [
-                  TextSampleTiles(
-                    samples: entry.forms,
-                    onEdited: editing
-                        ? (result) => setState(() {
-                              entry.forms = result!;
-                            })
-                        : null,
-                    icon: Icons.format_list_bulleted_outlined,
-                    name: 'form',
-                  ),
-                  TagsTile(
-                    entry.tags,
-                    onEdited: editing
-                        ? (result) => setState(() {
-                              entry.tags = result;
-                            })
-                        : null,
-                  ),
-                  NoteTile(
-                    entry.note,
-                    onEdited: editing
-                        ? (result) => setState(() {
-                              entry.note = result;
-                            })
-                        : null,
-                  ),
-                ],
-              ),
-              for (final use in entry.uses)
-                SegmentCard(
+              Card(
+                child: Column(
                   children: [
-                    MeaningTile(
-                      use,
-                      onEdited: editing
-                          ? (value) => setState(() {
-                                if (value == null)
-                                  entry.uses.remove(use);
-                                else
-                                  entry.uses.add(value);
-                              })
-                          : null,
-                    ),
-                    TagsTile(
-                      use.tags,
+                    TextSampleTiles(
+                      samples: entry.forms,
                       onEdited: editing
                           ? (result) => setState(() {
-                                use.tags = result;
+                                entry.forms = result!;
+                              })
+                          : null,
+                      icon: Icons.format_list_bulleted_outlined,
+                      name: 'form',
+                    ),
+                    TagsTile(
+                      entry.tags,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                entry.tags = result;
                               })
                           : null,
                     ),
                     NoteTile(
-                      use.note,
+                      entry.note,
                       onEdited: editing
                           ? (result) => setState(() {
-                                use.note = result;
+                                entry.note = result;
                               })
                           : null,
-                    ),
-                    TextSampleTiles(
-                      samples: use.samples,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                use.samples = result;
-                              })
-                          : null,
-                      icon: Icons.bookmark_outline,
-                      translation: true,
                     ),
                   ],
+                ),
+              ),
+              for (final use in entry.uses)
+                Card(
+                  child: Column(
+                    children: [
+                      MeaningTile(
+                        use,
+                        onEdited: editing
+                            ? (value) => setState(() {
+                                  if (value == null)
+                                    entry.uses.remove(use);
+                                  else
+                                    entry.uses.add(value);
+                                })
+                            : null,
+                      ),
+                      TagsTile(
+                        use.tags,
+                        onEdited: editing
+                            ? (result) => setState(() {
+                                  use.tags = result;
+                                })
+                            : null,
+                      ),
+                      NoteTile(
+                        use.note,
+                        onEdited: editing
+                            ? (result) => setState(() {
+                                  use.note = result;
+                                })
+                            : null,
+                      ),
+                      TextSampleTiles(
+                        samples: use.samples,
+                        onEdited: editing
+                            ? (result) => setState(() {
+                                  use.samples = result;
+                                })
+                            : null,
+                        icon: Icons.bookmark_outline,
+                        translation: true,
+                      ),
+                    ],
+                  ),
                 ),
               if (editing)
                 Padding(

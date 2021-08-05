@@ -1,6 +1,5 @@
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
-import 'package:avzag/widgets/segment_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'entry.dart';
 import 'entry_page.dart';
@@ -86,14 +85,16 @@ class _DictionaryPageState extends State<DictionaryPage> {
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  return SegmentCard(
-                    children: [
-                      for (final hit in hits[index])
-                        HitTile(
-                          hit,
-                          onTap: () => openEntry(hit),
-                        ),
-                    ],
+                  return Card(
+                    child: Column(
+                      children: [
+                        for (final hit in hits[index])
+                          HitTile(
+                            hit,
+                            onTap: () => openEntry(hit),
+                          ),
+                      ],
+                    ),
                   );
                 },
                 childCount: hits.length,
