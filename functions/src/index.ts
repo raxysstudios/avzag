@@ -9,7 +9,7 @@ const index = algoliasearch(
 )
     .initIndex("dictionary");
 
-type Record = {
+type EntryRecord = {
   entryID: string;
   language: string;
   headword: string,
@@ -27,33 +27,57 @@ export const indexDictionary = functions
         await index.deleteBy({
           filters: "entryID:" + context.params.entryID,
         });
+      } else if (change.after.exists) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const entry = change.after.data()!;
+        const base = {
+          entryID: context.params.entryID,
+          language: context.params.language,
+          forms: entry.forms.map(({plain}: never) => plain),
+          headword: entry.forms[0].plain,
+        };
+        const records = [];
+
+        for (const use of entry.uses) {
+          const record = Object.assign({term: use.term}, base) as EntryRecord;
+          const tags = [].concat(...(entry.tags ?? []), ...(use.tags ?? []));
+          if (tags?.length) {
+            record.tags = tags.map((t) => "#" + t);
+          }
+          if (use.definition) {
+            record.definition = use.definition;
+          }
+          records.push(record);
+        }
+        await index.saveObjects(
+            records,
+            {autoGenerateObjectIDIfNotExist: true}
+        );
+      }
+    });
+
+export const setEditorClaims = functions
+    .region("europe-central2")
+    .firestore.document("meta/editors")
+    .onWrite(async (change) => {
+      const auth = admin.auth();
+      const users = {} as Record<string, Record<string, unknown> | null>;
+
+      if (change.before.exists) {
+        const editors = change.before.data() as Record<string, unknown>;
+        for (const email of Object.keys(editors)) {
+          users[email] = null;
+        }
+      }
+      if (change.after.exists) {
+        const editors = change.after.data() as Record<string, string[]>;
+        for (const [email, languages] of Object.entries(editors)) {
+          users[email] = {languages};
+        }
       }
 
-      const entry = change.after.data();
-      if (!entry) return;
-
-      const base = {
-        entryID: context.params.entryID,
-        language: context.params.language,
-        forms: entry.forms.map(({plain}: never) => plain),
-        headword: entry.forms[0].plain,
-      };
-      const records = [];
-
-      for (const use of entry.uses) {
-        const record = Object.assign({term: use.term}, base) as Record;
-        const tags = [].concat(...(entry.tags ?? []), ...(use.tags ?? []));
-        if (tags?.length) {
-          record.tags = tags.map((t) => "#"+t);
-        }
-        if (use.definition) {
-          record.definition = use.definition;
-        }
-        records.push(record);
+      for (const [email, claims] of Object.entries(users)) {
+        const user = await auth.getUserByEmail(email);
+        await auth.setCustomUserClaims(user.uid, claims);
       }
-
-      await index.saveObjects(
-          records,
-          {autoGenerateObjectIDIfNotExist: true}
-      );
     });
