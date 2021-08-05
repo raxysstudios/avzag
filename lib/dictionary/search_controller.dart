@@ -115,12 +115,11 @@ class SearchControllerState extends State<SearchController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Divider(height: 0),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
-              PopupMenuButton<String?>(
+              PopupMenuButton<String>(
                 icon: language == null
                     ? Icon(Icons.language_outlined)
                     : language!.isEmpty
