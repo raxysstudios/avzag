@@ -44,6 +44,8 @@ class _AuthPageState extends State<AuthPage> {
     });
   }
 
+  final claims = FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +58,19 @@ class _AuthPageState extends State<AuthPage> {
       body: ListView(
         padding: const EdgeInsets.only(bottom: 64),
         children: [
+          FutureBuilder<IdTokenResult>(
+            future: claims,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done ||
+                  snapshot.data == null) return LinearProgressIndicator();
+              final languages = json2list(snapshot.data?.claims?['languages']);
+              return Text(
+                languages?.isEmpty ?? true
+                    ? 'No languages'
+                    : prettyTags(languages)!,
+              );
+            },
+          ),
           SegmentCard(
             children: [
               Padding(
@@ -129,7 +144,7 @@ class _AuthPageState extends State<AuthPage> {
                                     : 'You can edit this language',
                               )
                             : null,
-                        onTap: canEdit
+                        onTap: true
                             ? () => setState(() {
                                   EditorStore.language = editing ? null : l;
                                 })
