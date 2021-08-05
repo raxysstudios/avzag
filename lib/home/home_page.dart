@@ -64,103 +64,96 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         titleSpacing: 4,
-        title: Row(
-          children: [
-            IconButton(
-              tooltip: 'Toggle map',
-              icon: Icon(Icons.map_outlined),
-              onPressed: () => showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text('The map comes soon'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text('Close'),
-                      )
-                    ],
-                  );
-                },
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 8),
-                child: TextField(
-                  controller: inputController,
-                  decoration: InputDecoration(
-                    labelText: "Search by names, tags, families",
-                  ),
+        centerTitle: true,
+        toolbarHeight: 104,
+        title: selected.isEmpty
+            ? Text(
+                'Select languages below',
+                style: TextStyle(
+                  color: Colors.black54,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 16,
                 ),
-              ),
-            ),
-            IconButton(
-              onPressed:
-                  inputController.text.isEmpty ? null : inputController.clear,
-              icon: Icon(Icons.clear),
-            ),
-          ],
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48),
-          child: Column(
-            children: [
-              Divider(height: 0),
-              Container(
-                height: 48,
+              )
+            : Container(
+                height: 40,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 2),
                   children: [
-                    if (selected.isEmpty)
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            'Tap below to selected languages',
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontStyle: FontStyle.italic,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      )
-                    else ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: InputChip(
+                        avatar: Icon(Icons.cancel),
+                        label: Text('Clear'),
+                        pressElevation: 4,
+                        onPressed: () => setState(() {
+                          selected.clear();
+                        }),
+                      ),
+                    ),
+                    for (final language in selected) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2),
                         child: InputChip(
-                          avatar: Icon(Icons.cancel),
-                          label: Text('Clear'),
+                          avatar: LanguageAvatar(
+                            language,
+                            radius: 12,
+                          ),
+                          label: Text(
+                            capitalize(language),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          pressElevation: 4,
                           onPressed: () => setState(() {
-                            selected.clear();
+                            selected.remove(language);
                           }),
                         ),
                       ),
-                      for (final language in selected) ...[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 2),
-                          child: InputChip(
-                            avatar: LanguageAvatar(
-                              language,
-                              radius: 12,
-                            ),
-                            label: Text(
-                              capitalize(language),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            onPressed: () => setState(() {
-                              selected.remove(language);
-                            }),
-                          ),
-                        ),
-                      ],
-                    ]
+                    ],
                   ],
                 ),
+              ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(64),
+          child: Row(
+            children: [
+              IconButton(
+                tooltip: 'Toggle map',
+                icon: Icon(Icons.map_outlined),
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('The map comes soon'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('Close'),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 8),
+                  child: TextField(
+                    controller: inputController,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: "Search by names, tags, families",
+                    ),
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed:
+                    inputController.text.isEmpty ? null : inputController.clear,
+                icon: Icon(Icons.clear),
               ),
             ],
           ),
