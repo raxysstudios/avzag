@@ -27,7 +27,7 @@ export const indexDictionary = functions
         await index.deleteBy({
           filters: "entryID:" + context.params.entryID,
         });
-      } else if (change.after.exists) {
+      if (change.after.exists) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const entry = change.after.data()!;
         const base = {
