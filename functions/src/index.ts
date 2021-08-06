@@ -10,13 +10,13 @@ const index = algoliasearch(
     .initIndex("dictionary");
 
 type EntryRecord = {
-  entryID: string;
-  language: string;
-  headword: string,
-  forms: string[]
-  term: string;
-  definition: string | undefined;
-  tags: string[] | undefined;
+    entryID: string;
+    language: string;
+    headword: string;
+    forms: string[];
+    term: string;
+    definition: string | undefined;
+    tags: string[] | undefined;
 };
 
 export const indexDictionary = functions
@@ -27,6 +27,7 @@ export const indexDictionary = functions
         await index.deleteBy({
           filters: "entryID:" + context.params.entryID,
         });
+      }
       if (change.after.exists) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const entry = change.after.data()!;

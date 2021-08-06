@@ -11,5 +11,5 @@
     "esModuleInterop": true
   },
   "compileOnSave": true,
-  "include": ["src", "src/security/editors.js"]
+  "include": ["src"]
 }
