@@ -4,14 +4,12 @@ class Language {
   final String name;
   final String flag;
   final String? contact;
-  final List<String>? editors;
   final List<String>? family;
   final List<String>? tags;
 
   const Language({
     required this.name,
     required this.flag,
-    this.editors,
     this.contact,
     this.tags,
     this.family,
@@ -22,7 +20,6 @@ class Language {
           name: json['name'] as String,
           flag: json['flag'] as String,
           contact: json['contact'] as String?,
-          editors: json2list(json['editors']),
           family: json2list(json['family']),
           tags: json2list(json['tags']),
         );
@@ -32,7 +29,6 @@ class Language {
     data['name'] = name;
     data['flag'] = flag;
     if (contact?.isNotEmpty ?? false) data['contact'] = contact;
-    if (editors?.isNotEmpty ?? false) data['editors'] = editors;
     if (family?.isNotEmpty ?? false) data['family'] = family;
     if (tags?.isNotEmpty ?? false) data['tags'] = tags;
     return data;
