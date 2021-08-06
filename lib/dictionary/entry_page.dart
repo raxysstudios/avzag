@@ -183,7 +183,7 @@ class _EntryPageState extends State<EntryPage> {
                                   if (value == null)
                                     entry.uses.remove(use);
                                   else
-                                    entry.uses.add(value);
+                                    entry.uses[entry.uses.indexOf(use)] = value;
                                 })
                             : null,
                       ),
