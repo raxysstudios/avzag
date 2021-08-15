@@ -62,7 +62,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
               ),
               tooltip: 'Add new entry',
             ),
-      backgroundColor: Colors.blueGrey.shade50,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(

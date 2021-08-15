@@ -106,7 +106,6 @@ class _EntryPageState extends State<EntryPage> {
               ),
             ],
           ),
-          backgroundColor: Colors.blueGrey.shade50,
           floatingActionButton: EditorStore.language == null
               ? null
               : editing

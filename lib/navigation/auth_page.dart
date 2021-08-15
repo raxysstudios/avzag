@@ -77,7 +77,6 @@ class _AuthPageState extends State<AuthPage> {
           preferredSize: Size.fromHeight(4),
         ),
       ),
-      backgroundColor: Colors.blueGrey.shade50,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => navigate(context, null),
         icon: Icon(

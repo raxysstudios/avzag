@@ -61,7 +61,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey.shade50,
       floatingActionButton: selected.isEmpty
           ? null
           : FloatingActionButton.extended(
