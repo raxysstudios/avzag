@@ -27,7 +27,6 @@ class _AppState extends State<App> {
       title: 'Avzag',
       theme: ThemeData(
         primaryColor: Colors.white,
-        accentColor: Colors.grey,
         scaffoldBackgroundColor: Colors.blueGrey.shade50,
         cardTheme: CardTheme(
           clipBehavior: Clip.antiAlias,
