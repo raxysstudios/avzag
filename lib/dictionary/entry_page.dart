@@ -91,12 +91,10 @@ class _EntryPageState extends State<EntryPage> {
               editing ? Icons.close_outlined : Icons.arrow_back_outlined,
             ),
           ),
-          title: editing
-              ? Text('Entry editor')
-              : PageTitle(
-                  title: widget.hit.headword,
-                  subtitle: widget.hit.language,
-                ),
+          title: PageTitle(
+            title: editing ? 'Entry editor' : widget.hit.headword,
+            subtitle: widget.hit.language,
+          ),
           actions: [
             LanguageFlag(
               widget.hit.language,
