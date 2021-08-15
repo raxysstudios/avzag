@@ -31,10 +31,12 @@ class EntryHit {
 
 class HitTile extends StatelessWidget {
   final EntryHit hit;
+  final bool showLanguage;
   final VoidCallback? onTap;
 
   const HitTile(
     this.hit, {
+    this.showLanguage = true,
     this.onTap,
   });
 
@@ -44,21 +46,25 @@ class HitTile extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            capitalize(hit.headword),
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+          Flexible(
+            child: Text(
+              capitalize(hit.headword),
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
-          Text(
-            capitalize(hit.language),
-            style: TextStyle(
-              color: Colors.black54,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+          if (showLanguage)
+            Text(
+              capitalize(hit.language),
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
         ],
       ),
       subtitle: RichText(
