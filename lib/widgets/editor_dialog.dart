@@ -38,7 +38,7 @@ void showEditorDialog<T>(
                   callback(null);
                 },
                 icon: Icon(
-                  Icons.delete_outline,
+                  Icons.delete_outlined,
                   color: Colors.red,
                 ),
                 highlightColor: Colors.transparent,

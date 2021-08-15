@@ -1,5 +1,6 @@
 import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/store.dart';
+import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/home/language_flag.dart';
@@ -53,65 +54,189 @@ class _EntryPageState extends State<EntryPage> {
     );
   }
 
+  void delete() async {
+    final confirm = await showDangerDialog(
+      context,
+      'Delete entry?',
+      confirmText: 'Delete',
+      rejectText: 'Keep',
+    );
+    if (confirm)
+      showLoadingDialog(
+        context,
+        FirebaseFirestore.instance
+            .collection('languages/${EditorStore.language}/dictionary')
+            .doc(widget.hit.entryID)
+            .delete()
+            .then((_) => Navigator.pop(context)),
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        if (!editing) return true;
-        final result = await showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Discard edits?'),
-              actions: [
-                TextButton.icon(
-                  onPressed: () => Navigator.pop(context, true),
-                  icon: Icon(Icons.delete_outline),
-                  label: Text('Discard'),
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(Colors.red),
-                    overlayColor: MaterialStateProperty.all(Colors.red.shade50),
-                  ),
-                ),
-                TextButton.icon(
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(Icons.edit_outlined),
-                  label: Text('Edit'),
-                ),
-              ],
-            );
-          },
-        );
-        return result ?? false;
-      },
+      onWillPop: () async =>
+          !editing ||
+          await showDangerDialog(
+            context,
+            'Discard edits?',
+            confirmText: 'Discard',
+            rejectText: 'Edit',
+          ),
       child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () => Navigator.maybePop(context),
-              icon: Icon(
-                editing ? Icons.close_outlined : Icons.arrow_back_outlined,
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () => Navigator.maybePop(context),
+            icon: Icon(
+              editing ? Icons.close_outlined : Icons.arrow_back_outlined,
+            ),
+          ),
+          title: editing
+              ? Text('Entry editor')
+              : PageTitle(
+                  title: widget.hit.headword,
+                  subtitle: widget.hit.language,
+                ),
+          actions: [
+            LanguageFlag(
+              widget.hit.language,
+              offset: Offset(-40, 4),
+              scale: 9,
+            ),
+          ],
+        ),
+        floatingActionButton: EditorStore.language == null
+            ? null
+            : editing
+                ? FloatingActionButton(
+                    onPressed: entry.uses.isEmpty || entry.forms.isEmpty
+                        ? () => ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.warning_outlined,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Must have at least one form and one use.',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                        : submit,
+                    child: Icon(Icons.publish_outlined),
+                    tooltip: 'Submit changes',
+                  )
+                : FloatingActionButton(
+                    onPressed: () => setState(() => startEditing()),
+                    child: Icon(Icons.edit_outlined),
+                    tooltip: 'Edit entry',
+                  ),
+        body: ListView(
+          padding: const EdgeInsets.only(bottom: 64),
+          children: [
+            Card(
+              child: Column(
+                children: [
+                  TextSampleTiles(
+                    samples: entry.forms,
+                    onEdited: editing
+                        ? (result) => setState(() {
+                              entry.forms = result!;
+                            })
+                        : null,
+                    icon: Icons.format_list_bulleted_outlined,
+                    name: 'form',
+                  ),
+                  TagsTile(
+                    entry.tags,
+                    onEdited: editing
+                        ? (result) => setState(() {
+                              entry.tags = result;
+                            })
+                        : null,
+                  ),
+                  NoteTile(
+                    entry.note,
+                    onEdited: editing
+                        ? (result) => setState(() {
+                              entry.note = result;
+                            })
+                        : null,
+                  ),
+                ],
               ),
             ),
-            title: editing
-                ? Text('Entry editor')
-                : PageTitle(
-                    title: widget.hit.headword,
-                    subtitle: widget.hit.language,
-                  ),
-            actions: [
-              LanguageFlag(
-                widget.hit.language,
-                offset: Offset(-40, 4),
-                scale: 9,
+            for (final use in entry.uses)
+              Card(
+                child: Column(
+                  children: [
+                    MeaningTile(
+                      use,
+                      onEdited: editing
+                          ? (value) => setState(() {
+                                if (value == null)
+                                  entry.uses.remove(use);
+                                else
+                                  entry.uses[entry.uses.indexOf(use)] = value;
+                              })
+                          : null,
+                    ),
+                    TagsTile(
+                      use.tags,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                use.tags = result;
+                              })
+                          : null,
+                    ),
+                    NoteTile(
+                      use.note,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                use.note = result;
+                              })
+                          : null,
+                    ),
+                    TextSampleTiles(
+                      samples: use.samples,
+                      onEdited: editing
+                          ? (result) => setState(() {
+                                use.samples = result;
+                              })
+                          : null,
+                      icon: Icons.bookmark_outline,
+                      translation: true,
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-          floatingActionButton: EditorStore.language == null
-              ? null
-              : editing
-                  ? FloatingActionButton(
-                      onPressed: entry.uses.isEmpty || entry.forms.isEmpty
-                          ? () => ScaffoldMessenger.of(context).showSnackBar(
+            if (editing)
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () => MeaningTile.showEditor(
+                        context: context,
+                        callback: (value) {
+                          if (value != null)
+                            setState(() {
+                              entry.uses.add(value);
+                            });
+                        },
+                      ),
+                      icon: Icon(Icons.add_outlined),
+                      label: Text('Add use'),
+                    ),
+                    TextButton.icon(
+                      onPressed: entry.uses.isEmpty
+                          ? delete
+                          : () => ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Row(
                                     children: [
@@ -120,120 +245,25 @@ class _EntryPageState extends State<EntryPage> {
                                         color: Colors.white,
                                       ),
                                       SizedBox(width: 8),
-                                      Text(
-                                        'Must have at least one form and one use.',
-                                      ),
+                                      Text('Remove all uses first.'),
                                     ],
                                   ),
                                 ),
-                              )
-                          : submit,
-                      child: Icon(Icons.publish_outlined),
-                      tooltip: 'Submit changes',
-                    )
-                  : FloatingActionButton(
-                      onPressed: () => setState(() => startEditing()),
-                      child: Icon(Icons.edit_outlined),
-                      tooltip: 'Edit entry',
-                    ),
-          body: ListView(
-            padding: const EdgeInsets.only(bottom: 64),
-            children: [
-              Card(
-                child: Column(
-                  children: [
-                    TextSampleTiles(
-                      samples: entry.forms,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                entry.forms = result!;
-                              })
-                          : null,
-                      icon: Icons.format_list_bulleted_outlined,
-                      name: 'form',
-                    ),
-                    TagsTile(
-                      entry.tags,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                entry.tags = result;
-                              })
-                          : null,
-                    ),
-                    NoteTile(
-                      entry.note,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                entry.note = result;
-                              })
-                          : null,
+                              ),
+                      icon: Icon(Icons.delete_outlined),
+                      label: Text('Delete entry'),
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all(Colors.red),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.red.shade50),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              for (final use in entry.uses)
-                Card(
-                  child: Column(
-                    children: [
-                      MeaningTile(
-                        use,
-                        onEdited: editing
-                            ? (value) => setState(() {
-                                  if (value == null)
-                                    entry.uses.remove(use);
-                                  else
-                                    entry.uses[entry.uses.indexOf(use)] = value;
-                                })
-                            : null,
-                      ),
-                      TagsTile(
-                        use.tags,
-                        onEdited: editing
-                            ? (result) => setState(() {
-                                  use.tags = result;
-                                })
-                            : null,
-                      ),
-                      NoteTile(
-                        use.note,
-                        onEdited: editing
-                            ? (result) => setState(() {
-                                  use.note = result;
-                                })
-                            : null,
-                      ),
-                      TextSampleTiles(
-                        samples: use.samples,
-                        onEdited: editing
-                            ? (result) => setState(() {
-                                  use.samples = result;
-                                })
-                            : null,
-                        icon: Icons.bookmark_outline,
-                        translation: true,
-                      ),
-                    ],
-                  ),
-                ),
-              if (editing)
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: TextButton.icon(
-                    onPressed: () => MeaningTile.showEditor(
-                      context: context,
-                      callback: (value) {
-                        if (value != null)
-                          setState(() {
-                            entry.uses.add(value);
-                          });
-                      },
-                    ),
-                    icon: Icon(Icons.add_outlined),
-                    label: Text('Add use'),
-                  ),
-                ),
-            ],
-          )),
+              )
+          ],
+        ),
+      ),
     );
   }
 }
