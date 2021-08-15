@@ -105,7 +105,7 @@ class _EntryPageState extends State<EntryPage> {
             ),
           ],
         ),
-        floatingActionButton: EditorStore.language == null
+        floatingActionButton: EditorStore.language != widget.hit.language
             ? null
             : editing
                 ? FloatingActionButton(
