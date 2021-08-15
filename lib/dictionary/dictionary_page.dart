@@ -85,21 +85,29 @@ class _DictionaryPageState extends State<DictionaryPage> {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final hits = this.hits[index];
+                  EntryHit? lastHit;
                   return Card(
                     child: Column(
                       children: [
-                        for (var i = 0, l = true;
-                            i < hits.length;
-                            l = i == 0 ||
-                                hits[i - 1].language != hits[i].language,
-                            i++) ...[
-                          if (l) Divider(height: 0),
-                          HitTile(
-                            hits[i],
-                            showLanguage: l,
-                            onTap: () => openEntry(hits[i]),
+                        for (final hit in hits)
+                          Builder(
+                            builder: (context) {
+                              final language =
+                                  hit.language != lastHit?.language;
+                              final divider = language && lastHit != null;
+                              lastHit = hit;
+                              return Column(
+                                children: [
+                                  if (divider) Divider(height: 0),
+                                  HitTile(
+                                    hit,
+                                    showLanguage: language,
+                                    onTap: () => openEntry(hit),
+                                  )
+                                ],
+                              );
+                            },
                           ),
-                        ],
                       ],
                     ),
                   );
