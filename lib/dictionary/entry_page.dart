@@ -233,31 +233,33 @@ class _EntryPageState extends State<EntryPage> {
                       icon: Icon(Icons.add_outlined),
                       label: Text('Add use'),
                     ),
-                    TextButton.icon(
-                      onPressed: entry.uses.isEmpty
-                          ? delete
-                          : () => ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.warning_outlined,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(width: 8),
-                                      Text('Remove all uses first.'),
-                                    ],
+                    if (widget.hit.entryID.isNotEmpty)
+                      TextButton.icon(
+                        onPressed: entry.uses.isEmpty
+                            ? delete
+                            : () => ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.warning_outlined,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text('Remove all uses first.'),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                      icon: Icon(Icons.delete_outlined),
-                      label: Text('Delete entry'),
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(Colors.red),
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.red.shade50),
+                        icon: Icon(Icons.delete_outlined),
+                        label: Text('Delete entry'),
+                        style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all(Colors.red),
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.red.shade50),
+                        ),
                       ),
-                    ),
                   ],
                 ),
               )
