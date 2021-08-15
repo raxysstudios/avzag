@@ -90,7 +90,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                       children: [
                         for (var i = 0, l = true;
                             i < hits.length;
-                            l = i > 0 &&
+                            l = i == 0 ||
                                 hits[i - 1].language != hits[i].language,
                             i++) ...[
                           if (l) Divider(height: 0),
