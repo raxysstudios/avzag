@@ -16,8 +16,8 @@ class DictionaryPage extends StatefulWidget {
 class _DictionaryPageState extends State<DictionaryPage> {
   var hits = <List<EntryHit>>[];
 
-  void openEntry(EntryHit hit) {
-    showLoadingDialog<Entry>(
+  void openEntry(EntryHit hit) async {
+    final entry = await showLoadingDialog<Entry>(
       context,
       FirebaseFirestore.instance
           .doc('languages/${hit.language}/dictionary/${hit.entryID}')
@@ -26,14 +26,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
             toFirestore: (Entry object, _) => object.toJson(),
           )
           .get()
-          .then((snapshot) => Future.value(snapshot.data())),
-      callback: (result) => Navigator.push(
+          .then((snapshot) => snapshot.data()),
+    );
+    if (entry != null)
+      Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => EntryPage(result, hit),
+          builder: (context) => EntryPage(entry, hit),
         ),
-      ),
-    );
+      );
   }
 
   @override
