@@ -24,6 +24,7 @@ class SearchControllerState extends State<SearchController> {
   @override
   void initState() {
     super.initState();
+    if (BaseStore.languages.length == 1) language = BaseStore.languages.first;
     inputController.addListener(() {
       final text = inputController.text
           .split(' ')
@@ -138,25 +139,27 @@ class SearchControllerState extends State<SearchController> {
                     horizontal: VisualDensity.minimumDensity,
                   );
                   return [
-                    PopupMenuItem(
-                      value: 'English',
-                      child: ListTile(
-                        visualDensity: density,
-                        leading: Icon(Icons.language_outlined),
-                        title: Text('English'),
-                        selected: language == null,
+                    if (BaseStore.languages.length > 1) ...[
+                      PopupMenuItem(
+                        value: 'English',
+                        child: ListTile(
+                          visualDensity: density,
+                          leading: Icon(Icons.language_outlined),
+                          title: Text('English'),
+                          selected: language == null,
+                        ),
                       ),
-                    ),
-                    PopupMenuItem(
-                      value: '',
-                      child: ListTile(
-                        visualDensity: density,
-                        leading: Icon(Icons.auto_awesome_outlined),
-                        title: Text('Cross-lingual'),
-                        selected: language?.isEmpty ?? false,
+                      PopupMenuItem(
+                        value: '',
+                        child: ListTile(
+                          visualDensity: density,
+                          leading: Icon(Icons.auto_awesome_outlined),
+                          title: Text('Cross-lingual'),
+                          selected: language?.isEmpty ?? false,
+                        ),
                       ),
-                    ),
-                    PopupMenuDivider(),
+                      PopupMenuDivider(),
+                    ],
                     for (final l in BaseStore.languages)
                       PopupMenuItem(
                         value: l,
