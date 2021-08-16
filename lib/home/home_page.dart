@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                 );
                 await navigate(context, null);
               },
-              icon: Icon(Icons.arrow_back_outlined),
+              icon: Icon(Icons.check_outlined),
               label: Text('Continue'),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

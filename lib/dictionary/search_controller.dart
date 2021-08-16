@@ -94,8 +94,7 @@ class SearchControllerState extends State<SearchController> {
               : snapshot,
         );
 
-    final hits =
-        snap.hits.map((h) => EntryHit.fromAlgoliaHitData(h.data)).toList();
+    final hits = snap.hits.map((h) => EntryHit.fromAlgoliaHit(h)).toList();
     if (language?.isNotEmpty ?? false)
       widget.onSearch([hits]);
     else {

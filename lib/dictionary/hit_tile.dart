@@ -1,9 +1,11 @@
+import 'package:algolia/algolia.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 
 class EntryHit {
   final String entryID;
   final String headword;
+  final String? form;
   final String language;
   final String term;
   final String? definition;
@@ -12,21 +14,32 @@ class EntryHit {
   const EntryHit({
     required this.entryID,
     required this.headword,
+    this.form,
     required this.language,
     required this.term,
     this.tags,
     this.definition,
   });
 
-  EntryHit.fromAlgoliaHitData(Map<String, dynamic> json)
-      : this(
-          entryID: json['entryID'],
-          headword: json['headword'],
-          language: json['language'],
-          term: json['term'],
-          definition: json['definition'],
-          tags: json2list(json['tags'])?.map((t) => t.substring(1)).toList(),
-        );
+  factory EntryHit.fromAlgoliaHit(AlgoliaObjectSnapshot hit) {
+    final json = hit.data;
+
+    final form = listFromJson(
+          hit.highlightResult?['forms'],
+          (i) => i['matchLevel'] != 'none',
+        )?.indexOf(true) ??
+        -1;
+
+    return EntryHit(
+      entryID: json['entryID'],
+      headword: json['headword'],
+      form: form >= 0 ? json2list(json['forms'])![form] : null,
+      language: json['language'],
+      term: json['term'],
+      definition: json['definition'],
+      tags: json2list(json['tags'])?.map((t) => t.substring(1)).toList(),
+    );
+  }
 }
 
 class HitTile extends StatelessWidget {
@@ -46,14 +59,32 @@ class HitTile extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
-            child: Text(
-              capitalize(hit.headword),
-              overflow: TextOverflow.ellipsis,
+          RichText(
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
               style: TextStyle(
+                color: Colors.black87,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
+              children: [
+                TextSpan(
+                  text: capitalize(hit.headword),
+                ),
+                if (hit.form != null && hit.form != hit.headword) ...[
+                  WidgetSpan(
+                    child: SizedBox(width: 8),
+                  ),
+                  TextSpan(
+                    text: capitalize(hit.form!),
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ]
+              ],
             ),
           ),
           if (showLanguage)
@@ -61,7 +92,7 @@ class HitTile extends StatelessWidget {
               capitalize(hit.language),
               style: TextStyle(
                 color: Colors.black54,
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
             ),
