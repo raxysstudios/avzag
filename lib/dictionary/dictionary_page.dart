@@ -87,32 +87,31 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   final hits = this.hits[index];
                   EntryHit? lastHit;
                   return Card(
-                    child: Column(
-                      children: [
-                        for (final hit in hits)
-                          Builder(
-                            builder: (context) {
-                              final language =
-                                  hit.language != lastHit?.language;
-                              final divider = language && lastHit != null;
-                              lastHit = hit;
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemCount: hits.length,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) {
+                        final hit = hits[index];
+                        final language = hit.language != lastHit?.language;
+                        final divider = language && lastHit != null;
+                        lastHit = hit;
 
-                              final tile = HitTile(
-                                hit,
-                                showLanguage: language,
-                                onTap: () => openEntry(hit),
-                              );
-                              if (divider)
-                                return Column(
-                                  children: [
-                                    Divider(height: 0),
-                                    tile,
-                                  ],
-                                );
-                              return tile;
-                            },
-                          ),
-                      ],
+                        final tile = HitTile(
+                          hit,
+                          showLanguage: language,
+                          onTap: () => openEntry(hit),
+                        );
+                        if (divider)
+                          return Column(
+                            children: [
+                              Divider(height: 0),
+                              tile,
+                            ],
+                          );
+                        return tile;
+                      },
                     ),
                   );
                 },
