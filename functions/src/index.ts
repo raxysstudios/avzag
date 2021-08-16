@@ -41,7 +41,7 @@ export const indexDictionary = functions
 
         for (const use of entry.uses) {
           const record = Object.assign({term: use.term}, base) as EntryRecord;
-          const tags = [].concat(...(entry.tags ?? []), ...(use.tags ?? []));
+          const tags = [].concat(...(use.tags ?? []), ...(entry.tags ?? []));
           if (tags?.length) {
             record.tags = tags.map((t) => "#" + t);
           }
