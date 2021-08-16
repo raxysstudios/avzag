@@ -96,16 +96,20 @@ class _DictionaryPageState extends State<DictionaryPage> {
                                   hit.language != lastHit?.language;
                               final divider = language && lastHit != null;
                               lastHit = hit;
-                              return Column(
-                                children: [
-                                  if (divider) Divider(height: 0),
-                                  HitTile(
-                                    hit,
-                                    showLanguage: language,
-                                    onTap: () => openEntry(hit),
-                                  )
-                                ],
+
+                              final tile = HitTile(
+                                hit,
+                                showLanguage: language,
+                                onTap: () => openEntry(hit),
                               );
+                              if (divider)
+                                return Column(
+                                  children: [
+                                    Divider(height: 0),
+                                    tile,
+                                  ],
+                                );
+                              return tile;
                             },
                           ),
                       ],
