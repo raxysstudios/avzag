@@ -53,33 +53,34 @@ class _DictionaryPageState extends State<DictionaryPage> {
       top: Radius.circular(16),
     );
     final safePadding = MediaQuery.of(context).padding.top;
+    final canEdit = EditorStore.language == null ||
+        (hit != null && EditorStore.language != hit?.language);
     return Scaffold(
       drawer: NavDraver(title: 'dictionary'),
-      floatingActionButton:
-          EditorStore.language == null || EditorStore.language != hit?.language
-              ? null
-              : EditorButton(
-                  entry,
-                  hit,
-                  editing: editing,
-                  collapsed: collapsed,
-                  onStart: (entry, hit) {
-                    setState(() {
-                      this.entry = entry;
-                      this.hit = hit;
-                      editing = true;
-                      collapsed = false;
-                    });
-                    panelController.open();
-                  },
-                  onEnd: () {
-                    setState(() {
-                      editing = false;
-                      collapsed = true;
-                    });
-                    panelController.close();
-                  },
-                ),
+      floatingActionButton: canEdit
+          ? null
+          : EditorButton(
+              entry,
+              hit,
+              editing: editing,
+              collapsed: collapsed,
+              onStart: (entry, hit) {
+                setState(() {
+                  this.entry = entry;
+                  this.hit = hit;
+                  editing = true;
+                  collapsed = false;
+                });
+                panelController.open();
+              },
+              onEnd: () {
+                setState(() {
+                  editing = false;
+                  collapsed = true;
+                });
+                panelController.close();
+              },
+            ),
       body: SlidingUpPanel(
         controller: panelController,
         backdropEnabled: true,
