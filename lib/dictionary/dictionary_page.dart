@@ -1,3 +1,4 @@
+import 'package:avzag/dictionary/editor_button.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/store.dart';
@@ -6,8 +7,8 @@ import 'package:avzag/widgets/page_title.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'entry.dart';
-import 'entry_page.dart';
-import 'search_controller.dart';
+import 'entry_sliver.dart';
+import 'search_toolbar.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:flutter/material.dart';
 import 'hit_tile.dart';
@@ -53,7 +54,26 @@ class _DictionaryPageState extends State<DictionaryPage> {
     final safePadding = MediaQuery.of(context).padding.top;
     return Scaffold(
       drawer: NavDraver(title: 'dictionary'),
-      floatingActionButton: buildFloatingButton(context),
+      floatingActionButton: EditorStore.language == null
+          ? null
+          : EditorButton(
+              entry,
+              hit,
+              editing: editing,
+              collapsed: panelController.isPanelClosed,
+              onStart: (entry, hit) {
+                setState(() {
+                  this.entry = entry;
+                  this.hit = hit;
+                  editing = true;
+                });
+                panelController.open();
+              },
+              onEnd: () {
+                editing = false;
+                panelController.hide();
+              },
+            ),
       body: SlidingUpPanel(
         controller: panelController,
         backdropEnabled: true,
@@ -67,7 +87,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               title: Text('Dictionary'),
               bottom: PreferredSize(
                 preferredSize: Size.fromHeight(64),
-                child: SearchController(
+                child: SearchToolbar(
                   (s) => setState(() {
                     hits = s;
                   }),
@@ -84,7 +104,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
           ],
         ),
         maxHeight: MediaQuery.of(context).size.height - kToolbarHeight,
-        minHeight: editing ? kToolbarHeight : 0,
+        minHeight: editing ? kToolbarHeight + safePadding : 0,
         renderPanelSheet: false,
         panelBuilder: (scrollController) {
           if (entry == null) return SizedBox();
@@ -129,11 +149,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.only(bottom: 86),
-                    sliver: EntryPage(
+                    sliver: EntrySliver(
                       entry!,
                       hit!,
-                      scrollController: scrollController,
-                      key: ValueKey(hit!.entryID),
+                      onEdited: (e) => setState(() => entry = e),
                     ),
                   ),
                 ],
@@ -145,42 +164,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
           FocusScope.of(context).unfocus();
           setState(() {});
         },
-        onPanelClosed: () => setState(() {}),
+        onPanelClosed: () => setState(() {
+          if (!panelController.isPanelShown) entry = null;
+        }),
       ),
-    );
-  }
-
-  Widget? buildFloatingButton(BuildContext context) {
-    if (EditorStore.language == null) return null;
-    if (panelController.isPanelClosed) {
-      if (editing) return null;
-      return FloatingActionButton.extended(
-        onPressed: () {
-          setState(() {
-            entry = Entry(forms: [], uses: []);
-            hit = EntryHit(
-              entryID: '',
-              headword: '',
-              language: EditorStore.language!,
-              term: '',
-            );
-          });
-          panelController.open();
-        },
-        icon: Icon(Icons.add_outlined),
-        label: Text('New'),
-      );
-    }
-    if (editing)
-      return FloatingActionButton.extended(
-        onPressed: () {},
-        icon: Icon(Icons.publish_outlined),
-        label: Text('Submit'),
-      );
-    return FloatingActionButton.extended(
-      onPressed: () {},
-      icon: Icon(Icons.edit_outlined),
-      label: Text('Edit'),
     );
   }
 }

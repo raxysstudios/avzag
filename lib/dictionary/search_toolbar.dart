@@ -6,15 +6,15 @@ import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 import 'hit_tile.dart';
 
-class SearchController extends StatefulWidget {
+class SearchToolbar extends StatefulWidget {
   final ValueSetter<List<List<EntryHit>>> onSearch;
-  const SearchController(this.onSearch);
+  const SearchToolbar(this.onSearch);
 
   @override
-  SearchControllerState createState() => SearchControllerState();
+  SearchToolbarState createState() => SearchToolbarState();
 }
 
-class SearchControllerState extends State<SearchController> {
+class SearchToolbarState extends State<SearchToolbar> {
   final inputController = TextEditingController();
   Timer timer = Timer(Duration.zero, () {});
   String text = "";
