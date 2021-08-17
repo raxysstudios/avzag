@@ -103,7 +103,6 @@ class EditorButton extends StatelessWidget {
         ? collection.add(json)
         : collection.doc(hit!.entryID).update(json);
     await showLoadingDialog(context, upload);
-    Navigator.pop(context);
     return true;
   }
 
@@ -127,7 +126,6 @@ class EditorButton extends StatelessWidget {
             .doc(hit!.entryID)
             .delete(),
       );
-      Navigator.pop(context);
       return true;
     }
     return false;

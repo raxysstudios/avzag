@@ -154,7 +154,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     sliver: EntrySliver(
                       entry!,
                       hit!,
-                      onEdited: (e) => setState(() => entry = e),
+                      onEdited:
+                          editing ? (e) => setState(() => entry = e) : null,
                     ),
                   ),
                 ],
