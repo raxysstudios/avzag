@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () => setState(() {
                             selected.clear();
                           }),
-                          icon: Icon(Icons.cancel_outlined),
+                          icon: Icon(Icons.clear_outlined),
                           tooltip: 'Unselect all',
                         ),
                         SizedBox(width: 18),
