@@ -21,6 +21,7 @@ class DictionaryPage extends StatefulWidget {
 class _DictionaryPageState extends State<DictionaryPage> {
   var hits = <List<EntryHit>>[];
   var editing = false;
+  var collapsed = true;
   EntryHit? hit;
   Entry? entry;
   final panelController = PanelController();
@@ -60,7 +61,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               entry,
               hit,
               editing: editing,
-              collapsed: panelController.isPanelClosed,
+              collapsed: collapsed,
               onStart: (entry, hit) {
                 setState(() {
                   this.entry = entry;
@@ -121,7 +122,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     primary: false,
                     leading: Builder(
                       builder: (context) {
-                        if (panelController.isPanelClosed)
+                        if (collapsed)
                           return IconButton(
                             onPressed: panelController.open,
                             icon: Icon(Icons.expand_less_outlined),
@@ -162,9 +163,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
         },
         onPanelOpened: () {
           FocusScope.of(context).unfocus();
-          setState(() {});
+          setState(() {
+            collapsed = false;
+          });
         },
         onPanelClosed: () => setState(() {
+          collapsed = true;
           if (!panelController.isPanelShown) entry = null;
         }),
       ),

@@ -28,8 +28,15 @@ class EditorButton extends StatelessWidget {
     if (collapsed) {
       if (editing)
         return FloatingActionButton.extended(
-          onPressed: onEnd,
-          icon: Icon(Icons.cancel_outlined),
+          onPressed: () async {
+            if (await showDangerDialog(
+              context,
+              'Discard edits?',
+              confirmText: 'Discard',
+              rejectText: 'Edit',
+            )) onEnd();
+          },
+          icon: Icon(Icons.close_outlined),
           label: Text('Discard'),
           backgroundColor: Colors.redAccent,
         );
@@ -50,19 +57,24 @@ class EditorButton extends StatelessWidget {
     if (editing)
       return SingleChildScrollView(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            FloatingActionButton(
-              onPressed: () async {
-                final deleted = await delete(context);
-                if (deleted) onEnd();
-              },
-              child: Icon(Icons.delete),
-              tooltip: 'Delete',
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: kFloatingActionButtonMargin * 2),
+              child: FloatingActionButton(
+                onPressed: () async {
+                  if (await delete(context)) onEnd();
+                },
+                child: Icon(Icons.delete_outlined),
+                tooltip: 'Delete',
+                backgroundColor: Colors.redAccent,
+                mini: true,
+              ),
             ),
             FloatingActionButton.extended(
               onPressed: () async {
-                await submit(context);
-                onEnd();
+                if (await submit(context)) onEnd();
               },
               icon: Icon(Icons.publish_outlined),
               label: Text('Submit'),
