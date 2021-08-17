@@ -2,8 +2,6 @@ import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
-import 'package:avzag/widgets/page_title.dart';
-import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/widgets/note_tile.dart';
@@ -75,285 +73,108 @@ class _EntryPageState extends State<EntryPage> {
       );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      controller: widget.scrollController,
-      children: [
+  List<Widget> buildTiles(BuildContext context) {
+    return [
+      Card(
+        child: Column(
+          children: [
+            TextSampleTiles(
+              samples: entry.forms,
+              onEdited: editing
+                  ? (result) => setState(() {
+                        entry.forms = result!;
+                      })
+                  : null,
+              icon: Icons.format_list_bulleted_outlined,
+              name: 'form',
+            ),
+            TagsTile(
+              entry.tags,
+              onEdited: editing
+                  ? (result) => setState(() {
+                        entry.tags = result;
+                      })
+                  : null,
+            ),
+            NoteTile(
+              entry.note,
+              onEdited: editing
+                  ? (result) => setState(() {
+                        entry.note = result;
+                      })
+                  : null,
+            ),
+          ],
+        ),
+      ),
+      for (final use in entry.uses)
         Card(
           child: Column(
             children: [
-              TextSampleTiles(
-                samples: entry.forms,
+              MeaningTile(
+                use,
                 onEdited: editing
-                    ? (result) => setState(() {
-                          entry.forms = result!;
+                    ? (value) => setState(() {
+                          if (value == null)
+                            entry.uses.remove(use);
+                          else
+                            entry.uses[entry.uses.indexOf(use)] = value;
                         })
                     : null,
-                icon: Icons.format_list_bulleted_outlined,
-                name: 'form',
               ),
               TagsTile(
-                entry.tags,
+                use.tags,
                 onEdited: editing
                     ? (result) => setState(() {
-                          entry.tags = result;
+                          use.tags = result;
                         })
                     : null,
               ),
               NoteTile(
-                entry.note,
+                use.note,
                 onEdited: editing
                     ? (result) => setState(() {
-                          entry.note = result;
+                          use.note = result;
                         })
                     : null,
+              ),
+              TextSampleTiles(
+                samples: use.samples,
+                onEdited: editing
+                    ? (result) => setState(() {
+                          use.samples = result;
+                        })
+                    : null,
+                icon: Icons.bookmark_outline,
+                translation: true,
               ),
             ],
           ),
         ),
-        for (final use in entry.uses)
-          Card(
-            child: Column(
-              children: [
-                MeaningTile(
-                  use,
-                  onEdited: editing
-                      ? (value) => setState(() {
-                            if (value == null)
-                              entry.uses.remove(use);
-                            else
-                              entry.uses[entry.uses.indexOf(use)] = value;
-                          })
-                      : null,
+      if (editing)
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextButton.icon(
+                onPressed: () => MeaningTile.showEditor(
+                  context: context,
+                  callback: (value) {
+                    if (value != null)
+                      setState(() {
+                        entry.uses.add(value);
+                      });
+                  },
                 ),
-                TagsTile(
-                  use.tags,
-                  onEdited: editing
-                      ? (result) => setState(() {
-                            use.tags = result;
-                          })
-                      : null,
-                ),
-                NoteTile(
-                  use.note,
-                  onEdited: editing
-                      ? (result) => setState(() {
-                            use.note = result;
-                          })
-                      : null,
-                ),
-                TextSampleTiles(
-                  samples: use.samples,
-                  onEdited: editing
-                      ? (result) => setState(() {
-                            use.samples = result;
-                          })
-                      : null,
-                  icon: Icons.bookmark_outline,
-                  translation: true,
-                ),
-              ],
-            ),
-          ),
-        if (editing)
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+                icon: Icon(Icons.add_outlined),
+                label: Text('Add use'),
+              ),
+              if (widget.hit.entryID.isNotEmpty)
                 TextButton.icon(
-                  onPressed: () => MeaningTile.showEditor(
-                    context: context,
-                    callback: (value) {
-                      if (value != null)
-                        setState(() {
-                          entry.uses.add(value);
-                        });
-                    },
-                  ),
-                  icon: Icon(Icons.add_outlined),
-                  label: Text('Add use'),
-                ),
-                if (widget.hit.entryID.isNotEmpty)
-                  TextButton.icon(
-                    onPressed: entry.uses.isEmpty
-                        ? delete
-                        : () => ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.warning_outlined,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text('Remove all uses first.'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                    icon: Icon(Icons.delete_outlined),
-                    label: Text('Delete entry'),
-                    style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(Colors.red),
-                      overlayColor:
-                          MaterialStateProperty.all(Colors.red.shade50),
-                    ),
-                  ),
-              ],
-            ),
-          )
-      ],
-    );
-    return CustomScrollView(
-      controller: widget.scrollController,
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.only(bottom: 64),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Card(
-                  child: Column(
-                    children: [
-                      TextSampleTiles(
-                        samples: entry.forms,
-                        onEdited: editing
-                            ? (result) => setState(() {
-                                  entry.forms = result!;
-                                })
-                            : null,
-                        icon: Icons.format_list_bulleted_outlined,
-                        name: 'form',
-                      ),
-                      TagsTile(
-                        entry.tags,
-                        onEdited: editing
-                            ? (result) => setState(() {
-                                  entry.tags = result;
-                                })
-                            : null,
-                      ),
-                      NoteTile(
-                        entry.note,
-                        onEdited: editing
-                            ? (result) => setState(() {
-                                  entry.note = result;
-                                })
-                            : null,
-                      ),
-                    ],
-                  ),
-                ),
-                for (final use in entry.uses)
-                  Card(
-                    child: Column(
-                      children: [
-                        MeaningTile(
-                          use,
-                          onEdited: editing
-                              ? (value) => setState(() {
-                                    if (value == null)
-                                      entry.uses.remove(use);
-                                    else
-                                      entry.uses[entry.uses.indexOf(use)] =
-                                          value;
-                                  })
-                              : null,
-                        ),
-                        TagsTile(
-                          use.tags,
-                          onEdited: editing
-                              ? (result) => setState(() {
-                                    use.tags = result;
-                                  })
-                              : null,
-                        ),
-                        NoteTile(
-                          use.note,
-                          onEdited: editing
-                              ? (result) => setState(() {
-                                    use.note = result;
-                                  })
-                              : null,
-                        ),
-                        TextSampleTiles(
-                          samples: use.samples,
-                          onEdited: editing
-                              ? (result) => setState(() {
-                                    use.samples = result;
-                                  })
-                              : null,
-                          icon: Icons.bookmark_outline,
-                          translation: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                if (editing)
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TextButton.icon(
-                          onPressed: () => MeaningTile.showEditor(
-                            context: context,
-                            callback: (value) {
-                              if (value != null)
-                                setState(() {
-                                  entry.uses.add(value);
-                                });
-                            },
-                          ),
-                          icon: Icon(Icons.add_outlined),
-                          label: Text('Add use'),
-                        ),
-                        if (widget.hit.entryID.isNotEmpty)
-                          TextButton.icon(
-                            onPressed: entry.uses.isEmpty
-                                ? delete
-                                : () =>
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.warning_outlined,
-                                              color: Colors.white,
-                                            ),
-                                            SizedBox(width: 8),
-                                            Text('Remove all uses first.'),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                            icon: Icon(Icons.delete_outlined),
-                            label: Text('Delete entry'),
-                            style: ButtonStyle(
-                              foregroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              overlayColor:
-                                  MaterialStateProperty.all(Colors.red.shade50),
-                            ),
-                          ),
-                      ],
-                    ),
-                  )
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-    return Scaffold(
-      floatingActionButton: EditorStore.language != widget.hit.language
-          ? null
-          : editing
-              ? FloatingActionButton(
-                  onPressed: entry.uses.isEmpty || entry.forms.isEmpty
-                      ? () => ScaffoldMessenger.of(context).showSnackBar(
+                  onPressed: entry.uses.isEmpty
+                      ? delete
+                      : () => ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Row(
                                 children: [
@@ -362,316 +183,105 @@ class _EntryPageState extends State<EntryPage> {
                                     color: Colors.white,
                                   ),
                                   SizedBox(width: 8),
-                                  Text(
-                                    'Must have at least one form and one use.',
-                                  ),
+                                  Text('Remove all uses first.'),
                                 ],
                               ),
                             ),
-                          )
-                      : submit,
-                  child: Icon(Icons.publish_outlined),
-                  tooltip: 'Submit changes',
-                )
-              : FloatingActionButton(
-                  onPressed: () => setState(() => startEditing()),
-                  child: Icon(Icons.edit_outlined),
-                  tooltip: 'Edit entry',
-                ),
-      body: CustomScrollView(
-        controller: widget.scrollController,
-        slivers: [
-          SliverAppBar(
-            leading: IconButton(
-              onPressed: () => Navigator.maybePop(context),
-              icon: Icon(
-                editing ? Icons.close_outlined : Icons.arrow_back_outlined,
-              ),
-            ),
-            title: PageTitle(
-              title: editing ? 'Entry editor' : widget.hit.headword,
-              subtitle: widget.hit.language,
-            ),
-            actions: [
-              LanguageFlag(
-                widget.hit.language,
-                offset: Offset(-40, 4),
-                scale: 9,
-              ),
-            ],
-            pinned: true,
-            snap: true,
-            floating: true,
-            forceElevated: true,
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.only(bottom: 64),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Card(
-                    child: Column(
-                      children: [
-                        TextSampleTiles(
-                          samples: entry.forms,
-                          onEdited: editing
-                              ? (result) => setState(() {
-                                    entry.forms = result!;
-                                  })
-                              : null,
-                          icon: Icons.format_list_bulleted_outlined,
-                          name: 'form',
-                        ),
-                        TagsTile(
-                          entry.tags,
-                          onEdited: editing
-                              ? (result) => setState(() {
-                                    entry.tags = result;
-                                  })
-                              : null,
-                        ),
-                        NoteTile(
-                          entry.note,
-                          onEdited: editing
-                              ? (result) => setState(() {
-                                    entry.note = result;
-                                  })
-                              : null,
-                        ),
-                      ],
-                    ),
+                          ),
+                  icon: Icon(Icons.delete_outlined),
+                  label: Text('Delete entry'),
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(Colors.red),
+                    overlayColor: MaterialStateProperty.all(Colors.red.shade50),
                   ),
-                  for (final use in entry.uses)
-                    Card(
-                      child: Column(
-                        children: [
-                          MeaningTile(
-                            use,
-                            onEdited: editing
-                                ? (value) => setState(() {
-                                      if (value == null)
-                                        entry.uses.remove(use);
-                                      else
-                                        entry.uses[entry.uses.indexOf(use)] =
-                                            value;
-                                    })
-                                : null,
-                          ),
-                          TagsTile(
-                            use.tags,
-                            onEdited: editing
-                                ? (result) => setState(() {
-                                      use.tags = result;
-                                    })
-                                : null,
-                          ),
-                          NoteTile(
-                            use.note,
-                            onEdited: editing
-                                ? (result) => setState(() {
-                                      use.note = result;
-                                    })
-                                : null,
-                          ),
-                          TextSampleTiles(
-                            samples: use.samples,
-                            onEdited: editing
-                                ? (result) => setState(() {
-                                      use.samples = result;
-                                    })
-                                : null,
-                            icon: Icons.bookmark_outline,
-                            translation: true,
-                          ),
-                        ],
-                      ),
-                    ),
-                  if (editing)
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TextButton.icon(
-                            onPressed: () => MeaningTile.showEditor(
-                              context: context,
-                              callback: (value) {
-                                if (value != null)
-                                  setState(() {
-                                    entry.uses.add(value);
-                                  });
-                              },
-                            ),
-                            icon: Icon(Icons.add_outlined),
-                            label: Text('Add use'),
-                          ),
-                          if (widget.hit.entryID.isNotEmpty)
-                            TextButton.icon(
-                              onPressed: entry.uses.isEmpty
-                                  ? delete
-                                  : () => ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.warning_outlined,
-                                                color: Colors.white,
-                                              ),
-                                              SizedBox(width: 8),
-                                              Text('Remove all uses first.'),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                              icon: Icon(Icons.delete_outlined),
-                              label: Text('Delete entry'),
-                              style: ButtonStyle(
-                                foregroundColor:
-                                    MaterialStateProperty.all(Colors.red),
-                                overlayColor: MaterialStateProperty.all(
-                                    Colors.red.shade50),
-                              ),
-                            ),
-                        ],
-                      ),
-                    )
-                ],
-              ),
-            ),
+                ),
+            ],
           ),
-        ],
+        )
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // return ListView(
+    //   controller: widget.scrollController,
+    //   children: buildTiles(context),
+    // );
+    return SliverPadding(
+      padding: const EdgeInsets.only(bottom: 64),
+      sliver: SliverList(
+        delegate: SliverChildListDelegate(
+          buildTiles(context),
+        ),
       ),
-      // body: ListView(
-      //   padding: const EdgeInsets.only(bottom: 64),
-      //   children: [
-      //     Card(
-      //       child: Column(
-      //         children: [
-      //           TextSampleTiles(
-      //             samples: entry.forms,
-      //             onEdited: editing
-      //                 ? (result) => setState(() {
-      //                       entry.forms = result!;
-      //                     })
-      //                 : null,
-      //             icon: Icons.format_list_bulleted_outlined,
-      //             name: 'form',
-      //           ),
-      //           TagsTile(
-      //             entry.tags,
-      //             onEdited: editing
-      //                 ? (result) => setState(() {
-      //                       entry.tags = result;
-      //                     })
-      //                 : null,
-      //           ),
-      //           NoteTile(
-      //             entry.note,
-      //             onEdited: editing
-      //                 ? (result) => setState(() {
-      //                       entry.note = result;
-      //                     })
-      //                 : null,
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //     for (final use in entry.uses)
-      //       Card(
-      //         child: Column(
-      //           children: [
-      //             MeaningTile(
-      //               use,
-      //               onEdited: editing
-      //                   ? (value) => setState(() {
-      //                         if (value == null)
-      //                           entry.uses.remove(use);
-      //                         else
-      //                           entry.uses[entry.uses.indexOf(use)] = value;
-      //                       })
-      //                   : null,
-      //             ),
-      //             TagsTile(
-      //               use.tags,
-      //               onEdited: editing
-      //                   ? (result) => setState(() {
-      //                         use.tags = result;
-      //                       })
-      //                   : null,
-      //             ),
-      //             NoteTile(
-      //               use.note,
-      //               onEdited: editing
-      //                   ? (result) => setState(() {
-      //                         use.note = result;
-      //                       })
-      //                   : null,
-      //             ),
-      //             TextSampleTiles(
-      //               samples: use.samples,
-      //               onEdited: editing
-      //                   ? (result) => setState(() {
-      //                         use.samples = result;
-      //                       })
-      //                   : null,
-      //               icon: Icons.bookmark_outline,
-      //               translation: true,
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     if (editing)
-      //       Padding(
-      //         padding: const EdgeInsets.all(8),
-      //         child: Column(
-      //           crossAxisAlignment: CrossAxisAlignment.stretch,
-      //           children: [
-      //             TextButton.icon(
-      //               onPressed: () => MeaningTile.showEditor(
-      //                 context: context,
-      //                 callback: (value) {
-      //                   if (value != null)
-      //                     setState(() {
-      //                       entry.uses.add(value);
-      //                     });
-      //                 },
-      //               ),
-      //               icon: Icon(Icons.add_outlined),
-      //               label: Text('Add use'),
-      //             ),
-      //             if (widget.hit.entryID.isNotEmpty)
-      //               TextButton.icon(
-      //                 onPressed: entry.uses.isEmpty
-      //                     ? delete
-      //                     : () => ScaffoldMessenger.of(context).showSnackBar(
-      //                           SnackBar(
-      //                             content: Row(
-      //                               children: [
-      //                                 Icon(
-      //                                   Icons.warning_outlined,
-      //                                   color: Colors.white,
-      //                                 ),
-      //                                 SizedBox(width: 8),
-      //                                 Text('Remove all uses first.'),
-      //                               ],
-      //                             ),
-      //                           ),
-      //                         ),
-      //                 icon: Icon(Icons.delete_outlined),
-      //                 label: Text('Delete entry'),
-      //                 style: ButtonStyle(
-      //                   foregroundColor:
-      //                       MaterialStateProperty.all(Colors.red),
-      //                   overlayColor:
-      //                       MaterialStateProperty.all(Colors.red.shade50),
-      //                 ),
-      //               ),
-      //           ],
-      //         ),
-      //       )
-      //   ],
-      // ),
     );
+    // return Scaffold(
+    //   floatingActionButton: EditorStore.language != widget.hit.language
+    //       ? null
+    //       : editing
+    //           ? FloatingActionButton(
+    //               onPressed: entry.uses.isEmpty || entry.forms.isEmpty
+    //                   ? () => ScaffoldMessenger.of(context).showSnackBar(
+    //                         SnackBar(
+    //                           content: Row(
+    //                             children: [
+    //                               Icon(
+    //                                 Icons.warning_outlined,
+    //                                 color: Colors.white,
+    //                               ),
+    //                               SizedBox(width: 8),
+    //                               Text(
+    //                                 'Must have at least one form and one use.',
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ),
+    //                       )
+    //                   : submit,
+    //               child: Icon(Icons.publish_outlined),
+    //               tooltip: 'Submit changes',
+    //             )
+    //           : FloatingActionButton(
+    //               onPressed: () => setState(() => startEditing()),
+    //               child: Icon(Icons.edit_outlined),
+    //               tooltip: 'Edit entry',
+    //             ),
+    //   body: CustomScrollView(
+    //     controller: widget.scrollController,
+    //     slivers: [
+    //       SliverAppBar(
+    //         leading: IconButton(
+    //           onPressed: () => Navigator.maybePop(context),
+    //           icon: Icon(
+    //             editing ? Icons.close_outlined : Icons.arrow_back_outlined,
+    //           ),
+    //         ),
+    //         title: PageTitle(
+    //           title: editing ? 'Entry editor' : widget.hit.headword,
+    //           subtitle: widget.hit.language,
+    //         ),
+    //         actions: [
+    //           LanguageFlag(
+    //             widget.hit.language,
+    //             offset: Offset(-40, 4),
+    //             scale: 9,
+    //           ),
+    //         ],
+    //         pinned: true,
+    //         snap: true,
+    //         floating: true,
+    //         forceElevated: true,
+    //       ),
+    //       SliverPadding(
+    //         padding: const EdgeInsets.only(bottom: 64),
+    //         sliver: SliverList(
+    //           delegate: SliverChildListDelegate(
+    //             buildTiles(context),
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

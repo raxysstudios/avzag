@@ -53,9 +53,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   @override
   Widget build(BuildContext context) {
-    const radius = BorderRadius.only(
-      topLeft: Radius.circular(16),
-      topRight: Radius.circular(16),
+    const radius = BorderRadius.vertical(
+      top: Radius.circular(16),
     );
     return Scaffold(
       drawer: NavDraver(title: 'dictionary'),
@@ -109,154 +108,69 @@ class _DictionaryPageState extends State<DictionaryPage> {
             ),
           ],
         ),
-        maxHeight: MediaQuery.of(context).size.height,
-        minHeight: kToolbarHeight + 16,
+        maxHeight: MediaQuery.of(context).size.height -
+            kToolbarHeight -
+            MediaQuery.of(context).padding.top,
+        minHeight: kToolbarHeight,
         panel: entry == null ? SizedBox() : null,
         renderPanelSheet: entry != null,
         color: Theme.of(context).scaffoldBackgroundColor,
-        // header: hit == null
-        //     ? null
-        //     : AppBar(
-        //         leading: IconButton(
-        //           onPressed: () => Navigator.maybePop(context),
-        //           icon: Icon(
-        //             editing ? Icons.close_outlined : Icons.arrow_back_outlined,
-        //           ),
-        //         ),
-        //         title: PageTitle(
-        //           title: editing ? 'Entry editor' : hit!.headword,
-        //           subtitle: hit!.language,
-        //         ),
-        //         actions: [
-        //           LanguageFlag(
-        //             hit!.language,
-        //             offset: Offset(-40, 4),
-        //             scale: 9,
-        //           ),
-        //         ],
-        //       ),
         borderRadius: radius,
-        collapsed: Container(
-          decoration: BoxDecoration(
-            borderRadius: radius,
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: AppBar(
-            toolbarHeight: kToolbarHeight + 16,
-            primary: false,
-            leading: IconButton(
-              onPressed: () => Navigator.maybePop(context),
-              icon: Icon(
-                editing ? Icons.close_outlined : Icons.arrow_back_outlined,
-              ),
-            ),
-            title: PageTitle(
-              title: editing ? 'Entry editor' : hit!.headword,
-              subtitle: hit!.language,
-            ),
-            actions: [
-              LanguageFlag(
-                hit!.language,
-                offset: Offset(-40, 4),
-                scale: 9,
-              ),
-            ],
-          ),
-        ),
         panelBuilder: (scrollController) {
-          return EntryPage(
-            entry!,
-            hit!,
-            scrollController: scrollController,
-            key: ValueKey(hit!.entryID),
+          return Material(
+            borderRadius: radius,
+            clipBehavior: Clip.antiAlias,
+            child: CustomScrollView(
+              controller: scrollController,
+              slivers: [
+                SliverAppBar(
+                  primary: false,
+                  leading: Builder(
+                    builder: (context) {
+                      if (panelController.isPanelOpen)
+                        return IconButton(
+                          onPressed: panelController.close,
+                          icon: Icon(Icons.expand_more_outlined),
+                        );
+                      return IconButton(
+                        onPressed: panelController.open,
+                        icon: Icon(Icons.expand_less_outlined),
+                      );
+                    },
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: radius,
+                  ),
+                  title: PageTitle(
+                    title: editing ? 'Entry editor' : hit!.headword,
+                    subtitle: hit!.language,
+                  ),
+                  actions: [
+                    LanguageFlag(
+                      hit!.language,
+                      offset: Offset(-40, 4),
+                      scale: 9,
+                    ),
+                  ],
+                  floating: true,
+                  pinned: true,
+                  forceElevated: true,
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.only(bottom: 64),
+                  sliver: EntryPage(
+                    entry!,
+                    hit!,
+                    scrollController: scrollController,
+                    key: ValueKey(hit!.entryID),
+                  ),
+                ),
+              ],
+            ),
           );
         },
         onPanelOpened: () => setState(() {}),
         onPanelClosed: () => setState(() {}),
-      ),
-    );
-    return Scaffold(
-      drawer: NavDraver(title: 'dictionary'),
-      floatingActionButton: EditorStore.language == null
-          ? null
-          : FloatingActionButton(
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EntryPage(
-                    Entry(forms: [], uses: []),
-                    EntryHit(
-                      entryID: '',
-                      headword: '',
-                      language: EditorStore.language!,
-                      term: '',
-                    ),
-                  ),
-                ),
-              ),
-              child: Icon(
-                Icons.add_outlined,
-              ),
-              tooltip: 'Add new entry',
-            ),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            snap: true,
-            floating: true,
-            forceElevated: true,
-            title: Text('Dictionary'),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(64),
-              child: SearchController(
-                (s) => setState(() {
-                  hits = s;
-                }),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.only(bottom: 64),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final hits = this.hits[index];
-                  EntryHit? lastHit;
-                  return Card(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
-                      itemCount: hits.length,
-                      padding: EdgeInsets.zero,
-                      itemBuilder: (context, index) {
-                        final hit = hits[index];
-                        final language = hit.language != lastHit?.language;
-                        final divider = language && lastHit != null;
-                        lastHit = hit;
-
-                        final tile = HitTile(
-                          hit,
-                          showLanguage: language,
-                          onTap: () => openEntry(hit),
-                        );
-                        if (divider)
-                          return Column(
-                            children: [
-                              Divider(height: 0),
-                              tile,
-                            ],
-                          );
-                        return tile;
-                      },
-                    ),
-                  );
-                },
-                childCount: hits.length,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
