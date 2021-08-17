@@ -55,27 +55,28 @@ class _DictionaryPageState extends State<DictionaryPage> {
     final safePadding = MediaQuery.of(context).padding.top;
     return Scaffold(
       drawer: NavDraver(title: 'dictionary'),
-      floatingActionButton: EditorStore.language == null
-          ? null
-          : EditorButton(
-              entry,
-              hit,
-              editing: editing,
-              collapsed: collapsed,
-              onStart: (entry, hit) {
-                setState(() {
-                  this.entry = entry;
-                  this.hit = hit;
-                  editing = true;
-                  collapsed = false;
-                });
-                panelController.open();
-              },
-              onEnd: () {
-                editing = false;
-                panelController.close();
-              },
-            ),
+      floatingActionButton:
+          EditorStore.language == null || EditorStore.language != hit?.language
+              ? null
+              : EditorButton(
+                  entry,
+                  hit,
+                  editing: editing,
+                  collapsed: collapsed,
+                  onStart: (entry, hit) {
+                    setState(() {
+                      this.entry = entry;
+                      this.hit = hit;
+                      editing = true;
+                      collapsed = false;
+                    });
+                    panelController.open();
+                  },
+                  onEnd: () {
+                    editing = false;
+                    panelController.close();
+                  },
+                ),
       body: SlidingUpPanel(
         controller: panelController,
         backdropEnabled: true,

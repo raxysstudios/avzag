@@ -27,18 +27,21 @@ class EditorButton extends StatelessWidget {
   Widget build(BuildContext context) {
     if (collapsed) {
       if (editing)
-        return FloatingActionButton.extended(
-          onPressed: () async {
-            if (await showDangerDialog(
-              context,
-              'Discard edits?',
-              confirmText: 'Discard',
-              rejectText: 'Edit',
-            )) onEnd();
-          },
-          icon: Icon(Icons.close_outlined),
-          label: Text('Discard'),
-          backgroundColor: Colors.redAccent,
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: FloatingActionButton.extended(
+            onPressed: () async {
+              if (await showDangerDialog(
+                context,
+                'Discard edits?',
+                confirmText: 'Discard',
+                rejectText: 'Edit',
+              )) onEnd();
+            },
+            icon: Icon(Icons.close_outlined),
+            label: Text('Discard'),
+            backgroundColor: Colors.redAccent,
+          ),
         );
       return FloatingActionButton.extended(
         onPressed: () => onStart(
@@ -59,20 +62,23 @@ class EditorButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: kFloatingActionButtonMargin * 1.75,
-              ),
-              child: FloatingActionButton(
-                onPressed: () async {
-                  if (await delete(context)) onEnd();
-                },
-                child: Icon(Icons.delete_outlined),
-                tooltip: 'Delete',
-                backgroundColor: Colors.redAccent,
-                mini: true,
-              ),
-            ),
+            if (hit!.entryID.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: kFloatingActionButtonMargin * 1.75,
+                ),
+                child: FloatingActionButton(
+                  onPressed: () async {
+                    if (await delete(context)) onEnd();
+                  },
+                  child: Icon(Icons.delete_outlined),
+                  tooltip: 'Delete',
+                  backgroundColor: Colors.redAccent,
+                  mini: true,
+                ),
+              )
+            else
+              SizedBox(),
             FloatingActionButton.extended(
               onPressed: () async {
                 if (await submit(context)) onEnd();
