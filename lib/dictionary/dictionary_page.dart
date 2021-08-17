@@ -67,12 +67,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   this.entry = entry;
                   this.hit = hit;
                   editing = true;
+                  collapsed = false;
                 });
                 panelController.open();
               },
               onEnd: () {
                 editing = false;
-                panelController.hide();
+                panelController.close();
               },
             ),
       body: SlidingUpPanel(
@@ -107,7 +108,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
         maxHeight: MediaQuery.of(context).size.height - kToolbarHeight,
         minHeight: editing ? kToolbarHeight + safePadding : 0,
         renderPanelSheet: false,
-        panelBuilder: (scrollController) {
+        panelBuilder: (controller) {
           if (entry == null) return SizedBox();
           return Padding(
             padding: EdgeInsets.only(top: safePadding),
@@ -116,7 +117,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               clipBehavior: Clip.antiAlias,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: CustomScrollView(
-                controller: scrollController,
+                controller: controller,
                 slivers: [
                   SliverAppBar(
                     primary: false,

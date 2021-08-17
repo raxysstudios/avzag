@@ -60,8 +60,9 @@ class EditorButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.only(left: kFloatingActionButtonMargin * 2),
+              padding: const EdgeInsets.only(
+                left: kFloatingActionButtonMargin * 1.75,
+              ),
               child: FloatingActionButton(
                 onPressed: () async {
                   if (await delete(context)) onEnd();
@@ -92,22 +93,7 @@ class EditorButton extends StatelessWidget {
   Future<bool> submit(BuildContext context) async {
     if (entry == null || hit == null) return false;
     if (entry!.uses.isEmpty || entry!.forms.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(
-                Icons.warning_outlined,
-                color: Colors.white,
-              ),
-              SizedBox(width: 8),
-              Text(
-                'Must have at least one form and one use.',
-              ),
-            ],
-          ),
-        ),
-      );
+      showError(context, 'Must have at least a form and a use.');
       return false;
     }
     final collection = FirebaseFirestore.instance
@@ -124,22 +110,7 @@ class EditorButton extends StatelessWidget {
   Future<bool> delete(BuildContext context) async {
     if (entry == null || hit == null) return false;
     if (entry!.uses.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              Icon(
-                Icons.warning_outlined,
-                color: Colors.white,
-              ),
-              SizedBox(width: 8),
-              Text(
-                'Must have at least one form and one use.',
-              ),
-            ],
-          ),
-        ),
-      );
+      showError(context, 'Remove all uses first.');
       return false;
     }
     final confirm = await showDangerDialog(
@@ -160,5 +131,24 @@ class EditorButton extends StatelessWidget {
       return true;
     }
     return false;
+  }
+
+  void showError(BuildContext context, String text) {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: Colors.white,
+            ),
+            SizedBox(width: 8),
+            Text(text),
+          ],
+        ),
+      ),
+    );
   }
 }
