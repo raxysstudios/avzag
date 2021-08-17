@@ -43,12 +43,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
       });
       panelController.open();
     }
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => EntryPage(entry, hit),
-    //   ),
-    // );
   }
 
   @override
@@ -56,29 +50,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
     const radius = BorderRadius.vertical(
       top: Radius.circular(16),
     );
+    final safePadding = MediaQuery.of(context).padding.top;
     return Scaffold(
       drawer: NavDraver(title: 'dictionary'),
-      floatingActionButton: Builder(
-        builder: (context) {
-          if (EditorStore.language == null || panelController.isPanelOpen)
-            return SizedBox();
-          return FloatingActionButton(
-            onPressed: () => setState(() {
-              entry = Entry(forms: [], uses: []);
-              hit = EntryHit(
-                entryID: '',
-                headword: '',
-                language: EditorStore.language!,
-                term: '',
-              );
-            }),
-            child: Icon(
-              Icons.add_outlined,
-            ),
-            tooltip: 'Add new entry',
-          );
-        },
-      ),
+      floatingActionButton: buildFloatingButton(context),
       body: SlidingUpPanel(
         controller: panelController,
         backdropEnabled: true,
@@ -100,7 +75,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.only(bottom: 64),
+              padding: const EdgeInsets.only(bottom: 86),
               sliver: SearchResultsSliver(
                 hits,
                 onTap: openEntry,
@@ -108,64 +83,61 @@ class _DictionaryPageState extends State<DictionaryPage> {
             ),
           ],
         ),
-        maxHeight: MediaQuery.of(context).size.height -
-            kToolbarHeight -
-            MediaQuery.of(context).padding.top,
-        minHeight: kToolbarHeight,
-        panel: entry == null ? SizedBox() : null,
-        renderPanelSheet: entry != null,
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: radius,
+        maxHeight: MediaQuery.of(context).size.height - kToolbarHeight,
+        minHeight: editing ? kToolbarHeight : 0,
+        renderPanelSheet: false,
         panelBuilder: (scrollController) {
-          return Material(
-            borderRadius: radius,
-            clipBehavior: Clip.antiAlias,
-            child: CustomScrollView(
-              controller: scrollController,
-              slivers: [
-                SliverAppBar(
-                  primary: false,
-                  leading: Builder(
-                    builder: (context) {
-                      if (panelController.isPanelOpen)
+          if (entry == null) return SizedBox();
+          return Padding(
+            padding: EdgeInsets.only(top: safePadding),
+            child: Material(
+              borderRadius: radius,
+              clipBehavior: Clip.antiAlias,
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: CustomScrollView(
+                controller: scrollController,
+                slivers: [
+                  SliverAppBar(
+                    primary: false,
+                    leading: Builder(
+                      builder: (context) {
+                        if (panelController.isPanelClosed)
+                          return IconButton(
+                            onPressed: panelController.open,
+                            icon: Icon(Icons.expand_less_outlined),
+                          );
                         return IconButton(
                           onPressed: panelController.close,
                           icon: Icon(Icons.expand_more_outlined),
                         );
-                      return IconButton(
-                        onPressed: panelController.open,
-                        icon: Icon(Icons.expand_less_outlined),
-                      );
-                    },
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: radius,
-                  ),
-                  title: PageTitle(
-                    title: editing ? 'Entry editor' : hit!.headword,
-                    subtitle: hit!.language,
-                  ),
-                  actions: [
-                    LanguageFlag(
-                      hit!.language,
-                      offset: Offset(-40, 4),
-                      scale: 9,
+                      },
                     ),
-                  ],
-                  floating: true,
-                  pinned: true,
-                  forceElevated: true,
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.only(bottom: 64),
-                  sliver: EntryPage(
-                    entry!,
-                    hit!,
-                    scrollController: scrollController,
-                    key: ValueKey(hit!.entryID),
+                    title: PageTitle(
+                      title: editing ? 'Entry editor' : hit!.headword,
+                      subtitle: hit!.language,
+                    ),
+                    actions: [
+                      LanguageFlag(
+                        hit!.language,
+                        offset: Offset(-40, 4),
+                        scale: 9,
+                      ),
+                    ],
+                    floating: true,
+                    pinned: true,
+                    forceElevated: true,
                   ),
-                ),
-              ],
+                  SliverPadding(
+                    padding: const EdgeInsets.only(bottom: 86),
+                    sliver: EntryPage(
+                      entry!,
+                      hit!,
+                      scrollController: scrollController,
+                      key: ValueKey(hit!.entryID),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -175,6 +147,40 @@ class _DictionaryPageState extends State<DictionaryPage> {
         },
         onPanelClosed: () => setState(() {}),
       ),
+    );
+  }
+
+  Widget? buildFloatingButton(BuildContext context) {
+    if (EditorStore.language == null) return null;
+    if (panelController.isPanelClosed) {
+      if (editing) return null;
+      return FloatingActionButton.extended(
+        onPressed: () {
+          setState(() {
+            entry = Entry(forms: [], uses: []);
+            hit = EntryHit(
+              entryID: '',
+              headword: '',
+              language: EditorStore.language!,
+              term: '',
+            );
+          });
+          panelController.open();
+        },
+        icon: Icon(Icons.add_outlined),
+        label: Text('New'),
+      );
+    }
+    if (editing)
+      return FloatingActionButton.extended(
+        onPressed: () {},
+        icon: Icon(Icons.publish_outlined),
+        label: Text('Submit'),
+      );
+    return FloatingActionButton.extended(
+      onPressed: () {},
+      icon: Icon(Icons.edit_outlined),
+      label: Text('Edit'),
     );
   }
 }
