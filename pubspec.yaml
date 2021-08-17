@@ -34,7 +34,6 @@ dependencies:
   just_audio: ^0.8.0
   algolia: ^1.0.1
   flutter_markdown: ^0.6.3
-  backdrop: ^0.6.2
   sliding_up_panel: ^2.0.0+1
 
 dev_dependencies:

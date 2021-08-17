@@ -3,7 +3,6 @@ import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
-import 'package:backdrop/backdrop.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'entry.dart';
@@ -37,12 +36,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
           .get()
           .then((snapshot) => snapshot.data()),
     );
-    if (entry != null)
+    if (entry != null) {
       setState(() {
         this.entry = entry;
         this.hit = hit;
-        panelController.show();
       });
+      panelController.open();
+    }
     // Navigator.push(
     //   context,
     //   MaterialPageRoute(
@@ -53,11 +53,16 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   @override
   Widget build(BuildContext context) {
+    const radius = BorderRadius.only(
+      topLeft: Radius.circular(16),
+      topRight: Radius.circular(16),
+    );
     return Scaffold(
       drawer: NavDraver(title: 'dictionary'),
       floatingActionButton: Builder(
         builder: (context) {
-          if (EditorStore.language == null) return SizedBox();
+          if (EditorStore.language == null || panelController.isPanelOpen)
+            return SizedBox();
           return FloatingActionButton(
             onPressed: () => setState(() {
               entry = Entry(forms: [], uses: []);
@@ -105,104 +110,69 @@ class _DictionaryPageState extends State<DictionaryPage> {
           ],
         ),
         maxHeight: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.zero,
+        minHeight: kToolbarHeight + 16,
         panel: entry == null ? SizedBox() : null,
-        panelBuilder: entry == null
-            ? null
-            : (scrollController) {
-                return EntryPage(
-                  entry!,
-                  hit!,
-                  scrollController: scrollController,
-                );
-              },
-      ),
-    );
-    return BackdropScaffold(
-      drawer: NavDraver(title: 'dictionary'),
-      // appBar: PreferredSize(
-      //   child: SizedBox(),
-      //   preferredSize: Size.zero,
-      // ),
-      backLayer: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              snap: true,
-              floating: true,
-              forceElevated: true,
-              title: Text('Dictionary'),
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(64),
-                child: SearchController(
-                  (s) => setState(() {
-                    hits = s;
-                  }),
-                ),
+        renderPanelSheet: entry != null,
+        color: Theme.of(context).scaffoldBackgroundColor,
+        // header: hit == null
+        //     ? null
+        //     : AppBar(
+        //         leading: IconButton(
+        //           onPressed: () => Navigator.maybePop(context),
+        //           icon: Icon(
+        //             editing ? Icons.close_outlined : Icons.arrow_back_outlined,
+        //           ),
+        //         ),
+        //         title: PageTitle(
+        //           title: editing ? 'Entry editor' : hit!.headword,
+        //           subtitle: hit!.language,
+        //         ),
+        //         actions: [
+        //           LanguageFlag(
+        //             hit!.language,
+        //             offset: Offset(-40, 4),
+        //             scale: 9,
+        //           ),
+        //         ],
+        //       ),
+        borderRadius: radius,
+        collapsed: Container(
+          decoration: BoxDecoration(
+            borderRadius: radius,
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: AppBar(
+            toolbarHeight: kToolbarHeight + 16,
+            primary: false,
+            leading: IconButton(
+              onPressed: () => Navigator.maybePop(context),
+              icon: Icon(
+                editing ? Icons.close_outlined : Icons.arrow_back_outlined,
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.only(bottom: 64),
-              sliver: SearchResultsSliver(
-                hits,
-                onTap: openEntry,
-              ),
+            title: PageTitle(
+              title: editing ? 'Entry editor' : hit!.headword,
+              subtitle: hit!.language,
             ),
-          ],
+            actions: [
+              LanguageFlag(
+                hit!.language,
+                offset: Offset(-40, 4),
+                scale: 9,
+              ),
+            ],
+          ),
         ),
-      ),
-      backLayerBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      subHeader: hit == null
-          ? null
-          : AppBar(
-              leading: Builder(
-                builder: (context) {
-                  final backdrop = Backdrop.of(context);
-                  return backdrop.isBackLayerRevealed
-                      ? IconButton(
-                          onPressed: () => backdrop.concealBackLayer(),
-                          icon: Icon(Icons.expand_less_outlined),
-                        )
-                      : IconButton(
-                          onPressed: () => backdrop.revealBackLayer(),
-                          icon: Icon(Icons.expand_more_outlined),
-                        );
-                },
-              ),
-              title: PageTitle(
-                title: editing ? 'Entry editor' : hit!.headword,
-                subtitle: hit!.language,
-              ),
-              actions: [
-                LanguageFlag(
-                  hit!.language,
-                  offset: Offset(-40, 4),
-                  scale: 9,
-                ),
-              ],
-            ),
-      frontLayer: entry == null ? Text('no entry') : EntryPage(entry!, hit!),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Builder(
-        builder: (context) {
-          if (EditorStore.language == null) return SizedBox();
-          return FloatingActionButton(
-            onPressed: () => setState(() {
-              entry = Entry(forms: [], uses: []);
-              hit = EntryHit(
-                entryID: '',
-                headword: '',
-                language: EditorStore.language!,
-                term: '',
-              );
-            }),
-            child: Icon(
-              Icons.add_outlined,
-            ),
-            tooltip: 'Add new entry',
+        panelBuilder: (scrollController) {
+          return EntryPage(
+            entry!,
+            hit!,
+            scrollController: scrollController,
+            key: ValueKey(hit!.entryID),
           );
         },
+        onPanelOpened: () => setState(() {}),
+        onPanelClosed: () => setState(() {}),
       ),
     );
     return Scaffold(
