@@ -46,7 +46,23 @@ class _AppState extends State<App> {
               .then((_) => SharedPreferences.getInstance())
               .then((prefs) => prefs.getString('module') ?? 'home')
               .then((title) => navigate(context, title));
-          return Scaffold();
+          return Scaffold(
+            body: Center(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(128),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
