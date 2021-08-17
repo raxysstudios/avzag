@@ -73,7 +73,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     panelController.open();
                   },
                   onEnd: () {
-                    editing = false;
+                    setState(() {
+                      editing = false;
+                      collapsed = true;
+                    });
                     panelController.close();
                   },
                 ),
