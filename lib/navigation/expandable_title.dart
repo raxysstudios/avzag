@@ -22,7 +22,7 @@ class ExpandableTitle extends StatelessWidget {
                 radius: 12,
               ),
             ),
-            SizedBox(width: 34),
+            SizedBox(width: 32),
             Text(
               'Ævzag',
               style: TextStyle(
