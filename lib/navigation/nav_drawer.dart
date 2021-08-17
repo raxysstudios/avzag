@@ -37,10 +37,10 @@ Future<void> navigate(
 class _NavModule {
   final IconData icon;
   final String text;
-  final bool enabled;
-  _NavModule(this.icon, this.text, this.enabled);
+  _NavModule(this.icon, this.text);
 
-  Widget build(BuildContext context, bool selected) {
+  Widget build(BuildContext context, {bool? selected}) {
+    final enabled = selected != null;
     return ListTile(
       leading: Icon(icon),
       title: Text(
@@ -48,7 +48,7 @@ class _NavModule {
         style: TextStyle(fontSize: 18),
       ),
       trailing: enabled ? null : Icon(Icons.construction_outlined),
-      selected: selected,
+      selected: selected ?? false,
       onTap: enabled ? () => navigate(context, text) : null,
       enabled: enabled,
     );
@@ -111,12 +111,23 @@ class NavDraver extends StatelessWidget {
             Card(
               child: Column(
                 children: [
-                  _NavModule(Icons.map_outlined, 'home', true),
-                  _NavModule(Icons.music_note_outlined, 'phonology', false),
-                  _NavModule(Icons.switch_left_outlined, 'converter', false),
-                  _NavModule(Icons.book_outlined, 'dictionary', true),
-                  _NavModule(Icons.local_library_outlined, 'bootcamp', false),
-                ].map((e) => e.build(context, e.text == title)).toList(),
+                  ...[
+                    _NavModule(Icons.map_outlined, 'home'),
+                    _NavModule(Icons.book_outlined, 'dictionary'),
+                  ].map(
+                    (t) => t.build(
+                      context,
+                      selected: t.text == title,
+                    ),
+                  ),
+                  Divider(height: 0),
+                  ...[
+                    _NavModule(Icons.music_note_outlined, 'phonology'),
+                    _NavModule(Icons.switch_left_outlined, 'converter'),
+                    _NavModule(Icons.sms_outlined, 'phrasebook'),
+                    _NavModule(Icons.local_library_outlined, 'bootcamp'),
+                  ].map((t) => t.build(context)),
+                ],
               ),
             )
           ],
