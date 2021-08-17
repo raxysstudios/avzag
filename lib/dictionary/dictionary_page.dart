@@ -5,6 +5,7 @@ import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:backdrop/backdrop.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'entry.dart';
 import 'entry_page.dart';
 import 'search_controller.dart';
@@ -22,6 +23,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   var editing = false;
   EntryHit? hit;
   Entry? entry;
+  final panelController = PanelController();
 
   void openEntry(EntryHit hit) async {
     final entry = await showLoadingDialog<Entry>(
@@ -39,6 +41,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
       setState(() {
         this.entry = entry;
         this.hit = hit;
+        panelController.show();
       });
     // Navigator.push(
     //   context,
@@ -50,6 +53,71 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: NavDraver(title: 'dictionary'),
+      floatingActionButton: Builder(
+        builder: (context) {
+          if (EditorStore.language == null) return SizedBox();
+          return FloatingActionButton(
+            onPressed: () => setState(() {
+              entry = Entry(forms: [], uses: []);
+              hit = EntryHit(
+                entryID: '',
+                headword: '',
+                language: EditorStore.language!,
+                term: '',
+              );
+            }),
+            child: Icon(
+              Icons.add_outlined,
+            ),
+            tooltip: 'Add new entry',
+          );
+        },
+      ),
+      body: SlidingUpPanel(
+        controller: panelController,
+        backdropEnabled: true,
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              snap: true,
+              floating: true,
+              forceElevated: true,
+              title: Text('Dictionary'),
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(64),
+                child: SearchController(
+                  (s) => setState(() {
+                    hits = s;
+                  }),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(bottom: 64),
+              sliver: SearchResultsSliver(
+                hits,
+                onTap: openEntry,
+              ),
+            ),
+          ],
+        ),
+        maxHeight: MediaQuery.of(context).size.height,
+        padding: EdgeInsets.zero,
+        panel: entry == null ? SizedBox() : null,
+        panelBuilder: entry == null
+            ? null
+            : (scrollController) {
+                return EntryPage(
+                  entry!,
+                  hit!,
+                  scrollController: scrollController,
+                );
+              },
+      ),
+    );
     return BackdropScaffold(
       drawer: NavDraver(title: 'dictionary'),
       // appBar: PreferredSize(

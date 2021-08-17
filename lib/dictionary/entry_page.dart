@@ -15,11 +15,13 @@ import 'entry.dart';
 class EntryPage extends StatefulWidget {
   final Entry entry;
   final EntryHit hit;
+  final ScrollController? scrollController;
 
   const EntryPage(
     this.entry,
-    this.hit,
-  );
+    this.hit, {
+    this.scrollController,
+  });
 
   @override
   _EntryPageState createState() => _EntryPageState();
@@ -84,25 +86,6 @@ class _EntryPageState extends State<EntryPage> {
             rejectText: 'Edit',
           ),
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => Navigator.maybePop(context),
-            icon: Icon(
-              editing ? Icons.close_outlined : Icons.arrow_back_outlined,
-            ),
-          ),
-          title: PageTitle(
-            title: editing ? 'Entry editor' : widget.hit.headword,
-            subtitle: widget.hit.language,
-          ),
-          actions: [
-            LanguageFlag(
-              widget.hit.language,
-              offset: Offset(-40, 4),
-              scale: 9,
-            ),
-          ],
-        ),
         floatingActionButton: EditorStore.language != widget.hit.language
             ? null
             : editing
@@ -133,136 +116,300 @@ class _EntryPageState extends State<EntryPage> {
                     child: Icon(Icons.edit_outlined),
                     tooltip: 'Edit entry',
                   ),
-        body: ListView(
-          padding: const EdgeInsets.only(bottom: 64),
-          children: [
-            Card(
-              child: Column(
-                children: [
-                  TextSampleTiles(
-                    samples: entry.forms,
-                    onEdited: editing
-                        ? (result) => setState(() {
-                              entry.forms = result!;
-                            })
-                        : null,
-                    icon: Icons.format_list_bulleted_outlined,
-                    name: 'form',
-                  ),
-                  TagsTile(
-                    entry.tags,
-                    onEdited: editing
-                        ? (result) => setState(() {
-                              entry.tags = result;
-                            })
-                        : null,
-                  ),
-                  NoteTile(
-                    entry.note,
-                    onEdited: editing
-                        ? (result) => setState(() {
-                              entry.note = result;
-                            })
-                        : null,
-                  ),
-                ],
-              ),
-            ),
-            for (final use in entry.uses)
-              Card(
-                child: Column(
-                  children: [
-                    MeaningTile(
-                      use,
-                      onEdited: editing
-                          ? (value) => setState(() {
-                                if (value == null)
-                                  entry.uses.remove(use);
-                                else
-                                  entry.uses[entry.uses.indexOf(use)] = value;
-                              })
-                          : null,
-                    ),
-                    TagsTile(
-                      use.tags,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                use.tags = result;
-                              })
-                          : null,
-                    ),
-                    NoteTile(
-                      use.note,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                use.note = result;
-                              })
-                          : null,
-                    ),
-                    TextSampleTiles(
-                      samples: use.samples,
-                      onEdited: editing
-                          ? (result) => setState(() {
-                                use.samples = result;
-                              })
-                          : null,
-                      icon: Icons.bookmark_outline,
-                      translation: true,
-                    ),
-                  ],
+        body: CustomScrollView(
+          controller: widget.scrollController,
+          slivers: [
+            SliverAppBar(
+              leading: IconButton(
+                onPressed: () => Navigator.maybePop(context),
+                icon: Icon(
+                  editing ? Icons.close_outlined : Icons.arrow_back_outlined,
                 ),
               ),
-            if (editing)
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () => MeaningTile.showEditor(
-                        context: context,
-                        callback: (value) {
-                          if (value != null)
-                            setState(() {
-                              entry.uses.add(value);
-                            });
-                        },
+              title: PageTitle(
+                title: editing ? 'Entry editor' : widget.hit.headword,
+                subtitle: widget.hit.language,
+              ),
+              actions: [
+                LanguageFlag(
+                  widget.hit.language,
+                  offset: Offset(-40, 4),
+                  scale: 9,
+                ),
+              ],
+              pinned: true,
+              snap: true,
+              floating: true,
+              forceElevated: true,
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.only(bottom: 64),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Card(
+                      child: Column(
+                        children: [
+                          TextSampleTiles(
+                            samples: entry.forms,
+                            onEdited: editing
+                                ? (result) => setState(() {
+                                      entry.forms = result!;
+                                    })
+                                : null,
+                            icon: Icons.format_list_bulleted_outlined,
+                            name: 'form',
+                          ),
+                          TagsTile(
+                            entry.tags,
+                            onEdited: editing
+                                ? (result) => setState(() {
+                                      entry.tags = result;
+                                    })
+                                : null,
+                          ),
+                          NoteTile(
+                            entry.note,
+                            onEdited: editing
+                                ? (result) => setState(() {
+                                      entry.note = result;
+                                    })
+                                : null,
+                          ),
+                        ],
                       ),
-                      icon: Icon(Icons.add_outlined),
-                      label: Text('Add use'),
                     ),
-                    if (widget.hit.entryID.isNotEmpty)
-                      TextButton.icon(
-                        onPressed: entry.uses.isEmpty
-                            ? delete
-                            : () => ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.warning_outlined,
-                                          color: Colors.white,
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text('Remove all uses first.'),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                        icon: Icon(Icons.delete_outlined),
-                        label: Text('Delete entry'),
-                        style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all(Colors.red),
-                          overlayColor:
-                              MaterialStateProperty.all(Colors.red.shade50),
+                    for (final use in entry.uses)
+                      Card(
+                        child: Column(
+                          children: [
+                            MeaningTile(
+                              use,
+                              onEdited: editing
+                                  ? (value) => setState(() {
+                                        if (value == null)
+                                          entry.uses.remove(use);
+                                        else
+                                          entry.uses[entry.uses.indexOf(use)] =
+                                              value;
+                                      })
+                                  : null,
+                            ),
+                            TagsTile(
+                              use.tags,
+                              onEdited: editing
+                                  ? (result) => setState(() {
+                                        use.tags = result;
+                                      })
+                                  : null,
+                            ),
+                            NoteTile(
+                              use.note,
+                              onEdited: editing
+                                  ? (result) => setState(() {
+                                        use.note = result;
+                                      })
+                                  : null,
+                            ),
+                            TextSampleTiles(
+                              samples: use.samples,
+                              onEdited: editing
+                                  ? (result) => setState(() {
+                                        use.samples = result;
+                                      })
+                                  : null,
+                              icon: Icons.bookmark_outline,
+                              translation: true,
+                            ),
+                          ],
                         ),
                       ),
+                    if (editing)
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextButton.icon(
+                              onPressed: () => MeaningTile.showEditor(
+                                context: context,
+                                callback: (value) {
+                                  if (value != null)
+                                    setState(() {
+                                      entry.uses.add(value);
+                                    });
+                                },
+                              ),
+                              icon: Icon(Icons.add_outlined),
+                              label: Text('Add use'),
+                            ),
+                            if (widget.hit.entryID.isNotEmpty)
+                              TextButton.icon(
+                                onPressed: entry.uses.isEmpty
+                                    ? delete
+                                    : () => ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.warning_outlined,
+                                                  color: Colors.white,
+                                                ),
+                                                SizedBox(width: 8),
+                                                Text('Remove all uses first.'),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                icon: Icon(Icons.delete_outlined),
+                                label: Text('Delete entry'),
+                                style: ButtonStyle(
+                                  foregroundColor:
+                                      MaterialStateProperty.all(Colors.red),
+                                  overlayColor: MaterialStateProperty.all(
+                                      Colors.red.shade50),
+                                ),
+                              ),
+                          ],
+                        ),
+                      )
                   ],
                 ),
-              )
+              ),
+            ),
           ],
         ),
+        // body: ListView(
+        //   padding: const EdgeInsets.only(bottom: 64),
+        //   children: [
+        //     Card(
+        //       child: Column(
+        //         children: [
+        //           TextSampleTiles(
+        //             samples: entry.forms,
+        //             onEdited: editing
+        //                 ? (result) => setState(() {
+        //                       entry.forms = result!;
+        //                     })
+        //                 : null,
+        //             icon: Icons.format_list_bulleted_outlined,
+        //             name: 'form',
+        //           ),
+        //           TagsTile(
+        //             entry.tags,
+        //             onEdited: editing
+        //                 ? (result) => setState(() {
+        //                       entry.tags = result;
+        //                     })
+        //                 : null,
+        //           ),
+        //           NoteTile(
+        //             entry.note,
+        //             onEdited: editing
+        //                 ? (result) => setState(() {
+        //                       entry.note = result;
+        //                     })
+        //                 : null,
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //     for (final use in entry.uses)
+        //       Card(
+        //         child: Column(
+        //           children: [
+        //             MeaningTile(
+        //               use,
+        //               onEdited: editing
+        //                   ? (value) => setState(() {
+        //                         if (value == null)
+        //                           entry.uses.remove(use);
+        //                         else
+        //                           entry.uses[entry.uses.indexOf(use)] = value;
+        //                       })
+        //                   : null,
+        //             ),
+        //             TagsTile(
+        //               use.tags,
+        //               onEdited: editing
+        //                   ? (result) => setState(() {
+        //                         use.tags = result;
+        //                       })
+        //                   : null,
+        //             ),
+        //             NoteTile(
+        //               use.note,
+        //               onEdited: editing
+        //                   ? (result) => setState(() {
+        //                         use.note = result;
+        //                       })
+        //                   : null,
+        //             ),
+        //             TextSampleTiles(
+        //               samples: use.samples,
+        //               onEdited: editing
+        //                   ? (result) => setState(() {
+        //                         use.samples = result;
+        //                       })
+        //                   : null,
+        //               icon: Icons.bookmark_outline,
+        //               translation: true,
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     if (editing)
+        //       Padding(
+        //         padding: const EdgeInsets.all(8),
+        //         child: Column(
+        //           crossAxisAlignment: CrossAxisAlignment.stretch,
+        //           children: [
+        //             TextButton.icon(
+        //               onPressed: () => MeaningTile.showEditor(
+        //                 context: context,
+        //                 callback: (value) {
+        //                   if (value != null)
+        //                     setState(() {
+        //                       entry.uses.add(value);
+        //                     });
+        //                 },
+        //               ),
+        //               icon: Icon(Icons.add_outlined),
+        //               label: Text('Add use'),
+        //             ),
+        //             if (widget.hit.entryID.isNotEmpty)
+        //               TextButton.icon(
+        //                 onPressed: entry.uses.isEmpty
+        //                     ? delete
+        //                     : () => ScaffoldMessenger.of(context).showSnackBar(
+        //                           SnackBar(
+        //                             content: Row(
+        //                               children: [
+        //                                 Icon(
+        //                                   Icons.warning_outlined,
+        //                                   color: Colors.white,
+        //                                 ),
+        //                                 SizedBox(width: 8),
+        //                                 Text('Remove all uses first.'),
+        //                               ],
+        //                             ),
+        //                           ),
+        //                         ),
+        //                 icon: Icon(Icons.delete_outlined),
+        //                 label: Text('Delete entry'),
+        //                 style: ButtonStyle(
+        //                   foregroundColor:
+        //                       MaterialStateProperty.all(Colors.red),
+        //                   overlayColor:
+        //                       MaterialStateProperty.all(Colors.red.shade50),
+        //                 ),
+        //               ),
+        //           ],
+        //         ),
+        //       )
+        //   ],
+        // ),
       ),
     );
   }
