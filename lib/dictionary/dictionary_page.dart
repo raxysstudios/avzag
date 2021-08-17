@@ -169,7 +169,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
             ),
           );
         },
-        onPanelOpened: () => setState(() {}),
+        onPanelOpened: () {
+          FocusScope.of(context).unfocus();
+          setState(() {});
+        },
         onPanelClosed: () => setState(() {}),
       ),
     );
