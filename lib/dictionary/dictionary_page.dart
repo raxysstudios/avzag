@@ -2,6 +2,7 @@ import 'package:avzag/dictionary/editor_button.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/global_store.dart';
+import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,6 +28,22 @@ class _DictionaryPageState extends State<DictionaryPage> {
   final panelController = PanelController();
 
   void openEntry(EntryHit hit) async {
+    if (editing) {
+      if (await showDangerDialog(
+        context,
+        'Discard edits?',
+        confirmText: 'Discard',
+        rejectText: 'Edit',
+      ))
+        setState(() {
+          editing = false;
+        });
+      else {
+        panelController.open();
+        return;
+      }
+    }
+
     final entry = await showLoadingDialog<Entry>(
       context,
       FirebaseFirestore.instance
