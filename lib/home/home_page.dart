@@ -3,7 +3,6 @@ import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
 
