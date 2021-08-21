@@ -1,7 +1,6 @@
 import 'package:avzag/dictionary/editor_button.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/home/language_flag.dart';
-import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
@@ -70,34 +69,32 @@ class _DictionaryPageState extends State<DictionaryPage> {
       top: Radius.circular(16),
     );
     final safePadding = MediaQuery.of(context).padding.top;
-    final canEdit = GlobalStore.editing == null ||
-        (hit != null && GlobalStore.editing != hit?.language);
     return Scaffold(
       drawer: NavDraver(title: 'dictionary'),
-      floatingActionButton: canEdit
-          ? null
-          : EditorButton(
-              entry,
-              hit,
-              editing: editing,
-              collapsed: collapsed,
-              onStart: (entry, hit) {
-                setState(() {
-                  this.entry = entry;
-                  this.hit = hit;
-                  editing = true;
-                  collapsed = false;
-                });
-                panelController.open();
-              },
-              onEnd: () {
-                setState(() {
-                  editing = false;
-                  collapsed = true;
-                });
-                panelController.close();
-              },
-            ),
+      floatingActionButton: EditorButton(
+        entry,
+        hit,
+        editing: editing,
+        collapsed: collapsed,
+        onStart: (entry, hit) {
+          setState(() {
+            this.entry = entry;
+            this.hit = hit;
+            editing = true;
+            collapsed = false;
+          });
+          panelController.open();
+        },
+        onEnd: () {
+          setState(() {
+            entry = null;
+            hit = null;
+            editing = false;
+            collapsed = true;
+          });
+          panelController.close();
+        },
+      ),
       body: SlidingUpPanel(
         controller: panelController,
         backdropEnabled: true,
@@ -193,7 +190,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
         },
         onPanelClosed: () => setState(() {
           collapsed = true;
-          if (!panelController.isPanelShown) entry = null;
+          if (!editing) {
+            entry = null;
+            hit = null;
+          }
         }),
       ),
     );
