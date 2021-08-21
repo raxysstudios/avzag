@@ -117,7 +117,7 @@ class EditorButton extends StatelessWidget {
 
   Future<bool> delete(BuildContext context) async {
     if (entry == null || hit == null) return false;
-    if (entry!.uses.isEmpty) {
+    if (entry!.uses.isNotEmpty) {
       showError(context, 'Remove all uses first.');
       return false;
     }
