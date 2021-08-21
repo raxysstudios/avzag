@@ -57,7 +57,7 @@ class ExpandableTitle extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'Made with honor in\nDagestan, North Caucasus.',
+                        'Made with honor in North Caucasus.',
                         textAlign: TextAlign.center,
                       ),
                     ],

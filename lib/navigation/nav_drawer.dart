@@ -80,6 +80,7 @@ class NavDraver extends StatelessWidget {
     return Drawer(
       child: Container(
         color: Theme.of(context).scaffoldBackgroundColor,
+        width: MediaQuery.of(context).size.width,
         child: ListView(
           children: [
             Material(
