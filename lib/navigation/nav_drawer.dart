@@ -78,60 +78,62 @@ class NavDraver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
       width: MediaQuery.of(context).size.width,
       child: Drawer(
-        child: ListView(
-          children: [
-            Material(
-              color: Colors.transparent,
-              child: ExpandableTitle(
-                [
-                  Card(
-                    child: Column(
-                      children: [
-                        EditorSwitch(),
-                        ...[
-                          _NavLink(
-                            Icons.send_outlined,
-                            'developer contact',
-                            'https://t.me/alkaitagi',
-                          ),
-                          _NavLink(
-                            Icons.code_outlined,
-                            'GitHub repository',
-                            'https://github.com/alkaitagi/avzag_flutter',
-                          ),
-                        ].map((e) => e.build()),
-                      ],
+        child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: ListView(
+            children: [
+              Material(
+                color: Colors.transparent,
+                child: ExpandableTitle(
+                  [
+                    Card(
+                      child: Column(
+                        children: [
+                          EditorSwitch(),
+                          ...[
+                            _NavLink(
+                              Icons.send_outlined,
+                              'developer contact',
+                              'https://t.me/alkaitagi',
+                            ),
+                            _NavLink(
+                              Icons.code_outlined,
+                              'GitHub repository',
+                              'https://github.com/alkaitagi/avzag_flutter',
+                            ),
+                          ].map((e) => e.build()),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Card(
-              child: Column(
-                children: [
-                  ...[
-                    _NavModule(Icons.map_outlined, 'home'),
-                    _NavModule(Icons.book_outlined, 'dictionary'),
-                  ].map(
-                    (t) => t.build(
-                      context,
-                      selected: t.text == title,
+              Card(
+                child: Column(
+                  children: [
+                    ...[
+                      _NavModule(Icons.map_outlined, 'home'),
+                      _NavModule(Icons.book_outlined, 'dictionary'),
+                    ].map(
+                      (t) => t.build(
+                        context,
+                        selected: t.text == title,
+                      ),
                     ),
-                  ),
-                  Divider(height: 0),
-                  ...[
-                    _NavModule(Icons.music_note_outlined, 'phonology'),
-                    _NavModule(Icons.switch_left_outlined, 'converter'),
-                    _NavModule(Icons.sms_outlined, 'phrasebook'),
-                    _NavModule(Icons.local_library_outlined, 'bootcamp'),
-                  ].map((t) => t.build(context)),
-                ],
-              ),
-            )
-          ],
+                    Divider(height: 0),
+                    ...[
+                      _NavModule(Icons.music_note_outlined, 'phonology'),
+                      _NavModule(Icons.switch_left_outlined, 'converter'),
+                      _NavModule(Icons.sms_outlined, 'phrasebook'),
+                      _NavModule(Icons.local_library_outlined, 'bootcamp'),
+                    ].map((t) => t.build(context)),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
