@@ -1,9 +1,9 @@
 import 'package:avzag/home/language.dart';
 import 'package:avzag/home/language_avatar.dart';
-import 'package:avzag/home/store.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
-import 'package:avzag/store.dart';
+import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
 
@@ -21,9 +21,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    selected = List.from(BaseStore.languages);
+    selected = List.from(GlobalStore.languages);
     tags = Map.fromIterable(
-      HomeStore.languages.values,
+      GlobalStore.catalogue.values,
       key: (l) => l.name,
       value: (l) => [
         l.name,
@@ -37,7 +37,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    BaseStore.languages = selected.toList();
     super.dispose();
   }
 
@@ -49,8 +48,8 @@ class _HomePageState extends State<HomePage> {
         ..clear()
         ..addAll(
           query.isEmpty
-              ? HomeStore.languages.values
-              : HomeStore.languages.values.where((l) {
+              ? GlobalStore.catalogue.values
+              : GlobalStore.catalogue.values.where((l) {
                   final t = tags[l.name]!;
                   return query.any((q) => t.contains(q));
                 }),
@@ -65,7 +64,7 @@ class _HomePageState extends State<HomePage> {
           ? null
           : FloatingActionButton.extended(
               onPressed: () async {
-                await BaseStore.load(
+                await GlobalStore.load(
                   context,
                   languages: selected,
                 );

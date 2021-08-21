@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:avzag/home/language_avatar.dart';
-import 'package:avzag/home/store.dart';
-import 'package:avzag/store.dart';
+import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 import 'hit_tile.dart';
@@ -24,7 +23,8 @@ class SearchToolbarState extends State<SearchToolbar> {
   @override
   void initState() {
     super.initState();
-    if (BaseStore.languages.length == 1) language = BaseStore.languages.first;
+    if (GlobalStore.languages.length == 1)
+      language = GlobalStore.languages.first;
     inputController.addListener(() {
       final text = inputController.text
           .split(' ')
@@ -62,7 +62,7 @@ class SearchToolbarState extends State<SearchToolbar> {
     widget.onSearch(<List<EntryHit>>[]);
     if (!searching) return;
 
-    var query = BaseStore.algolia.instance
+    var query = GlobalStore.algolia.instance
         .index(
           (language?.isEmpty ?? true) ? 'dictionary' : 'dictionary_headword',
         )
@@ -70,7 +70,7 @@ class SearchToolbarState extends State<SearchToolbar> {
         .filters(
           filterOr(
             'language',
-            (language?.isEmpty ?? true) ? BaseStore.languages : [language!],
+            (language?.isEmpty ?? true) ? GlobalStore.languages : [language!],
           ),
         )
         .setRestrictSearchableAttributes([
@@ -82,7 +82,7 @@ class SearchToolbarState extends State<SearchToolbar> {
 
     final snap = await query.getObjects().then(
           (snapshot) async => (language?.isEmpty ?? false)
-              ? await BaseStore.algolia.instance
+              ? await GlobalStore.algolia.instance
                   .index('dictionary')
                   .filters(
                     filterOr(
@@ -138,7 +138,7 @@ class SearchToolbarState extends State<SearchToolbar> {
                     horizontal: VisualDensity.minimumDensity,
                   );
                   return [
-                    if (BaseStore.languages.length > 1) ...[
+                    if (GlobalStore.languages.length > 1) ...[
                       PopupMenuItem(
                         value: 'English',
                         child: ListTile(
@@ -159,14 +159,14 @@ class SearchToolbarState extends State<SearchToolbar> {
                       ),
                       PopupMenuDivider(),
                     ],
-                    for (final l in BaseStore.languages)
+                    for (final l in GlobalStore.languages)
                       PopupMenuItem(
                         value: l,
                         child: ListTile(
                           visualDensity: density,
                           leading: LanguageAvatar(l),
                           title: Text(
-                            capitalize(HomeStore.languages[l]!.name),
+                            capitalize(GlobalStore.catalogue[l]!.name),
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                             ),

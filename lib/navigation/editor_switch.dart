@@ -1,5 +1,5 @@
+import 'package:avzag/global_store.dart';
 import 'package:avzag/navigation/auth_page.dart';
-import 'package:avzag/store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -14,11 +14,9 @@ class _EditorSwitchState extends State<EditorSwitch> {
     return SwitchListTile(
       title: Text('Editor Mode'),
       subtitle: Text(
-        EditorStore.language == null
-            ? 'Off'
-            : capitalize(EditorStore.language!),
+        GlobalStore.editing == null ? 'Off' : capitalize(GlobalStore.editing!),
       ),
-      value: EditorStore.language != null,
+      value: GlobalStore.editing != null,
       secondary: Padding(
         padding: const EdgeInsets.only(top: 8),
         child: Icon(Icons.edit_outlined),

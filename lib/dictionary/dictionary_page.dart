@@ -1,7 +1,7 @@
 import 'package:avzag/dictionary/editor_button.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/home/language_flag.dart';
-import 'package:avzag/store.dart';
+import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -53,8 +53,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
       top: Radius.circular(16),
     );
     final safePadding = MediaQuery.of(context).padding.top;
-    final canEdit = EditorStore.language == null ||
-        (hit != null && EditorStore.language != hit?.language);
+    final canEdit = GlobalStore.editing == null ||
+        (hit != null && GlobalStore.editing != hit?.language);
     return Scaffold(
       drawer: NavDraver(title: 'dictionary'),
       floatingActionButton: canEdit

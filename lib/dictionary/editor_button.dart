@@ -1,6 +1,6 @@
 import 'package:avzag/dictionary/entry.dart';
 import 'package:avzag/dictionary/hit_tile.dart';
-import 'package:avzag/store.dart';
+import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -49,7 +49,7 @@ class EditorButton extends StatelessWidget {
           EntryHit(
             entryID: '',
             headword: '',
-            language: EditorStore.language!,
+            language: GlobalStore.editing!,
             term: '',
           ),
         ),
@@ -103,7 +103,7 @@ class EditorButton extends StatelessWidget {
       return false;
     }
     final collection = FirebaseFirestore.instance
-        .collection('languages/${EditorStore.language}/dictionary');
+        .collection('languages/${GlobalStore.editing}/dictionary');
     final json = entry!.toJson();
     final upload = hit!.entryID.isEmpty
         ? collection.add(json)
@@ -128,7 +128,7 @@ class EditorButton extends StatelessWidget {
       await showLoadingDialog(
         context,
         FirebaseFirestore.instance
-            .collection('languages/${EditorStore.language}/dictionary')
+            .collection('languages/${GlobalStore.editing}/dictionary')
             .doc(hit!.entryID)
             .delete(),
       );

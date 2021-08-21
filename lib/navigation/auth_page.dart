@@ -1,7 +1,6 @@
 import 'package:avzag/home/language_avatar.dart';
-import 'package:avzag/home/store.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
-import 'package:avzag/store.dart';
+import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,7 +37,7 @@ class _AuthPageState extends State<AuthPage> {
         await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
     setState(() {
       editable = json2list(token?.claims?['languages']) ?? [];
-      if (!editable.contains(EditorStore.language)) EditorStore.language = null;
+      if (!editable.contains(GlobalStore.editing)) GlobalStore.editing = null;
     });
   }
 
@@ -48,7 +47,7 @@ class _AuthPageState extends State<AuthPage> {
     });
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
-    EditorStore.language = null;
+    GlobalStore.editing = null;
 
     final user = await GoogleSignIn().signIn();
     if (user != null) {
@@ -80,7 +79,7 @@ class _AuthPageState extends State<AuthPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => navigate(context, null),
         icon: Icon(
-          EditorStore.language == null
+          GlobalStore.editing == null
               ? Icons.edit_off_outlined
               : Icons.edit_outlined,
         ),
@@ -100,11 +99,11 @@ class _AuthPageState extends State<AuthPage> {
                     onPressed: loading ? null : signIn,
                     icon: Icon(Icons.person_outlined),
                     label: Text(
-                      EditorStore.email ?? 'Sign In',
+                      GlobalStore.email ?? 'Sign In',
                     ),
                   ),
                 ),
-                if (EditorStore.email == null)
+                if (GlobalStore.email == null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: Text(
@@ -139,16 +138,17 @@ class _AuthPageState extends State<AuthPage> {
               ],
             ),
           ),
-          if (EditorStore.email != null)
+          if (GlobalStore.email != null)
             Card(
               child: Column(
                 children: [
-                  for (final l in BaseStore.languages)
+                  for (final l in GlobalStore.languages)
                     Builder(
                       builder: (context) {
-                        final language = HomeStore.languages[l]!;
+                        final language = GlobalStore.catalogue[l];
                         final canEdit = editable.contains(l);
-                        final editing = l == EditorStore.language;
+                        final editing = l == GlobalStore.editing;
+                        if (language == null) return SizedBox();
                         return ListTile(
                           leading: LanguageAvatar(language.name),
                           title: Text(
@@ -160,7 +160,7 @@ class _AuthPageState extends State<AuthPage> {
                           ),
                           onTap: canEdit
                               ? () => setState(() {
-                                    EditorStore.language = editing ? null : l;
+                                    GlobalStore.editing = editing ? null : l;
                                   })
                               : language.contact == null
                                   ? null

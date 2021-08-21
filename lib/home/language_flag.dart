@@ -1,8 +1,8 @@
 import 'dart:math';
+import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'store.dart';
 
 class LanguageFlag extends StatefulWidget {
   late final Language language;
@@ -22,7 +22,7 @@ class LanguageFlag extends StatefulWidget {
     this.offset = const Offset(0, 0),
     this.scale = 18,
   }) {
-    this.language = HomeStore.languages[language]!;
+    this.language = GlobalStore.catalogue[language]!;
   }
 
   @override
