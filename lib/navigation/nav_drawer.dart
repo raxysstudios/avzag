@@ -77,10 +77,10 @@ class NavDraver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Drawer(
-        child: Container(
+        child: Material(
           color: Theme.of(context).scaffoldBackgroundColor,
           child: ListView(
             children: [
