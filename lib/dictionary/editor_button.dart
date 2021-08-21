@@ -25,7 +25,6 @@ class EditorButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('BTN ${hit?.language}');
     if (GlobalStore.editing == null ||
         (hit != null && GlobalStore.editing != hit!.language))
       return SizedBox();

@@ -65,9 +65,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   @override
   Widget build(BuildContext context) {
-    const radius = BorderRadius.vertical(
-      top: Radius.circular(16),
-    );
     final safePadding = MediaQuery.of(context).padding.top;
     return Scaffold(
       drawer: NavDraver(title: 'dictionary'),
@@ -132,7 +129,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
           return Padding(
             padding: EdgeInsets.only(top: safePadding),
             child: Material(
-              borderRadius: radius,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
               clipBehavior: Clip.antiAlias,
               color: Theme.of(context).scaffoldBackgroundColor,
               child: CustomScrollView(
