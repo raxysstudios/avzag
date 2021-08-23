@@ -31,21 +31,18 @@ class EditorButton extends StatelessWidget {
       return SizedBox();
     if (collapsed) {
       if (editing)
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: FloatingActionButton.extended(
-            onPressed: () async {
-              if (await showDangerDialog(
-                context,
-                'Discard edits?',
-                confirmText: 'Discard',
-                rejectText: 'Edit',
-              )) onEnd();
-            },
-            icon: Icon(Icons.close_outlined),
-            label: Text('Discard'),
-            backgroundColor: Colors.redAccent,
-          ),
+        return FloatingActionButton.extended(
+          onPressed: () async {
+            if (await showDangerDialog(
+              context,
+              'Discard edits?',
+              confirmText: 'Discard',
+              rejectText: 'Edit',
+            )) onEnd();
+          },
+          icon: Icon(Icons.close_outlined),
+          label: Text('Discard'),
+          backgroundColor: Colors.redAccent,
         );
       return FloatingActionButton.extended(
         onPressed: () => onStart(
