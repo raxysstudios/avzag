@@ -126,7 +126,7 @@ class SearchToolbarState extends State<SearchToolbar> {
                     ? Icon(Icons.language_outlined)
                     : language!.isEmpty
                         ? Icon(Icons.auto_awesome_outlined)
-                        : LanguageAvatar(language!),
+                        : LanguageAvatar(GlobalStore.languages[language]!.flag),
                 tooltip: 'Select search mode',
                 onSelected: (l) {
                   setState(() {
