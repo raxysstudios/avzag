@@ -14,16 +14,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  @override
-  void initState() {
-    super.initState();
-    GlobalStore.load().then(
-      (_) => navigate(
-        context,
-        GlobalStore.prefs.getString('module') ?? 'home',
-      ),
-    );
-  }
+  final loader = GlobalStore.load();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +28,20 @@ class _AppState extends State<App> {
         ),
       ),
       home: Scaffold(
-        body: LoadingCard(),
+        body: FutureBuilder(
+          future: loader,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done)
+              Future.delayed(
+                Duration(milliseconds: 10),
+                () => navigate(
+                  context,
+                  GlobalStore.prefs.getString('module') ?? 'home',
+                ),
+              );
+            return LoadingCard();
+          },
+        ),
       ),
     );
   }

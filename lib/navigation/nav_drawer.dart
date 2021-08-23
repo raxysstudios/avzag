@@ -27,11 +27,11 @@ Future<void> navigate(
   else
     builder = (_) => Text("No Route");
 
+  if (title != null) await prefs.setString('module', title);
   await Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: builder),
   );
-  if (title != null) await prefs.setString('module', title);
 }
 
 class _NavModule {

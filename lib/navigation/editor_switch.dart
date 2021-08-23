@@ -16,14 +16,12 @@ class EditorSwitch extends StatelessWidget {
         padding: const EdgeInsets.only(top: 8),
         child: Icon(Icons.edit_outlined),
       ),
-      onChanged: (e) async {
-        await Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AuthPage(),
-          ),
-        );
-      },
+      onChanged: (e) => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AuthPage(),
+        ),
+      ),
     );
   }
 }

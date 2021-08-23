@@ -37,7 +37,8 @@ class _AuthPageState extends State<AuthPage> {
         await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
     setState(() {
       editable = json2list(token?.claims?['languages']) ?? [];
-      if (!editable.contains(GlobalStore.editing)) GlobalStore.editing = null;
+      if (GlobalStore.editing != null &&
+          !editable.contains(GlobalStore.editing)) GlobalStore.editing = null;
     });
   }
 
