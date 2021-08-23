@@ -4,6 +4,7 @@ import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
 import 'package:avzag/widgets/loading_card.dart';
+import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
@@ -14,11 +15,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final List<String> selected;
   late final Map<String, String> tags;
   final inputController = TextEditingController();
-  List<Language> catalogue = [];
-  List<Language> languages = [];
+  final List<String> selected = [];
+  final List<Language> catalogue = [];
+  final List<Language> languages = [];
 
   late final Future<void> loader;
 
@@ -37,8 +38,8 @@ class _HomePageState extends State<HomePage> {
         .get()
         .then(
       (r) {
-        catalogue = r.docs.map((d) => d.data()).toList();
-        selected = List.from(GlobalStore.languages);
+        catalogue.addAll(r.docs.map((d) => d.data()));
+        selected.addAll(GlobalStore.languages);
         tags = Map.fromIterable(
           catalogue,
           key: (l) => l.name,
@@ -67,8 +68,8 @@ class _HomePageState extends State<HomePage> {
         ..clear()
         ..addAll(
           query.isEmpty
-              ? GlobalStore.catalogue.values
-              : GlobalStore.catalogue.values.where((l) {
+              ? catalogue
+              : catalogue.where((l) {
                   final t = tags[l.name]!;
                   return query.any((q) => t.contains(q));
                 }),
@@ -82,129 +83,125 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: selected.isEmpty
           ? null
           : FloatingActionButton.extended(
-              onPressed: () async {
-                await GlobalStore.load(
+              onPressed: () => showLoadingDialog(
+                context,
+                GlobalStore.load(
                   context,
                   languages: selected,
-                );
-                await navigate(context, null);
-              },
+                ).then(
+                  (_) => navigate(context, null),
+                ),
+              ),
               icon: Icon(Icons.check_outlined),
               label: Text('Continue'),
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            snap: true,
-            floating: true,
-            forceElevated: true,
-            automaticallyImplyLeading: false,
-            titleSpacing: 0,
-            centerTitle: true,
-            title: selected.isEmpty
-                ? Text(
-                    'Select languages below',
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 16,
-                    ),
-                  )
-                : Container(
-                    height: 64,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.only(right: 2),
-                      children: [
-                        IconButton(
-                          onPressed: () => setState(() {
-                            selected.clear();
-                          }),
-                          icon: Icon(Icons.clear_outlined),
-                          tooltip: 'Unselect all',
+      body: FutureBuilder(
+        future: loader,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done)
+            return LoadingCard();
+          return CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                pinned: true,
+                snap: true,
+                floating: true,
+                forceElevated: true,
+                automaticallyImplyLeading: false,
+                titleSpacing: 0,
+                centerTitle: true,
+                title: selected.isEmpty
+                    ? Text(
+                        'Select languages below',
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 16,
                         ),
-                        SizedBox(width: 18),
-                        for (final language in selected) ...[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: InputChip(
-                              avatar: LanguageAvatar(
-                                language,
-                                radius: 12,
-                              ),
-                              label: Text(
-                                capitalize(language),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
+                      )
+                    : Container(
+                        height: 64,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.only(right: 2),
+                          children: [
+                            IconButton(
+                              onPressed: () => setState(() {
+                                selected.clear();
+                              }),
+                              icon: Icon(Icons.clear_outlined),
+                              tooltip: 'Unselect all',
+                            ),
+                            SizedBox(width: 18),
+                            for (final language in selected) ...[
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 2),
+                                child: InputChip(
+                                  avatar: LanguageAvatar(
+                                    language,
+                                    radius: 12,
+                                  ),
+                                  label: Text(
+                                    capitalize(language),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  onPressed: () => setState(() {
+                                    selected.remove(language);
+                                  }),
                                 ),
                               ),
-                              onPressed: () => setState(() {
-                                selected.remove(language);
-                              }),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(59),
-              child: Row(
-                children: [
-                  IconButton(
-                    tooltip: 'Toggle map',
-                    icon: Icon(Icons.map_outlined),
-                    onPressed: () => showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text('The map comes soon'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text('Close'),
-                            )
+                            ],
                           ],
-                        );
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 8),
-                      child: TextField(
-                        controller: inputController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          labelText: "Search by names, tags, families",
                         ),
                       ),
-                    ),
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(59),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        tooltip: 'Toggle map',
+                        icon: Icon(Icons.map_outlined),
+                        onPressed: () => showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('The map comes soon'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text('Close'),
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 8),
+                          child: TextField(
+                            controller: inputController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              labelText: "Search by names, tags, families",
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: inputController.text.isEmpty
+                            ? null
+                            : inputController.clear,
+                        icon: Icon(Icons.clear),
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    onPressed: inputController.text.isEmpty
-                        ? null
-                        : inputController.clear,
-                    icon: Icon(Icons.clear),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-          FutureBuilder(
-            future: loader,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done)
-                return SliverPadding(
-                  padding: const EdgeInsets.all(32),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate(
-                      [LoadingCard()],
-                    ),
-                  ),
-                );
-              return SliverPadding(
+              SliverPadding(
                 padding: const EdgeInsets.only(bottom: 78),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -225,10 +222,10 @@ class _HomePageState extends State<HomePage> {
                     childCount: languages.length,
                   ),
                 ),
-              );
-            },
-          ),
-        ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
