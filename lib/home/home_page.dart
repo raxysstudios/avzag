@@ -3,6 +3,8 @@ import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
+import 'package:avzag/widgets/loading_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
 
@@ -15,23 +17,41 @@ class _HomePageState extends State<HomePage> {
   late final List<String> selected;
   late final Map<String, String> tags;
   final inputController = TextEditingController();
-  final List<Language> languages = [];
+  List<Language> catalogue = [];
+  List<Language> languages = [];
+
+  late final Future<void> loader;
 
   @override
   void initState() {
     super.initState();
-    selected = List.from(GlobalStore.languages);
-    tags = Map.fromIterable(
-      GlobalStore.catalogue.values,
-      key: (l) => l.name,
-      value: (l) => [
-        l.name,
-        ...l.family ?? [],
-        ...l.tags ?? [],
-      ].join(' '),
+    loader = FirebaseFirestore.instance
+        .collection('languages')
+        .orderBy('family')
+        .orderBy('name')
+        .where('name')
+        .withConverter(
+          fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
+          toFirestore: (Language language, _) => language.toJson(),
+        )
+        .get()
+        .then(
+      (r) {
+        catalogue = r.docs.map((d) => d.data()).toList();
+        selected = List.from(GlobalStore.languages);
+        tags = Map.fromIterable(
+          catalogue,
+          key: (l) => l.name,
+          value: (l) => [
+            l.name,
+            ...l.family ?? [],
+            ...l.tags ?? [],
+          ].join(' '),
+        );
+        inputController.addListener(filterLanguages);
+        filterLanguages();
+      },
     );
-    inputController.addListener(filterLanguages);
-    filterLanguages();
   }
 
   @override
@@ -172,27 +192,38 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.only(bottom: 64),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final language = languages[index];
-                  final name = language.name;
-                  final selected = this.selected.contains(name);
-                  return LanguageCard(
-                    language,
-                    selected: selected,
-                    onTap: () => setState(
-                      () => selected
-                          ? this.selected.remove(name)
-                          : this.selected.add(name),
-                    ),
-                  );
-                },
-                childCount: languages.length,
-              ),
-            ),
+          FutureBuilder(
+            future: loader,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done)
+                return SliverList(
+                  delegate: SliverChildListDelegate(
+                    [LoadingCard()],
+                  ),
+                );
+              return SliverPadding(
+                padding: const EdgeInsets.only(bottom: 64),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final language = languages[index];
+                      final name = language.name;
+                      final selected = this.selected.contains(name);
+                      return LanguageCard(
+                        language,
+                        selected: selected,
+                        onTap: () => setState(
+                          () => selected
+                              ? this.selected.remove(name)
+                              : this.selected.add(name),
+                        ),
+                      );
+                    },
+                    childCount: languages.length,
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
