@@ -196,13 +196,16 @@ class _HomePageState extends State<HomePage> {
             future: loader,
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done)
-                return SliverList(
-                  delegate: SliverChildListDelegate(
-                    [LoadingCard()],
+                return SliverPadding(
+                  padding: const EdgeInsets.all(32),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate(
+                      [LoadingCard()],
+                    ),
                   ),
                 );
               return SliverPadding(
-                padding: const EdgeInsets.only(bottom: 64),
+                padding: const EdgeInsets.only(bottom: 78),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
