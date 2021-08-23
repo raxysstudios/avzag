@@ -1,3 +1,4 @@
+import 'package:avzag/widgets/loading_card.dart';
 import 'package:flutter/material.dart';
 
 Future<T?> showLoadingDialog<T>(
@@ -7,23 +8,7 @@ Future<T?> showLoadingDialog<T>(
   showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (context) {
-      return Center(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(128),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              width: 32,
-              height: 32,
-              child: CircularProgressIndicator(),
-            ),
-          ),
-        ),
-      );
-    },
+    builder: (context) => LoadingCard(),
   );
   try {
     final result = await future;

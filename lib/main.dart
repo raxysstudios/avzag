@@ -1,5 +1,6 @@
 import 'package:algolia/algolia.dart';
 import 'package:avzag/global_store.dart';
+import 'package:avzag/widgets/loading_card.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,21 +48,7 @@ class _AppState extends State<App> {
               .then((prefs) => prefs.getString('module') ?? 'home')
               .then((title) => navigate(context, title));
           return Scaffold(
-            body: Center(
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(128),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              ),
-            ),
+            body: LoadingCard(),
           );
         },
       ),
