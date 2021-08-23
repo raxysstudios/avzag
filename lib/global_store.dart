@@ -7,7 +7,9 @@ import 'home/language.dart';
 
 class GlobalStore {
   static late final Algolia algolia;
-  static Map<String, Language> catalogue = {};
+
+  static Map<String, Language> _catalogue = {};
+  static Map<String, Language> get catalogue => _catalogue;
 
   static List<String> _languages = [];
   static List<String> get languages => _languages;
@@ -31,25 +33,6 @@ class GlobalStore {
     List<String>? languages,
   }) async {
     final prefs = await SharedPreferences.getInstance();
-    // ignore: unnecessary_null_comparison
-    if (catalogue != null)
-      catalogue = await FirebaseFirestore.instance
-          .collection('languages')
-          .orderBy('family')
-          .orderBy('name')
-          .where('name')
-          .withConverter(
-            fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
-            toFirestore: (Language language, _) => language.toJson(),
-          )
-          .get()
-          .then(
-            (r) => Map.fromIterable(
-              r.docs,
-              key: (d) => d.id,
-              value: (d) => d.data(),
-            ),
-          );
 
     if (languages == null) {
       languages = prefs.getStringList('languages') ?? [catalogue.keys.first];
@@ -61,6 +44,25 @@ class GlobalStore {
       );
 
     _languages = languages;
+    _catalogue = await Future.wait<Language?>(
+      languages.map(
+        (l) => FirebaseFirestore.instance
+            .doc('languages/$l')
+            .withConverter(
+              fromFirestore: (snapshot, _) =>
+                  Language.fromJson(snapshot.data()!),
+              toFirestore: (Language language, _) => language.toJson(),
+            )
+            .get()
+            .then((r) => r.data()),
+      ),
+    ).then(
+      (l) => Map.fromIterable(
+        l.where((l) => l != null),
+        key: (d) => d.id,
+        value: (d) => d.data(),
+      ),
+    );
     _editing = prefs.getString('editor');
   }
 }
