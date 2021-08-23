@@ -3,12 +3,7 @@ import 'package:avzag/navigation/auth_page.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 
-class EditorSwitch extends StatefulWidget {
-  @override
-  _EditorSwitchState createState() => _EditorSwitchState();
-}
-
-class _EditorSwitchState extends State<EditorSwitch> {
+class EditorSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
@@ -28,7 +23,6 @@ class _EditorSwitchState extends State<EditorSwitch> {
             builder: (context) => AuthPage(),
           ),
         );
-        setState(() {});
       },
     );
   }
