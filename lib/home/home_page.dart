@@ -5,6 +5,7 @@ import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
 import 'package:avzag/widgets/loading_card.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
+import 'package:avzag/widgets/snackbar_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
@@ -39,7 +40,11 @@ class _HomePageState extends State<HomePage> {
         .then(
       (r) {
         catalogue.addAll(r.docs.map((d) => d.data()).toList());
-        selected.addAll(GlobalStore.languages.values);
+        selected.addAll(
+          GlobalStore.languages.keys.map(
+            (n) => catalogue.firstWhere((l) => l.name == n),
+          ),
+        );
         tags = Map.fromIterable(
           catalogue,
           key: (l) => l.name,
@@ -80,21 +85,23 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: selected.isEmpty
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: () => showLoadingDialog(
-                context,
-                GlobalStore.load(
-                  context,
-                  languages: selected.map((s) => s.name).toList(),
-                ).then(
-                  (_) => navigate(context, null),
-                ),
-              ),
-              icon: Icon(Icons.check_outlined),
-              label: Text('Continue'),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          if (selected.isEmpty)
+            return showSnackbar(context, 'Select at least one language.');
+          showLoadingDialog(
+            context,
+            GlobalStore.load(
+              context,
+              languages: selected.map((s) => s.name).toList(),
+            ).then(
+              (_) => navigate(context, null),
             ),
+          );
+        },
+        icon: Icon(Icons.check_outlined),
+        label: Text('Continue'),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: FutureBuilder(
         future: loader,

@@ -3,6 +3,7 @@ import 'package:avzag/dictionary/hit_tile.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
+import 'package:avzag/widgets/snackbar_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -102,7 +103,7 @@ class EditorButton extends StatelessWidget {
   Future<bool> submit(BuildContext context) async {
     if (entry == null || hit == null) return false;
     if (entry!.uses.isEmpty || entry!.forms.isEmpty) {
-      showError(context, 'Must have at least a form and a use.');
+      showSnackbar(context, 'Must have at least a form and a use.');
       return false;
     }
     final collection = FirebaseFirestore.instance
@@ -118,7 +119,7 @@ class EditorButton extends StatelessWidget {
   Future<bool> delete(BuildContext context) async {
     if (entry == null || hit == null) return false;
     if (entry!.uses.isNotEmpty) {
-      showError(context, 'Remove all uses first.');
+      showSnackbar(context, 'Remove all uses first.');
       return false;
     }
     final confirm = await showDangerDialog(
@@ -138,24 +139,5 @@ class EditorButton extends StatelessWidget {
       return true;
     }
     return false;
-  }
-
-  void showError(BuildContext context, String text) {
-    final messenger = ScaffoldMessenger.of(context);
-    messenger.hideCurrentSnackBar();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(
-              Icons.error_outline,
-              color: Colors.white,
-            ),
-            SizedBox(width: 8),
-            Text(text),
-          ],
-        ),
-      ),
-    );
   }
 }
