@@ -2,7 +2,6 @@ import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home/language.dart';
 
@@ -26,10 +25,7 @@ class GlobalStore {
 
   static String? get email => FirebaseAuth.instance.currentUser?.email;
 
-  static Future<void> load(
-    BuildContext context, {
-    List<String>? languages,
-  }) async {
+  static Future<void> load([List<String>? languages]) async {
     if (_first) await _init();
     languages ??= prefs.getStringList('languages') ?? ['iron'];
 
