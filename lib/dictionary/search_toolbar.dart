@@ -24,7 +24,7 @@ class SearchToolbarState extends State<SearchToolbar> {
   void initState() {
     super.initState();
     if (GlobalStore.languages.length == 1)
-      language = GlobalStore.languages.first;
+      language = GlobalStore.languages.keys.first;
     inputController.addListener(() {
       final text = inputController.text
           .split(' ')
@@ -70,7 +70,9 @@ class SearchToolbarState extends State<SearchToolbar> {
         .filters(
           filterOr(
             'language',
-            (language?.isEmpty ?? true) ? GlobalStore.languages : [language!],
+            (language?.isEmpty ?? true)
+                ? GlobalStore.languages.keys
+                : [language!],
           ),
         )
         .setRestrictSearchableAttributes([
@@ -159,19 +161,19 @@ class SearchToolbarState extends State<SearchToolbar> {
                       ),
                       PopupMenuDivider(),
                     ],
-                    for (final l in GlobalStore.languages)
+                    for (final name in GlobalStore.languages.keys)
                       PopupMenuItem(
-                        value: l,
+                        value: name,
                         child: ListTile(
                           visualDensity: density,
-                          leading: LanguageAvatar(l),
+                          leading: LanguageAvatar(name),
                           title: Text(
-                            capitalize(GlobalStore.catalogue[l]!.name),
+                            capitalize(name),
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          selected: language == l,
+                          selected: language == name,
                         ),
                       ),
                   ];

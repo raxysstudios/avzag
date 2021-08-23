@@ -3,7 +3,6 @@ import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/loading_card.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'navigation/nav_drawer.dart';
 
 void main() async {
@@ -44,8 +43,7 @@ class _AppState extends State<App> {
         builder: (context) {
           Firebase.initializeApp()
               .then((_) => GlobalStore.load(context))
-              .then((_) => SharedPreferences.getInstance())
-              .then((prefs) => prefs.getString('module') ?? 'home')
+              .then((_) => GlobalStore.prefs.getString('module') ?? 'home')
               .then((title) => navigate(context, title));
           return Scaffold(
             body: LoadingCard(),

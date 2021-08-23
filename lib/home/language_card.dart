@@ -29,8 +29,7 @@ class LanguageCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: LanguageFlag(
-                      null,
-                      flag: language.flag,
+                      language.flag,
                       offset: Offset(-30, 36),
                     ),
                   ),

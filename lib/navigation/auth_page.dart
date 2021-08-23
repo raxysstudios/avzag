@@ -142,33 +142,31 @@ class _AuthPageState extends State<AuthPage> {
             Card(
               child: Column(
                 children: [
-                  for (final l in GlobalStore.languages)
+                  for (final l in GlobalStore.languages.values)
                     Builder(
                       builder: (context) {
-                        final language = GlobalStore.catalogue[l];
                         final canEdit = editable.contains(l);
-                        final editing = l == GlobalStore.editing;
-                        if (language == null) return SizedBox();
+                        final editing = l.name == GlobalStore.editing;
                         return ListTile(
-                          leading: LanguageAvatar(language.name),
+                          leading: LanguageAvatar(l.name),
                           title: Text(
-                            capitalize(l),
+                            capitalize(l.name),
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
                             ),
                           ),
-                          onTap: canEdit
-                              ? () => setState(() {
-                                    GlobalStore.editing = editing ? null : l;
-                                  })
-                              : language.contact == null
-                                  ? null
-                                  : () => launch(language.contact!),
+                          onTap: () {
+                            if (canEdit)
+                              setState(() {
+                                GlobalStore.editing = editing ? null : l.name;
+                              });
+                            else if (l.contact != null) launch(l.contact!);
+                          },
                           selected: editing,
                           trailing: canEdit
                               ? Icon(Icons.edit_outlined)
-                              : language.contact == null
+                              : l.contact == null
                                   ? null
                                   : Icon(Icons.send_outlined),
                         );

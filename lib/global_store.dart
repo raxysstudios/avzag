@@ -7,23 +7,19 @@ import 'home/language.dart';
 
 class GlobalStore {
   static late final Algolia algolia;
+  static late final SharedPreferences prefs;
 
-  static Map<String, Language> _catalogue = {};
-  static Map<String, Language> get catalogue => _catalogue;
-
-  static List<String> _languages = [];
-  static List<String> get languages => _languages;
+  static Map<String, Language> _languages = {};
+  static Map<String, Language> get languages => _languages;
 
   static String? _editing;
   static String? get editing => _editing;
   static set editing(String? value) {
     _editing = value;
-    SharedPreferences.getInstance().then((prefs) {
-      if (value == null)
-        prefs.remove('editor');
-      else
-        prefs.setString('editor', value);
-    });
+    if (value == null)
+      prefs.remove('editor');
+    else
+      prefs.setString('editor', value);
   }
 
   static String? get email => FirebaseAuth.instance.currentUser?.email;
@@ -32,19 +28,10 @@ class GlobalStore {
     BuildContext context, {
     List<String>? languages,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
+    languages ??= prefs.getStringList('languages') ?? ['iron'];
 
-    if (languages == null) {
-      languages = prefs.getStringList('languages') ?? [catalogue.keys.first];
-      languages = languages.where((l) => catalogue.containsKey(l)).toList();
-    } else
-      await prefs.setStringList(
-        'languages',
-        languages.toList(),
-      );
-
-    _languages = languages;
-    _catalogue = await Future.wait<Language?>(
+    await Future.wait<Language?>(
       languages.map(
         (l) => FirebaseFirestore.instance
             .doc('languages/$l')
@@ -57,10 +44,21 @@ class GlobalStore {
             .then((r) => r.data()),
       ),
     ).then(
-      (l) => ({
-        for (final l in l.where((l) => l != null)) l!.name: l,
-      }),
+      (c) {
+        _languages = {
+          for (final l in c.where((l) => l != null)) l!.name: l,
+        };
+      },
     );
+
     _editing = prefs.getString('editor');
+    if (_editing != null && !_languages.containsKey(_editing)) editing = null;
+
+    await prefs.setStringList(
+      'languages',
+      languages.where((l) => _languages.containsKey(l)).toList(),
+    );
+
+    print('CTL $_languages');
   }
 }

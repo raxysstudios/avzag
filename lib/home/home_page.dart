@@ -17,8 +17,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final Map<String, String> tags;
   final inputController = TextEditingController();
-  late final Map<String, Language> catalogue;
-  final List<String> selected = [];
+  final List<Language> catalogue = [];
+  final List<Language> selected = [];
   final List<Language> languages = [];
 
   late final Future<void> loader;
@@ -38,12 +38,10 @@ class _HomePageState extends State<HomePage> {
         .get()
         .then(
       (r) {
-        catalogue = {
-          for (final d in r.docs) d.id: d.data(),
-        };
-        selected.addAll(GlobalStore.languages);
+        catalogue.addAll(r.docs.map((d) => d.data()).toList());
+        selected.addAll(GlobalStore.languages.values);
         tags = Map.fromIterable(
-          catalogue.values,
+          catalogue,
           key: (l) => l.name,
           value: (l) => [
             l.name,
@@ -70,8 +68,8 @@ class _HomePageState extends State<HomePage> {
         ..clear()
         ..addAll(
           query.isEmpty
-              ? catalogue.values
-              : catalogue.values.where((l) {
+              ? catalogue
+              : catalogue.where((l) {
                   final t = tags[l.name]!;
                   return query.any((q) => t.contains(q));
                 }),
@@ -89,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                 context,
                 GlobalStore.load(
                   context,
-                  languages: selected,
+                  languages: selected.map((s) => s.name).toList(),
                 ).then(
                   (_) => navigate(context, null),
                 ),
@@ -141,12 +139,11 @@ class _HomePageState extends State<HomePage> {
                                     const EdgeInsets.symmetric(horizontal: 2),
                                 child: InputChip(
                                   avatar: LanguageAvatar(
-                                    null,
-                                    flag: catalogue[language]?.flag,
+                                    language.flag,
                                     radius: 12,
                                   ),
                                   label: Text(
-                                    capitalize(language),
+                                    capitalize(language.name),
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -210,15 +207,14 @@ class _HomePageState extends State<HomePage> {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final language = languages[index];
-                      final name = language.name;
-                      final selected = this.selected.contains(name);
+                      final selected = this.selected.contains(language);
                       return LanguageCard(
                         language,
                         selected: selected,
                         onTap: () => setState(
                           () => selected
-                              ? this.selected.remove(name)
-                              : this.selected.add(name),
+                              ? this.selected.remove(language)
+                              : this.selected.add(language),
                         ),
                       );
                     },
