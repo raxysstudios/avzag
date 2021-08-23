@@ -59,10 +59,11 @@ class _AboutCardState extends State<AboutCard> {
                   text: TextSpan(
                     style: Theme.of(context).textTheme.bodyText2,
                     children: [
-                      TextSpan(
-                        text:
-                            'v${package!.version} • b${package!.buildNumber}\n',
-                      ),
+                      if (package != null)
+                        TextSpan(
+                          text:
+                              'v${package!.version} • b${package!.buildNumber}\n',
+                        ),
                       TextSpan(text: 'Build with '),
                       TextSpan(
                         text: 'Flutter SDK',
