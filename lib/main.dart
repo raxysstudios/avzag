@@ -15,6 +15,17 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   @override
+  void initState() {
+    super.initState();
+    GlobalStore.load().then(
+      (_) => navigate(
+        context,
+        GlobalStore.prefs.getString('module') ?? 'home',
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Avzag',
@@ -25,15 +36,8 @@ class _AppState extends State<App> {
           clipBehavior: Clip.antiAlias,
         ),
       ),
-      home: Builder(
-        builder: (context) {
-          GlobalStore.load(context)
-              .then((_) => GlobalStore.prefs.getString('module') ?? 'home')
-              .then((title) => navigate(context, title));
-          return Scaffold(
-            body: LoadingCard(),
-          );
-        },
+      home: Scaffold(
+        body: LoadingCard(),
       ),
     );
   }

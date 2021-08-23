@@ -92,8 +92,7 @@ class _HomePageState extends State<HomePage> {
           showLoadingDialog(
             context,
             GlobalStore.load(
-              context,
-              languages: selected.map((s) => s.name).toList(),
+              selected.map((s) => s.name).toList(),
             ).then(
               (_) => navigate(context, null),
             ),
