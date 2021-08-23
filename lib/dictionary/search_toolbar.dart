@@ -161,19 +161,19 @@ class SearchToolbarState extends State<SearchToolbar> {
                       ),
                       PopupMenuDivider(),
                     ],
-                    for (final name in GlobalStore.languages.keys)
+                    for (final l in GlobalStore.languages.values)
                       PopupMenuItem(
-                        value: name,
+                        value: l.name,
                         child: ListTile(
                           visualDensity: density,
-                          leading: LanguageAvatar(name),
+                          leading: LanguageAvatar(l.flag),
                           title: Text(
-                            capitalize(name),
+                            capitalize(l.name),
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          selected: language == name,
+                          selected: language == l.name,
                         ),
                       ),
                   ];
