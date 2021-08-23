@@ -1,11 +1,10 @@
 import 'dart:math';
 import 'package:avzag/global_store.dart';
-import 'package:avzag/home/language.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class LanguageFlag extends StatefulWidget {
-  late final Language language;
+  late final String? flag;
   final double width;
   final double height;
   final double rotation;
@@ -15,14 +14,15 @@ class LanguageFlag extends StatefulWidget {
   static final Map<String, String> urls = {};
 
   LanguageFlag(
-    String language, {
+    String? language, {
+    String? flag,
     this.width = 16,
     this.height = 4,
     this.rotation = -pi / 4,
     this.offset = const Offset(0, 0),
     this.scale = 18,
   }) {
-    this.language = GlobalStore.catalogue[language]!;
+    this.flag = flag ?? GlobalStore.catalogue[language]?.flag;
   }
 
   @override
@@ -30,18 +30,18 @@ class LanguageFlag extends StatefulWidget {
 }
 
 class _LanguageFlagState extends State<LanguageFlag> {
-  String? get url => LanguageFlag.urls[widget.language.name];
+  String? get url => LanguageFlag.urls[widget.flag];
 
   @override
   void initState() {
     super.initState();
-    if (url == null)
+    if (url == null && widget.flag != null)
       FirebaseStorage.instance
-          .ref('flags/${widget.language.flag}.png')
+          .ref('flags/${widget.flag}.png')
           .getDownloadURL()
           .then(
             (u) => setState(() {
-              LanguageFlag.urls[widget.language.name] = u;
+              LanguageFlag.urls[widget.flag!] = u;
             }),
           );
   }

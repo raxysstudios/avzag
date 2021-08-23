@@ -57,11 +57,9 @@ class GlobalStore {
             .then((r) => r.data()),
       ),
     ).then(
-      (l) => Map.fromIterable(
-        l.where((l) => l != null),
-        key: (d) => d.id,
-        value: (d) => d.data(),
-      ),
+      (l) => ({
+        for (final l in l.where((l) => l != null)) l!.name: l,
+      }),
     );
     _editing = prefs.getString('editor');
   }

@@ -1,19 +1,19 @@
 import 'package:avzag/global_store.dart';
-import 'package:avzag/home/language.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'language_flag.dart';
 
 class LanguageAvatar extends StatefulWidget {
-  late final Language? language;
+  late final String? flag;
   final double radius;
   static const double R = 12;
 
   LanguageAvatar(
-    String language, {
+    String? language, {
+    String? flag,
     this.radius = 1.5 * R,
   }) {
-    this.language = GlobalStore.catalogue[language];
+    this.flag = flag ?? GlobalStore.catalogue[language]?.flag;
   }
 
   @override
@@ -21,22 +21,18 @@ class LanguageAvatar extends StatefulWidget {
 }
 
 class _LanguageAvatarState extends State<LanguageAvatar> {
-  String? get url {
-    return widget.language == null
-        ? null
-        : LanguageFlag.urls[widget.language!.name];
-  }
+  String? get url => LanguageFlag.urls[widget.flag];
 
   @override
   void initState() {
     super.initState();
-    if (url == null && widget.language != null)
+    if (url == null && widget.flag != null)
       FirebaseStorage.instance
-          .ref('flags/${widget.language!.flag}.png')
+          .ref('flags/${widget.flag}.png')
           .getDownloadURL()
           .then(
             (u) => setState(() {
-              LanguageFlag.urls[widget.language!.name] = u;
+              LanguageFlag.urls[widget.flag!] = u;
             }),
           );
   }

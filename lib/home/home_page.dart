@@ -17,8 +17,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final Map<String, String> tags;
   final inputController = TextEditingController();
+  late final Map<String, Language> catalogue;
   final List<String> selected = [];
-  final List<Language> catalogue = [];
   final List<Language> languages = [];
 
   late final Future<void> loader;
@@ -38,10 +38,12 @@ class _HomePageState extends State<HomePage> {
         .get()
         .then(
       (r) {
-        catalogue.addAll(r.docs.map((d) => d.data()));
+        catalogue = {
+          for (final d in r.docs) d.id: d.data(),
+        };
         selected.addAll(GlobalStore.languages);
         tags = Map.fromIterable(
-          catalogue,
+          catalogue.values,
           key: (l) => l.name,
           value: (l) => [
             l.name,
@@ -68,8 +70,8 @@ class _HomePageState extends State<HomePage> {
         ..clear()
         ..addAll(
           query.isEmpty
-              ? catalogue
-              : catalogue.where((l) {
+              ? catalogue.values
+              : catalogue.values.where((l) {
                   final t = tags[l.name]!;
                   return query.any((q) => t.contains(q));
                 }),
@@ -139,7 +141,8 @@ class _HomePageState extends State<HomePage> {
                                     const EdgeInsets.symmetric(horizontal: 2),
                                 child: InputChip(
                                   avatar: LanguageAvatar(
-                                    language,
+                                    null,
+                                    flag: catalogue[language]?.flag,
                                     radius: 12,
                                   ),
                                   label: Text(
