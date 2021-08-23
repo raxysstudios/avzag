@@ -1,3 +1,4 @@
+import 'package:avzag/navigation/about_card.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
@@ -44,49 +45,8 @@ class ExpandableTitle extends StatelessWidget {
       collapsed: Offstage(),
       expanded: Column(
         children: [
-          Card(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.landscape_outlined,
-                        color: Colors.black54,
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Made with honor in North Caucasus.',
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(height: 0),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      FlutterLogo(size: 24),
-                      Image.asset(
-                        'firebase.png',
-                        width: 24,
-                        height: 24,
-                      ),
-                      Image.asset(
-                        'algolia.png',
-                        width: 24,
-                        height: 24,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ...children
+          AboutCard(),
+          ...children,
         ],
       ),
     );
