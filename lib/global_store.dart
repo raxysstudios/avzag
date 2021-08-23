@@ -1,11 +1,13 @@
 import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home/language.dart';
 
 class GlobalStore {
+  static bool _first = true;
   static late final Algolia algolia;
   static late final SharedPreferences prefs;
 
@@ -28,7 +30,7 @@ class GlobalStore {
     BuildContext context, {
     List<String>? languages,
   }) async {
-    prefs = await SharedPreferences.getInstance();
+    if (_first) await _init();
     languages ??= prefs.getStringList('languages') ?? ['iron'];
 
     await Future.wait<Language?>(
@@ -58,7 +60,15 @@ class GlobalStore {
       'languages',
       languages.where((l) => _languages.containsKey(l)).toList(),
     );
+  }
 
-    print('CTL $_languages');
+  static Future<void> _init() async {
+    _first = true;
+    prefs = await SharedPreferences.getInstance();
+    await Firebase.initializeApp();
+    GlobalStore.algolia = Algolia.init(
+      applicationId: 'NYVVAA43NI',
+      apiKey: 'cf52a68ac340fc555978892202ce37df',
+    );
   }
 }

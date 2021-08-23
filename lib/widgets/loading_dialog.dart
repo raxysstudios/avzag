@@ -16,6 +16,7 @@ Future<T?> showLoadingDialog<T>(
     Navigator.pop(context);
     return result;
   } catch (e) {
+    print(e);
     Navigator.pop(context);
     showSnackbar(context);
   }
