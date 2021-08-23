@@ -63,10 +63,10 @@ class GlobalStore {
   }
 
   static Future<void> _init() async {
-    _first = true;
-    prefs = await SharedPreferences.getInstance();
+    _first = false;
     await Firebase.initializeApp();
-    GlobalStore.algolia = Algolia.init(
+    prefs = await SharedPreferences.getInstance();
+    algolia = Algolia.init(
       applicationId: 'NYVVAA43NI',
       apiKey: 'cf52a68ac340fc555978892202ce37df',
     );
