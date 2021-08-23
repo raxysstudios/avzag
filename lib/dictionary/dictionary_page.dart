@@ -1,5 +1,6 @@
 import 'package:avzag/dictionary/editor_button.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
+import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
@@ -157,10 +158,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
                       subtitle: hit!.language,
                     ),
                     actions: [
-                      LanguageFlag(
-                        hit!.language,
-                        offset: Offset(-40, 4),
-                        scale: 9,
+                      Opacity(
+                        opacity: 0.4,
+                        child: LanguageFlag(
+                          GlobalStore.languages[hit!.language]!.flag,
+                          offset: Offset(-40, 4),
+                          scale: 9,
+                        ),
                       ),
                     ],
                     floating: true,
