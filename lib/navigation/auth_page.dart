@@ -145,10 +145,10 @@ class _AuthPageState extends State<AuthPage> {
                   for (final l in GlobalStore.languages.values)
                     Builder(
                       builder: (context) {
-                        final canEdit = editable.contains(l);
+                        final canEdit = editable.contains(l.name);
                         final editing = l.name == GlobalStore.editing;
                         return ListTile(
-                          leading: LanguageAvatar(l.name),
+                          leading: LanguageAvatar(l.flag),
                           title: Text(
                             capitalize(l.name),
                             style: TextStyle(
