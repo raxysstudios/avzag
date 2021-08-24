@@ -88,7 +88,7 @@ class _AuthPageState extends State<AuthPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: ListView(
-        padding: const EdgeInsets.only(bottom: 78),
+        padding: const EdgeInsets.only(bottom: 76),
         children: [
           Card(
             child: Column(

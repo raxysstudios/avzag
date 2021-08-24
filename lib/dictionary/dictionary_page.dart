@@ -114,7 +114,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.only(bottom: 78),
+              padding: const EdgeInsets.only(bottom: 76),
               sliver: SearchResultsSliver(
                 hits,
                 onTap: openEntry,
@@ -172,7 +172,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     forceElevated: true,
                   ),
                   SliverPadding(
-                    padding: const EdgeInsets.only(bottom: 78),
+                    padding: const EdgeInsets.only(bottom: 76),
                     sliver: EntrySliver(
                       entry!,
                       hit!,

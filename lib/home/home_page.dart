@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SliverPadding(
-                padding: const EdgeInsets.only(bottom: 78),
+                padding: const EdgeInsets.only(bottom: 76),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
