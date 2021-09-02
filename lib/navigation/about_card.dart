@@ -55,43 +55,54 @@ class _AboutCardState extends State<AboutCard> {
             padding: const EdgeInsets.all(16),
             child: RichText(
               text: TextSpan(
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                      height: 1.5,
+                    ),
                 children: [
                   if (package != null)
                     TextSpan(
                       text: 'v${package!.version} • b${package!.buildNumber}\n',
                     ),
                   TextSpan(text: 'Built with '),
-                  TextSpan(
-                    text: 'Flutter ',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
                   WidgetSpan(
-                    child: FlutterLogo(size: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 2),
+                      child: FlutterLogo(size: 16),
+                    ),
+                  ),
+                  TextSpan(
+                    text: 'Flutter',
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   TextSpan(text: ' & '),
-                  TextSpan(
-                    text: 'Firebase ',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
                   WidgetSpan(
-                    child: Image.asset(
-                      'firebase.png',
-                      width: 16,
-                      height: 16,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 2),
+                      child: Image.asset(
+                        'firebase.png',
+                        width: 16,
+                        height: 16,
+                      ),
                     ),
+                  ),
+                  TextSpan(
+                    text: 'Firebase',
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   TextSpan(text: '.\nSearch powered by '),
-                  TextSpan(
-                    text: 'Algolia ',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
                   WidgetSpan(
-                    child: Image.asset(
-                      'algolia.png',
-                      width: 16,
-                      height: 16,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 2),
+                      child: Image.asset(
+                        'algolia.png',
+                        width: 16,
+                        height: 16,
+                      ),
                     ),
+                  ),
+                  TextSpan(
+                    text: 'Algolia',
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   TextSpan(text: '.'),
                 ],
