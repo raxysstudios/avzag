@@ -10,6 +10,7 @@ void showSnackbar(BuildContext context, [text = 'Error!']) {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
+      elevation: 4,
       backgroundColor: theme.colorScheme.surface,
       content: Row(
         children: [
