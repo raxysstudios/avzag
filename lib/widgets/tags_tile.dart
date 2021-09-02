@@ -20,10 +20,10 @@ class TagsTile extends StatelessWidget {
       title: (tags?.isEmpty ?? true)
           ? Text(
               'Tap to add tags',
-              style: Theme.of(context).textTheme.caption?.copyWith(
-                    fontSize: 16,
-                    fontStyle: FontStyle.italic,
-                  ),
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                color: Theme.of(context).textTheme.caption?.color,
+              ),
             )
           : Builder(builder: (context) {
               final text = prettyTags(tags, capitalized: false)!;
