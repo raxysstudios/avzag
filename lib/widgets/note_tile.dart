@@ -22,7 +22,7 @@ class NoteTile extends StatelessWidget {
               'Tap to add note',
               style: TextStyle(
                 fontStyle: FontStyle.italic,
-                color: Colors.black54,
+                color: Theme.of(context).textTheme.caption?.color,
               ),
             )
           : MarkdownBody(
