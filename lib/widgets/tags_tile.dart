@@ -14,19 +14,19 @@ class TagsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (tags == null && onEdited == null) return Offstage();
+    final theme = Theme.of(context).textTheme.caption;
     return ListTile(
       minVerticalPadding: 12,
       leading: Icon(Icons.tag_outlined),
       title: (tags?.isEmpty ?? true)
           ? Text(
               'Tap to add tags',
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                color: Colors.black54,
-              ),
+              style: theme,
             )
           : Builder(builder: (context) {
-              const style = const TextStyle(color: Colors.black54);
+              final style = TextStyle(
+                color: theme?.color,
+              );
               final data = prettyTags(tags, capitalized: false)!;
               return onEdited == null
                   ? SelectableText(data, style: style)
