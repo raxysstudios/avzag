@@ -14,15 +14,13 @@ class MeaningTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).textTheme;
     return ListTile(
       minVerticalPadding: 12,
       leading: Icon(Icons.lightbulb_outline),
       title: RichText(
         text: TextSpan(
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.black87,
-          ),
+          style: theme.subtitle1,
           children: [
             TextSpan(
               text: capitalize(use.term),
