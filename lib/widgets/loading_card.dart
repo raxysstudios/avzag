@@ -9,7 +9,7 @@ class LoadingCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(128),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(24),
           child: SizedBox(
             width: 32,
             height: 32,
