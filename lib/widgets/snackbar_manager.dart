@@ -14,7 +14,7 @@ void showSnackbar(BuildContext context, [text = 'Error!']) {
       backgroundColor: theme.colorScheme.surface,
       content: Row(
         children: [
-          const Icon(Icons.error_outlined),
+          const Icon(Icons.error_outline_outlined),
           const SizedBox(width: 8),
           Text(
             text,
