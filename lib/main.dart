@@ -16,29 +16,38 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   final loader = GlobalStore.load();
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Avzag',
-      theme: ThemeData(
+  List<ThemeData> getThemes(BuildContext context) {
+    final floatingActionButtonTheme = FloatingActionButtonThemeData(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+    );
+    final cardTheme = const CardTheme(
+      clipBehavior: Clip.antiAlias,
+    );
+    return [
+      ThemeData(
         primaryColor: Colors.white,
         accentColor: Colors.grey,
         scaffoldBackgroundColor: Colors.blueGrey.shade50,
-        cardTheme: CardTheme(
-          clipBehavior: Clip.antiAlias,
-        ),
+        floatingActionButtonTheme: floatingActionButtonTheme,
+        cardTheme: cardTheme,
       ),
-      darkTheme: ThemeData(
+      ThemeData(
         brightness: Brightness.dark,
         accentColor: Colors.grey,
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        ),
-        cardTheme: CardTheme(
-          clipBehavior: Clip.antiAlias,
-        ),
+        floatingActionButtonTheme: floatingActionButtonTheme,
+        cardTheme: cardTheme,
       ),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final themes = getThemes(context);
+    return MaterialApp(
+      title: 'Avzag',
+      theme: themes[0],
+      darkTheme: themes[1],
       home: Scaffold(
         body: FutureBuilder(
           future: loader,
