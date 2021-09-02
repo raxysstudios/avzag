@@ -68,6 +68,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
     final theme = Theme.of(context).textTheme;
     return TextSpan(
       style: TextStyle(
+        fontSize: theme.subtitle1?.fontSize,
         color: theme.caption?.color,
       ),
       children: [
