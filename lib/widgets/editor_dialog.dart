@@ -14,6 +14,7 @@ void showEditorDialog<T>(
   required List<Widget> children,
 }) {
   final form = GlobalKey<FormState>();
+  final theme = Theme.of(context);
   showDialog(
     context: context,
     builder: (context) {
@@ -37,12 +38,9 @@ void showEditorDialog<T>(
                   Navigator.pop(context);
                   callback(null);
                 },
-                icon: Icon(
-                  Icons.delete_outlined,
-                  color: Colors.red,
-                ),
-                highlightColor: Colors.transparent,
-                splashColor: Colors.red.shade50,
+                icon: const Icon(Icons.delete_outlined),
+                color: theme.colorScheme.error,
+                splashColor: theme.colorScheme.error.withOpacity(0.1),
               ),
               Spacer(),
               TextButton.icon(
@@ -50,9 +48,9 @@ void showEditorDialog<T>(
                 icon: Icon(Icons.close_outlined),
                 label: Text('Cancel'),
                 style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(Colors.black54),
+                  foregroundColor: MaterialStateProperty.all(theme.hintColor),
                   overlayColor: MaterialStateProperty.all(
-                    Colors.blueGrey.shade50,
+                    theme.hintColor.withOpacity(0.1),
                   ),
                 ),
               ),

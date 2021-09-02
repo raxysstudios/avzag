@@ -10,6 +10,7 @@ Future<bool> showDangerDialog(
   return showDialog<bool>(
     context: context,
     builder: (context) {
+      final theme = Theme.of(context).colorScheme;
       return AlertDialog(
         title: Text(title),
         actions: [
@@ -21,8 +22,10 @@ Future<bool> showDangerDialog(
             icon: Icon(Icons.delete_outlined),
             label: Text(confirmText),
             style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(Colors.red),
-              overlayColor: MaterialStateProperty.all(Colors.red.shade50),
+              foregroundColor: MaterialStateProperty.all(theme.error),
+              overlayColor: MaterialStateProperty.all(
+                theme.error.withOpacity(0.1),
+              ),
             ),
           ),
           TextButton.icon(
