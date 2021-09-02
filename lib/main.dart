@@ -17,24 +17,33 @@ class _AppState extends State<App> {
   final loader = GlobalStore.load();
 
   List<ThemeData> getThemes(BuildContext context) {
+    final theme = Theme.of(context);
     final floatingActionButtonTheme = FloatingActionButtonThemeData(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: theme.colorScheme.primary,
+      foregroundColor: theme.colorScheme.onPrimary,
     );
     final cardTheme = const CardTheme(
       clipBehavior: Clip.antiAlias,
+    );
+    final textTheme = theme.textTheme.copyWith(
+      caption: TextStyle(
+        fontSize: 16,
+        fontStyle: FontStyle.italic,
+      ),
     );
     return [
       ThemeData(
         primaryColor: Colors.white,
         accentColor: Colors.grey,
         scaffoldBackgroundColor: Colors.blueGrey.shade50,
+        textTheme: textTheme,
         floatingActionButtonTheme: floatingActionButtonTheme,
         cardTheme: cardTheme,
       ),
       ThemeData(
         brightness: Brightness.dark,
         accentColor: Colors.grey,
+        textTheme: textTheme,
         floatingActionButtonTheme: floatingActionButtonTheme,
         cardTheme: cardTheme,
       ),
