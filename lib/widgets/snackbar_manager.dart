@@ -6,11 +6,11 @@ void showSnackbar(BuildContext context, [text = 'Error!']) {
   messenger.hideCurrentSnackBar();
   messenger.showSnackBar(
     SnackBar(
-      behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
       ),
-      elevation: 4,
       backgroundColor: theme.colorScheme.surface,
       content: Row(
         children: [
