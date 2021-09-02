@@ -14,17 +14,16 @@ class TagsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (tags == null && onEdited == null) return Offstage();
-    final theme = Theme.of(context).textTheme.caption?.copyWith(
-          fontSize: 16,
-          fontStyle: FontStyle.italic,
-        );
     return ListTile(
       minVerticalPadding: 12,
       leading: Icon(Icons.tag_outlined),
       title: (tags?.isEmpty ?? true)
           ? Text(
               'Tap to add tags',
-              style: theme,
+              style: Theme.of(context).textTheme.caption?.copyWith(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                  ),
             )
           : Builder(builder: (context) {
               final text = prettyTags(tags, capitalized: false)!;
