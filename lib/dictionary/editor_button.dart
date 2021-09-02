@@ -29,6 +29,11 @@ class EditorButton extends StatelessWidget {
     if (GlobalStore.editing == null ||
         (hit != null && GlobalStore.editing != hit!.language))
       return SizedBox();
+
+    final background = Theme.of(context).colorScheme.primary;
+    final danger = Theme.of(context).colorScheme.error;
+    final foreground = Theme.of(context).colorScheme.onPrimary;
+
     if (collapsed) {
       if (editing)
         return FloatingActionButton.extended(
@@ -42,12 +47,15 @@ class EditorButton extends StatelessWidget {
           },
           icon: Icon(Icons.close_outlined),
           label: Text('Discard'),
-          backgroundColor: Colors.redAccent,
+          backgroundColor: danger,
+          foregroundColor: foreground,
         );
       return FloatingActionButton.extended(
         onPressed: () => onStart(Entry(forms: [], uses: [])),
         icon: Icon(Icons.add_outlined),
         label: Text('New'),
+        backgroundColor: background,
+        foregroundColor: foreground,
       );
     }
     if (editing)
@@ -68,7 +76,8 @@ class EditorButton extends StatelessWidget {
                   },
                   child: Icon(Icons.delete_outlined),
                   tooltip: 'Delete',
-                  backgroundColor: Colors.redAccent,
+                  backgroundColor: danger,
+                  foregroundColor: foreground,
                   mini: true,
                 ),
               ),
@@ -78,6 +87,8 @@ class EditorButton extends StatelessWidget {
               },
               icon: Icon(Icons.publish_outlined),
               label: Text('Submit'),
+              backgroundColor: background,
+              foregroundColor: foreground,
             ),
           ],
         ),
@@ -86,6 +97,8 @@ class EditorButton extends StatelessWidget {
       onPressed: () => onStart(entry!, hit),
       icon: Icon(Icons.edit_outlined),
       label: Text('Edit'),
+      backgroundColor: background,
+      foregroundColor: foreground,
     );
   }
 
