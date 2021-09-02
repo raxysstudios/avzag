@@ -37,6 +37,7 @@ class _AppState extends State<App> {
       ThemeData(
         brightness: Brightness.dark,
         accentColor: Colors.grey,
+        toggleableActiveColor: theme.colorScheme.primary,
         floatingActionButtonTheme: floatingActionButtonTheme,
         cardTheme: cardTheme,
       ),
