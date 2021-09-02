@@ -41,6 +41,7 @@ class ExpandableTitle extends StatelessWidget {
           right: 20,
           top: 16,
         ),
+        iconColor: Theme.of(context).iconTheme.color,
       ),
       collapsed: Offstage(),
       expanded: Column(

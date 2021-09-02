@@ -29,10 +29,7 @@ class _AboutCardState extends State<AboutCard> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                Icon(
-                  Icons.landscape_outlined,
-                  color: Colors.black54,
-                ),
+                Icon(Icons.landscape_outlined),
                 SizedBox(height: 8),
                 RichText(
                   text: TextSpan(
@@ -62,6 +59,7 @@ class _AboutCardState extends State<AboutCard> {
                   if (package != null)
                     TextSpan(
                       text: 'v${package!.version} • b${package!.buildNumber}\n',
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
                   TextSpan(text: 'Built with '),
                   WidgetSpan(
