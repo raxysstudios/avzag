@@ -54,7 +54,7 @@ class TextSampleTiles extends StatefulWidget {
 class _TextSampleTilesState extends State<TextSampleTiles> {
   bool advanced = false;
 
-  TextSpan getTextSpan(int index) {
+  TextSpan getTextSpan(BuildContext context, int index) {
     final extended = this.advanced || widget.onEdited != null;
     final sample = widget.samples![index];
     final fields = [
@@ -65,15 +65,17 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
       ]
     ].where((t) => t != null);
 
+    final theme = Theme.of(context).textTheme;
     return TextSpan(
       style: TextStyle(
-        color: Colors.black54,
-        fontSize: 16,
+        color: theme.caption?.color,
       ),
       children: [
         TextSpan(
           text: sample.plain,
-          style: TextStyle(color: Colors.black87),
+          style: TextStyle(
+            color: theme.bodyText2?.color,
+          ),
         ),
         if (fields.length > 0)
           TextSpan(
@@ -150,12 +152,12 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
               'Tap to add ${widget.name}',
               style: TextStyle(
                 fontStyle: FontStyle.italic,
-                color: Colors.black54,
+                color: Theme.of(context).textTheme.caption?.color,
               ),
             )
           : widget.onEdited == null
-              ? SelectableText.rich(getTextSpan(index))
-              : RichText(text: getTextSpan(index)),
+              ? SelectableText.rich(getTextSpan(context, index))
+              : RichText(text: getTextSpan(context, index)),
       onTap: widget.onEdited == null ? null : () => showEditor(context, index),
       trailing: widget.onEdited == null || index > 0
           ? null
@@ -165,7 +167,6 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
                 widget.samples?.length ?? 0,
               ),
               icon: Icon(Icons.add_outlined),
-              color: Colors.black87,
               tooltip: 'Add ${widget.name}',
             ),
     );
@@ -184,10 +185,10 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
         title: SelectableText.rich(
           TextSpan(
             children: [
-              getTextSpan(0),
+              getTextSpan(context, 0),
               for (var i = 1; i < widget.samples!.length; i++) ...[
                 TextSpan(text: '\n'),
-                getTextSpan(i),
+                getTextSpan(context, i),
               ],
             ],
           ),
