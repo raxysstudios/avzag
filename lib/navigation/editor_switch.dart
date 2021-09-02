@@ -11,7 +11,6 @@ class EditorSwitch extends StatelessWidget {
       subtitle: Text(
         GlobalStore.editing == null ? 'Off' : capitalize(GlobalStore.editing!),
       ),
-      activeColor: Theme.of(context).colorScheme.primary,
       value: GlobalStore.editing != null,
       secondary: Padding(
         padding: const EdgeInsets.only(top: 8),

@@ -29,6 +29,7 @@ class _AppState extends State<App> {
       ThemeData(
         primaryColor: Colors.white,
         accentColor: Colors.grey,
+        toggleableActiveColor: theme.colorScheme.primary,
         scaffoldBackgroundColor: Colors.blueGrey.shade50,
         floatingActionButtonTheme: floatingActionButtonTheme,
         cardTheme: cardTheme,
