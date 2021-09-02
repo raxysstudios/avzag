@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     loader = FirebaseFirestore.instance
         .collection('languages')
-        .orderBy('family')
         .orderBy('name')
         .where('name')
         .withConverter(
@@ -120,10 +119,7 @@ class _HomePageState extends State<HomePage> {
                 title: selected.isEmpty
                     ? Text(
                         'Select languages below',
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
+                        style: Theme.of(context).textTheme.bodyText1,
                       )
                     : Container(
                         height: 64,
