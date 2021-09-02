@@ -12,12 +12,12 @@ class EditorButton extends StatelessWidget {
   final EntryHit? hit;
   final bool editing;
   final bool collapsed;
-  final void Function(Entry entry, EntryHit hit) onStart;
+  final void Function(Entry entry, [EntryHit? hit]) onStart;
   final VoidCallback onEnd;
 
   const EditorButton(
-    this.entry,
-    this.hit, {
+    this.entry, {
+    this.hit,
     this.editing = false,
     this.collapsed = false,
     required this.onStart,
@@ -45,15 +45,7 @@ class EditorButton extends StatelessWidget {
           backgroundColor: Colors.redAccent,
         );
       return FloatingActionButton.extended(
-        onPressed: () => onStart(
-          Entry(forms: [], uses: []),
-          EntryHit(
-            entryID: '',
-            headword: '',
-            language: GlobalStore.editing!,
-            term: '',
-          ),
-        ),
+        onPressed: () => onStart(Entry(forms: [], uses: [])),
         icon: Icon(Icons.add_outlined),
         label: Text('New'),
       );
@@ -63,7 +55,9 @@ class EditorButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (hit!.entryID.isNotEmpty)
+            if (hit == null)
+              SizedBox()
+            else
               Padding(
                 padding: const EdgeInsets.only(
                   left: kFloatingActionButtonMargin * 1.75,
@@ -77,9 +71,7 @@ class EditorButton extends StatelessWidget {
                   backgroundColor: Colors.redAccent,
                   mini: true,
                 ),
-              )
-            else
-              SizedBox(),
+              ),
             FloatingActionButton.extended(
               onPressed: () async {
                 if (await submit(context)) onEnd();
@@ -91,25 +83,25 @@ class EditorButton extends StatelessWidget {
         ),
       );
     return FloatingActionButton.extended(
-      onPressed: () => onStart(entry!, hit!),
+      onPressed: () => onStart(entry!, hit),
       icon: Icon(Icons.edit_outlined),
       label: Text('Edit'),
     );
   }
 
   Future<bool> submit(BuildContext context) async {
-    if (entry == null || hit == null) return false;
+    if (entry == null) return false;
     if (entry!.uses.isEmpty || entry!.forms.isEmpty) {
       showSnackbar(context, 'Must have at least a form and a use.');
       return false;
     }
-    final collection = FirebaseFirestore.instance
-        .collection('languages/${GlobalStore.editing}/dictionary');
-    final json = entry!.toJson();
-    final upload = hit!.entryID.isEmpty
-        ? collection.add(json)
-        : collection.doc(hit!.entryID).update(json);
-    await showLoadingDialog(context, upload);
+    await showLoadingDialog(
+      context,
+      FirebaseFirestore.instance
+          .collection('languages/${GlobalStore.editing}/dictionary')
+          .doc(hit?.entryID)
+          .set(entry!.toJson()),
+    );
     return true;
   }
 

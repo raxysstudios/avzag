@@ -71,10 +71,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
       drawer: NavDraver(title: 'dictionary'),
       floatingActionButton: EditorButton(
         entry,
-        hit,
+        hit: hit,
         editing: editing,
         collapsed: collapsed,
-        onStart: (entry, hit) {
+        onStart: (entry, [hit]) {
           setState(() {
             this.entry = entry;
             this.hit = hit;
@@ -155,13 +155,17 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     ),
                     title: PageTitle(
                       title: editing ? 'Entry editor' : hit!.headword,
-                      subtitle: hit!.language,
+                      subtitle: editing ? GlobalStore.editing : hit!.language,
                     ),
                     actions: [
                       Opacity(
                         opacity: 0.4,
                         child: LanguageFlag(
-                          GlobalStore.languages[hit!.language]!.flag,
+                          GlobalStore
+                              .languages[editing
+                                  ? GlobalStore.editing
+                                  : hit!.language]!
+                              .flag,
                           offset: Offset(-40, 4),
                           scale: 9,
                         ),
@@ -175,7 +179,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     padding: const EdgeInsets.only(bottom: 76),
                     sliver: EntrySliver(
                       entry!,
-                      hit!,
                       onEdited:
                           editing ? (e) => setState(() => entry = e) : null,
                     ),
