@@ -121,7 +121,7 @@ class _AuthPageState extends State<AuthPage> {
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      style: TextStyle(color: Colors.black87),
+                      style: Theme.of(context).textTheme.bodyText2,
                       children: [
                         TextSpan(text: 'You can edit '),
                         TextSpan(
