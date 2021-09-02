@@ -14,7 +14,10 @@ class TagsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (tags == null && onEdited == null) return Offstage();
-    final theme = Theme.of(context).textTheme.caption;
+    final theme = Theme.of(context).textTheme.caption?.copyWith(
+          fontSize: 16,
+          fontStyle: FontStyle.italic,
+        );
     return ListTile(
       minVerticalPadding: 12,
       leading: Icon(Icons.tag_outlined),
@@ -24,13 +27,8 @@ class TagsTile extends StatelessWidget {
               style: theme,
             )
           : Builder(builder: (context) {
-              final style = TextStyle(
-                color: theme?.color,
-              );
-              final data = prettyTags(tags, capitalized: false)!;
-              return onEdited == null
-                  ? SelectableText(data, style: style)
-                  : Text(data, style: style);
+              final text = prettyTags(tags, capitalized: false)!;
+              return onEdited == null ? SelectableText(text) : Text(text);
             }),
       onTap: onEdited == null ? null : () => showEditor(context),
     );
