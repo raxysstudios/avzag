@@ -1,6 +1,6 @@
 name: avzag
 description: The language onslaught.
-version: 0.3.10+15
+version: 0.3.11+16
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
