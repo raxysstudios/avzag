@@ -50,7 +50,7 @@ class _AuthPageState extends State<AuthPage> {
     await GoogleSignIn().signOut();
     GlobalStore.editing = null;
 
-    final user = await GoogleSignIn().signIn().catchError((e) {});
+    final user = await GoogleSignIn().signIn();
     if (user != null) {
       final auth = await user.authentication;
       final cred = GoogleAuthProvider.credential(
