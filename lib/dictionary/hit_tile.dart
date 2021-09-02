@@ -55,6 +55,7 @@ class HitTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).textTheme;
     return ListTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,9 +64,7 @@ class HitTile extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             text: TextSpan(
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 16,
+              style: theme.subtitle1?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
               children: [
@@ -79,7 +78,7 @@ class HitTile extends StatelessWidget {
                   TextSpan(
                     text: capitalize(hit.form!),
                     style: TextStyle(
-                      color: Colors.black54,
+                      color: theme.caption?.color,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
@@ -90,9 +89,7 @@ class HitTile extends StatelessWidget {
           if (showLanguage)
             Text(
               capitalize(hit.language),
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 12,
+              style: theme.caption?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -102,18 +99,21 @@ class HitTile extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         text: TextSpan(
-          style: TextStyle(
+          style: theme.caption?.copyWith(
             fontSize: 14,
-            color: Colors.black54,
           ),
+          // style: TextStyle(
+          //   fontSize: 14,
+          //   color: Colors.black54,
+          // ),
           children: [
             WidgetSpan(
               child: Padding(
                 padding: const EdgeInsets.only(right: 2),
-                child: const Icon(
+                child: Icon(
                   Icons.lightbulb_outline,
                   size: 16,
-                  color: Colors.black54,
+                  color: theme.caption?.color,
                 ),
               ),
             ),
@@ -131,10 +131,10 @@ class HitTile extends StatelessWidget {
               WidgetSpan(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8, right: 2),
-                  child: const Icon(
+                  child: Icon(
                     Icons.tag_outlined,
                     size: 16,
-                    color: Colors.black54,
+                    color: theme.caption?.color,
                   ),
                 ),
               ),
