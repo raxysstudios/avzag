@@ -12,24 +12,19 @@ class PageTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).textTheme;
     return RichText(
       text: TextSpan(
         children: [
           TextSpan(
             text: capitalize(title),
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.black87,
-              fontWeight: FontWeight.w500,
-            ),
+            style: theme.headline6,
           ),
           if (subtitle != null)
             TextSpan(
               text: '\n' + capitalize(subtitle!),
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.black54,
-                fontWeight: FontWeight.w500,
+              style: theme.subtitle2?.copyWith(
+                color: theme.caption?.color,
               ),
             )
         ],
