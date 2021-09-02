@@ -129,12 +129,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
           if (entry == null) return SizedBox();
           return Padding(
             padding: EdgeInsets.only(top: safePadding),
-            child: Material(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
+                boxShadow: kElevationToShadow[4],
               ),
               clipBehavior: Clip.antiAlias,
-              color: Theme.of(context).scaffoldBackgroundColor,
               child: CustomScrollView(
                 controller: controller,
                 slivers: [
