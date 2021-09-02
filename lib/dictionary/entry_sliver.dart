@@ -3,17 +3,14 @@ import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/widgets/note_tile.dart';
 import 'package:flutter/material.dart';
-import 'hit_tile.dart';
 import 'entry.dart';
 
 class EntrySliver extends StatelessWidget {
   final Entry entry;
-  final EntryHit hit;
   final ValueSetter<Entry>? onEdited;
 
   const EntrySliver(
-    this.entry,
-    this.hit, {
+    this.entry, {
     this.onEdited,
   });
 
