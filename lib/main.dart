@@ -31,6 +31,10 @@ class _AppState extends State<App> {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         accentColor: Colors.grey,
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        ),
         cardTheme: CardTheme(
           clipBehavior: Clip.antiAlias,
         ),

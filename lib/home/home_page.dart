@@ -100,8 +100,6 @@ class _HomePageState extends State<HomePage> {
         },
         icon: Icon(Icons.check_outlined),
         label: Text('Continue'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: FutureBuilder(
