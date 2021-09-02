@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -38,7 +40,9 @@ class _AboutCardState extends State<AboutCard> {
                       TextSpan(text: 'Made with honor in '),
                       TextSpan(
                         text: 'North Caucasus',
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       TextSpan(text: '.'),
                     ],
@@ -59,7 +63,9 @@ class _AboutCardState extends State<AboutCard> {
                   if (package != null)
                     TextSpan(
                       text: 'v${package!.version} • b${package!.buildNumber}\n',
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   TextSpan(text: 'Built with '),
                   WidgetSpan(
@@ -70,7 +76,9 @@ class _AboutCardState extends State<AboutCard> {
                   ),
                   TextSpan(
                     text: 'Flutter',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   TextSpan(text: ' & '),
                   WidgetSpan(
@@ -85,7 +93,9 @@ class _AboutCardState extends State<AboutCard> {
                   ),
                   TextSpan(
                     text: 'Firebase',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   TextSpan(text: '.\nSearch powered by '),
                   WidgetSpan(
