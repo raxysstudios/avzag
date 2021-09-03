@@ -62,19 +62,16 @@ class SearchToolbarState extends State<SearchToolbar> {
     widget.onSearch(<List<EntryHit>>[]);
     if (!searching) return;
 
+    var languages = filterOr(
+      'language',
+      (language?.isEmpty ?? true) ? GlobalStore.languages.keys : [language!],
+    );
     var query = GlobalStore.algolia.instance
         .index(
           (language?.isEmpty ?? true) ? 'dictionary' : 'dictionary_headword',
         )
         .query(text)
-        .filters(
-          filterOr(
-            'language',
-            (language?.isEmpty ?? true)
-                ? GlobalStore.languages.keys
-                : [language!],
-          ),
-        )
+        .filters(languages)
         .setRestrictSearchableAttributes([
       'term',
       'forms',
@@ -83,18 +80,19 @@ class SearchToolbarState extends State<SearchToolbar> {
     ]);
 
     final snap = await query.getObjects().then(
-          (snapshot) async => (language?.isEmpty ?? false)
-              ? await GlobalStore.algolia.instance
-                  .index('dictionary')
-                  .filters(
-                    filterOr(
-                      'term',
-                      snapshot.hits.map((hit) => hit.data['term']),
-                    ),
-                  )
-                  .getObjects()
-              : snapshot,
+      (snapshot) async {
+        final terms = filterOr(
+          'term',
+          snapshot.hits.map((hit) => hit.data['term']),
         );
+        return (language?.isEmpty ?? false)
+            ? await GlobalStore.algolia.instance
+                .index('dictionary')
+                .filters('($languages) AND ($terms)')
+                .getObjects()
+            : snapshot;
+      },
+    );
 
     final hits = snap.hits.map((h) => EntryHit.fromAlgoliaHit(h)).toList();
     if (language?.isNotEmpty ?? false)
@@ -146,7 +144,7 @@ class SearchToolbarState extends State<SearchToolbar> {
                         child: ListTile(
                           visualDensity: density,
                           leading: Icon(Icons.language_outlined),
-                          title: Text('English'),
+                          title: Text('Parallel'),
                           selected: language == null,
                         ),
                       ),
