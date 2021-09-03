@@ -65,6 +65,7 @@ class MeaningTile extends StatelessWidget {
             labelText: 'General term',
           ),
           validator: emptyValidator,
+          inputFormatters: [LowerCaseTextFormatter()],
         ),
         SizedBox(height: 8),
         TextFormField(
@@ -75,6 +76,7 @@ class MeaningTile extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'Specific definition',
           ),
+          inputFormatters: [LowerCaseTextFormatter()],
         ),
       ],
     );

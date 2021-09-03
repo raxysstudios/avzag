@@ -51,6 +51,7 @@ class TagsTile extends StatelessWidget {
             labelText: 'Space-separated, without the #-character',
           ),
           validator: emptyValidator,
+          inputFormatters: [LowerCaseTextFormatter()],
         ),
       ],
     );
