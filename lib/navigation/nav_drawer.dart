@@ -124,8 +124,9 @@ class NavDraver extends StatelessWidget {
                   ...[
                     _NavModule(Icons.music_note_outlined, 'phonology'),
                     _NavModule(Icons.switch_left_outlined, 'converter'),
-                    _NavModule(Icons.sms_outlined, 'phrasebook'),
+                    _NavModule(Icons.forum_outlined, 'phrasebook'),
                     _NavModule(Icons.local_library_outlined, 'bootcamp'),
+                    _NavModule(Icons.insights_outlined, 'quests'),
                   ].map((t) => t.build(context)),
                 ],
               ),
