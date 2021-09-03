@@ -114,10 +114,8 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
           decoration: InputDecoration(
             labelText: 'Plain text',
           ),
-          inputFormatters: orNull(
-            widget.translation,
-            [LowerCaseTextFormatter()],
-          ),
+          inputFormatters:
+              widget.translation ? null : [LowerCaseTextFormatter()],
           validator: emptyValidator,
         ),
         TextFormField(
@@ -126,20 +124,13 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
           decoration: InputDecoration(
             labelText: 'IPA (glossed)',
           ),
-          inputFormatters: orNull(
-            widget.translation,
-            [LowerCaseTextFormatter()],
-          ),
+          inputFormatters: [LowerCaseTextFormatter()],
         ),
         TextFormField(
           initialValue: result.glossed,
           onChanged: (value) => result.glossed = value.trim(),
           decoration: InputDecoration(
             labelText: 'Leipzig-glossed',
-          ),
-          inputFormatters: orNull(
-            widget.translation,
-            [LowerCaseTextFormatter()],
           ),
         ),
         if (widget.translation)
@@ -148,10 +139,6 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
             onChanged: (value) => result.translation = value.trim(),
             decoration: InputDecoration(
               labelText: 'Translation',
-            ),
-            inputFormatters: orNull(
-              widget.translation,
-              [LowerCaseTextFormatter()],
             ),
           ),
       ],

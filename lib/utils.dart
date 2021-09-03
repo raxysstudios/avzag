@@ -39,5 +39,3 @@ class LowerCaseTextFormatter extends TextInputFormatter {
     );
   }
 }
-
-T? orNull<T>(bool check, T? value) => check ? value : null;
