@@ -94,7 +94,7 @@ class NavDraver extends StatelessWidget {
                           _NavLink(
                             Icons.send_outlined,
                             'developer contact',
-                            'https://t.me/alkaitagi',
+                            'https://t.me/avzag',
                           ),
                           _NavLink(
                             Icons.code_outlined,
