@@ -112,7 +112,7 @@ class NavDraver extends StatelessWidget {
               child: Column(
                 children: [
                   ...[
-                    _NavModule(Icons.map_outlined, 'home'),
+                    _NavModule(Icons.home_outlined, 'home'),
                     _NavModule(Icons.book_outlined, 'dictionary'),
                   ].map(
                     (t) => t.build(
