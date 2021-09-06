@@ -145,8 +145,12 @@ class SearchToolbarState extends State<SearchToolbar> {
           child: Row(
             children: [
               Badge(
-                badgeContent:
-                    restricted ? Icon(Icons.filter_alt_outlined) : null,
+                showBadge: restricted,
+                badgeColor: Theme.of(context).colorScheme.primary,
+                badgeContent: Icon(
+                  Icons.filter_alt_outlined,
+                  size: 16,
+                ),
                 child: PopupMenuButton(
                   icon: language.isEmpty
                       ? Icon(Icons.language_outlined)
