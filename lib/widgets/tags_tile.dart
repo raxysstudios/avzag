@@ -1,6 +1,7 @@
 import 'package:avzag/utils.dart';
 import 'package:avzag/widgets/editor_dialog.dart';
 import 'package:flutter/material.dart';
+import 'snackbar_manager.dart';
 
 class TagsTile extends StatelessWidget {
   final List<String>? tags;
@@ -25,12 +26,19 @@ class TagsTile extends StatelessWidget {
                 color: Theme.of(context).textTheme.caption?.color,
               ),
             )
-          : Builder(builder: (context) {
-              final text = prettyTags(tags, capitalized: false)!;
-              return onEdited == null ? SelectableText(text) : Text(text);
-            }),
+          : Text(
+              prettyTags(
+                tags,
+                capitalized: false,
+              )!,
+            ),
       onTap: onEdited == null ? null : () => showEditor(context),
-      onLongPress: () {},
+      onLongPress: onEdited == null
+          ? () => copyText(
+                context,
+                tags!.join(' '),
+              )
+          : null,
     );
   }
 

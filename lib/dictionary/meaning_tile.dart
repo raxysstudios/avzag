@@ -1,3 +1,5 @@
+import 'package:avzag/widgets/snackbar_manager.dart';
+
 import 'use.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +42,15 @@ class MeaningTile extends StatelessWidget {
                 use: use,
                 callback: onEdited!,
               ),
-      onLongPress: () {},
+      onLongPress: onEdited == null
+          ? () => copyText(
+                context,
+                [
+                  use.term,
+                  if (use.definition != null) use.definition,
+                ].join(' '),
+              )
+          : null,
     );
   }
 

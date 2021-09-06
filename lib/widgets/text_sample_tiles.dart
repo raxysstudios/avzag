@@ -1,6 +1,7 @@
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 import 'editor_dialog.dart';
+import 'snackbar_manager.dart';
 
 class TextSample {
   String plain;
@@ -186,10 +187,22 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
         onTap: () => setState(() {
           advanced = !advanced;
         }),
-        onLongPress: () {},
+        onLongPress: widget.onEdited == null
+            ? () => copyText(
+                  context,
+                  widget.samples
+                      ?.map(
+                        (s) => [
+                          s.plain,
+                          if (s.translation != null) s.translation
+                        ].join(' '),
+                      )
+                      .join('\n'),
+                )
+            : null,
         leading: Icon(widget.icon),
-        title: SelectableText.rich(
-          TextSpan(
+        title: RichText(
+          text: TextSpan(
             children: [
               getTextSpan(context, 0),
               for (var i = 1; i < widget.samples!.length; i++) ...[
