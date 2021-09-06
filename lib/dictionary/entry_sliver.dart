@@ -32,7 +32,7 @@ class EntrySliver extends StatelessWidget {
                   samples: entry.forms,
                   onEdited:
                       editing ? (v) => edit(() => entry.forms = v ?? []) : null,
-                  icon: Icons.format_list_bulleted_outlined,
+                  icon: Icons.layers_outlined,
                   name: 'form',
                 ),
                 TagsTile(
