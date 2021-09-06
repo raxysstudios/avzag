@@ -37,7 +37,7 @@ class EntryHit {
       language: json['language'],
       term: json['term'],
       definition: json['definition'],
-      tags: json2list(json['tags'])?.map((t) => t.substring(1)).toList(),
+      tags: json2list(json['tags']),
     );
   }
 }
