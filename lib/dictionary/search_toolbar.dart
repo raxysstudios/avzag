@@ -18,7 +18,10 @@ class SearchToolbarState extends State<SearchToolbar> {
   Timer timer = Timer(Duration.zero, () {});
   String text = "";
   bool searching = false;
+  bool restricted = false;
   String? language;
+
+  bool get monolingual => language?.isNotEmpty ?? false;
 
   @override
   void initState() {
@@ -26,16 +29,12 @@ class SearchToolbarState extends State<SearchToolbar> {
     if (GlobalStore.languages.length == 1)
       language = GlobalStore.languages.keys.first;
     inputController.addListener(() {
-      final text = inputController.text
-          .split(' ')
-          .where((e) => e.isNotEmpty && e != '#')
-          .join(' ');
-      if (this.text != text) {
+      if (this.text != inputController.text) {
         timer.cancel();
         setState(() {
-          this.text = text;
+          this.text = inputController.text;
         });
-        if (text.isEmpty)
+        if (this.text.isEmpty)
           search();
         else
           timer = Timer(
@@ -52,8 +51,30 @@ class SearchToolbarState extends State<SearchToolbar> {
     super.dispose();
   }
 
-  String filterOr(String filter, Iterable<String> values) =>
-      values.map((v) => '$filter:$v').join(' OR ');
+  String generateFilter(
+    Iterable<String> values, [
+    filter = 'tags',
+    bool and = false,
+  ]) {
+    final joint = and ? 'AND' : 'OR';
+    final tags = values.map((v) => '$filter:$v');
+    return tags.join(' $joint ');
+  }
+
+  List<String> parseQuery(String query) {
+    final tags = <String>[];
+    final words = <String>[];
+    query.split(' ').forEach((e) {
+      if (e.startsWith('#'))
+        tags.add(e.substring(1));
+      else
+        words.add(e);
+    });
+    return [
+      generateFilter(tags, 'tags', true),
+      words.join(' '),
+    ];
+  }
 
   void search() async {
     setState(() {
@@ -62,40 +83,37 @@ class SearchToolbarState extends State<SearchToolbar> {
     widget.onSearch(<List<EntryHit>>[]);
     if (!searching) return;
 
-    var languages = filterOr(
+    final parsed = parseQuery(text);
+    final languages = generateFilter(
+      monolingual ? [language!] : GlobalStore.languages.keys,
       'language',
-      (language?.isEmpty ?? true) ? GlobalStore.languages.keys : [language!],
     );
-    var query = GlobalStore.algolia.instance
-        .index(
-          (language?.isEmpty ?? true) ? 'dictionary' : 'dictionary_headword',
-        )
-        .query(text)
-        .filters(languages)
-        .setRestrictSearchableAttributes([
-      'term',
-      'forms',
-      'definition',
-      if (text.contains('#')) 'tags',
-    ]);
+    var query = (monolingual
+            ? GlobalStore.algolia.instance
+                .index('dictionary_headword')
+                .setRestrictSearchableAttributes(['forms'])
+            : GlobalStore.algolia.instance.index('dictionary'))
+        .query(parsed[0])
+        .filters(
+          parsed[1].isEmpty ? languages : '${parsed[1]} AND ($languages)',
+        );
 
     final snap = await query.getObjects().then(
       (snapshot) async {
-        final terms = filterOr(
-          'term',
+        if (monolingual || !restricted) return snapshot;
+        final terms = generateFilter(
           snapshot.hits.map((hit) => hit.data['term']),
+          'term',
         );
-        return (language?.isEmpty ?? false)
-            ? await GlobalStore.algolia.instance
-                .index('dictionary')
-                .filters('($languages) AND ($terms)')
-                .getObjects()
-            : snapshot;
+        return await GlobalStore.algolia.instance
+            .index('dictionary')
+            .filters('($languages) AND ($terms)')
+            .getObjects();
       },
     );
 
     final hits = snap.hits.map((h) => EntryHit.fromAlgoliaHit(h)).toList();
-    if (language?.isNotEmpty ?? false)
+    if (monolingual)
       widget.onSearch([hits]);
     else {
       final groups = <String, List<EntryHit>>{};
@@ -180,15 +198,22 @@ class SearchToolbarState extends State<SearchToolbar> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 4),
-                  child: TextField(
-                    controller: inputController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      labelText: 'Search by terms, forms, tags' +
-                          (language?.isEmpty ?? true
-                              ? ''
-                              : ' in ${capitalize(language!)}'),
-                    ),
+                  child: Builder(
+                    builder: (context) {
+                      var label = 'Search by ';
+                      label += restricted ? 'forms ' : 'terms, forms, tags ';
+                      label += monolingual
+                          ? 'in ${capitalize(language!)}'
+                          : (restricted ? 'between' : 'across') +
+                              'across the languages';
+                      return TextField(
+                        controller: inputController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: label,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
