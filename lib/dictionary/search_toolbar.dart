@@ -3,6 +3,7 @@ import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:badges/badges.dart';
 import 'hit_tile.dart';
 
 class SearchToolbar extends StatefulWidget {
@@ -19,9 +20,9 @@ class SearchToolbarState extends State<SearchToolbar> {
   String text = "";
   bool searching = false;
   bool restricted = false;
-  String? language;
+  String language = '';
 
-  bool get monolingual => language?.isNotEmpty ?? false;
+  bool get monolingual => language.isNotEmpty;
 
   @override
   void initState() {
@@ -85,7 +86,7 @@ class SearchToolbarState extends State<SearchToolbar> {
 
     final parsed = parseQuery(text);
     final languages = generateFilter(
-      monolingual ? [language!] : GlobalStore.languages.keys,
+      monolingual ? [language] : GlobalStore.languages.keys,
       'language',
     );
     var query = GlobalStore.algolia.instance
@@ -127,6 +128,14 @@ class SearchToolbarState extends State<SearchToolbar> {
     });
   }
 
+  void setSearch(String language, [restricted = false]) {
+    setState(() {
+      this.language = language;
+      this.restricted = restricted;
+    });
+    inputController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -135,63 +144,58 @@ class SearchToolbarState extends State<SearchToolbar> {
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
-              PopupMenuButton<String>(
-                icon: language == null
-                    ? Icon(Icons.language_outlined)
-                    : language!.isEmpty
-                        ? Icon(Icons.auto_awesome_outlined)
-                        : LanguageAvatar(GlobalStore.languages[language]!.flag),
-                tooltip: 'Select search mode',
-                onSelected: (l) {
-                  setState(() {
-                    language = l == 'English' ? null : l;
-                  });
-                  inputController.clear();
-                },
-                itemBuilder: (BuildContext context) {
-                  const density = const VisualDensity(
-                    vertical: VisualDensity.minimumDensity,
-                    horizontal: VisualDensity.minimumDensity,
-                  );
-                  return [
-                    if (GlobalStore.languages.length > 1) ...[
-                      PopupMenuItem(
-                        value: 'English',
-                        child: ListTile(
-                          visualDensity: density,
-                          leading: Icon(Icons.language_outlined),
-                          title: Text('Parallel'),
-                          selected: language == null,
+              Badge(
+                badgeContent:
+                    restricted ? Icon(Icons.filter_alt_outlined) : null,
+                child: PopupMenuButton(
+                  icon: language.isEmpty
+                      ? Icon(Icons.language_outlined)
+                      : LanguageAvatar(
+                          GlobalStore.languages[language]!.flag,
                         ),
-                      ),
-                      PopupMenuItem(
-                        value: '',
-                        child: ListTile(
-                          visualDensity: density,
-                          leading: Icon(Icons.auto_awesome_outlined),
-                          title: Text('Cross-lingual'),
-                          selected: language?.isEmpty ?? false,
-                        ),
-                      ),
-                      PopupMenuDivider(),
-                    ],
-                    for (final l in GlobalStore.languages.values)
-                      PopupMenuItem(
-                        value: l.name,
-                        child: ListTile(
-                          visualDensity: density,
-                          leading: LanguageAvatar(l.flag),
-                          title: Text(
-                            capitalize(l.name),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
+                  tooltip: 'Select search mode',
+                  itemBuilder: (BuildContext context) {
+                    const density = const VisualDensity(
+                      vertical: VisualDensity.minimumDensity,
+                      horizontal: VisualDensity.minimumDensity,
+                    );
+                    return [
+                      if (GlobalStore.languages.length > 1)
+                        PopupMenuItem(
+                          child: ListTile(
+                            visualDensity: density,
+                            leading: Icon(Icons.auto_awesome_outlined),
+                            title: Text('Cross-lingual'),
+                            onTap: () => setSearch(''),
+                            trailing: IconButton(
+                              onPressed: () => setSearch('', true),
+                              icon: Icon(Icons.filter_alt_outlined),
                             ),
+                            selected: language.isEmpty,
                           ),
-                          selected: language == l.name,
                         ),
-                      ),
-                  ];
-                },
+                      for (final l in GlobalStore.languages.values)
+                        PopupMenuItem(
+                          child: ListTile(
+                            visualDensity: density,
+                            leading: LanguageAvatar(l.flag),
+                            title: Text(
+                              capitalize(l.name),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onTap: () => setSearch(l.name),
+                            trailing: IconButton(
+                              onPressed: () => setSearch(l.name, true),
+                              icon: Icon(Icons.filter_alt_outlined),
+                            ),
+                            selected: language == l.name,
+                          ),
+                        ),
+                    ];
+                  },
+                ),
               ),
               Expanded(
                 child: Padding(
@@ -201,7 +205,7 @@ class SearchToolbarState extends State<SearchToolbar> {
                       var label = 'Search by ';
                       label += restricted ? 'forms ' : 'terms, forms, tags ';
                       label += monolingual
-                          ? 'in ${capitalize(language!)}'
+                          ? 'in ${capitalize(language)}'
                           : (restricted ? 'between' : 'across') +
                               'across the languages';
                       return TextField(
