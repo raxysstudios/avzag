@@ -165,7 +165,7 @@ class SearchToolbarState extends State<SearchToolbar> {
                           child: ListTile(
                             visualDensity: density,
                             leading: Icon(Icons.auto_awesome_outlined),
-                            title: Text('Cross-lingual'),
+                            title: Text('Multilingual'),
                             onTap: () => setSearch(''),
                             trailing: IconButton(
                               onPressed: () => setSearch('', true),
