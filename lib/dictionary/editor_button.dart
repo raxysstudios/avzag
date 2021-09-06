@@ -94,7 +94,10 @@ class EditorButton extends StatelessWidget {
   Future<bool> submit(BuildContext context) async {
     if (entry == null) return false;
     if (entry!.uses.isEmpty || entry!.forms.isEmpty) {
-      showSnackbar(context, 'Must have at least a form and a use.');
+      showSnackbar(
+        context,
+        text: 'Must have at least a form and a use.',
+      );
       return false;
     }
     await showLoadingDialog(
@@ -110,7 +113,10 @@ class EditorButton extends StatelessWidget {
   Future<bool> delete(BuildContext context) async {
     if (entry == null || hit == null) return false;
     if (entry!.uses.isNotEmpty) {
-      showSnackbar(context, 'Remove all uses first.');
+      showSnackbar(
+        context,
+        text: 'Remove all uses first.',
+      );
       return false;
     }
     final confirm = await showDangerDialog(

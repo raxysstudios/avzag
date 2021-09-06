@@ -87,7 +87,10 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           if (selected.isEmpty)
-            return showSnackbar(context, 'Select at least one language.');
+            return showSnackbar(
+              context,
+              text: 'Select at least one language.',
+            );
           showLoadingDialog(
             context,
             GlobalStore.load(
