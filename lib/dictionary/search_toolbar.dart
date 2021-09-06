@@ -71,8 +71,8 @@ class SearchToolbarState extends State<SearchToolbar> {
         words.add(e);
     });
     return [
-      generateFilter(tags, 'tags', true),
       words.join(' '),
+      generateFilter(tags, 'tags', true),
     ];
   }
 
@@ -88,15 +88,13 @@ class SearchToolbarState extends State<SearchToolbar> {
       monolingual ? [language!] : GlobalStore.languages.keys,
       'language',
     );
-    var query = (monolingual
-            ? GlobalStore.algolia.instance
-                .index('dictionary_headword')
-                .setRestrictSearchableAttributes(['forms'])
-            : GlobalStore.algolia.instance.index('dictionary'))
+    var query = GlobalStore.algolia.instance
+        .index(monolingual ? 'dictionary_headword' : 'dictionary')
         .query(parsed[0])
         .filters(
           parsed[1].isEmpty ? languages : '${parsed[1]} AND ($languages)',
         );
+    if (restricted) query = query.setRestrictSearchableAttributes(['forms']);
 
     final snap = await query.getObjects().then(
       (snapshot) async {
