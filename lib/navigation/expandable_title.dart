@@ -1,10 +1,9 @@
-import 'package:avzag/navigation/about_card.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
 class ExpandableTitle extends StatelessWidget {
-  final Iterable<Widget> children;
-  const ExpandableTitle(this.children);
+  final Widget child;
+  const ExpandableTitle(this.child);
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +43,7 @@ class ExpandableTitle extends StatelessWidget {
         iconColor: Theme.of(context).iconTheme.color,
       ),
       collapsed: Offstage(),
-      expanded: Column(
-        children: [
-          AboutCard(),
-          ...children,
-        ],
-      ),
+      expanded: child,
     );
   }
 }

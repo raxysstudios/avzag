@@ -1,11 +1,13 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
+import 'package:avzag/global_store.dart';
 import 'package:avzag/home/home_page.dart';
-import 'package:avzag/navigation/editor_switch.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'auth_page.dart';
 import 'expandable_title.dart';
 
 Future<void> navigate(
@@ -55,22 +57,6 @@ class _NavModule {
   }
 }
 
-class _NavLink {
-  final IconData icon;
-  final String text;
-  final String url;
-  _NavLink(this.icon, this.text, this.url);
-
-  Widget build() {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(capitalize(text)),
-      trailing: Icon(Icons.open_in_new_outlined),
-      onTap: () => launch(url),
-    );
-  }
-}
-
 class NavDraver extends StatelessWidget {
   NavDraver({this.title});
   final String? title;
@@ -85,27 +71,59 @@ class NavDraver extends StatelessWidget {
             Material(
               color: Colors.transparent,
               child: ExpandableTitle(
-                [
-                  Card(
-                    child: Column(
-                      children: [
-                        EditorSwitch(),
-                        ...[
-                          _NavLink(
-                            Icons.send_outlined,
-                            'developer contact',
-                            'https://t.me/avzag',
+                Card(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: Icon(Icons.landscape_outlined),
+                        title: Text('Made with honor in\nNorth Caucasus'),
+                        onTap: () => launch('https://t.me/avzag'),
+                      ),
+                      FutureBuilder<PackageInfo>(
+                        future: PackageInfo.fromPlatform(),
+                        builder: (context, snapshot) {
+                          var info = 'Loading...';
+                          final package = snapshot.data;
+                          if (package != null)
+                            info = [
+                              'v' + package.version,
+                              'b' + package.buildNumber
+                            ].join(' • ');
+                          return ListTile(
+                            leading: Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Icon(Icons.code_outlined),
+                            ),
+                            title: Text('GitHub Repository'),
+                            subtitle: Text(info),
+                            onTap: () => launch(
+                              'https://github.com/alkaitagi/avzag_flutter',
+                            ),
+                          );
+                        },
+                      ),
+                      SwitchListTile(
+                        title: Text('Editor Mode'),
+                        subtitle: Text(
+                          GlobalStore.editing == null
+                              ? 'Off'
+                              : capitalize(GlobalStore.editing!),
+                        ),
+                        value: GlobalStore.editing != null,
+                        secondary: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Icon(Icons.edit_outlined),
+                        ),
+                        onChanged: (e) => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AuthPage(),
                           ),
-                          _NavLink(
-                            Icons.code_outlined,
-                            'GitHub repository',
-                            'https://github.com/alkaitagi/avzag_flutter',
-                          ),
-                        ].map((e) => e.build()),
-                      ],
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
             Card(
