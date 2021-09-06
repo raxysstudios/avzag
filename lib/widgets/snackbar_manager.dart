@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void showSnackbar(
   BuildContext context, {
@@ -11,7 +12,7 @@ void showSnackbar(
   messenger.hideCurrentSnackBar();
   messenger.showSnackBar(
     SnackBar(
-      duration: Duration(seconds: short ? 2 : 4),
+      duration: Duration(seconds: short ? 1 : 4),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(16),
@@ -32,4 +33,18 @@ void showSnackbar(
       ),
     ),
   );
+}
+
+void copyText(BuildContext context, String? text) async {
+  if (text?.isNotEmpty ?? false) {
+    await Clipboard.setData(
+      ClipboardData(text: text),
+    );
+    showSnackbar(
+      context,
+      icon: Icons.content_copy_outlined,
+      text: 'Copied.',
+      short: true,
+    );
+  }
 }
