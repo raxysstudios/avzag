@@ -37,5 +37,3 @@ flutter:
   uses-material-design: true
   assets:
     - icon.png
-    - algolia.png
-    - firebase.png
