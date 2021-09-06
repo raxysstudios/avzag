@@ -102,10 +102,6 @@ class HitTile extends StatelessWidget {
           style: theme.caption?.copyWith(
             fontSize: 14,
           ),
-          // style: TextStyle(
-          //   fontSize: 14,
-          //   color: Colors.black54,
-          // ),
           children: [
             WidgetSpan(
               child: Padding(
