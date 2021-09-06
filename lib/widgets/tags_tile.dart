@@ -30,6 +30,7 @@ class TagsTile extends StatelessWidget {
               return onEdited == null ? SelectableText(text) : Text(text);
             }),
       onTap: onEdited == null ? null : () => showEditor(context),
+      onLongPress: () {},
     );
   }
 

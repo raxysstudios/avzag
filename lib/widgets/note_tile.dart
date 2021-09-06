@@ -38,6 +38,7 @@ class NoteTile extends StatelessWidget {
               ),
             ),
       onTap: onEdited == null ? null : () => showEditor(context),
+      onLongPress: () {},
     );
   }
 

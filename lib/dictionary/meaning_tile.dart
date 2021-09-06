@@ -40,6 +40,7 @@ class MeaningTile extends StatelessWidget {
                 use: use,
                 callback: onEdited!,
               ),
+      onLongPress: () {},
     );
   }
 

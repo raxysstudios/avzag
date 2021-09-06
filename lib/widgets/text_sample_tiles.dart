@@ -186,6 +186,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
         onTap: () => setState(() {
           advanced = !advanced;
         }),
+        onLongPress: () {},
         leading: Icon(widget.icon),
         title: SelectableText.rich(
           TextSpan(
