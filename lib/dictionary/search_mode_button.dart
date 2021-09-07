@@ -73,16 +73,14 @@ class SearchModeButton extends StatelessWidget {
           capitalize(text ?? value),
           softWrap: false,
           overflow: TextOverflow.fade,
-          style: value.isEmpty
-              ? null
-              : const TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
+          style: const TextStyle(
+            fontWeight: FontWeight.w500,
+          ),
         ),
         trailing: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
-            onSelected('', true);
+            onSelected(value, true);
           },
           icon: const Icon(Icons.layers_outlined),
           tooltip: 'Restrict search to forms',
