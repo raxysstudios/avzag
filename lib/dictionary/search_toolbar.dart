@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:algolia/algolia.dart';
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
@@ -97,9 +98,9 @@ class SearchToolbarState extends State<SearchToolbar> {
         );
     if (restricted) query = query.setRestrictSearchableAttributes(['forms']);
 
-    final snap = await query.getObjects().then(
+    final hits = await query.getObjects().then(
       (snapshot) async {
-        if (monolingual || !restricted) return snapshot;
+        if (monolingual || !restricted) return snapshot.hits;
         final terms = generateFilter(
           snapshot.hits.map((hit) => hit.data['term']),
           'term',
@@ -107,11 +108,12 @@ class SearchToolbarState extends State<SearchToolbar> {
         return await GlobalStore.algolia.instance
             .index('dictionary')
             .filters('($languages) AND ($terms)')
-            .getObjects();
+            .getObjects()
+            .then((s) => s.hits)
+            .onError((error, stackTrace) => []);
       },
-    );
+    ).then((s) => s.map((h) => EntryHit.fromAlgoliaHit(h)).toList());
 
-    final hits = snap.hits.map((h) => EntryHit.fromAlgoliaHit(h)).toList();
     if (monolingual)
       widget.onSearch([hits]);
     else {
@@ -128,12 +130,82 @@ class SearchToolbarState extends State<SearchToolbar> {
     });
   }
 
-  void setSearch(String language, [restricted = false]) {
+  void setSearchMode(String language,
+      [restricted = false, BuildContext? context]) {
     setState(() {
       this.language = language;
       this.restricted = restricted;
     });
     inputController.clear();
+    if (context != null) Navigator.of(context).pop();
+  }
+
+  Widget buildSearchModeButton(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+    const density = const VisualDensity(
+      vertical: VisualDensity.minimumDensity,
+      horizontal: VisualDensity.minimumDensity,
+    );
+    return Badge(
+      showBadge: restricted,
+      badgeColor: theme.primary,
+      badgeContent: Icon(
+        Icons.filter_alt_outlined,
+        size: 16,
+      ),
+      child: PopupMenuButton<String>(
+        icon: language.isEmpty
+            ? Icon(Icons.language_outlined)
+            : LanguageAvatar(
+                GlobalStore.languages[language]!.flag,
+              ),
+        onSelected: (l) => setSearchMode(l),
+        tooltip: 'Select search mode',
+        itemBuilder: (BuildContext context) {
+          return [
+            if (GlobalStore.languages.length > 1)
+              PopupMenuItem(
+                value: '',
+                child: ListTile(
+                  visualDensity: density,
+                  leading: Icon(Icons.language_outlined),
+                  title: Text('Multilingual'),
+                  trailing: IconButton(
+                    onPressed: () => setSearchMode('', true, context),
+                    icon: Icon(Icons.filter_alt_outlined),
+                    color: language.isNotEmpty || !restricted
+                        ? theme.onSurface
+                        : null,
+                  ),
+                  selected: language.isEmpty,
+                ),
+              ),
+            for (final l in GlobalStore.languages.values)
+              PopupMenuItem(
+                value: l.name,
+                child: ListTile(
+                  visualDensity: density,
+                  leading: LanguageAvatar(l.flag),
+                  title: Text(
+                    capitalize(l.name),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  trailing: IconButton(
+                    onPressed: () => setSearchMode(l.name, true, context),
+                    icon: Icon(Icons.filter_alt_outlined),
+                    color: language != l.name || !restricted
+                        ? theme.onSurface
+                        : null,
+                  ),
+                  selected: language == l.name,
+                ),
+              ),
+          ];
+        },
+      ),
+    );
   }
 
   @override
@@ -144,74 +216,18 @@ class SearchToolbarState extends State<SearchToolbar> {
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
-              Badge(
-                showBadge: restricted,
-                badgeColor: Theme.of(context).colorScheme.primary,
-                badgeContent: Icon(
-                  Icons.filter_alt_outlined,
-                  size: 16,
-                ),
-                child: PopupMenuButton(
-                  icon: language.isEmpty
-                      ? Icon(Icons.language_outlined)
-                      : LanguageAvatar(
-                          GlobalStore.languages[language]!.flag,
-                        ),
-                  tooltip: 'Select search mode',
-                  itemBuilder: (BuildContext context) {
-                    const density = const VisualDensity(
-                      vertical: VisualDensity.minimumDensity,
-                      horizontal: VisualDensity.minimumDensity,
-                    );
-                    return [
-                      if (GlobalStore.languages.length > 1)
-                        PopupMenuItem(
-                          child: ListTile(
-                            visualDensity: density,
-                            leading: Icon(Icons.auto_awesome_outlined),
-                            title: Text('Multilingual'),
-                            onTap: () => setSearch(''),
-                            trailing: IconButton(
-                              onPressed: () => setSearch('', true),
-                              icon: Icon(Icons.filter_alt_outlined),
-                            ),
-                            selected: language.isEmpty,
-                          ),
-                        ),
-                      for (final l in GlobalStore.languages.values)
-                        PopupMenuItem(
-                          child: ListTile(
-                            visualDensity: density,
-                            leading: LanguageAvatar(l.flag),
-                            title: Text(
-                              capitalize(l.name),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            onTap: () => setSearch(l.name),
-                            trailing: IconButton(
-                              onPressed: () => setSearch(l.name, true),
-                              icon: Icon(Icons.filter_alt_outlined),
-                            ),
-                            selected: language == l.name,
-                          ),
-                        ),
-                    ];
-                  },
-                ),
-              ),
+              buildSearchModeButton(context),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 4),
                   child: Builder(
                     builder: (context) {
-                      var label = 'Search by ';
-                      label += restricted ? 'forms ' : 'terms, forms, tags ';
+                      var label = 'Search ';
+                      if (restricted) label += 'by forms ';
                       label += monolingual
                           ? 'in ${capitalize(language)}'
                           : (restricted ? 'between' : 'across') +
-                              'across the languages';
+                              ' the languages';
                       return TextField(
                         controller: inputController,
                         decoration: InputDecoration(
