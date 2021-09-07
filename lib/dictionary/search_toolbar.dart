@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:algolia/algolia.dart';
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
