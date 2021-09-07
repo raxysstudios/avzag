@@ -75,8 +75,9 @@ class NavDraver extends StatelessWidget {
                   child: Column(
                     children: [
                       ListTile(
-                        leading: Icon(Icons.landscape_outlined),
-                        title: Text('Made with honor in\nNorth Caucasus'),
+                        leading: const Icon(Icons.landscape_outlined),
+                        title: const Text('Made with honor in\nNorth Caucasus'),
+                        trailing: const Icon(Icons.send_outlined),
                         onTap: () => launch('https://t.me/avzag'),
                       ),
                       FutureBuilder<PackageInfo>(
@@ -90,12 +91,13 @@ class NavDraver extends StatelessWidget {
                               'b' + package.buildNumber
                             ].join(' • ');
                           return ListTile(
-                            leading: Padding(
+                            leading: const Padding(
                               padding: const EdgeInsets.only(top: 8),
-                              child: Icon(Icons.code_outlined),
+                              child: const Icon(Icons.code_outlined),
                             ),
-                            title: Text('GitHub Repository'),
+                            title: const Text('GitHub Repository'),
                             subtitle: Text(info),
+                            trailing: const Icon(Icons.open_in_new_outlined),
                             onTap: () => launch(
                               'https://github.com/alkaitagi/avzag_flutter',
                             ),
@@ -103,16 +105,16 @@ class NavDraver extends StatelessWidget {
                         },
                       ),
                       SwitchListTile(
-                        title: Text('Editor Mode'),
+                        title: const Text('Editor Mode'),
                         subtitle: Text(
                           GlobalStore.editing == null
                               ? 'Off'
                               : capitalize(GlobalStore.editing!),
                         ),
                         value: GlobalStore.editing != null,
-                        secondary: Padding(
+                        secondary: const Padding(
                           padding: const EdgeInsets.only(top: 8),
-                          child: Icon(Icons.edit_outlined),
+                          child: const Icon(Icons.edit_outlined),
                         ),
                         onChanged: (e) => Navigator.push(
                           context,
