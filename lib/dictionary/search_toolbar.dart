@@ -151,6 +151,7 @@ class SearchToolbarState extends State<SearchToolbar> {
       badgeContent: Icon(
         Icons.filter_alt_outlined,
         size: 16,
+        color: theme.onPrimary,
       ),
       child: PopupMenuButton<String>(
         icon: language.isEmpty
