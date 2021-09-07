@@ -23,7 +23,7 @@ class SearchModeButton extends StatelessWidget {
       showBadge: restricted,
       badgeColor: theme.primary,
       badgeContent: Icon(
-        Icons.filter_alt_outlined,
+        Icons.layers_outlined,
         size: 16,
         color: theme.onPrimary,
       ),
@@ -40,7 +40,7 @@ class SearchModeButton extends StatelessWidget {
               buildOption(
                 context,
                 '',
-                leading: Icon(Icons.language_outlined),
+                leading: const Icon(Icons.language_outlined),
                 text: 'multilingual',
               ),
             for (final l in GlobalStore.languages.values)
@@ -64,21 +64,34 @@ class SearchModeButton extends StatelessWidget {
     return PopupMenuItem(
       padding: EdgeInsets.zero,
       child: ListTile(
+        contentPadding: const EdgeInsets.only(
+          left: 24,
+          right: 16,
+        ),
         leading: leading,
-        title: Text(capitalize(text ?? value)),
+        title: Text(
+          capitalize(text ?? value),
+          softWrap: false,
+          overflow: TextOverflow.fade,
+          style: value.isEmpty
+              ? null
+              : const TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+        ),
         trailing: IconButton(
           onPressed: () {
             Navigator.of(context).pop();
             onSelected('', true);
           },
-          icon: Icon(Icons.filter_alt_outlined),
+          icon: const Icon(Icons.layers_outlined),
           color: selected != value || !restricted
               ? Theme.of(context).colorScheme.onSurface
               : null,
         ),
         onTap: () {
           Navigator.of(context).pop();
-          onSelected('', false);
+          onSelected(value, false);
         },
         selected: selected == value,
       ),
