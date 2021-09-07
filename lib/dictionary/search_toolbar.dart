@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'package:avzag/home/language_avatar.dart';
+import 'package:avzag/dictionary/search_mode_button.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:badges/badges.dart';
 import 'hit_tile.dart';
 
 class SearchToolbar extends StatefulWidget {
@@ -129,85 +128,6 @@ class SearchToolbarState extends State<SearchToolbar> {
     });
   }
 
-  void setSearchMode(String language,
-      [restricted = false, BuildContext? context]) {
-    setState(() {
-      this.language = language;
-      this.restricted = restricted;
-    });
-    inputController.clear();
-    if (context != null) Navigator.of(context).pop();
-  }
-
-  Widget buildSearchModeButton(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
-    const density = const VisualDensity(
-      vertical: VisualDensity.minimumDensity,
-      horizontal: VisualDensity.minimumDensity,
-    );
-    return Badge(
-      showBadge: restricted,
-      badgeColor: theme.primary,
-      badgeContent: Icon(
-        Icons.filter_alt_outlined,
-        size: 16,
-        color: theme.onPrimary,
-      ),
-      child: PopupMenuButton<String>(
-        icon: language.isEmpty
-            ? Icon(Icons.language_outlined)
-            : LanguageAvatar(
-                GlobalStore.languages[language]!.flag,
-              ),
-        onSelected: (l) => setSearchMode(l),
-        tooltip: 'Select search mode',
-        itemBuilder: (BuildContext context) {
-          return [
-            if (GlobalStore.languages.length > 1)
-              PopupMenuItem(
-                value: '',
-                child: ListTile(
-                  visualDensity: density,
-                  leading: Icon(Icons.language_outlined),
-                  title: Text('Multilingual'),
-                  trailing: IconButton(
-                    onPressed: () => setSearchMode('', true, context),
-                    icon: Icon(Icons.filter_alt_outlined),
-                    color: language.isNotEmpty || !restricted
-                        ? theme.onSurface
-                        : null,
-                  ),
-                  selected: language.isEmpty,
-                ),
-              ),
-            for (final l in GlobalStore.languages.values)
-              PopupMenuItem(
-                value: l.name,
-                child: ListTile(
-                  visualDensity: density,
-                  leading: LanguageAvatar(l.flag),
-                  title: Text(
-                    capitalize(l.name),
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: IconButton(
-                    onPressed: () => setSearchMode(l.name, true, context),
-                    icon: Icon(Icons.filter_alt_outlined),
-                    color: language != l.name || !restricted
-                        ? theme.onSurface
-                        : null,
-                  ),
-                  selected: language == l.name,
-                ),
-              ),
-          ];
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -216,7 +136,15 @@ class SearchToolbarState extends State<SearchToolbar> {
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
-              buildSearchModeButton(context),
+              SearchModeButton(
+                selected: language,
+                restricted: restricted,
+                onSelected: (l, r) => setState(() {
+                  language = l;
+                  restricted = r;
+                  inputController.clear();
+                }),
+              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 4),
