@@ -157,13 +157,14 @@ class _AuthPageState extends State<AuthPage> {
                               fontSize: 18,
                             ),
                           ),
-                          onTap: () {
-                            if (canEdit)
-                              setState(() {
-                                GlobalStore.editing = editing ? null : l.name;
-                              });
-                            else if (l.contact != null) launch(l.contact!);
-                          },
+                          onTap: canEdit
+                              ? () => setState(() {
+                                    GlobalStore.editing =
+                                        editing ? null : l.name;
+                                  })
+                              : l.contact != null
+                                  ? () => launch(l.contact!)
+                                  : null,
                           selected: editing,
                           trailing: canEdit
                               ? Icon(Icons.edit_outlined)
