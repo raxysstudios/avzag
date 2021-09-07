@@ -85,6 +85,7 @@ class SearchModeButton extends StatelessWidget {
             onSelected('', true);
           },
           icon: const Icon(Icons.layers_outlined),
+          tooltip: 'Restrict search to forms',
           color: selected != value || !restricted
               ? Theme.of(context).colorScheme.onSurface
               : null,
