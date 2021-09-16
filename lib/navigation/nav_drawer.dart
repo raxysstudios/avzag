@@ -99,7 +99,7 @@ class NavDraver extends StatelessWidget {
                             subtitle: Text(info),
                             trailing: const Icon(Icons.open_in_new_outlined),
                             onTap: () => launch(
-                              'https://github.com/alkaitagi/avzag_flutter',
+                              'https://github.com/raxysstudios/avzag',
                             ),
                           );
                         },
