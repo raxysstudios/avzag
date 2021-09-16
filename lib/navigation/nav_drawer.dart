@@ -78,7 +78,7 @@ class NavDraver extends StatelessWidget {
                         leading: const Icon(Icons.landscape_outlined),
                         title: const Text('Made with honor in\nNorth Caucasus'),
                         trailing: const Icon(Icons.send_outlined),
-                        onTap: () => launch('https://t.me/studioraxys'),
+                        onTap: () => launch('https://t.me/raxysstudios'),
                       ),
                       FutureBuilder<PackageInfo>(
                         future: PackageInfo.fromPlatform(),
