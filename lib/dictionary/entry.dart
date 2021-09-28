@@ -24,7 +24,7 @@ class Entry {
         );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['forms'] = forms.map((v) => v.toJson()).toList();
     if (tags?.isNotEmpty ?? false) data['tags'] = tags;
     if (note?.isNotEmpty ?? false) data['note'] = note;

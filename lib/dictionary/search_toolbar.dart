@@ -7,7 +7,11 @@ import 'hit_tile.dart';
 
 class SearchToolbar extends StatefulWidget {
   final ValueSetter<List<List<EntryHit>>> onSearch;
-  const SearchToolbar(this.onSearch);
+
+  const SearchToolbar(
+    this.onSearch, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   SearchToolbarState createState() => SearchToolbarState();
@@ -26,21 +30,23 @@ class SearchToolbarState extends State<SearchToolbar> {
   @override
   void initState() {
     super.initState();
-    if (GlobalStore.languages.length == 1)
+    if (GlobalStore.languages.length == 1) {
       language = GlobalStore.languages.keys.first;
+    }
     inputController.addListener(() {
-      if (this.text != inputController.text) {
+      if (text != inputController.text) {
         timer.cancel();
         setState(() {
-          this.text = inputController.text;
+          text = inputController.text;
         });
-        if (this.text.isEmpty)
+        if (text.isEmpty) {
           search();
-        else
+        } else {
           timer = Timer(
-            Duration(milliseconds: 300),
+            const Duration(milliseconds: 300),
             search,
           );
+        }
       }
     });
   }
@@ -65,10 +71,11 @@ class SearchToolbarState extends State<SearchToolbar> {
     final tags = <String>[];
     final words = <String>[];
     query.split(' ').forEach((e) {
-      if (e.startsWith('#'))
+      if (e.startsWith('#')) {
         tags.add(e.substring(1));
-      else
+      } else {
         words.add(e);
+      }
     });
     return [
       words.join(' '),
@@ -112,9 +119,9 @@ class SearchToolbarState extends State<SearchToolbar> {
       },
     ).then((s) => s.map((h) => EntryHit.fromAlgoliaHit(h)).toList());
 
-    if (monolingual)
+    if (monolingual) {
       widget.onSearch([hits]);
-    else {
+    } else {
       final groups = <String, List<EntryHit>>{};
       for (final hit in hits) {
         final key = hit.term;
@@ -170,7 +177,7 @@ class SearchToolbarState extends State<SearchToolbar> {
               IconButton(
                 onPressed:
                     inputController.text.isEmpty ? null : inputController.clear,
-                icon: Icon(Icons.clear),
+                icon: const Icon(Icons.clear_outlined),
               ),
             ],
           ),

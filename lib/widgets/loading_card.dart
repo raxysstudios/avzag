@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class LoadingCard extends StatelessWidget {
+  const LoadingCard({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -8,8 +10,8 @@ class LoadingCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(128),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
+        child: const Padding(
+          padding: EdgeInsets.all(24),
           child: SizedBox(
             width: 32,
             height: 32,

@@ -42,11 +42,11 @@ void showEditorDialog<T>(
                 color: theme.colorScheme.error,
                 splashColor: theme.colorScheme.error.withOpacity(0.1),
               ),
-              Spacer(),
+              const Spacer(),
               TextButton.icon(
                 onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.close_outlined),
-                label: Text('Cancel'),
+                icon: const Icon(Icons.close_outlined),
+                label: const Text('Cancel'),
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all(theme.hintColor),
                   overlayColor: MaterialStateProperty.all(
@@ -61,8 +61,8 @@ void showEditorDialog<T>(
                     callback(result());
                   }
                 },
-                icon: Icon(Icons.done),
-                label: Text('Save'),
+                icon: const Icon(Icons.done_outlined),
+                label: const Text('Save'),
               ),
             ],
           ),

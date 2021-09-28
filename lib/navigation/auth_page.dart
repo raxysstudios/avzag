@@ -9,6 +9,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AuthPage extends StatefulWidget {
+  const AuthPage({Key? key}) : super(key: key);
+
   @override
   _AuthPageState createState() => _AuthPageState();
 }
@@ -70,11 +72,11 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Editors'),
+        title: const Text('Editors'),
         centerTitle: true,
         bottom: PreferredSize(
           child: LinearProgressIndicator(value: loading ? null : 0),
-          preferredSize: Size.fromHeight(4),
+          preferredSize: const Size.fromHeight(4),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -84,7 +86,7 @@ class _AuthPageState extends State<AuthPage> {
               ? Icons.edit_off_outlined
               : Icons.edit_outlined,
         ),
-        label: Text('Continue'),
+        label: const Text('Continue'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: ListView(
@@ -98,43 +100,43 @@ class _AuthPageState extends State<AuthPage> {
                   padding: const EdgeInsets.all(8),
                   child: ElevatedButton.icon(
                     onPressed: loading ? null : signIn,
-                    icon: Icon(Icons.person_outlined),
+                    icon: const Icon(Icons.person_outlined),
                     label: Text(
                       GlobalStore.email ?? 'Sign In',
                     ),
                   ),
                 ),
                 if (GlobalStore.email == null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 16),
                     child: Text(
                       'Sign in with Google to see your options.',
                       textAlign: TextAlign.center,
                     ),
                   )
                 else ...[
-                  Text(
+                  const Text(
                     'With any question regarding the language materials, contact the corresponding editors below.',
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
                       style: Theme.of(context).textTheme.bodyText2,
                       children: [
-                        TextSpan(text: 'You can edit '),
+                        const TextSpan(text: 'You can edit '),
                         TextSpan(
                           text: capitalize(editable.join(', ')),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        TextSpan(text: ' yourself.'),
+                        const TextSpan(text: ' yourself.'),
                       ],
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                 ],
               ],
             ),
@@ -152,7 +154,7 @@ class _AuthPageState extends State<AuthPage> {
                           leading: LanguageAvatar(l.flag),
                           title: Text(
                             capitalize(l.name),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
                             ),
@@ -167,10 +169,10 @@ class _AuthPageState extends State<AuthPage> {
                                   : null,
                           selected: editing,
                           trailing: canEdit
-                              ? Icon(Icons.edit_outlined)
+                              ? const Icon(Icons.edit_outlined)
                               : l.contact == null
                                   ? null
-                                  : Icon(Icons.send_outlined),
+                                  : const Icon(Icons.send_outlined),
                         );
                       },
                     ),

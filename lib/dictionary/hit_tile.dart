@@ -49,9 +49,10 @@ class HitTile extends StatelessWidget {
 
   const HitTile(
     this.hit, {
+    Key? key,
     this.showLanguage = true,
     this.onTap,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class HitTile extends StatelessWidget {
                   text: capitalize(hit.headword),
                 ),
                 if (hit.form != null && hit.form != hit.headword) ...[
-                  WidgetSpan(
+                  const WidgetSpan(
                     child: SizedBox(width: 8),
                   ),
                   TextSpan(

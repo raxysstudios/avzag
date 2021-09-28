@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 
 class ExpandableTitle extends StatelessWidget {
   final Widget child;
-  const ExpandableTitle(this.child);
+  const ExpandableTitle(
+    this.child, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +20,13 @@ class ExpandableTitle extends StatelessWidget {
           children: [
             Transform.scale(
               scale: 1.5,
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 backgroundImage: AssetImage('icon.png'),
                 radius: 12,
               ),
             ),
-            SizedBox(width: 32),
-            Text(
+            const SizedBox(width: 32),
+            const Text(
               'Ævzag',
               style: TextStyle(
                 fontSize: 20,
@@ -42,7 +45,7 @@ class ExpandableTitle extends StatelessWidget {
         ),
         iconColor: Theme.of(context).iconTheme.color,
       ),
-      collapsed: Offstage(),
+      collapsed: const Offstage(),
       expanded: child,
     );
   }

@@ -5,10 +5,12 @@ import 'navigation/nav_drawer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
   _AppState createState() => _AppState();
 }
@@ -22,24 +24,26 @@ class _AppState extends State<App> {
       backgroundColor: theme.colorScheme.primary,
       foregroundColor: theme.colorScheme.onPrimary,
     );
-    final cardTheme = const CardTheme(
+    const cardTheme = CardTheme(
       clipBehavior: Clip.antiAlias,
     );
     return [
-      ThemeData(
-        primaryColor: Colors.white,
-        accentColor: Colors.grey,
-        toggleableActiveColor: theme.colorScheme.primary,
-        scaffoldBackgroundColor: Colors.blueGrey.shade50,
-        floatingActionButtonTheme: floatingActionButtonTheme,
+      ThemeData().copyWith(
+        colorScheme: ColorScheme.fromSwatch(
+          accentColor: Colors.grey,
+        ),
         cardTheme: cardTheme,
+        toggleableActiveColor: theme.colorScheme.primary,
+        floatingActionButtonTheme: floatingActionButtonTheme,
       ),
-      ThemeData(
-        brightness: Brightness.dark,
-        accentColor: Colors.grey,
+      ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.fromSwatch(
+          accentColor: Colors.grey,
+          brightness: Brightness.dark,
+        ),
+        cardTheme: cardTheme,
         toggleableActiveColor: theme.colorScheme.primary,
         floatingActionButtonTheme: floatingActionButtonTheme,
-        cardTheme: cardTheme,
       ),
     ];
   }
@@ -55,15 +59,16 @@ class _AppState extends State<App> {
         body: FutureBuilder(
           future: loader,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done)
+            if (snapshot.connectionState == ConnectionState.done) {
               Future.delayed(
-                Duration(milliseconds: 10),
+                const Duration(milliseconds: 10),
                 () => navigate(
                   context,
                   GlobalStore.prefs.getString('module') ?? 'home',
                 ),
               );
-            return LoadingCard();
+            }
+            return const LoadingCard();
           },
         ),
       ),

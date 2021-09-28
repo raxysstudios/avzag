@@ -42,12 +42,13 @@ class TextSampleTiles extends StatefulWidget {
   final bool translation;
 
   const TextSampleTiles({
+    Key? key,
     this.samples,
     this.onEdited,
     this.icon,
     this.translation = false,
     this.name = 'sample',
-  });
+  }) : super(key: key);
 
   @override
   _TextSampleTilesState createState() => _TextSampleTilesState();
@@ -57,7 +58,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
   bool advanced = false;
 
   TextSpan getTextSpan(BuildContext context, int index) {
-    final extended = this.advanced || widget.onEdited != null;
+    final extended = advanced || widget.onEdited != null;
     final sample = widget.samples![index];
     final fields = [
       sample.translation,
@@ -80,7 +81,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
             color: theme.bodyText2?.color,
           ),
         ),
-        if (fields.length > 0)
+        if (fields.isNotEmpty)
           TextSpan(
             text: ['', ...fields].join(' • '),
           )
@@ -96,10 +97,11 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
     showEditorDialog<List<TextSample>>(
       context,
       result: () {
-        if (index < samples.length)
+        if (index < samples.length) {
           samples[index] = result;
-        else
+        } else {
           samples.add(result);
+        }
         return samples;
       },
       callback: (result) {
@@ -112,7 +114,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
           autofocus: true,
           initialValue: result.plain,
           onChanged: (value) => result.plain = value.trim(),
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Plain text',
           ),
           inputFormatters:
@@ -122,7 +124,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
         TextFormField(
           initialValue: result.ipa,
           onChanged: (value) => result.ipa = value.trim(),
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'IPA (glossed)',
           ),
           inputFormatters: [LowerCaseTextFormatter()],
@@ -130,7 +132,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
         TextFormField(
           initialValue: result.glossed,
           onChanged: (value) => result.glossed = value.trim(),
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Leipzig-glossed',
           ),
         ),
@@ -138,7 +140,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
           TextFormField(
             initialValue: result.translation,
             onChanged: (value) => result.translation = value.trim(),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Translation',
             ),
           ),
@@ -172,7 +174,7 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
                 context,
                 widget.samples?.length ?? 0,
               ),
-              icon: Icon(Icons.add_outlined),
+              icon: const Icon(Icons.add_outlined),
               tooltip: 'Add ${widget.name}',
             ),
     );
@@ -180,8 +182,10 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.samples == null && widget.onEdited == null) return Offstage();
-    if (widget.onEdited == null)
+    if (widget.samples == null && widget.onEdited == null) {
+      return const Offstage();
+    }
+    if (widget.onEdited == null) {
       return ListTile(
         minVerticalPadding: 12,
         onTap: () => setState(() {
@@ -206,13 +210,14 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
             children: [
               getTextSpan(context, 0),
               for (var i = 1; i < widget.samples!.length; i++) ...[
-                TextSpan(text: '\n'),
+                const TextSpan(text: '\n'),
                 getTextSpan(context, i),
               ],
             ],
           ),
         ),
       );
+    }
     return Column(
       children: [
         buildTile(context, 0),

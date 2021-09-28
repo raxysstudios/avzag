@@ -13,7 +13,7 @@ void showSnackbar(
   messenger.showSnackBar(
     SnackBar(
       duration: Duration(seconds: short ? 1 : 4),
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(16),
         ),

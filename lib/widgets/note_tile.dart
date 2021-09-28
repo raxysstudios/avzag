@@ -9,15 +9,16 @@ class NoteTile extends StatelessWidget {
 
   const NoteTile(
     this.note, {
+    Key? key,
     this.onEdited,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (note == null && onEdited == null) return Offstage();
+    if (note == null && onEdited == null) return const Offstage();
     return ListTile(
       minVerticalPadding: 12,
-      leading: Icon(Icons.info_outline),
+      leading: const Icon(Icons.info_outline),
       title: note?.isEmpty ?? true
           ? Text(
               'Tap to add note',
@@ -30,10 +31,10 @@ class NoteTile extends StatelessWidget {
               data: note!,
               selectable: onEdited == null,
               styleSheet: MarkdownStyleSheet(
-                p: TextStyle(
+                p: const TextStyle(
                   fontSize: 16,
                 ),
-                strong: TextStyle(
+                strong: const TextStyle(
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -60,7 +61,7 @@ class NoteTile extends StatelessWidget {
           onChanged: (value) {
             result = value.trim();
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Note (markdown supported)',
           ),
           validator: emptyValidator,

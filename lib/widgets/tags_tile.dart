@@ -9,15 +9,16 @@ class TagsTile extends StatelessWidget {
 
   const TagsTile(
     this.tags, {
+    Key? key,
     this.onEdited,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (tags == null && onEdited == null) return Offstage();
+    if (tags == null && onEdited == null) return const Offstage();
     return ListTile(
       minVerticalPadding: 12,
-      leading: Icon(Icons.tag_outlined),
+      leading: const Icon(Icons.tag_outlined),
       title: (tags?.isEmpty ?? true)
           ? Text(
               'Tap to add tags',
@@ -56,7 +57,7 @@ class TagsTile extends StatelessWidget {
           onChanged: (value) {
             result = value.trim();
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Space-separated, without the #-character',
           ),
           validator: emptyValidator,

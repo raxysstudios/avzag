@@ -9,15 +9,15 @@ Future<T?> showLoadingDialog<T>(
   showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (context) => LoadingCard(),
+    builder: (context) => const LoadingCard(),
   );
   try {
     final result = await future;
     Navigator.pop(context);
     return result;
   } catch (e) {
-    print(e);
     Navigator.pop(context);
     showSnackbar(context);
+    // rethrow;
   }
 }

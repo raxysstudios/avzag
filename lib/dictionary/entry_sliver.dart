@@ -11,8 +11,9 @@ class EntrySliver extends StatelessWidget {
 
   const EntrySliver(
     this.entry, {
+    Key? key,
     this.onEdited,
-  });
+  }) : super(key: key);
 
   bool get editing => onEdited != null;
   ValueSetter<VoidCallback> get edit => (e) {
@@ -54,10 +55,11 @@ class EntrySliver extends StatelessWidget {
                     use,
                     onEdited: editing
                         ? (v) => edit(() {
-                              if (v == null)
+                              if (v == null) {
                                 entry.uses.remove(use);
-                              else
+                              } else {
                                 entry.uses[entry.uses.indexOf(use)] = v;
+                              }
                             })
                         : null,
                   ),
@@ -89,8 +91,8 @@ class EntrySliver extends StatelessWidget {
                     if (v != null) edit(() => entry.uses.add(v));
                   },
                 ),
-                icon: Icon(Icons.add_outlined),
-                label: Text('Add use'),
+                icon: const Icon(Icons.add_outlined),
+                label: const Text('Add use'),
               ),
             )
         ],

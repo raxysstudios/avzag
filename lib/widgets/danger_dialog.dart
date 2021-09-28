@@ -19,7 +19,7 @@ Future<bool> showDangerDialog(
               Navigator.pop(context, true);
               onConfirm?.call();
             },
-            icon: Icon(Icons.delete_outlined),
+            icon: const Icon(Icons.delete_outlined),
             label: Text(confirmText),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(theme.error),
@@ -30,7 +30,7 @@ Future<bool> showDangerDialog(
           ),
           TextButton.icon(
             onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.edit_outlined),
+            icon: const Icon(Icons.edit_outlined),
             label: Text(rejectText),
           ),
         ],

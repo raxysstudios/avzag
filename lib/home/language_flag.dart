@@ -14,12 +14,13 @@ class LanguageFlag extends StatefulWidget {
 
   const LanguageFlag(
     this.flag, {
+    Key? key,
     this.width = 16,
     this.height = 4,
     this.rotation = -pi / 4,
     this.offset = const Offset(0, 0),
     this.scale = 18,
-  });
+  }) : super(key: key);
 
   @override
   _LanguageFlagState createState() => _LanguageFlagState();
@@ -31,7 +32,7 @@ class _LanguageFlagState extends State<LanguageFlag> {
   @override
   void initState() {
     super.initState();
-    if (url == null)
+    if (url == null) {
       FirebaseStorage.instance
           .ref('flags/${widget.flag}.png')
           .getDownloadURL()
@@ -40,12 +41,13 @@ class _LanguageFlagState extends State<LanguageFlag> {
               LanguageFlag.urls[widget.flag] = u;
             }),
           );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (url == null) return Offstage();
-    return Container(
+    if (url == null) return const Offstage();
+    return SizedBox(
       width: widget.width,
       height: widget.height,
       child: Transform.translate(
@@ -57,12 +59,6 @@ class _LanguageFlagState extends State<LanguageFlag> {
             child: Image.network(
               url!,
               repeat: ImageRepeat.repeatX,
-              errorBuilder: (
-                context,
-                exception,
-                stackTrace,
-              ) =>
-                  Container(),
             ),
           ),
         ),

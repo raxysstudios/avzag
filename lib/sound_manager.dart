@@ -18,7 +18,7 @@ class SoundManager {
       await _player.play();
       _url = null;
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 }

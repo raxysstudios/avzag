@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'language_card.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -44,15 +46,14 @@ class _HomePageState extends State<HomePage> {
             (n) => catalogue.firstWhere((l) => l.name == n),
           ),
         );
-        tags = Map.fromIterable(
-          catalogue,
-          key: (l) => l.name,
-          value: (l) => [
-            l.name,
-            ...l.family ?? [],
-            ...l.tags ?? [],
-          ].join(' '),
-        );
+        tags = {
+          for (var l in catalogue)
+            l.name: [
+              l.name,
+              ...l.family ?? [],
+              ...l.tags ?? [],
+            ].join(' ')
+        };
         inputController.addListener(filterLanguages);
         filterLanguages();
       },
@@ -86,11 +87,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          if (selected.isEmpty)
+          if (selected.isEmpty) {
             return showSnackbar(
               context,
               text: 'Select at least one language.',
             );
+          }
           showLoadingDialog(
             context,
             GlobalStore.load(
@@ -100,15 +102,16 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         },
-        icon: Icon(Icons.check_outlined),
-        label: Text('Continue'),
+        icon: const Icon(Icons.check_outlined),
+        label: const Text('Continue'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: FutureBuilder(
         future: loader,
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done)
-            return LoadingCard();
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const LoadingCard();
+          }
           return CustomScrollView(
             slivers: [
               SliverAppBar(
@@ -124,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                         'Select languages below',
                         style: Theme.of(context).textTheme.bodyText1,
                       )
-                    : Container(
+                    : SizedBox(
                         height: 64,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
@@ -134,10 +137,10 @@ class _HomePageState extends State<HomePage> {
                               onPressed: () => setState(() {
                                 selected.clear();
                               }),
-                              icon: Icon(Icons.clear_outlined),
+                              icon: const Icon(Icons.clear_outlined),
                               tooltip: 'Unselect all',
                             ),
-                            SizedBox(width: 18),
+                            const SizedBox(width: 18),
                             for (final language in selected) ...[
                               Padding(
                                 padding:
@@ -149,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   label: Text(
                                     capitalize(language.name),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -168,16 +171,16 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       IconButton(
                         tooltip: 'Toggle map',
-                        icon: Icon(Icons.map_outlined),
+                        icon: const Icon(Icons.map_outlined),
                         onPressed: () => showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: Text('The map comes soon'),
+                              title: const Text('The map comes soon'),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text('Close'),
+                                  child: const Text('Close'),
                                 )
                               ],
                             );
@@ -189,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.only(left: 20, right: 8),
                           child: TextField(
                             controller: inputController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                               labelText: "Search by names, tags, families",
                             ),
@@ -200,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: inputController.text.isEmpty
                             ? null
                             : inputController.clear,
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear_outlined),
                       ),
                     ],
                   ),

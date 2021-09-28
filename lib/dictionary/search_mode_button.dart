@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 class SearchModeButton extends StatelessWidget {
   final String selected;
   final bool restricted;
-
   final Function(String language, bool restricted) onSelected;
 
   const SearchModeButton({
+    Key? key,
     required this.selected,
     required this.restricted,
     required this.onSelected,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class SearchModeButton extends StatelessWidget {
       ),
       child: PopupMenuButton(
         icon: selected.isEmpty
-            ? Icon(Icons.language_outlined)
+            ? const Icon(Icons.language_outlined)
             : LanguageAvatar(
                 GlobalStore.languages[selected]!.flag,
               ),

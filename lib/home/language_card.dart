@@ -10,9 +10,10 @@ class LanguageCard extends StatelessWidget {
 
   const LanguageCard(
     this.language, {
+    Key? key,
     this.selected = false,
     this.onTap,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +26,12 @@ class LanguageCard extends StatelessWidget {
               children: [
                 AnimatedOpacity(
                   opacity: selected ? 0.8 : 0.4,
-                  duration: Duration(milliseconds: 250),
+                  duration: const Duration(milliseconds: 250),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: LanguageFlag(
                       language.flag,
-                      offset: Offset(-30, 36),
+                      offset: const Offset(-30, 36),
                     ),
                   ),
                 ),
@@ -39,7 +40,7 @@ class LanguageCard extends StatelessWidget {
                   minVerticalPadding: 16,
                   title: Text(
                     capitalize(language.name),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),

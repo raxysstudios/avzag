@@ -34,8 +34,9 @@ class Use {
     if (definition?.isNotEmpty ?? false) data['definition'] = definition;
     if (tags?.isNotEmpty ?? false) data['tags'] = tags;
     if (note?.isNotEmpty ?? false) data['note'] = note;
-    if (samples?.isNotEmpty ?? false)
+    if (samples?.isNotEmpty ?? false) {
       data['samples'] = samples!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }

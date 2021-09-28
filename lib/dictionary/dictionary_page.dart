@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 import 'hit_tile.dart';
 
 class DictionaryPage extends StatefulWidget {
+  const DictionaryPage({Key? key}) : super(key: key);
+
   @override
   _DictionaryPageState createState() => _DictionaryPageState();
 }
@@ -34,11 +36,11 @@ class _DictionaryPageState extends State<DictionaryPage> {
         'Discard edits?',
         confirmText: 'Discard',
         rejectText: 'Edit',
-      ))
+      )) {
         setState(() {
           editing = false;
         });
-      else {
+      } else {
         panelController.open();
         return;
       }
@@ -68,7 +70,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   Widget build(BuildContext context) {
     final safePadding = MediaQuery.of(context).padding.top;
     return Scaffold(
-      drawer: NavDraver(title: 'dictionary'),
+      drawer: const NavDraver(title: 'dictionary'),
       floatingActionButton: EditorButton(
         entry,
         hit: hit,
@@ -103,9 +105,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
               snap: true,
               floating: true,
               forceElevated: true,
-              title: Text('Dictionary'),
+              title: const Text('Dictionary'),
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(64),
+                preferredSize: const Size.fromHeight(64),
                 child: SearchToolbar(
                   (s) => setState(() {
                     hits = s;
@@ -126,7 +128,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
         minHeight: editing ? kToolbarHeight + safePadding : 0,
         renderPanelSheet: false,
         panelBuilder: (controller) {
-          if (entry == null) return SizedBox();
+          if (entry == null) return const SizedBox();
           return Padding(
             padding: EdgeInsets.only(top: safePadding),
             child: Container(
@@ -145,14 +147,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     primary: false,
                     leading: Builder(
                       builder: (context) {
-                        if (collapsed)
+                        if (collapsed) {
                           return IconButton(
                             onPressed: panelController.open,
-                            icon: Icon(Icons.expand_less_outlined),
+                            icon: const Icon(Icons.expand_less_outlined),
                           );
+                        }
                         return IconButton(
                           onPressed: panelController.close,
-                          icon: Icon(Icons.expand_more_outlined),
+                          icon: const Icon(Icons.expand_more_outlined),
                         );
                       },
                     ),
@@ -169,7 +172,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                                   ? GlobalStore.editing
                                   : hit!.language]!
                               .flag,
-                          offset: Offset(-40, 4),
+                          offset: const Offset(-40, 4),
                           scale: 9,
                         ),
                       ),

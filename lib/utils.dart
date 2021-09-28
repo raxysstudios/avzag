@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 
 String capitalize(String value) => value
     .split(' ')
-    .where((w) => w.length > 0)
+    .where((w) => w.isNotEmpty)
     .map((w) => w[0].toUpperCase() + w.substring(1))
     .join(' ');
 
@@ -30,12 +30,12 @@ List<T>? listFromJson<T>(
 class LowerCaseTextFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-    TextEditingValue _,
-    TextEditingValue value,
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
   ) {
     return TextEditingValue(
-      text: value.text.toLowerCase(),
-      selection: value.selection,
+      text: newValue.text.toLowerCase(),
+      selection: newValue.selection,
     );
   }
 }

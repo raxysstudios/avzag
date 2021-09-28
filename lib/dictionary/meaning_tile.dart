@@ -11,22 +11,23 @@ class MeaningTile extends StatelessWidget {
 
   const MeaningTile(
     this.use, {
+    Key? key,
     this.onEdited,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
     return ListTile(
       minVerticalPadding: 12,
-      leading: Icon(Icons.lightbulb_outline),
+      leading: const Icon(Icons.lightbulb_outline),
       title: RichText(
         text: TextSpan(
           style: theme.subtitle1,
           children: [
             TextSpan(
               text: capitalize(use.term),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
@@ -72,19 +73,19 @@ class MeaningTile extends StatelessWidget {
           onChanged: (text) {
             result.term = text.trim();
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'General term',
           ),
           validator: emptyValidator,
           inputFormatters: [LowerCaseTextFormatter()],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         TextFormField(
           initialValue: result.definition,
           onChanged: (text) {
             result.definition = text.trim();
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Specific definition',
           ),
           inputFormatters: [LowerCaseTextFormatter()],

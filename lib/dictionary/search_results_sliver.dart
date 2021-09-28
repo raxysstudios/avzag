@@ -5,7 +5,11 @@ class SearchResultsSliver extends StatelessWidget {
   final List<List<EntryHit>> hits;
   final ValueSetter<EntryHit>? onTap;
 
-  const SearchResultsSliver(this.hits, {required this.onTap});
+  const SearchResultsSliver(
+    this.hits, {
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,7 @@ class SearchResultsSliver extends StatelessWidget {
           return Card(
             child: ListView.builder(
               shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               itemCount: hits.length,
               padding: EdgeInsets.zero,
               itemBuilder: (context, index) {
@@ -31,13 +35,14 @@ class SearchResultsSliver extends StatelessWidget {
                   showLanguage: language,
                   onTap: onTap == null ? null : () => onTap!(hit),
                 );
-                if (divider)
+                if (divider) {
                   return Column(
                     children: [
-                      Divider(height: 0),
+                      const Divider(height: 0),
                       tile,
                     ],
                   );
+                }
                 return tile;
               },
             ),

@@ -17,10 +17,11 @@ class GlobalStore {
   static String? get editing => _editing;
   static set editing(String? value) {
     _editing = value;
-    if (value == null)
+    if (value == null) {
       prefs.remove('editor');
-    else
+    } else {
       prefs.setString('editor', value);
+    }
   }
 
   static String? get email => FirebaseAuth.instance.currentUser?.email;
@@ -62,7 +63,7 @@ class GlobalStore {
     _first = false;
     await Firebase.initializeApp();
     prefs = await SharedPreferences.getInstance();
-    algolia = Algolia.init(
+    algolia = const Algolia.init(
       applicationId: 'NYVVAA43NI',
       apiKey: 'cf52a68ac340fc555978892202ce37df',
     );

@@ -17,22 +17,24 @@ class EditorButton extends StatelessWidget {
 
   const EditorButton(
     this.entry, {
+    Key? key,
     this.hit,
     this.editing = false,
     this.collapsed = false,
     required this.onStart,
     required this.onEnd,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (GlobalStore.editing == null ||
-        (hit != null && GlobalStore.editing != hit!.language))
-      return SizedBox();
+        (hit != null && GlobalStore.editing != hit!.language)) {
+      return const SizedBox();
+    }
 
     final dangerColor = Theme.of(context).colorScheme.error;
     if (collapsed) {
-      if (editing)
+      if (editing) {
         return FloatingActionButton.extended(
           onPressed: () async {
             if (await showDangerDialog(
@@ -42,23 +44,24 @@ class EditorButton extends StatelessWidget {
               rejectText: 'Edit',
             )) onEnd();
           },
-          icon: Icon(Icons.close_outlined),
-          label: Text('Discard'),
+          icon: const Icon(Icons.close_outlined),
+          label: const Text('Discard'),
           backgroundColor: dangerColor,
         );
+      }
       return FloatingActionButton.extended(
         onPressed: () => onStart(Entry(forms: [], uses: [])),
-        icon: Icon(Icons.add_outlined),
-        label: Text('New'),
+        icon: const Icon(Icons.add_outlined),
+        label: const Text('New'),
       );
     }
-    if (editing)
+    if (editing) {
       return SingleChildScrollView(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (hit == null)
-              SizedBox()
+              const SizedBox()
             else
               Padding(
                 padding: const EdgeInsets.only(
@@ -68,7 +71,7 @@ class EditorButton extends StatelessWidget {
                   onPressed: () async {
                     if (await delete(context)) onEnd();
                   },
-                  child: Icon(Icons.delete_outlined),
+                  child: const Icon(Icons.delete_outlined),
                   tooltip: 'Delete',
                   backgroundColor: dangerColor,
                   mini: true,
@@ -78,16 +81,17 @@ class EditorButton extends StatelessWidget {
               onPressed: () async {
                 if (await submit(context)) onEnd();
               },
-              icon: Icon(Icons.publish_outlined),
-              label: Text('Submit'),
+              icon: const Icon(Icons.publish_outlined),
+              label: const Text('Submit'),
             ),
           ],
         ),
       );
+    }
     return FloatingActionButton.extended(
       onPressed: () => onStart(entry!, hit),
-      icon: Icon(Icons.edit_outlined),
-      label: Text('Edit'),
+      icon: const Icon(Icons.edit_outlined),
+      label: const Text('Edit'),
     );
   }
 

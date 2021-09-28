@@ -22,12 +22,13 @@ Future<void> navigate(
 
   late Widget Function(BuildContext) builder;
   if (title == 'home') {
-    builder = (_) => HomePage();
+    builder = (_) => const HomePage();
     title = null;
-  } else if (title == 'dictionary')
-    builder = (_) => DictionaryPage();
-  else
-    builder = (_) => Text("No Route");
+  } else if (title == 'dictionary') {
+    builder = (_) => const DictionaryPage();
+  } else {
+    builder = (_) => const Text("No Route");
+  }
 
   if (title != null) await prefs.setString('module', title);
   await Navigator.pushReplacement(
@@ -47,9 +48,9 @@ class _NavModule {
       leading: Icon(icon),
       title: Text(
         capitalize(text),
-        style: TextStyle(fontSize: 18),
+        style: const TextStyle(fontSize: 18),
       ),
-      trailing: enabled ? null : Icon(Icons.construction_outlined),
+      trailing: enabled ? null : const Icon(Icons.construction_outlined),
       selected: selected ?? false,
       onTap: enabled ? () => navigate(context, text) : null,
       enabled: enabled,
@@ -58,8 +59,12 @@ class _NavModule {
 }
 
 class NavDraver extends StatelessWidget {
-  NavDraver({this.title});
   final String? title;
+
+  const NavDraver({
+    Key? key,
+    this.title,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,15 +90,16 @@ class NavDraver extends StatelessWidget {
                         builder: (context, snapshot) {
                           var info = 'Loading...';
                           final package = snapshot.data;
-                          if (package != null)
+                          if (package != null) {
                             info = [
                               'v' + package.version,
                               'b' + package.buildNumber
                             ].join(' • ');
+                          }
                           return ListTile(
                             leading: const Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: const Icon(Icons.code_outlined),
+                              padding: EdgeInsets.only(top: 8),
+                              child: Icon(Icons.code_outlined),
                             ),
                             title: const Text('GitHub Repository'),
                             subtitle: Text(info),
@@ -113,13 +119,13 @@ class NavDraver extends StatelessWidget {
                         ),
                         value: GlobalStore.editing != null,
                         secondary: const Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: const Icon(Icons.edit_outlined),
+                          padding: EdgeInsets.only(top: 8),
+                          child: Icon(Icons.edit_outlined),
                         ),
                         onChanged: (e) => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AuthPage(),
+                            builder: (context) => const AuthPage(),
                           ),
                         ),
                       ),
@@ -140,7 +146,7 @@ class NavDraver extends StatelessWidget {
                       selected: t.text == title,
                     ),
                   ),
-                  Divider(height: 0),
+                  const Divider(height: 0),
                   ...[
                     _NavModule(Icons.music_note_outlined, 'phonology'),
                     _NavModule(Icons.switch_left_outlined, 'converter'),

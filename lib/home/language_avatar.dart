@@ -7,10 +7,11 @@ class LanguageAvatar extends StatefulWidget {
   final double radius;
   static const double R = 12;
 
-  LanguageAvatar(
+  const LanguageAvatar(
     this.flag, {
+    Key? key,
     this.radius = 1.5 * R,
-  });
+  }) : super(key: key);
 
   @override
   _LanguageAvatarState createState() => _LanguageAvatarState();
@@ -22,7 +23,7 @@ class _LanguageAvatarState extends State<LanguageAvatar> {
   @override
   void initState() {
     super.initState();
-    if (url == null)
+    if (url == null) {
       FirebaseStorage.instance
           .ref('flags/${widget.flag}.png')
           .getDownloadURL()
@@ -31,11 +32,12 @@ class _LanguageAvatarState extends State<LanguageAvatar> {
               LanguageFlag.urls[widget.flag] = u;
             }),
           );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (url == null) return Icon(Icons.flag_outlined);
+    if (url == null) return const Icon(Icons.flag_outlined);
     return Transform.scale(
       scale: widget.radius / LanguageAvatar.R,
       child: CircleAvatar(
