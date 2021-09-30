@@ -35,8 +35,10 @@ class GlobalStore {
         (l) => FirebaseFirestore.instance
             .doc('languages/$l')
             .withConverter(
-              fromFirestore: (snapshot, _) =>
-                  Language.fromJson(snapshot.data()!),
+              fromFirestore: (snapshot, _) => Language.fromJson(
+                snapshot.data()!,
+                snapshot.id,
+              ),
               toFirestore: (Language language, _) => language.toJson(),
             )
             .get()

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'language_flag.dart';
 
 class LanguageAvatar extends StatefulWidget {
-  final String flag;
+  final String? flag;
   final double radius;
   static const double R = 12;
 
@@ -23,13 +23,13 @@ class _LanguageAvatarState extends State<LanguageAvatar> {
   @override
   void initState() {
     super.initState();
-    if (url == null) {
+    if (url == null && widget.flag != null) {
       FirebaseStorage.instance
           .ref('flags/${widget.flag}.png')
           .getDownloadURL()
           .then(
             (u) => setState(() {
-              LanguageFlag.urls[widget.flag] = u;
+              LanguageFlag.urls[widget.flag!] = u;
             }),
           );
     }

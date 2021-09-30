@@ -3,7 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class LanguageFlag extends StatefulWidget {
-  final String flag;
+  final String? flag;
   final double width;
   final double height;
   final double rotation;
@@ -32,13 +32,13 @@ class _LanguageFlagState extends State<LanguageFlag> {
   @override
   void initState() {
     super.initState();
-    if (url == null) {
+    if (url == null && widget.flag != null) {
       FirebaseStorage.instance
           .ref('flags/${widget.flag}.png')
           .getDownloadURL()
           .then(
             (u) => setState(() {
-              LanguageFlag.urls[widget.flag] = u;
+              LanguageFlag.urls[widget.flag!] = u;
             }),
           );
     }

@@ -34,7 +34,10 @@ class _HomePageState extends State<HomePage> {
         .orderBy('name')
         .where('name')
         .withConverter(
-          fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) => Language.fromJson(
+            snapshot.data()!,
+            snapshot.id,
+          ),
           toFirestore: (Language language, _) => language.toJson(),
         )
         .get()
