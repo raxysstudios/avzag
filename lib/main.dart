@@ -19,25 +19,26 @@ class _AppState extends State<App> {
   final loader = GlobalStore.load();
 
   List<ThemeData> getThemes(BuildContext context) {
-    final theme = Theme.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
     final floatingActionButtonTheme = FloatingActionButtonThemeData(
-      backgroundColor: theme.colorScheme.primary,
-      foregroundColor: theme.colorScheme.onPrimary,
+      backgroundColor: colorScheme.primary,
+      foregroundColor: colorScheme.onPrimary,
     );
     const cardTheme = CardTheme(
       clipBehavior: Clip.antiAlias,
     );
     return [
       ThemeData().copyWith(
+        scaffoldBackgroundColor: Colors.blueGrey.shade50,
         colorScheme: ColorScheme.fromSwatch(
           accentColor: Colors.grey,
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: const ColorScheme.light().surface,
-          foregroundColor: const ColorScheme.light().onSurface,
+          backgroundColor: colorScheme.surface,
+          foregroundColor: colorScheme.onSurface,
         ),
         cardTheme: cardTheme,
-        toggleableActiveColor: theme.colorScheme.primary,
+        toggleableActiveColor: colorScheme.primary,
         floatingActionButtonTheme: floatingActionButtonTheme,
       ),
       ThemeData.dark().copyWith(
@@ -46,7 +47,7 @@ class _AppState extends State<App> {
           brightness: Brightness.dark,
         ),
         cardTheme: cardTheme,
-        toggleableActiveColor: theme.colorScheme.primary,
+        toggleableActiveColor: colorScheme.primary,
         floatingActionButtonTheme: floatingActionButtonTheme,
       ),
     ];
