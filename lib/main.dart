@@ -32,6 +32,10 @@ class _AppState extends State<App> {
         colorScheme: ColorScheme.fromSwatch(
           accentColor: Colors.grey,
         ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: const ColorScheme.light().surface,
+          foregroundColor: const ColorScheme.light().onSurface,
+        ),
         cardTheme: cardTheme,
         toggleableActiveColor: theme.colorScheme.primary,
         floatingActionButtonTheme: floatingActionButtonTheme,
