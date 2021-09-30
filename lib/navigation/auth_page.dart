@@ -73,6 +73,7 @@ class _AuthPageState extends State<AuthPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Editors'),
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         bottom: PreferredSize(

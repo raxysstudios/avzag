@@ -106,6 +106,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               floating: true,
               forceElevated: true,
               title: const Text('Dictionary'),
+              foregroundColor: Theme.of(context).colorScheme.onSurface,
               backgroundColor: Theme.of(context).colorScheme.surface,
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(64),
@@ -146,6 +147,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 slivers: [
                   SliverAppBar(
                     primary: false,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
                     backgroundColor: Theme.of(context).colorScheme.surface,
                     leading: Builder(
                       builder: (context) {

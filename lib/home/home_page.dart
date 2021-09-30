@@ -122,6 +122,7 @@ class _HomePageState extends State<HomePage> {
                 automaticallyImplyLeading: false,
                 titleSpacing: 0,
                 centerTitle: true,
+                foregroundColor: Theme.of(context).colorScheme.onSurface,
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 title: selected.isEmpty
                     ? Text(
