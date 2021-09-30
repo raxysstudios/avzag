@@ -74,6 +74,7 @@ class _AuthPageState extends State<AuthPage> {
         automaticallyImplyLeading: false,
         title: const Text('Editors'),
         centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         bottom: PreferredSize(
           child: LinearProgressIndicator(value: loading ? null : 0),
           preferredSize: const Size.fromHeight(4),

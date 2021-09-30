@@ -122,6 +122,7 @@ class _HomePageState extends State<HomePage> {
                 automaticallyImplyLeading: false,
                 titleSpacing: 0,
                 centerTitle: true,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 title: selected.isEmpty
                     ? Text(
                         'Select languages below',

@@ -106,6 +106,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               floating: true,
               forceElevated: true,
               title: const Text('Dictionary'),
+              backgroundColor: Theme.of(context).colorScheme.surface,
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(64),
                 child: SearchToolbar(
@@ -145,6 +146,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 slivers: [
                   SliverAppBar(
                     primary: false,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
                     leading: Builder(
                       builder: (context) {
                         if (collapsed) {
