@@ -63,7 +63,7 @@ class SearchToolbarState extends State<SearchToolbar> {
     bool and = false,
   ]) {
     final joint = and ? 'AND' : 'OR';
-    final tags = values.map((v) => '$filter:$v');
+    final tags = values.map((v) => '$filter:"$v"');
     return tags.join(' $joint ');
   }
 
