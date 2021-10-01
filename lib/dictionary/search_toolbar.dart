@@ -22,17 +22,13 @@ class SearchToolbarState extends State<SearchToolbar> {
   Timer timer = Timer(Duration.zero, () {});
   String text = "";
   bool searching = false;
-  bool restricted = false;
   String language = '';
 
-  bool get monolingual => language.isNotEmpty;
+  bool get monolingual => language.isNotEmpty && language != '_';
 
   @override
   void initState() {
     super.initState();
-    if (GlobalStore.languages.length == 1) {
-      language = GlobalStore.languages.keys.first;
-    }
     inputController.addListener(() {
       if (text != inputController.text) {
         timer.cancel();
@@ -101,11 +97,11 @@ class SearchToolbarState extends State<SearchToolbar> {
         .filters(
           parsed[1].isEmpty ? languages : '${parsed[1]} AND ($languages)',
         );
-    if (restricted) query = query.setRestrictSearchableAttributes(['forms']);
+    if (monolingual) query = query.setRestrictSearchableAttributes(['forms']);
 
     final hits = await query.getObjects().then(
       (snapshot) async {
-        if (monolingual || !restricted) return snapshot.hits;
+        if (monolingual) return snapshot.hits;
         final terms = generateFilter(
           snapshot.hits.map((hit) => hit.data['term']),
           'term',
@@ -144,11 +140,9 @@ class SearchToolbarState extends State<SearchToolbar> {
           child: Row(
             children: [
               SearchModeButton(
-                selected: language,
-                restricted: restricted,
-                onSelected: (l, r) => setState(() {
+                language,
+                onSelected: (l) => setState(() {
                   language = l;
-                  restricted = r;
                   inputController.clear();
                 }),
               ),
@@ -158,10 +152,10 @@ class SearchToolbarState extends State<SearchToolbar> {
                   child: Builder(
                     builder: (context) {
                       var label = 'Search ';
-                      if (restricted) label += 'by forms ';
+                      if (monolingual) label += 'by forms ';
                       label += monolingual
                           ? 'in ${capitalize(language)}'
-                          : (restricted ? 'between' : 'across') +
+                          : (language.isEmpty ? 'across' : 'between') +
                               ' the languages';
                       return TextField(
                         controller: inputController,
