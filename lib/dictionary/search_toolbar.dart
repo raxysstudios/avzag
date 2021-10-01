@@ -101,7 +101,7 @@ class SearchToolbarState extends State<SearchToolbar> {
 
     final hits = await query.getObjects().then(
       (snapshot) async {
-        if (monolingual) return snapshot.hits;
+        if (language != '_') return snapshot.hits;
         final terms = generateFilter(
           snapshot.hits.map((hit) => hit.data['term']),
           'term',
@@ -152,9 +152,8 @@ class SearchToolbarState extends State<SearchToolbar> {
                   child: Builder(
                     builder: (context) {
                       var label = 'Search ';
-                      if (monolingual) label += 'by forms ';
                       label += monolingual
-                          ? 'in ${capitalize(language)}'
+                          ? 'forms in ${capitalize(language)}'
                           : (language.isEmpty ? 'over' : 'across') +
                               ' the languages';
                       return TextField(
