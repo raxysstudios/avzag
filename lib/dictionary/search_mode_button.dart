@@ -59,16 +59,11 @@ class SearchModeButton extends StatelessWidget {
     String? text,
   }) {
     return PopupMenuItem(
-      padding: EdgeInsets.zero,
       onTap: () {
         Navigator.of(context).pop();
         onSelected(value);
       },
       child: ListTile(
-        contentPadding: const EdgeInsets.only(
-          left: 24,
-          right: 16,
-        ),
         leading: leading,
         title: Text(
           capitalize(text ?? value),
