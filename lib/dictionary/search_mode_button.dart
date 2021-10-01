@@ -59,10 +59,7 @@ class SearchModeButton extends StatelessWidget {
     String? text,
   }) {
     return PopupMenuItem(
-      onTap: () {
-        Navigator.of(context).pop();
-        onSelected(value);
-      },
+      onTap: () => onSelected(value),
       child: ListTile(
         leading: leading,
         title: Text(
