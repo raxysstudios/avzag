@@ -36,6 +36,12 @@ class MeaningTile extends StatelessWidget {
           ],
         ),
       ),
+      subtitle: use.aliases?.isNotEmpty ?? false
+          ? Text(
+              prettyTags(use.aliases, separator: ', ')!,
+              maxLines: 1,
+            )
+          : null,
       onTap: onEdited == null
           ? null
           : () => showEditor(
@@ -61,9 +67,14 @@ class MeaningTile extends StatelessWidget {
     required ValueSetter<Use?> callback,
   }) {
     final result = use == null ? Use(term: '') : Use.fromJson(use.toJson());
+    var aliases = result.aliases?.join(' ');
     showEditorDialog(
       context,
-      result: () => result,
+      result: () {
+        result.aliases =
+            aliases?.split(' ').where((e) => e.isNotEmpty).toList();
+        return result;
+      },
       callback: callback,
       title: 'Edit entry concept',
       children: [
@@ -87,6 +98,17 @@ class MeaningTile extends StatelessWidget {
           },
           decoration: const InputDecoration(
             labelText: 'Specific definition',
+          ),
+          inputFormatters: [LowerCaseTextFormatter()],
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          initialValue: aliases,
+          onChanged: (text) {
+            aliases = text.trim();
+          },
+          decoration: const InputDecoration(
+            labelText: 'Aliases (for search only)',
           ),
           inputFormatters: [LowerCaseTextFormatter()],
         ),
