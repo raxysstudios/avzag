@@ -47,7 +47,7 @@ class TagsTile extends StatelessWidget {
     var result = tags?.join(' ');
     showEditorDialog(
       context,
-      result: () => result!.split(' ').where((e) => e.isNotEmpty).toList(),
+      result: () => result?.split(' ').where((e) => e.isNotEmpty).toList(),
       callback: onEdited!,
       title: 'Edit tags',
       children: [
