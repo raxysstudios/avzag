@@ -22,6 +22,7 @@ class MeaningTile extends StatelessWidget {
       minVerticalPadding: 12,
       leading: const Icon(Icons.lightbulb_outline),
       title: RichText(
+        maxLines: 1,
         text: TextSpan(
           style: theme.subtitle1,
           children: [
@@ -108,7 +109,7 @@ class MeaningTile extends StatelessWidget {
             aliases = text.trim();
           },
           decoration: const InputDecoration(
-            labelText: 'Aliases (for search only)',
+            labelText: 'Aliases, space-separated (for search only)',
           ),
           inputFormatters: [LowerCaseTextFormatter()],
         ),

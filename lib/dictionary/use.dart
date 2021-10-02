@@ -22,7 +22,7 @@ class Use {
       : this(
           term: json['term'],
           definition: json['definition'],
-          aliases: json2list(json['tags']),
+          aliases: json2list(json['aliases']),
           tags: json2list(json['tags']),
           note: json['note'],
           samples: listFromJson(
