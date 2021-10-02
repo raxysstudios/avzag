@@ -14,6 +14,7 @@ type EntryRecord = {
     language: string;
     headword: string;
     forms: string[];
+    aliases: string[],
     term: string;
     definition: string | undefined;
     tags: string[] | undefined;
@@ -43,6 +44,9 @@ export const indexDictionary = functions
           const record = Object.assign({term: use.term}, base) as EntryRecord;
           if (use.tags?.length || entry.tags?.length) {
             record.tags = (use.tags ?? []).concat(entry.tags ?? []);
+          }
+          if (use.aliases?.length) {
+            record.aliases = use.aliases;
           }
           if (use.definition) {
             record.definition = use.definition;
