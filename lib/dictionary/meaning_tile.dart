@@ -37,7 +37,7 @@ class MeaningTile extends StatelessWidget {
           ],
         ),
       ),
-      subtitle: use.aliases?.isNotEmpty ?? false
+      subtitle: onEdited != null && (use.aliases?.isNotEmpty ?? false)
           ? Text(
               prettyTags(use.aliases, separator: ', ')!,
               maxLines: 1,
