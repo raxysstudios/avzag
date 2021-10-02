@@ -53,7 +53,7 @@ class TagsTile extends StatelessWidget {
       children: [
         TextFormField(
           autofocus: true,
-          initialValue: tags?.join(' '),
+          initialValue: result,
           onChanged: (value) {
             result = value.trim();
           },
