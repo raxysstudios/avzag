@@ -106,11 +106,14 @@ class SearchToolbarState extends State<SearchToolbar> {
           snapshot.hits.map((hit) => hit.data['term']),
           'term',
         );
+        final original = {
+          for (final hit in snapshot.hits) hit.objectID: hit,
+        };
         return await GlobalStore.algolia.instance
             .index('dictionary')
             .filters('($languages) AND ($terms)')
             .getObjects()
-            .then((s) => s.hits)
+            .then((s) => s.hits.map((h) => original[h.objectID] ?? h))
             .onError((error, stackTrace) => []);
       },
     ).then((s) => s.map((h) => EntryHit.fromAlgoliaHit(h)).toList());
