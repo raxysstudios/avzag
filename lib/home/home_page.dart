@@ -32,12 +32,8 @@ class _HomePageState extends State<HomePage> {
     loader = FirebaseFirestore.instance
         .collection('languages')
         .orderBy('name')
-        .where('name')
         .withConverter(
-          fromFirestore: (snapshot, _) => Language.fromJson(
-            snapshot.data()!,
-            snapshot.id,
-          ),
+          fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
           toFirestore: (Language language, _) => language.toJson(),
         )
         .get()

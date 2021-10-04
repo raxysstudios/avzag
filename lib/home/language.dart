@@ -15,9 +15,9 @@ class Language {
     this.family,
   });
 
-  Language.fromJson(Map<String, Object?> json, String name)
+  Language.fromJson(Map<String, Object?> json)
       : this(
-          name: name,
+          name: json['name'] as String,
           flag: json['flag'] as String,
           contact: json['contact'] as String?,
           family: json2list(json['family']),
@@ -26,6 +26,7 @@ class Language {
 
   Map<String, Object?> toJson() {
     final Map<String, dynamic> data = {};
+    data['name'] = name;
     if (data['flag'] != null) data['flag'] = flag;
     if (contact?.isNotEmpty ?? false) data['contact'] = contact;
     if (family?.isNotEmpty ?? false) data['family'] = family;
