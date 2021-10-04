@@ -63,13 +63,7 @@
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    if (firebase.analytics && navigator.cookieEnabled) {
-      try { firebase.analytics(); }
-      catch (e) {
-        console.log(e);
-        firebase.analytics = function () { };
-      }
-    }
+    // firebase.analytics();
   </script>
 
   <script src="main.dart.js" type="application/javascript"></script>
