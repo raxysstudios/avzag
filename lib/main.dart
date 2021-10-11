@@ -1,5 +1,4 @@
 import 'package:avzag/global_store.dart';
-import 'package:avzag/widgets/loading_card.dart';
 import 'package:flutter/material.dart';
 import 'navigation/nav_drawer.dart';
 
@@ -16,8 +15,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  final loader = GlobalStore.load();
-
   List<ThemeData> getThemes(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final floatingActionButtonTheme = FloatingActionButtonThemeData(
@@ -62,7 +59,10 @@ class _AppState extends State<App> {
       darkTheme: themes[1],
       home: Scaffold(
         body: FutureBuilder(
-          future: loader,
+          future: Future.delayed(
+            const Duration(seconds: 3),
+            GlobalStore.load,
+          ),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               Future.delayed(
@@ -73,7 +73,17 @@ class _AppState extends State<App> {
                 ),
               );
             }
-            return const LoadingCard();
+            return Material(
+              color: const Color(0xff1c4473),
+              child: SafeArea(
+                child: Center(
+                  child: SizedBox(
+                    height: 500,
+                    child: Image.asset('assets/splash.png'),
+                  ),
+                ),
+              ),
+            );
           },
         ),
       ),
