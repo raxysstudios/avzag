@@ -21,7 +21,7 @@ class ExpandableTitle extends StatelessWidget {
             Transform.scale(
               scale: 1.5,
               child: const CircleAvatar(
-                backgroundImage: AssetImage('icon.png'),
+                backgroundImage: AssetImage('assets/icon.png'),
                 radius: 12,
               ),
             ),
