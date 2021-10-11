@@ -1,11 +1,10 @@
 {
-    "name": "avzag",
-    "short_name": "avzag",
+    "name": "Avzag",
+    "short_name": "Avzag",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#212121",
+    "theme_color": "#212112",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
