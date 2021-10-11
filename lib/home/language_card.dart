@@ -55,15 +55,11 @@ class LanguageCard extends StatelessWidget {
                   text: TextSpan(
                     style: Theme.of(context).textTheme.caption?.copyWith(
                           fontSize: 14,
-                          fontWeight: FontWeight.w500,
                         ),
                     children: [
                       if (language.family?.isNotEmpty ?? false)
                         TextSpan(
                           text: prettyTags(language.family)!,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                          ),
                         ),
                       if (language.stats != null) ...[
                         if (language.family?.isNotEmpty ?? false)
