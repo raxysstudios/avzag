@@ -81,7 +81,7 @@ class LanguageCard extends StatelessWidget {
                               const WidgetSpan(
                                 child: Padding(
                                   padding: EdgeInsets.only(left: 8, right: 2),
-                                  child: Icon(Icons.tag_outlined),
+                                  child: Icon(Icons.book_outlined),
                                 ),
                               ),
                               TextSpan(
