@@ -18,55 +18,59 @@ class LanguageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Column(
-        children: [
-          InkWell(
-            onTap: onTap,
-            child: Stack(
-              children: [
-                AnimatedOpacity(
-                  opacity: selected ? 0.8 : 0.4,
-                  duration: const Duration(milliseconds: 250),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: LanguageFlag(
-                      language.flag,
-                      offset: const Offset(-30, 36),
-                    ),
+      child: InkWell(
+        onTap: onTap,
+        child: Stack(
+          children: [
+            AnimatedOpacity(
+              opacity: selected ? 0.8 : 0.4,
+              duration: const Duration(milliseconds: 250),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: LanguageFlag(
+                  language.flag,
+                  offset: const Offset(-30, 36),
+                ),
+              ),
+            ),
+            ListTile(
+                selected: selected,
+                minVerticalPadding: 16,
+                title: Text(
+                  capitalize(language.name),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                ListTile(
-                    selected: selected,
-                    minVerticalPadding: 16,
-                    title: Text(
-                      capitalize(language.name),
+                subtitle: Theme(
+                  data: ThemeData(
+                    iconTheme: IconThemeData(
+                      color: Theme.of(context).textTheme.caption?.color,
+                      size: 16,
+                    ),
+                  ),
+                  child: RichText(
+                    maxLines: 2,
+                    text: TextSpan(
                       style: const TextStyle(
-                        fontSize: 18,
                         fontWeight: FontWeight.w500,
                       ),
-                    ),
-                    subtitle: Theme(
-                      data: ThemeData(
-                        iconTheme: IconThemeData(
-                          color: Theme.of(context).textTheme.caption?.color,
-                          size: 16,
-                        ),
-                      ),
-                      child: RichText(
-                        maxLines: 2,
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
+                      children: [
+                        if (language.family?.isNotEmpty ?? false)
+                          TextSpan(
+                            text: prettyTags(language.family)!,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
-                          children: [
-                            if (language.family?.isNotEmpty ?? false)
-                              TextSpan(
-                                text: prettyTags(language.family)!,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                            if (language.stats != null) ...[
+                        if (language.stats != null)
+                          TextSpan(
+                            style:
+                                Theme.of(context).textTheme.caption?.copyWith(
+                                      fontSize: 14,
+                                    ),
+                            children: [
                               if (language.family?.isNotEmpty ?? false)
                                 const TextSpan(text: '\n'),
                               const WidgetSpan(
@@ -87,15 +91,14 @@ class LanguageCard extends StatelessWidget {
                               TextSpan(
                                 text: language.stats!.dictionary.toString(),
                               ),
-                            ]
-                          ],
-                        ),
-                      ),
-                    )),
-              ],
-            ),
-          ),
-        ],
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                )),
+          ],
+        ),
       ),
     );
   }

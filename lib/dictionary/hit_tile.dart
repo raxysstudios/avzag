@@ -96,54 +96,54 @@ class HitTile extends StatelessWidget {
             ),
         ],
       ),
-      subtitle: RichText(
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        text: TextSpan(
-          style: theme.caption?.copyWith(
-            fontSize: 14,
+      subtitle: Theme(
+        data: ThemeData(
+          iconTheme: IconThemeData(
+            color: Theme.of(context).textTheme.caption?.color,
+            size: 16,
           ),
-          children: [
-            WidgetSpan(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 2),
-                child: Icon(
-                  Icons.lightbulb_outline,
-                  size: 16,
-                  color: theme.caption?.color,
+        ),
+        child: RichText(
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          text: TextSpan(
+            style: theme.caption?.copyWith(
+              fontSize: 14,
+            ),
+            children: [
+              const WidgetSpan(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 2),
+                  child: Icon(Icons.lightbulb_outline),
                 ),
               ),
-            ),
-            TextSpan(
-              text: capitalize(hit.term),
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            if (hit.definition != null)
               TextSpan(
-                text: ' ' + hit.definition!,
+                text: capitalize(hit.term),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            if (hit.tags?.isNotEmpty ?? false) ...[
-              WidgetSpan(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 2),
-                  child: Icon(
-                    Icons.tag_outlined,
-                    size: 16,
-                    color: theme.caption?.color,
+              if (hit.definition != null)
+                TextSpan(
+                  text: ' ' + hit.definition!,
+                ),
+              if (hit.tags?.isNotEmpty ?? false) ...[
+                const WidgetSpan(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 8, right: 2),
+                    child: Icon(Icons.tag_outlined),
                   ),
                 ),
-              ),
-              TextSpan(
-                text: prettyTags(
-                  hit.tags,
-                  separator: ' ',
-                  capitalized: false,
-                )!,
-              ),
-            ]
-          ],
+                TextSpan(
+                  text: prettyTags(
+                    hit.tags,
+                    separator: ' ',
+                    capitalized: false,
+                  )!,
+                ),
+              ]
+            ],
+          ),
         ),
       ),
       onTap: onTap,
