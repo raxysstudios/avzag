@@ -20,7 +20,6 @@ class SearchToolbar extends StatefulWidget {
 class SearchToolbarState extends State<SearchToolbar> {
   final inputController = TextEditingController();
   Timer timer = Timer(Duration.zero, () {});
-  String text = "";
   bool searching = false;
   String language = '';
 
@@ -30,21 +29,20 @@ class SearchToolbarState extends State<SearchToolbar> {
   void initState() {
     super.initState();
     inputController.addListener(() {
-      if (text != inputController.text) {
-        timer.cancel();
-        setState(() {
-          text = inputController.text;
-        });
-        if (text.isEmpty) {
-          search();
-        } else {
-          timer = Timer(
-            const Duration(milliseconds: 300),
-            search,
-          );
-        }
+      timer.cancel();
+      if (inputController.text.isEmpty) {
+        search();
+      } else {
+        timer = Timer(
+          const Duration(milliseconds: 300),
+          search,
+        );
       }
     });
+    Timer(
+      const Duration(milliseconds: 300),
+      search,
+    );
   }
 
   @override
@@ -81,12 +79,11 @@ class SearchToolbarState extends State<SearchToolbar> {
 
   void search() async {
     setState(() {
-      searching = text.isNotEmpty;
+      searching = true;
     });
     widget.onSearch(<List<EntryHit>>[]);
-    if (!searching) return;
 
-    final parsed = parseQuery(text);
+    final parsed = parseQuery(inputController.text);
     final languages = generateFilter(
       monolingual ? [language] : GlobalStore.languages.keys,
       'language',
