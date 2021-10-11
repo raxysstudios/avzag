@@ -57,32 +57,30 @@ class _AppState extends State<App> {
       title: 'Avzag',
       theme: themes[0],
       darkTheme: themes[1],
-      home: Scaffold(
-        body: FutureBuilder(
-          future: Future.wait([
-            Future.delayed(const Duration(seconds: 1)),
-            GlobalStore.load(),
-          ]),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              navigate(
-                context,
-                GlobalStore.prefs.getString('module') ?? 'home',
-              );
-            }
-            return Material(
-              color: const Color(0xff1c4473),
-              child: SafeArea(
-                child: Center(
-                  child: SizedBox(
-                    height: 500,
-                    child: Image.asset('assets/splash.png'),
-                  ),
+      home: FutureBuilder(
+        future: Future.wait([
+          Future.delayed(const Duration(seconds: 1)),
+          GlobalStore.load(),
+        ]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            navigate(
+              context,
+              GlobalStore.prefs.getString('module') ?? 'home',
+            );
+          }
+          return Material(
+            color: const Color(0xff1c4473),
+            child: SafeArea(
+              child: Center(
+                child: SizedBox(
+                  height: 500,
+                  child: Image.asset('assets/splash.png'),
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

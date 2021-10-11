@@ -31,9 +31,9 @@ Future<void> navigate(
   }
 
   if (title != null) await prefs.setString('module', title);
-  await Navigator.pushReplacement(
-    context,
+  Navigator.of(context).pushAndRemoveUntil(
     MaterialPageRoute(builder: builder),
+    (route) => false,
   );
 }
 
