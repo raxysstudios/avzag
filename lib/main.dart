@@ -60,7 +60,7 @@ class _AppState extends State<App> {
       home: Scaffold(
         body: FutureBuilder(
           future: Future.wait([
-            Future.delayed(const Duration(milliseconds: 1500)),
+            Future.delayed(const Duration(seconds: 1)),
             GlobalStore.load(),
           ]),
           builder: (context, snapshot) {
