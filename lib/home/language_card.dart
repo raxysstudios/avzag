@@ -29,74 +29,69 @@ class LanguageCard extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: LanguageFlag(
                   language.flag,
-                  offset: const Offset(-30, 36),
+                  offset: const Offset(-34, 40),
                 ),
               ),
             ),
             ListTile(
-                selected: selected,
-                minVerticalPadding: 16,
-                title: Text(
-                  capitalize(language.name),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+              selected: selected,
+              minVerticalPadding: 16,
+              title: Text(
+                capitalize(language.name),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              subtitle: Theme(
+                data: ThemeData(
+                  iconTheme: IconThemeData(
+                    color: Theme.of(context).textTheme.caption?.color,
+                    size: 16,
                   ),
                 ),
-                subtitle: Theme(
-                  data: ThemeData(
-                    iconTheme: IconThemeData(
-                      color: Theme.of(context).textTheme.caption?.color,
-                      size: 16,
-                    ),
-                  ),
-                  child: RichText(
-                    maxLines: 2,
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
-                      children: [
+                child: RichText(
+                  maxLines: 2,
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.caption?.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                    children: [
+                      if (language.family?.isNotEmpty ?? false)
+                        TextSpan(
+                          text: prettyTags(language.family)!,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      if (language.stats != null) ...[
                         if (language.family?.isNotEmpty ?? false)
-                          TextSpan(
-                            text: prettyTags(language.family)!,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.normal,
-                            ),
+                          const TextSpan(text: '\n'),
+                        const WidgetSpan(
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 2),
+                            child: Icon(Icons.person_outlined),
                           ),
-                        if (language.stats != null)
-                          TextSpan(
-                            style:
-                                Theme.of(context).textTheme.caption?.copyWith(
-                                      fontSize: 14,
-                                    ),
-                            children: [
-                              if (language.family?.isNotEmpty ?? false)
-                                const TextSpan(text: '\n'),
-                              const WidgetSpan(
-                                child: Padding(
-                                  padding: EdgeInsets.only(right: 2),
-                                  child: Icon(Icons.person_outlined),
-                                ),
-                              ),
-                              TextSpan(
-                                text: language.stats!.editors.toString(),
-                              ),
-                              const WidgetSpan(
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 8, right: 2),
-                                  child: Icon(Icons.book_outlined),
-                                ),
-                              ),
-                              TextSpan(
-                                text: language.stats!.dictionary.toString(),
-                              ),
-                            ],
+                        ),
+                        TextSpan(
+                          text: language.stats!.editors.toString(),
+                        ),
+                        const WidgetSpan(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 8, right: 2),
+                            child: Icon(Icons.book_outlined),
                           ),
+                        ),
+                        TextSpan(
+                          text: language.stats!.dictionary.toString(),
+                        ),
                       ],
-                    ),
+                    ],
                   ),
-                )),
+                ),
+              ),
+            ),
           ],
         ),
       ),
