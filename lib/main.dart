@@ -1,4 +1,5 @@
 import 'package:avzag/global_store.dart';
+import 'package:avzag/widgets/avzag_logo.dart';
 import 'package:flutter/material.dart';
 import 'navigation/nav_drawer.dart';
 
@@ -70,13 +71,26 @@ class _AppState extends State<App> {
             );
           }
           return Material(
-            color: const Color(0xff1c4473),
             child: SafeArea(
-              child: Center(
-                child: SizedBox(
-                  height: 500,
-                  child: Image.asset('assets/splash.png'),
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Center(child: AvzagLogo(256)),
+                  Text(
+                    'ÆVZAG',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text('Made with honor in'),
+                  Text(
+                    'North Caucasus',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
           );
