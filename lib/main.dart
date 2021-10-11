@@ -59,18 +59,15 @@ class _AppState extends State<App> {
       darkTheme: themes[1],
       home: Scaffold(
         body: FutureBuilder(
-          future: Future.delayed(
-            const Duration(seconds: 3),
-            GlobalStore.load,
-          ),
+          future: Future.wait([
+            Future.delayed(const Duration(milliseconds: 1500)),
+            GlobalStore.load(),
+          ]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              Future.delayed(
-                const Duration(milliseconds: 10),
-                () => navigate(
-                  context,
-                  GlobalStore.prefs.getString('module') ?? 'home',
-                ),
+              navigate(
+                context,
+                GlobalStore.prefs.getString('module') ?? 'home',
               );
             }
             return Material(
