@@ -36,19 +36,61 @@ class LanguageCard extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  selected: selected,
-                  minVerticalPadding: 16,
-                  title: Text(
-                    capitalize(language.name),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+                    selected: selected,
+                    minVerticalPadding: 16,
+                    isThreeLine: true,
+                    title: Text(
+                      capitalize(language.name),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  subtitle: language.family?.isNotEmpty ?? false
-                      ? Text(prettyTags(language.family)!)
-                      : null,
-                ),
+                    subtitle: Theme(
+                      data: ThemeData(
+                        iconTheme: IconThemeData(
+                          color: Theme.of(context).textTheme.caption?.color,
+                          size: 16,
+                        ),
+                      ),
+                      child: RichText(
+                        maxLines: 1,
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
+                          children: [
+                            if (language.family?.isNotEmpty ?? false)
+                              TextSpan(
+                                text: prettyTags(language.family)! + '\n',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            if (language.stats != null) ...[
+                              const WidgetSpan(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 2),
+                                  child: Icon(Icons.person_outlined),
+                                ),
+                              ),
+                              TextSpan(
+                                text: language.stats!.editors.toString(),
+                              ),
+                              const WidgetSpan(
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 8, right: 2),
+                                  child: Icon(Icons.tag_outlined),
+                                ),
+                              ),
+                              TextSpan(
+                                text: language.stats!.dictionary.toString(),
+                              ),
+                            ]
+                          ],
+                        ),
+                      ),
+                    )),
               ],
             ),
           ),

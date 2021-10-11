@@ -1,11 +1,33 @@
 import 'package:avzag/utils.dart';
 
+class LanguageStats {
+  final int editors;
+  final int dictionary;
+
+  LanguageStats({
+    this.editors = 0,
+    this.dictionary = 0,
+  });
+
+  LanguageStats.fromJson(Map<String, int?> json)
+      : this(
+          editors: json['editors'] ?? 0,
+          dictionary: json['dictionary'] ?? 0,
+        );
+
+  Map<String, Object?> toJson() => {
+        'editors': editors,
+        'dictionary': dictionary,
+      };
+}
+
 class Language {
   final String name;
   final String? flag;
   final String? contact;
   final List<String>? family;
   final List<String>? tags;
+  final LanguageStats? stats;
 
   const Language({
     required this.name,
@@ -13,6 +35,7 @@ class Language {
     this.contact,
     this.tags,
     this.family,
+    this.stats,
   });
 
   Language.fromJson(Map<String, Object?> json)
@@ -22,6 +45,9 @@ class Language {
           contact: json['contact'] as String?,
           family: json2list(json['family']),
           tags: json2list(json['tags']),
+          stats: json['stats'] == null
+              ? null
+              : LanguageStats.fromJson(json['stats'] as Map<String, int?>),
         );
 
   Map<String, Object?> toJson() {
@@ -31,6 +57,7 @@ class Language {
     if (contact?.isNotEmpty ?? false) data['contact'] = contact;
     if (family?.isNotEmpty ?? false) data['family'] = family;
     if (tags?.isNotEmpty ?? false) data['tags'] = tags;
+    if (stats != null) data['stats'] = stats!.toJson();
     return data;
   }
 }
