@@ -36,4 +36,5 @@ flutter_icons:
 flutter:
   uses-material-design: true
   assets:
-    - assets/
+    - assets/splash_light.png
+    - assets/splash_dark.png

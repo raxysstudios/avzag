@@ -1,3 +1,4 @@
+import 'package:avzag/widgets/avzag_logo.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
@@ -19,11 +20,8 @@ class ExpandableTitle extends StatelessWidget {
         child: Row(
           children: [
             Transform.scale(
-              scale: 1.5,
-              child: const CircleAvatar(
-                backgroundImage: AssetImage('assets/icon.png'),
-                radius: 12,
-              ),
+              scale: 2,
+              child: const AvzagLogo(24),
             ),
             const SizedBox(width: 32),
             const Text(

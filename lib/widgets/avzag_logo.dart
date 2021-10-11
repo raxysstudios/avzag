@@ -8,9 +8,13 @@ class AvzagLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: size,
-      child: Theme.of(context).brightness == Brightness.dark
-          ? Image.asset('assets/splash_dark.png')
-          : Image.asset('assets/splash_light.png'),
+      child: Image.asset(
+        Theme.of(context).brightness == Brightness.dark
+            ? 'assets/splash_dark.png'
+            : 'assets/splash_light.png',
+        isAntiAlias: true,
+        filterQuality: FilterQuality.high,
+      ),
     );
   }
 }
