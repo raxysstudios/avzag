@@ -9,10 +9,10 @@ class LanguageStats {
     this.dictionary = 0,
   });
 
-  LanguageStats.fromJson(Map<String, int?> json)
+  LanguageStats.fromJson(Map<String, Object?> json)
       : this(
-          editors: json['editors'] ?? 0,
-          dictionary: json['dictionary'] ?? 0,
+          editors: json['editors'] as int,
+          dictionary: json['dictionary'] as int,
         );
 
   Map<String, Object?> toJson() => {
@@ -47,7 +47,7 @@ class Language {
           tags: json2list(json['tags']),
           stats: json['stats'] == null
               ? null
-              : LanguageStats.fromJson(json['stats'] as Map<String, int?>),
+              : LanguageStats.fromJson(json['stats'] as Map<String, Object?>),
         );
 
   Map<String, Object?> toJson() {

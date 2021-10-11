@@ -38,7 +38,6 @@ class LanguageCard extends StatelessWidget {
                 ListTile(
                     selected: selected,
                     minVerticalPadding: 16,
-                    isThreeLine: true,
                     title: Text(
                       capitalize(language.name),
                       style: const TextStyle(
@@ -54,7 +53,7 @@ class LanguageCard extends StatelessWidget {
                         ),
                       ),
                       child: RichText(
-                        maxLines: 1,
+                        maxLines: 2,
                         text: TextSpan(
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
@@ -62,12 +61,14 @@ class LanguageCard extends StatelessWidget {
                           children: [
                             if (language.family?.isNotEmpty ?? false)
                               TextSpan(
-                                text: prettyTags(language.family)! + '\n',
+                                text: prettyTags(language.family)!,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
                             if (language.stats != null) ...[
+                              if (language.family?.isNotEmpty ?? false)
+                                const TextSpan(text: '\n'),
                               const WidgetSpan(
                                 child: Padding(
                                   padding: EdgeInsets.only(right: 2),
