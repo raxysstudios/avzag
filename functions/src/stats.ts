@@ -21,13 +21,14 @@ export const collectStats = functions
       for (const lang of langs) {
         await db.doc("languages/" + lang).update({
           stats: {
-            editors: Object.entries(editors).reduce(
-                (e, [, ls]) => ls.includes(lang) ? (e + 1) : e,
-                0
-            ),
-            dictionary: await dictionary.search("", {
-              "facetFilters": ["language:"+lang],
-            }).then((s) => s.nbHits),
+            editors: Object
+                .values(editors)
+                .filter((ls) => ls.includes(lang))
+                .length,
+            dictionary: await dictionary
+                .search("", {
+                  "facetFilters": ["language:"+lang],
+                }).then((s) => s.nbHits),
           },
         });
       }
