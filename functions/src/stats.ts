@@ -1,0 +1,34 @@
+import * as admin from "firebase-admin";
+import * as functions from "firebase-functions";
+import algoliasearch from "algoliasearch";
+
+const dictionary = algoliasearch(
+    functions.config().algolia.app,
+    functions.config().algolia.key
+).initIndex("dictionary");
+
+export const collectStats = functions
+    .pubsub.schedule("every 24 hours")
+    .onRun(async () => {
+      const db = admin.firestore();
+      const langs = await db
+          .collection("languages").get()
+          .then((d) => d.docs.map((l) => l.id));
+      const editors = await db
+          .doc("meta/editors").get()
+          .then((d) => d.data() as Record<string, string[]>);
+
+      for (const lang of langs) {
+        await db.doc("languages/" + lang).update({
+          stats: {
+            editors: Object.entries(editors).reduce(
+                (e, [, ls]) => ls.includes(lang) ? (e + 1) : e,
+                0
+            ),
+            dictionary: await dictionary.search("", {
+              "facetFilters": ["language:"+lang],
+            }).then((s) => s.nbHits),
+          },
+        });
+      }
+    });
