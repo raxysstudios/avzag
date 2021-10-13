@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import algoliasearch from "algoliasearch";
 
-const index = algoliasearch(
+const dictionary = algoliasearch(
     functions.config().algolia.app,
     functions.config().algolia.key
 ).initIndex("dictionary");
@@ -22,7 +22,7 @@ export const indexDictionary = functions
     .firestore.document("languages/{language}/dictionary/{entryID}")
     .onWrite(async (change, context) => {
       if (change.before.exists) {
-        await index.deleteBy({
+        await dictionary.deleteBy({
           filters: "entryID:" + context.params.entryID,
         });
       }
@@ -50,7 +50,7 @@ export const indexDictionary = functions
           }
           records.push(record);
         }
-        await index.saveObjects(
+        await dictionary.saveObjects(
             records,
             {autoGenerateObjectIDIfNotExist: true}
         );
