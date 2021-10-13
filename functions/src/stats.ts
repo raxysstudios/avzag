@@ -8,7 +8,9 @@ const dictionary = algoliasearch(
 ).initIndex("dictionary");
 
 export const collectStats = functions
-    .pubsub.schedule("every 24 hours")
+    .region("europe-central2")
+    .pubsub.schedule("0 5 * * *")
+    .timeZone("Europe/Moscow")
     .onRun(async () => {
       const db = admin.firestore();
       const langs = await db
