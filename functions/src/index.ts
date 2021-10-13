@@ -2,6 +2,6 @@ import * as admin from "firebase-admin";
 
 admin.initializeApp();
 
-import "./dictionary";
-import "./editors";
-import "./stats";
+export * from "./dictionary";
+export * from "./editors";
+export * from "./stats";
