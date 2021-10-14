@@ -1,10 +1,17 @@
 import 'package:flutter/services.dart';
 
-String capitalize(String value) => value
-    .split(' ')
-    .where((w) => w.isNotEmpty)
-    .map((w) => w[0].toUpperCase() + w.substring(1))
-    .join(' ');
+String capitalize(String? text) {
+  if (text == null) return '';
+  return text
+      .split(' ')
+      .where((s) => s.isNotEmpty)
+      .map((w) => w[0].toUpperCase() + w.substring(1))
+      .join(' ')
+      .split('-')
+      .where((s) => s.isNotEmpty)
+      .map((w) => w[0].toUpperCase() + w.substring(1))
+      .join('-');
+}
 
 String? prettyTags(
   Iterable<String>? tags, {
