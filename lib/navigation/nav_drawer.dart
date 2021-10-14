@@ -41,8 +41,8 @@ class _NavModule {
   final String text;
   _NavModule(this.icon, this.text);
 
-  Widget build(BuildContext context, {bool? selected}) {
-    final enabled = selected != null;
+  Widget build(BuildContext context, [String? route]) {
+    final enabled = route != null;
     return ListTile(
       leading: Icon(icon),
       title: Text(
@@ -50,7 +50,7 @@ class _NavModule {
         style: const TextStyle(fontSize: 18),
       ),
       trailing: enabled ? null : const Icon(Icons.construction_outlined),
-      selected: selected ?? false,
+      selected: route == text,
       onTap: enabled ? () => navigate(context, text) : null,
       enabled: enabled,
     );
@@ -79,9 +79,8 @@ class NavDraver extends StatelessWidget {
                   child: Column(
                     children: [
                       ListTile(
-                        leading: const Icon(Icons.landscape_outlined),
+                        leading: const Icon(Icons.send_outlined),
                         title: const Text('Made with honor in\nNorth Caucasus'),
-                        trailing: const Icon(Icons.send_outlined),
                         onTap: () => launch('https://t.me/raxysstudios'),
                       ),
                       FutureBuilder<PackageInfo>(
@@ -102,7 +101,6 @@ class NavDraver extends StatelessWidget {
                             ),
                             title: const Text('GitHub Repository'),
                             subtitle: Text(info),
-                            trailing: const Icon(Icons.open_in_new_outlined),
                             onTap: () => launch(
                               'https://github.com/raxysstudios/avzag',
                             ),
@@ -136,22 +134,21 @@ class NavDraver extends StatelessWidget {
             Card(
               child: Column(
                 children: [
-                  ...[
-                    _NavModule(Icons.home_outlined, 'home'),
-                    _NavModule(Icons.book_outlined, 'dictionary'),
-                  ].map(
-                    (t) => t.build(
-                      context,
-                      selected: t.text == title,
-                    ),
-                  ),
+                  _NavModule(
+                    Icons.home_outlined,
+                    'home',
+                  ).build(context, title),
+                  const Divider(height: 0),
+                  _NavModule(
+                    Icons.book_outlined,
+                    'dictionary',
+                  ).build(context, title),
                   const Divider(height: 0),
                   ...[
                     _NavModule(Icons.music_note_outlined, 'phonology'),
                     _NavModule(Icons.switch_left_outlined, 'converter'),
                     _NavModule(Icons.forum_outlined, 'phrasebook'),
                     _NavModule(Icons.local_library_outlined, 'bootcamp'),
-                    _NavModule(Icons.insights_outlined, 'quests'),
                   ].map((t) => t.build(context)),
                 ],
               ),

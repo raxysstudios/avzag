@@ -1,5 +1,4 @@
 import 'package:avzag/global_store.dart';
-import 'package:avzag/widgets/avzag_logo.dart';
 import 'package:flutter/material.dart';
 import 'navigation/nav_drawer.dart';
 
@@ -74,17 +73,28 @@ class _AppState extends State<App> {
             child: SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Center(child: AvzagLogo(256)),
-                  Text(
+                children: [
+                  Center(
+                    child: SizedBox(
+                      width: 256,
+                      child: Image.asset(
+                        Theme.of(context).brightness == Brightness.dark
+                            ? 'assets/splash_dark.png'
+                            : 'assets/splash_light.png',
+                        isAntiAlias: true,
+                        filterQuality: FilterQuality.high,
+                      ),
+                    ),
+                  ),
+                  const Text(
                     'ÆVZAG',
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text('Made with honor in'),
-                  Text(
+                  const Text('Made with honor in'),
+                  const Text(
                     'North Caucasus',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
