@@ -22,6 +22,7 @@ class SearchToolbarState extends State<SearchToolbar> {
   Timer timer = Timer(Duration.zero, () {});
   bool searching = false;
   String language = '';
+  String lastText = '';
 
   bool get monolingual => language.isNotEmpty && language != '_';
 
@@ -29,6 +30,8 @@ class SearchToolbarState extends State<SearchToolbar> {
   void initState() {
     super.initState();
     inputController.addListener(() {
+      if (lastText == inputController.text) return;
+      lastText = inputController.text;
       timer.cancel();
       if (inputController.text.isEmpty) {
         search();
