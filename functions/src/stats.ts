@@ -29,7 +29,8 @@ export const collectStats = functions
                 .length,
             dictionary: await dictionary
                 .search("", {
-                  "facetFilters": ["language:"+lang],
+                  facetFilters: ["language:" + lang],
+                  hitsPerPage: 0,
                 }).then((s) => s.nbHits),
           },
         });
