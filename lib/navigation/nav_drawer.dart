@@ -79,8 +79,12 @@ class NavDraver extends StatelessWidget {
                   child: Column(
                     children: [
                       ListTile(
-                        leading: const Icon(Icons.send_outlined),
-                        title: const Text('Made with honor in\nNorth Caucasus'),
+                        leading: const Padding(
+                          padding: EdgeInsets.only(top: 8),
+                          child: Icon(Icons.send_outlined),
+                        ),
+                        title: const Text('Developer Contact'),
+                        subtitle: const Text('Raxys Studios'),
                         onTap: () => launch('https://t.me/raxysstudios'),
                       ),
                       FutureBuilder<PackageInfo>(
