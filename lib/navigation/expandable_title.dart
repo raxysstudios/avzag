@@ -16,7 +16,7 @@ class ExpandableTitle extends StatelessWidget {
         leading: Transform.scale(
           scale: 7,
           child: const Opacity(
-            opacity: .25,
+            opacity: .2,
             child: RaxysLogo(size: 24),
           ),
         ),
