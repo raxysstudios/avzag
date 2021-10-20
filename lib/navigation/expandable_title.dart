@@ -1,3 +1,4 @@
+import 'package:avzag/widgets/raxys_logo.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +12,16 @@ class ExpandableTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpandablePanel(
-      header: const ListTile(
-        leading: Icon(Icons.menu_outlined),
-        contentPadding: EdgeInsets.only(left: 20),
-        title: Text(
+      header: ListTile(
+        leading: Transform.scale(
+          scale: 7,
+          child: const Opacity(
+            opacity: .25,
+            child: RaxysLogo(size: 24),
+          ),
+        ),
+        contentPadding: const EdgeInsets.only(left: 20),
+        title: const Text(
           'Ævzag',
           style: TextStyle(
             fontSize: 20,
@@ -22,13 +29,14 @@ class ExpandableTitle extends StatelessWidget {
           ),
         ),
       ),
-      theme: const ExpandableThemeData(
+      theme: ExpandableThemeData(
         expandIcon: Icons.expand_more_outlined,
         collapseIcon: Icons.expand_more_outlined,
-        iconPadding: EdgeInsets.only(
+        iconPadding: const EdgeInsets.only(
           right: 20,
           top: 16,
         ),
+        iconColor: Theme.of(context).iconTheme.color,
       ),
       collapsed: const Offstage(),
       expanded: child,

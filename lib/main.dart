@@ -1,4 +1,5 @@
 import 'package:avzag/global_store.dart';
+import 'package:avzag/widgets/raxys_logo.dart';
 import 'package:flutter/material.dart';
 import 'navigation/nav_drawer.dart';
 
@@ -73,28 +74,17 @@ class _AppState extends State<App> {
             child: SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: SizedBox(
-                      width: 256,
-                      child: Image.asset(
-                        Theme.of(context).brightness == Brightness.dark
-                            ? 'assets/splash_dark.png'
-                            : 'assets/splash_light.png',
-                        isAntiAlias: true,
-                        filterQuality: FilterQuality.high,
-                      ),
-                    ),
-                  ),
-                  const Text(
+                children: const [
+                  Center(child: RaxysLogo()),
+                  Text(
                     'ÆVZAG',
                     style: TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Text('Made with honor in'),
-                  const Text(
+                  Text('Made with honor in'),
+                  Text(
                     'North Caucasus',
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
