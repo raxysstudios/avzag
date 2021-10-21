@@ -37,8 +37,8 @@ class RaxysLogo extends StatelessWidget {
           opacity: opacity,
           child: Image.asset(
             Theme.of(context).brightness == Brightness.dark
-                ? 'assets/splash_dark.png'
-                : 'assets/splash_light.png',
+                ? 'assets/raxys_dark.png'
+                : 'assets/raxys_light.png',
             isAntiAlias: true,
             filterQuality: FilterQuality.high,
           ),
