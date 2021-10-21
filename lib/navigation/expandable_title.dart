@@ -14,7 +14,6 @@ class ExpandableTitle extends StatelessWidget {
     return ExpandablePanel(
       header: const ListTile(
         leading: RaxysLogo(
-          size: 24,
           opacity: 0.2,
           scale: 7,
         ),
