@@ -75,9 +75,7 @@ class _AppState extends State<App> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  Center(
-                    child: RaxysLogo(size: 256),
-                  ),
+                  RaxysLogo.splash(),
                   Text(
                     'ÆVZAG',
                     style: TextStyle(
