@@ -29,8 +29,8 @@ class RaxysLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
+    return SizedBox.square(
+      dimension: size,
       child: Transform.scale(
         scale: scale,
         child: Opacity(
