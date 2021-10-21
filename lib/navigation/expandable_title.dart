@@ -13,7 +13,10 @@ class ExpandableTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpandablePanel(
       header: const ListTile(
-        leading: RaxysLogo.ambient(),
+        leading: RaxysLogo(
+          opacity: .1,
+          scale: 7,
+        ),
         contentPadding: EdgeInsets.only(left: 20),
         title: Text(
           'Ævzag',

@@ -8,21 +8,6 @@ class RaxysLogo extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  const RaxysLogo.splash({
-    Key? key,
-  }) : this(
-          size: 256,
-          key: key,
-        );
-
-  const RaxysLogo.ambient({
-    Key? key,
-  }) : this(
-          opacity: .2,
-          scale: 7,
-          key: key,
-        );
-
   final double scale;
   final double size;
   final double opacity;
