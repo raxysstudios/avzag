@@ -26,6 +26,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   var results = SearchResults();
   var editing = false;
   var collapsed = true;
+  var pendingReviewOnly = false;
   EntryHit? hit;
   Entry? entry;
   final panelController = PanelController();
@@ -50,7 +51,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
     final entry = await showLoadingDialog<Entry>(
       context,
       FirebaseFirestore.instance
-          .doc('languages/${hit.language}/dictionary/${hit.entryID}')
+          .doc('dictionary/${hit.entryID}')
           .withConverter(
             fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
             toFirestore: (Entry object, _) => object.toJson(),
@@ -116,6 +117,21 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 ),
               ),
             ),
+            if (GlobalStore.editing != null)
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    SwitchListTile(
+                      value: pendingReviewOnly,
+                      onChanged: (v) => setState(() {
+                        pendingReviewOnly = v;
+                      }),
+                      title: const Text('Filter pending reviews'),
+                      secondary: const Icon(Icons.pending_actions_outlined),
+                    ),
+                  ],
+                ),
+              ),
             SliverPadding(
               padding: const EdgeInsets.only(bottom: 76),
               sliver: SearchResultsSliver(
