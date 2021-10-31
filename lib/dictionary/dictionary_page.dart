@@ -60,14 +60,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
       this.entry = entry;
       this.hit = hit;
 
+      final media = MediaQuery.of(context);
+      final sheetSize =
+          1 - (kToolbarHeight + media.padding.top) / media.size.height;
       showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
         isScrollControlled: true,
         builder: (BuildContext context) {
-          final media = MediaQuery.of(context);
-          final sheetSize =
-              1 - (kToolbarHeight + media.padding.top) / media.size.height;
           return DraggableScrollableSheet(
             minChildSize: .5,
             maxChildSize: sheetSize,
