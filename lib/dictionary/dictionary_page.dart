@@ -9,7 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'entry.dart';
 import 'entry_sliver.dart';
-import 'search_results.dart';
 import 'search_toolbar.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,6 @@ class DictionaryPage extends StatefulWidget {
 }
 
 class _DictionaryPageState extends State<DictionaryPage> {
-  var results = SearchResults();
   var editing = false;
   var collapsed = true;
   var pendingReviewOnly = false;
@@ -102,19 +100,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
         backdropEnabled: true,
         body: CustomScrollView(
           slivers: [
-            SliverAppBar(
+            const SliverAppBar(
               pinned: true,
               snap: true,
               floating: true,
               forceElevated: true,
-              title: const Text('Dictionary'),
+              title: Text('Dictionary'),
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(64),
-                child: SearchToolbar(
-                  (r) => setState(() {
-                    results = r;
-                  }),
-                ),
+                preferredSize: Size.fromHeight(64),
+                child: SearchToolbar(),
               ),
             ),
             if (GlobalStore.editing != null)
@@ -135,7 +129,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
             SliverPadding(
               padding: const EdgeInsets.only(bottom: 76),
               sliver: SearchResultsSliver(
-                results,
                 onTap: openEntry,
               ),
             ),

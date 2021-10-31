@@ -1,4 +1,5 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
+import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/home_page.dart';
 import 'package:avzag/utils.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'auth_page.dart';
 import 'expandable_title.dart';
+import 'package:provider/provider.dart';
 
 Future<void> navigate(
   BuildContext context,
@@ -25,7 +27,13 @@ Future<void> navigate(
     builder = (_) => const HomePage();
     title = null;
   } else if (title == 'dictionary') {
-    builder = (_) => const DictionaryPage();
+    builder = (_) => Provider(
+          create: (_) => SearchController(
+            GlobalStore.languages.keys,
+            GlobalStore.algolia.instance.index('dictionary'),
+          ),
+          child: const DictionaryPage(),
+        );
   } else {
     builder = (_) => const Text("No Route");
   }

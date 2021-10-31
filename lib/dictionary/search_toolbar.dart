@@ -1,16 +1,14 @@
 import 'dart:async';
-import 'search_mode_button.dart';
-import 'search_results.dart';
-import 'package:avzag/global_store.dart';
-import 'package:avzag/utils.dart';
+
 import 'package:flutter/material.dart';
-import 'hit_tile.dart';
+import 'package:avzag/utils.dart';
+import 'package:provider/provider.dart';
+
+import 'search_controller.dart';
+import 'search_mode_button.dart';
 
 class SearchToolbar extends StatefulWidget {
-  final ValueSetter<SearchResults> onSearch;
-
-  const SearchToolbar(
-    this.onSearch, {
+  const SearchToolbar({
     Key? key,
   }) : super(key: key);
 
@@ -21,11 +19,7 @@ class SearchToolbar extends StatefulWidget {
 class SearchToolbarState extends State<SearchToolbar> {
   final inputController = TextEditingController();
   Timer timer = Timer(Duration.zero, () {});
-  bool searching = false;
-  String language = '';
   String lastText = '';
-
-  bool get monolingual => language.isNotEmpty && language != '_';
 
   @override
   void initState() {
@@ -55,83 +49,12 @@ class SearchToolbarState extends State<SearchToolbar> {
     super.dispose();
   }
 
-  String generateFilter(
-    Iterable<String> values, [
-    filter = 'tags',
-    bool and = false,
-  ]) {
-    final joint = and ? 'AND' : 'OR';
-    final tags = values.map((v) => '$filter:"$v"');
-    return tags.join(' $joint ');
-  }
-
-  List<String> parseQuery(String query) {
-    final tags = <String>[];
-    final words = <String>[];
-    query.split(' ').forEach((e) {
-      if (e.startsWith('#')) {
-        tags.add(e.substring(1));
-      } else {
-        words.add(e);
-      }
-    });
-    return [
-      words.join(' '),
-      generateFilter(tags, 'tags', true),
-    ];
-  }
-
-  void search() async {
-    setState(() {
-      searching = true;
-    });
-    widget.onSearch(SearchResults());
-
-    final parsed = parseQuery(inputController.text);
-    final languages = generateFilter(
-      monolingual ? [language] : GlobalStore.languages.keys,
-      'language',
-    );
-    var query = GlobalStore.algolia.instance
-        .index('dictionary')
-        .query(parsed[0])
-        .filters(
-          parsed[1].isEmpty ? languages : '${parsed[1]} AND ($languages)',
-        );
-    if (monolingual) query = query.setRestrictSearchableAttributes(['forms']);
-
-    final hits = await query.getObjects().then(
-      (snapshot) async {
-        if (language != '_') return snapshot.hits;
-        final terms = generateFilter(
-          snapshot.hits.map((hit) => hit.data['term']),
-          'term',
-        );
-        final original = {
-          for (final hit in snapshot.hits) hit.objectID: hit,
-        };
-        return await GlobalStore.algolia.instance
-            .index('dictionary')
-            .filters('($languages) AND ($terms)')
-            .getObjects()
-            .then((s) => s.hits.map((h) => original[h.objectID] ?? h))
-            .onError((error, stackTrace) => []);
-      },
-    ).then((s) => s.map((h) => EntryHit.fromAlgoliaHit(h)).toList());
-
-    widget.onSearch(
-      SearchResults(
-        hits,
-        GlobalStore.languages.keys,
-      ),
-    );
-    setState(() {
-      searching = false;
-    });
-  }
+  void search() =>
+      context.read<SearchController>().search(inputController.text);
 
   @override
   Widget build(BuildContext context) {
+    final search = context.watch<SearchController>();
     return Column(
       children: [
         Padding(
@@ -139,9 +62,9 @@ class SearchToolbarState extends State<SearchToolbar> {
           child: Row(
             children: [
               SearchModeButton(
-                language,
+                search.language,
                 onSelected: (l) => setState(() {
-                  language = l;
+                  search.language = l;
                   inputController.clear();
                 }),
               ),
@@ -151,9 +74,9 @@ class SearchToolbarState extends State<SearchToolbar> {
                   child: Builder(
                     builder: (context) {
                       var label = 'Search ';
-                      label += monolingual
-                          ? 'forms in ${capitalize(language)}'
-                          : (language.isEmpty ? 'over' : 'across') +
+                      label += search.monolingual
+                          ? 'forms in ${capitalize(search.language)}'
+                          : (search.language.isEmpty ? 'over' : 'across') +
                               ' the languages';
                       return TextField(
                         controller: inputController,
@@ -175,7 +98,7 @@ class SearchToolbarState extends State<SearchToolbar> {
           ),
         ),
         LinearProgressIndicator(
-          value: searching ? null : 0,
+          value: search.processing ? null : 0,
         ),
       ],
     );
