@@ -93,7 +93,7 @@ class SearchToolbarState extends State<SearchToolbar> {
       'language',
     );
     var query = GlobalStore.algolia.instance
-        .index('dictionary_headword')
+        .index('dictionary')
         .query(parsed[0])
         .filters(
           parsed[1].isEmpty ? languages : '${parsed[1]} AND ($languages)',
@@ -111,7 +111,7 @@ class SearchToolbarState extends State<SearchToolbar> {
           for (final hit in snapshot.hits) hit.objectID: hit,
         };
         return await GlobalStore.algolia.instance
-            .index('dictionary_headword')
+            .index('dictionary')
             .filters('($languages) AND ($terms)')
             .getObjects()
             .then((s) => s.hits.map((h) => original[h.objectID] ?? h))
