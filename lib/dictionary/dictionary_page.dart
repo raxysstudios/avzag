@@ -1,4 +1,5 @@
 import 'package:avzag/dictionary/editor_button.dart';
+import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_flag.dart';
@@ -6,6 +7,8 @@ import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'entry.dart';
 import 'entry_sliver.dart';
@@ -69,6 +72,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   @override
   Widget build(BuildContext context) {
     final safePadding = MediaQuery.of(context).padding.top;
+    final controller = context.watch<SearchController>();
     return Scaffold(
       drawer: const NavDraver(title: 'dictionary'),
       floatingActionButton: EditorButton(
@@ -116,10 +120,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 delegate: SliverChildListDelegate(
                   [
                     SwitchListTile(
-                      value: pendingReviewOnly,
-                      onChanged: (v) => setState(() {
-                        pendingReviewOnly = v;
-                      }),
+                      value: controller.pendingOnly,
+                      onChanged: (v) {
+                        controller.pendingOnly = v;
+                      },
                       title: const Text('Filter pending reviews'),
                       secondary: const Icon(Icons.pending_actions_outlined),
                     ),

@@ -82,6 +82,9 @@ class SearchController with ChangeNotifier {
   }
 
   _organizeHits(Iterable<EntryHit> hits) {
+    _ids.clear();
+    _tags.clear();
+    _hits.clear();
     for (final hit in hits) {
       var id = hit.term;
       if (hit.definition != null) id += ' ' + hit.definition!;

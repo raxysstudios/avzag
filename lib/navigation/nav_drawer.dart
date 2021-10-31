@@ -27,7 +27,7 @@ Future<void> navigate(
     builder = (_) => const HomePage();
     title = null;
   } else if (title == 'dictionary') {
-    builder = (_) => Provider(
+    builder = (_) => ChangeNotifierProvider(
           create: (_) => SearchController(
             GlobalStore.languages.keys,
             GlobalStore.algolia.instance.index('dictionary'),
