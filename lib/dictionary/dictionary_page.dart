@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'entry.dart';
 import 'entry_sliver.dart';
+import 'search_results.dart';
 import 'search_toolbar.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class DictionaryPage extends StatefulWidget {
 }
 
 class _DictionaryPageState extends State<DictionaryPage> {
-  var hits = <List<EntryHit>>[];
+  var results = SearchResults();
   var editing = false;
   var collapsed = true;
   EntryHit? hit;
@@ -109,8 +110,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(64),
                 child: SearchToolbar(
-                  (s) => setState(() {
-                    hits = s;
+                  (r) => setState(() {
+                    results = r;
                   }),
                 ),
               ),
@@ -118,7 +119,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
             SliverPadding(
               padding: const EdgeInsets.only(bottom: 76),
               sliver: SearchResultsSliver(
-                hits,
+                results,
                 onTap: openEntry,
               ),
             ),

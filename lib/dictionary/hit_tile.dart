@@ -12,12 +12,6 @@ class EntryHit {
   final bool pendingReview;
   final List<String>? tags;
 
-  String get id {
-    var id = term;
-    if (definition != null) id += ' ' + definition!;
-    return id;
-  }
-
   const EntryHit({
     required this.entryID,
     required this.headword,
@@ -45,8 +39,7 @@ class EntryHit {
       language: json['language'],
       term: json['term'],
       definition: json['definition'],
-      // pendingReview: json['pendingReview'] ?? false,
-      pendingReview: true,
+      pendingReview: json['pendingReview'] ?? false,
       tags: json2list(json['tags']),
     );
   }
@@ -96,9 +89,7 @@ class HitTile extends StatelessWidget {
           if (showLanguage)
             Text(
               capitalize(hit.language),
-              style: theme.caption?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+              style: theme.caption,
             ),
         ],
       ),

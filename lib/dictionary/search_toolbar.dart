@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'package:avzag/dictionary/search_mode_button.dart';
+import 'search_mode_button.dart';
+import 'search_results.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 import 'hit_tile.dart';
 
 class SearchToolbar extends StatefulWidget {
-  final ValueSetter<List<List<EntryHit>>> onSearch;
+  final ValueSetter<SearchResults> onSearch;
 
   const SearchToolbar(
     this.onSearch, {
@@ -84,7 +85,7 @@ class SearchToolbarState extends State<SearchToolbar> {
     setState(() {
       searching = true;
     });
-    widget.onSearch(<List<EntryHit>>[]);
+    widget.onSearch(SearchResults());
 
     final parsed = parseQuery(inputController.text);
     final languages = generateFilter(
@@ -118,16 +119,12 @@ class SearchToolbarState extends State<SearchToolbar> {
       },
     ).then((s) => s.map((h) => EntryHit.fromAlgoliaHit(h)).toList());
 
-    if (monolingual) {
-      widget.onSearch([hits]);
-    } else {
-      final groups = <String, List<EntryHit>>{};
-      for (final hit in hits) {
-        if (!groups.containsKey(hit.id)) groups[hit.id] = [];
-        groups[hit.id]!.add(hit);
-      }
-      widget.onSearch(groups.values.toList());
-    }
+    widget.onSearch(
+      SearchResults(
+        hits,
+        GlobalStore.languages.keys,
+      ),
+    );
     setState(() {
       searching = false;
     });

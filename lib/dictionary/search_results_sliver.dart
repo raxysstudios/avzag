@@ -1,13 +1,14 @@
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 import 'hit_tile.dart';
+import 'search_results.dart';
 
 class SearchResultsSliver extends StatelessWidget {
-  final List<List<EntryHit>> hits;
+  final SearchResults results;
   final ValueSetter<EntryHit>? onTap;
 
   const SearchResultsSliver(
-    this.hits, {
+    this.results, {
     Key? key,
     required this.onTap,
   }) : super(key: key);
@@ -25,33 +26,27 @@ class SearchResultsSliver extends StatelessWidget {
       child: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
-            final hits = this.hits[index];
-            final tags = <String>{...hits.expand((h) => h.tags ?? [])};
-            EntryHit? lastHit;
+            final id = results.ids[index];
+            final hitGroups = results[index];
+            final tags = results.tags[id]!;
             return Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 20, top: 8),
                   child: Row(
                     children: [
-                      Text(
-                        capitalize(hits[0].id),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      Text(capitalize(id)),
                       if (tags.isNotEmpty) ...[
-                        const SizedBox(width: 8),
-                        const Icon(Icons.tag_outlined),
                         const SizedBox(width: 4),
+                        const Icon(Icons.tag_outlined),
+                        const SizedBox(width: 2),
                         Text(
                           prettyTags(
                             tags,
                             separator: ' ',
                             capitalized: false,
                           )!,
-                          style: const TextStyle(fontSize: 14),
-                          maxLines: 1,
+                          style: theme.textTheme.caption,
                         ),
                       ],
                     ],
@@ -61,34 +56,29 @@ class SearchResultsSliver extends StatelessWidget {
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: const ClampingScrollPhysics(),
-                    itemCount: hits.length,
+                    itemCount: hitGroups.length,
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) {
-                      final hit = hits[index];
-                      final language = hit.language != lastHit?.language;
-                      final divider = language && lastHit != null;
-                      final tile = HitTile(
-                        hit,
-                        showLanguage: language,
-                        onTap: onTap == null ? null : () => onTap!(hit),
+                      final hits = hitGroups[index];
+                      return Column(
+                        children: [
+                          if (index > 0) const Divider(height: 0),
+                          for (var i = 0; i < hits.length; i++)
+                            HitTile(
+                              hits[i],
+                              showLanguage: i == 0,
+                              onTap:
+                                  onTap == null ? null : () => onTap!(hits[i]),
+                            ),
+                        ],
                       );
-
-                      lastHit = hit;
-                      return divider
-                          ? Column(
-                              children: [
-                                const Divider(height: 0),
-                                tile,
-                              ],
-                            )
-                          : tile;
                     },
                   ),
                 ),
               ],
             );
           },
-          childCount: hits.length,
+          childCount: results.length,
         ),
       ),
     );
