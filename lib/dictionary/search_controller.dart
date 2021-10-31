@@ -91,8 +91,7 @@ class SearchController with ChangeNotifier {
     _tags.clear();
     _hits.clear();
     for (final hit in hits) {
-      var id = hit.term;
-      if (hit.definition != null) id += ' ' + hit.definition!;
+      final id = hit.term;
       _hits.putIfAbsent(id, () {
         _tags[id] = <String>{};
         _ids.add(id);

@@ -1,5 +1,4 @@
-import 'package:avzag/dictionary/editor_button.dart';
-import 'package:avzag/dictionary/search_controller.dart';
+import 'package:avzag/dictionary/editor_controller.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
@@ -22,29 +21,21 @@ class DictionaryPage extends StatefulWidget {
 }
 
 class _DictionaryPageState extends State<DictionaryPage> {
-  var editing = false;
-  var collapsed = true;
-  var pendingReviewOnly = false;
-  EntryHit? hit;
-  Entry? entry;
-
-  void openEntry(EntryHit hit) async {
-    if (editing) {
+  Future loadEntry(EntryHit hit) async {
+    final editor = context.read<EditorController>();
+    if (editor.editing) {
       if (await showDangerDialog(
         context,
         'Discard edits?',
         confirmText: 'Discard',
         rejectText: 'Edit',
       )) {
-        setState(() {
-          editing = false;
-        });
+        editor.stopEditing();
       } else {
         return;
       }
     }
-
-    final entry = await showLoadingDialog<Entry>(
+    final snapshot = await showLoadingDialog(
       context,
       FirebaseFirestore.instance
           .doc('dictionary/${hit.entryID}')
@@ -52,71 +43,79 @@ class _DictionaryPageState extends State<DictionaryPage> {
             fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
             toFirestore: (Entry object, _) => object.toJson(),
           )
-          .get()
-          .then((snapshot) => snapshot.data()),
+          .get(),
     );
-
-    if (entry != null) {
-      this.entry = entry;
-      this.hit = hit;
-
-      final media = MediaQuery.of(context);
-      final sheetSize =
-          1 - (kToolbarHeight + media.padding.top) / media.size.height;
-      showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return DraggableScrollableSheet(
-            minChildSize: .5,
-            maxChildSize: sheetSize,
-            initialChildSize: .5,
-            builder: (context, scroll) {
-              return Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(16),
-                  ),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: EntryPage(
-                  entry,
-                  hit: hit,
-                  scroll: scroll,
-                  onEdited:
-                      editing ? (e) => setState(() => this.entry = e) : null,
-                ),
-              );
-            },
-          );
-        },
+    if (snapshot?.exists ?? false) {
+      await openEntry(
+        snapshot!.data()!,
+        snapshot.id,
       );
     }
   }
 
+  Future openEntry(Entry entry, [String? id]) async {
+    final media = MediaQuery.of(context);
+    final sheetSize =
+        1 - (kToolbarHeight + media.padding.top) / media.size.height;
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          minChildSize: .5,
+          maxChildSize: sheetSize,
+          initialChildSize: .5,
+          builder: (context, scroll) {
+            return Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: EntryPage(
+                entry,
+                id: id,
+                scroll: scroll,
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<SearchController>();
     return Scaffold(
       drawer: const NavDraver(title: 'dictionary'),
-      floatingActionButton: EditorButton(
-        entry,
-        hit: hit,
-        editing: editing,
-        collapsed: collapsed,
-        onStart: (entry, [hit]) => setState(() {
-          this.entry = entry;
-          this.hit = hit;
-          editing = true;
-          collapsed = false;
-        }),
-        onEnd: () => setState(() {
-          entry = null;
-          hit = null;
-          editing = false;
-          collapsed = true;
-        }),
+      floatingActionButton: Builder(
+        builder: (context) {
+          final language = GlobalStore.editing;
+          if (language == null) return const SizedBox();
+          final editor = context.watch<EditorController<Entry>>();
+          if (editor.editing) {
+            return FloatingActionButton.extended(
+              onPressed: () => openEntry(editor.object!),
+              icon: const Icon(Icons.open_in_full_outlined),
+              label: const Text('Resume'),
+            );
+          }
+          return FloatingActionButton.extended(
+            onPressed: () => openEntry(
+              editor.startEditing(
+                Entry(
+                  forms: [],
+                  uses: [],
+                  language: language,
+                ),
+              ),
+            ),
+            icon: const Icon(Icons.add_outlined),
+            label: const Text('New'),
+          );
+        },
       ),
       body: CustomScrollView(
         slivers: [
@@ -149,7 +148,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
           SliverPadding(
             padding: const EdgeInsets.only(bottom: 76),
             sliver: SearchResultsSliver(
-              onTap: openEntry,
+              onTap: loadEntry,
             ),
           ),
         ],

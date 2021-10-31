@@ -8,7 +8,6 @@ class EntryHit {
   final String? form;
   final String language;
   final String term;
-  final String? definition;
   final bool pendingReview;
   final List<String>? tags;
 
@@ -20,7 +19,6 @@ class EntryHit {
     required this.term,
     this.tags,
     this.pendingReview = false,
-    this.definition,
   });
 
   factory EntryHit.fromAlgoliaHit(AlgoliaObjectSnapshot hit) {
@@ -38,7 +36,6 @@ class EntryHit {
       form: form >= 0 ? json2list(json['forms'])![form] : null,
       language: json['language'],
       term: json['term'],
-      definition: json['definition'],
       pendingReview: json['pendingReview'] ?? false,
       tags: json2list(json['tags']),
     );

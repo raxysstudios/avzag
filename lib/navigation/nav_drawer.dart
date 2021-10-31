@@ -1,5 +1,6 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/dictionary/editor_controller.dart';
+import 'package:avzag/dictionary/entry.dart';
 import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/home_page.dart';
@@ -37,7 +38,7 @@ Future<void> navigate(
               ),
             ),
             ChangeNotifierProvider(
-              create: (_) => EditorController(),
+              create: (_) => EditorController<Entry>(),
             ),
           ],
           child: const DictionaryPage(),

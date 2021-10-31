@@ -11,10 +11,19 @@ class EditorController<T> with ChangeNotifier {
 
   bool get editing => object != null;
 
-  void startEditing(T object, String id) {
+  T startEditing(T object, [String? id]) {
     _object = object;
     _id = id;
     notifyListeners();
+    return object;
+  }
+
+  ValueSetter<V>? edit<V>(ValueSetter<V> action) {
+    if (!editing) return null;
+    return (V v) {
+      action(v);
+      notifyListeners();
+    };
   }
 
   void stopEditing() {
