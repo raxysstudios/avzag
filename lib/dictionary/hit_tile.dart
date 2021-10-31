@@ -9,7 +9,14 @@ class EntryHit {
   final String language;
   final String term;
   final String? definition;
+  final bool pendingReview;
   final List<String>? tags;
+
+  String get id {
+    var id = term;
+    if (definition != null) id += ' ' + definition!;
+    return id;
+  }
 
   const EntryHit({
     required this.entryID,
@@ -18,6 +25,7 @@ class EntryHit {
     required this.language,
     required this.term,
     this.tags,
+    this.pendingReview = false,
     this.definition,
   });
 
@@ -37,6 +45,8 @@ class EntryHit {
       language: json['language'],
       term: json['term'],
       definition: json['definition'],
+      // pendingReview: json['pendingReview'] ?? false,
+      pendingReview: true,
       tags: json2list(json['tags']),
     );
   }
@@ -58,35 +68,31 @@ class HitTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
     return ListTile(
+      dense: true,
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          RichText(
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            text: TextSpan(
-              style: theme.subtitle1?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
-              children: [
-                TextSpan(
-                  text: capitalize(hit.headword),
-                ),
-                if (hit.form != null && hit.form != hit.headword) ...[
-                  const WidgetSpan(
-                    child: SizedBox(width: 8),
-                  ),
-                  TextSpan(
-                    text: capitalize(hit.form!),
-                    style: TextStyle(
-                      color: theme.caption?.color,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ]
-              ],
+          if (hit.pendingReview) ...[
+            const Icon(Icons.pending_actions_outlined),
+            const SizedBox(width: 4),
+          ],
+          Text(
+            capitalize(hit.headword),
+            style: theme.subtitle1?.copyWith(
+              fontWeight: FontWeight.w500,
             ),
+            maxLines: 1,
           ),
+          if (hit.form != null && hit.form != hit.headword) ...[
+            const SizedBox(width: 4),
+            Text(
+              capitalize(hit.form!),
+              style: TextStyle(
+                color: theme.caption?.color,
+              ),
+              maxLines: 1,
+            ),
+          ],
+          const Spacer(),
           if (showLanguage)
             Text(
               capitalize(hit.language),
@@ -95,56 +101,6 @@ class HitTile extends StatelessWidget {
               ),
             ),
         ],
-      ),
-      subtitle: Theme(
-        data: ThemeData(
-          iconTheme: IconThemeData(
-            color: Theme.of(context).textTheme.caption?.color,
-            size: 16,
-          ),
-        ),
-        child: RichText(
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          text: TextSpan(
-            style: theme.caption?.copyWith(
-              fontSize: 14,
-            ),
-            children: [
-              const WidgetSpan(
-                child: Padding(
-                  padding: EdgeInsets.only(right: 2),
-                  child: Icon(Icons.lightbulb_outline),
-                ),
-              ),
-              TextSpan(
-                text: capitalize(hit.term),
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              if (hit.definition != null)
-                TextSpan(
-                  text: ' ' + hit.definition!,
-                ),
-              if (hit.tags?.isNotEmpty ?? false) ...[
-                const WidgetSpan(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 8, right: 2),
-                    child: Icon(Icons.tag_outlined),
-                  ),
-                ),
-                TextSpan(
-                  text: prettyTags(
-                    hit.tags,
-                    separator: ' ',
-                    capitalized: false,
-                  )!,
-                ),
-              ]
-            ],
-          ),
-        ),
       ),
       onTap: onTap,
     );

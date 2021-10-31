@@ -92,7 +92,7 @@ class SearchToolbarState extends State<SearchToolbar> {
       'language',
     );
     var query = GlobalStore.algolia.instance
-        .index(monolingual ? 'dictionary_headword' : 'dictionary')
+        .index('dictionary_headword')
         .query(parsed[0])
         .filters(
           parsed[1].isEmpty ? languages : '${parsed[1]} AND ($languages)',
@@ -110,7 +110,7 @@ class SearchToolbarState extends State<SearchToolbar> {
           for (final hit in snapshot.hits) hit.objectID: hit,
         };
         return await GlobalStore.algolia.instance
-            .index('dictionary')
+            .index('dictionary_headword')
             .filters('($languages) AND ($terms)')
             .getObjects()
             .then((s) => s.hits.map((h) => original[h.objectID] ?? h))
@@ -123,9 +123,8 @@ class SearchToolbarState extends State<SearchToolbar> {
     } else {
       final groups = <String, List<EntryHit>>{};
       for (final hit in hits) {
-        final key = hit.term;
-        if (!groups.containsKey(key)) groups[key] = [];
-        groups[key]!.add(hit);
+        if (!groups.containsKey(hit.id)) groups[hit.id] = [];
+        groups[hit.id]!.add(hit);
       }
       widget.onSearch(groups.values.toList());
     }
