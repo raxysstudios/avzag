@@ -54,6 +54,7 @@ class SearchController with ChangeNotifier {
     var query = _index.query(parsed[0]).filters(
           parsed[1].isEmpty ? languages : '${parsed[1]} AND ($languages)',
         );
+    if (pendingOnly) query = query.facetFilter('pendingReview:true');
     if (monolingual) query = query.setRestrictSearchableAttributes(['forms']);
 
     _organizeHits(await _fetchHits(query));
@@ -62,7 +63,10 @@ class SearchController with ChangeNotifier {
   }
 
   Future<Iterable<EntryHit>> _fetchHits(AlgoliaQuery query) async {
-    var hits = await query.getObjects().then((s) => s.hits);
+    var hits = await query
+        .getObjects()
+        .then((s) => s.hits)
+        .onError((error, stackTrace) => []);
 
     if (language == '_') {
       final terms = _generateFilter(
@@ -76,7 +80,8 @@ class SearchController with ChangeNotifier {
           .filters('($_languages) AND ($terms)')
           .getObjects()
           .then((s) => s.hits.map((h) => original[h.objectID] ?? h))
-          .then((h) => h.toList());
+          .then((h) => h.toList())
+          .onError((error, stackTrace) => []);
     }
     return hits.map((h) => EntryHit.fromAlgoliaHit(h));
   }
