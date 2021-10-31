@@ -63,10 +63,10 @@ class SearchToolbarState extends State<SearchToolbar> {
             children: [
               SearchModeButton(
                 search.language,
-                onSelected: (l) => setState(() {
+                onSelected: (l) {
                   search.language = l;
                   inputController.clear();
-                }),
+                },
               ),
               Expanded(
                 child: Padding(
