@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:avzag/utils.dart';
 import 'package:flutter/material.dart';
 import 'hit_tile.dart';
@@ -31,26 +33,35 @@ class SearchResultsSliver extends StatelessWidget {
             final tags = results.tags[id]!;
             return Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 8),
-                  child: Row(
-                    children: [
-                      Text(capitalize(id)),
-                      if (tags.isNotEmpty) ...[
-                        const SizedBox(width: 4),
-                        const Icon(Icons.tag_outlined),
-                        const SizedBox(width: 2),
-                        Text(
-                          prettyTags(
-                            tags,
-                            separator: ' ',
-                            capitalized: false,
-                          )!,
-                          style: theme.textTheme.caption,
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const SizedBox(width: 2),
+                    const Icon(Icons.lightbulb_outlined),
+                    const SizedBox(width: 2),
+                    Text(
+                      capitalize(id),
+                      style: theme.textTheme.caption?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                      ),
+                    ),
+                    if (tags.isNotEmpty) ...[
+                      const SizedBox(width: 4),
+                      const Icon(Icons.tag_outlined),
+                      const SizedBox(width: 2),
+                      Text(
+                        prettyTags(
+                          tags,
+                          separator: ' ',
+                          capitalized: false,
+                        )!,
+                        style: theme.textTheme.caption?.copyWith(
+                          fontSize: 14,
                         ),
-                      ],
+                      ),
                     ],
-                  ),
+                  ],
                 ),
                 Card(
                   child: ListView.builder(
