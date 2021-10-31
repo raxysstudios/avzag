@@ -6,16 +6,6 @@ const dictionary = algoliasearch(
     functions.config().algolia.key
 ).initIndex("dictionary");
 
-type EntryRecord = {
-    entryID: string;
-    language: string;
-    headword: string;
-    forms: string[];
-    aliases: string[],
-    term: string;
-    definition: string | undefined;
-    tags: string[] | undefined;
-};
 
 export const indexDictionary = functions
     .region("europe-central2")
@@ -34,19 +24,18 @@ export const indexDictionary = functions
           language: context.params.language,
           forms: entry.forms.map(({plain}: never) => plain),
           headword: entry.forms[0].plain,
+          pendingReview: !!entry.pendingReview,
         };
         const records = [];
 
         for (const use of entry.uses) {
-          const record = Object.assign({term: use.term}, base) as EntryRecord;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const record = Object.assign({term: use.term}, base) as any;
           if (use.tags?.length || entry.tags?.length) {
             record.tags = (use.tags ?? []).concat(entry.tags ?? []);
           }
           if (use.aliases?.length) {
             record.aliases = use.aliases;
-          }
-          if (use.definition) {
-            record.definition = use.definition;
           }
           records.push(record);
         }
