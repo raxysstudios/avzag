@@ -36,9 +36,7 @@ class SearchResultsSliver extends StatelessWidget {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const SizedBox(width: 2),
-                    const Icon(Icons.lightbulb_outlined),
-                    const SizedBox(width: 2),
+                    const SizedBox(width: 20),
                     Text(
                       capitalize(id),
                       style: theme.textTheme.caption?.copyWith(
