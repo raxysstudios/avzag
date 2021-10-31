@@ -60,18 +60,79 @@ class _DictionaryPageState extends State<DictionaryPage> {
           .get()
           .then((snapshot) => snapshot.data()),
     );
+
     if (entry != null) {
-      setState(() {
-        this.entry = entry;
-        this.hit = hit;
-      });
-      panelController.open();
+      this.entry = entry;
+      this.hit = hit;
+
+      final media = MediaQuery.of(context);
+      final expand =
+          1 - (kToolbarHeight + media.padding.top) / media.size.height;
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return DraggableScrollableSheet(
+            minChildSize: .5,
+            maxChildSize: expand,
+            builder: (context, scroll) {
+              return buildEditingPanel(context, scroll);
+            },
+          );
+        },
+      );
     }
+  }
+
+  Widget buildEditingPanel(BuildContext context, ScrollController scroll) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: CustomScrollView(
+        controller: scroll,
+        slivers: [
+          SliverAppBar(
+            primary: false,
+            title: PageTitle(
+              title: editing ? 'Entry editor' : hit!.headword,
+              subtitle: editing ? GlobalStore.editing : hit!.language,
+            ),
+            actions: [
+              Opacity(
+                opacity: 0.4,
+                child: LanguageFlag(
+                  GlobalStore
+                      .languages[editing ? GlobalStore.editing : hit!.language]!
+                      .flag,
+                  offset: const Offset(-40, 4),
+                  scale: 9,
+                ),
+              ),
+            ],
+            floating: true,
+            pinned: true,
+            forceElevated: true,
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(bottom: 76),
+            sliver: EntrySliver(
+              entry!,
+              onEdited: editing ? (e) => setState(() => entry = e) : null,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final safePadding = MediaQuery.of(context).padding.top;
     final controller = context.watch<SearchController>();
     return Scaffold(
       drawer: const NavDraver(title: 'dictionary'),
@@ -99,129 +160,130 @@ class _DictionaryPageState extends State<DictionaryPage> {
           panelController.close();
         },
       ),
-      body: SlidingUpPanel(
-        controller: panelController,
-        backdropEnabled: true,
-        body: CustomScrollView(
-          slivers: [
-            const SliverAppBar(
-              pinned: true,
-              snap: true,
-              floating: true,
-              forceElevated: true,
-              title: Text('Dictionary'),
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(64),
-                child: SearchToolbar(),
-              ),
+      body: CustomScrollView(
+        slivers: [
+          const SliverAppBar(
+            pinned: true,
+            snap: true,
+            floating: true,
+            forceElevated: true,
+            title: Text('Dictionary'),
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(64),
+              child: SearchToolbar(),
             ),
-            if (GlobalStore.editing != null)
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    SwitchListTile(
-                      value: controller.pendingOnly,
-                      onChanged: (v) {
-                        controller.pendingOnly = v;
-                      },
-                      title: const Text('Filter pending reviews'),
-                      secondary: const Icon(Icons.pending_actions_outlined),
-                    ),
-                  ],
-                ),
-              ),
-            SliverPadding(
-              padding: const EdgeInsets.only(bottom: 76),
-              sliver: SearchResultsSliver(
-                onTap: openEntry,
-              ),
-            ),
-          ],
-        ),
-        maxHeight: MediaQuery.of(context).size.height - kToolbarHeight,
-        minHeight: editing ? kToolbarHeight + safePadding : 0,
-        renderPanelSheet: false,
-        panelBuilder: (controller) {
-          if (entry == null) return const SizedBox();
-          return Padding(
-            padding: EdgeInsets.only(top: safePadding),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-                boxShadow: kElevationToShadow[4],
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: CustomScrollView(
-                controller: controller,
-                slivers: [
-                  SliverAppBar(
-                    primary: false,
-                    leading: Builder(
-                      builder: (context) {
-                        if (collapsed) {
-                          return IconButton(
-                            onPressed: panelController.open,
-                            icon: const Icon(Icons.expand_less_outlined),
-                          );
-                        }
-                        return IconButton(
-                          onPressed: panelController.close,
-                          icon: const Icon(Icons.expand_more_outlined),
-                        );
-                      },
-                    ),
-                    title: PageTitle(
-                      title: editing ? 'Entry editor' : hit!.headword,
-                      subtitle: editing ? GlobalStore.editing : hit!.language,
-                    ),
-                    actions: [
-                      Opacity(
-                        opacity: 0.4,
-                        child: LanguageFlag(
-                          GlobalStore
-                              .languages[editing
-                                  ? GlobalStore.editing
-                                  : hit!.language]!
-                              .flag,
-                          offset: const Offset(-40, 4),
-                          scale: 9,
-                        ),
-                      ),
-                    ],
-                    floating: true,
-                    pinned: true,
-                    forceElevated: true,
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.only(bottom: 76),
-                    sliver: EntrySliver(
-                      entry!,
-                      onEdited:
-                          editing ? (e) => setState(() => entry = e) : null,
-                    ),
+          ),
+          if (GlobalStore.editing != null)
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  SwitchListTile(
+                    value: controller.pendingOnly,
+                    onChanged: (v) {
+                      controller.pendingOnly = v;
+                    },
+                    title: const Text('Filter pending reviews'),
+                    secondary: const Icon(Icons.pending_actions_outlined),
                   ),
                 ],
               ),
             ),
-          );
-        },
-        onPanelOpened: () {
-          FocusScope.of(context).unfocus();
-          setState(() {
-            collapsed = false;
-          });
-        },
-        onPanelClosed: () => setState(() {
-          collapsed = true;
-          if (!editing) {
-            entry = null;
-            hit = null;
-          }
-        }),
+          SliverPadding(
+            padding: const EdgeInsets.only(bottom: 76),
+            sliver: SearchResultsSliver(
+              onTap: openEntry,
+            ),
+          ),
+        ],
       ),
+      // body: SlidingUpPanel(
+      //   controller: panelController,
+      //   backdropEnabled: true,
+
+      //   maxHeight: MediaQuery.of(context).size.height - kToolbarHeight,
+      //   minHeight: editing ? kToolbarHeight + safePadding : 0,
+      //   renderPanelSheet: false,
+      //   panelBuilder: (controller) {
+      //     if (entry == null) return const SizedBox();
+      //     return Padding(
+      //       padding: EdgeInsets.only(top: safePadding),
+      //       child: Container(
+      //         decoration: BoxDecoration(
+      //           color: Theme.of(context).scaffoldBackgroundColor,
+      //           borderRadius: const BorderRadius.vertical(
+      //             top: Radius.circular(16),
+      //           ),
+      //           boxShadow: kElevationToShadow[4],
+      //         ),
+      //         clipBehavior: Clip.antiAlias,
+      //         child: CustomScrollView(
+      //           controller: controller,
+      //           slivers: [
+      //             SliverAppBar(
+      //               primary: false,
+      //               leading: Builder(
+      //                 builder: (context) {
+      //                   if (collapsed) {
+      //                     return IconButton(
+      //                       onPressed: panelController.open,
+      //                       icon: const Icon(Icons.expand_less_outlined),
+      //                     );
+      //                   }
+      //                   return IconButton(
+      //                     onPressed: panelController.close,
+      //                     icon: const Icon(Icons.expand_more_outlined),
+      //                   );
+      //                 },
+      //               ),
+      //               title: PageTitle(
+      //                 title: editing ? 'Entry editor' : hit!.headword,
+      //                 subtitle: editing ? GlobalStore.editing : hit!.language,
+      //               ),
+      //               actions: [
+      //                 Opacity(
+      //                   opacity: 0.4,
+      //                   child: LanguageFlag(
+      //                     GlobalStore
+      //                         .languages[editing
+      //                             ? GlobalStore.editing
+      //                             : hit!.language]!
+      //                         .flag,
+      //                     offset: const Offset(-40, 4),
+      //                     scale: 9,
+      //                   ),
+      //                 ),
+      //               ],
+      //               floating: true,
+      //               pinned: true,
+      //               forceElevated: true,
+      //             ),
+      //             SliverPadding(
+      //               padding: const EdgeInsets.only(bottom: 76),
+      //               sliver: EntrySliver(
+      //                 entry!,
+      //                 onEdited:
+      //                     editing ? (e) => setState(() => entry = e) : null,
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     );
+      //   },
+      //   onPanelOpened: () {
+      //     FocusScope.of(context).unfocus();
+      //     setState(() {
+      //       collapsed = false;
+      //     });
+      //   },
+      //   onPanelClosed: () => setState(() {
+      //     collapsed = true;
+      //     if (!editing) {
+      //       entry = null;
+      //       hit = null;
+      //     }
+      //   }),
+      // ),
     );
   }
 }

@@ -107,8 +107,7 @@ class EditorButton extends StatelessWidget {
     await showLoadingDialog(
       context,
       FirebaseFirestore.instance
-          .collection('languages/${GlobalStore.editing}/dictionary')
-          .doc(hit?.entryID)
+          .doc('dictionary/${hit?.entryID}')
           .set(entry!.toJson()),
     );
     return true;
@@ -132,10 +131,7 @@ class EditorButton extends StatelessWidget {
     if (confirm) {
       await showLoadingDialog(
         context,
-        FirebaseFirestore.instance
-            .collection('languages/${GlobalStore.editing}/dictionary')
-            .doc(hit!.entryID)
-            .delete(),
+        FirebaseFirestore.instance.doc('dictionary/${hit!.entryID}').delete(),
       );
       return true;
     }
