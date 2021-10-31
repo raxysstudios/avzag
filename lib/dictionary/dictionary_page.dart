@@ -131,21 +131,21 @@ class _DictionaryPageState extends State<DictionaryPage> {
               child: SearchToolbar(),
             ),
           ),
-          if (GlobalStore.editing != null)
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  SwitchListTile(
-                    value: controller.pendingOnly,
-                    onChanged: (v) {
-                      controller.pendingOnly = v;
-                    },
-                    title: const Text('Filter pending reviews'),
-                    secondary: const Icon(Icons.pending_actions_outlined),
-                  ),
-                ],
-              ),
-            ),
+          // if (GlobalStore.editing != null)
+          //   SliverList(
+          //     delegate: SliverChildListDelegate(
+          //       [
+          //         SwitchListTile(
+          //           value: controller.pendingOnly,
+          //           onChanged: (v) {
+          //             controller.pendingOnly = v;
+          //           },
+          //           title: const Text('Filter pending reviews'),
+          //           secondary: const Icon(Icons.pending_actions_outlined),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
           SliverPadding(
             padding: const EdgeInsets.only(bottom: 76),
             sliver: SearchResultsSliver(
