@@ -65,18 +65,20 @@ class EntryPage extends StatelessWidget {
               label: const Text('Edit'),
             );
           }
+          final theme = Theme.of(context).colorScheme;
           return SpeedDial(
             icon: Icons.done_all_outlined,
-            activeIcon: Icons.remove_done_outlined,
-            // label: const Text('Finish editing'),
-            // activeLabel: const Text('Continue editing'),
-            // buttonSize: 48,
+            activeIcon: Icons.close_outlined,
+            backgroundColor: theme.primary,
+            foregroundColor: theme.onPrimary,
+            activeBackgroundColor: theme.surface,
+            activeForegroundColor: theme.onSurface,
             spaceBetweenChildren: 9,
             spacing: 7,
             children: [
               SpeedDialChild(
                 child: const Icon(Icons.upload_outlined),
-                backgroundColor: Colors.indigo,
+                backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
                 label: 'Submit changes',
                 onTap: () async {
@@ -88,6 +90,8 @@ class EntryPage extends StatelessWidget {
               SpeedDialChild(
                 child: const Icon(Icons.cancel_outlined),
                 label: 'Discard changes',
+                backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
                 onTap: () {
                   Navigator.of(context).pop(true);
                 },
