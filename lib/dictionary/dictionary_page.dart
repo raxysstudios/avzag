@@ -95,7 +95,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
                         builder: (context, search, _) {
                           return SwitchListTile(
                             value: search.pendingOnly,
-                            onChanged: (v) => search.pendingOnly = v,
+                            onChanged: (v) {
+                              search.pendingOnly = v;
+                              search.search();
+                            },
                             title: const Text('Filter pending reviews'),
                             secondary:
                                 const Icon(Icons.pending_actions_outlined),
