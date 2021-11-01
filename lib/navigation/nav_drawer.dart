@@ -127,12 +127,14 @@ class NavDraver extends StatelessWidget {
                     SwitchListTile(
                       title: const Text('Editor Mode'),
                       subtitle: Text(
-                        EditorStore.language == null
-                            ? 'Off'
-                            : prettyTags([
-                                if (EditorStore.isAdmin) 'admin',
-                                EditorStore.language!,
-                              ])!,
+                        prettyTags(
+                          EditorStore.isEditing
+                              ? [
+                                  if (EditorStore.isAdmin) 'admin',
+                                  EditorStore.language!,
+                                ]
+                              : ['off'],
+                        )!,
                       ),
                       value: EditorStore.language != null,
                       secondary: const Padding(

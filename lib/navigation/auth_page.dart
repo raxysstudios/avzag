@@ -2,6 +2,7 @@ import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils.dart';
+import 'package:avzag/widgets/loading_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,10 +73,6 @@ class _AuthPageState extends State<AuthPage> {
         automaticallyImplyLeading: false,
         title: const Text('Editors'),
         centerTitle: true,
-        bottom: PreferredSize(
-          child: LinearProgressIndicator(value: loading ? null : 0),
-          preferredSize: const Size.fromHeight(4),
-        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => navigate(context, null),
@@ -97,7 +94,7 @@ class _AuthPageState extends State<AuthPage> {
                   onPressed: loading ? null : signIn,
                   icon: const Icon(Icons.person_outlined),
                   label: Text(
-                    GlobalStore.email ?? 'Sign In',
+                    EditorStore.email ?? 'Sign In',
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -108,9 +105,9 @@ class _AuthPageState extends State<AuthPage> {
                     children: [
                       const TextSpan(
                         text:
-                            'With any question regarding the language materials, use contacts below.',
+                            'With any question regarding the language materials, use the contacts below.',
                       ),
-                      if (GlobalStore.email != null) ...[
+                      if (EditorStore.email != null) ...[
                         const TextSpan(text: '\n\nYou have admin rights for '),
                         TextSpan(
                           text: capitalize(editable.join(', ')),
@@ -126,7 +123,12 @@ class _AuthPageState extends State<AuthPage> {
               ],
             ),
           ),
-          if (GlobalStore.email != null)
+          if (loading)
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: LoadingCard(),
+            ),
+          if (EditorStore.email != null)
             Card(
               child: Column(
                 children: [
@@ -144,7 +146,6 @@ class _AuthPageState extends State<AuthPage> {
                               fontSize: 18,
                             ),
                           ),
-                          subtitle: isAdmin ? const Text('Admin') : null,
                           onTap: () => setState(() {
                             EditorStore.language = editing ? null : l.name;
                             EditorStore.isAdmin = !editing && isAdmin;

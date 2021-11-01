@@ -30,8 +30,6 @@ class GlobalStore {
   static Map<String, Language> _languages = {};
   static Map<String, Language> get languages => _languages;
 
-  static String? get email => FirebaseAuth.instance.currentUser?.email;
-
   static Future<void> load([List<String>? languages]) async {
     if (_first) await _init();
     languages ??= prefs.getStringList('languages') ?? ['iron'];
