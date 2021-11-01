@@ -143,7 +143,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
     final entry = await showLoadingDialog(
       context,
       FirebaseFirestore.instance
-          .doc('dictionary/${hit.entryID}')
+          .collection('dictionary')
+          .doc(hit.entryID)
           .withConverter(
             fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
             toFirestore: (Entry object, _) => object.toJson(),

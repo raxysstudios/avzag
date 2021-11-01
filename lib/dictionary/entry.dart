@@ -27,7 +27,9 @@ class Entry {
           uses: listFromJson(json['uses'], (j) => Use.fromJson(j))!,
           tags: json2list(json['tags']),
           note: json['note'],
-          contribution: Contribution.fromJson(json['contribution']),
+          contribution: json['contribution'] == null
+              ? null
+              : Contribution.fromJson(json['contribution']),
         );
 
   Map<String, dynamic> toJson() {
