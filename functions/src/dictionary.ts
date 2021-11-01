@@ -27,7 +27,7 @@ export const indexDictionary = functions
           forms: entry.forms.map(({plain}: never) => plain),
           headword: entry.forms[0].plain,
         } as any;
-        if (entry.pendingReview) {
+        if (entry.contribution) {
           base.pendingReview = true;
         }
 
