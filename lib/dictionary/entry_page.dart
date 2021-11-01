@@ -24,7 +24,7 @@ class EntryPage extends StatelessWidget {
   final ScrollController? scroll;
 
   bool get isReviewing =>
-      entry.contribution?.email != EditorStore.email || sourceEntry != null;
+      entry.contribution?.email != EditorStore.email && sourceEntry != null;
 
   const EntryPage(
     this.entry, {
@@ -234,22 +234,21 @@ class EntryPage extends StatelessWidget {
             overwriteId: hit?.entryID,
           );
 
-    await showLoadingDialog(
-      context,
-      Future.wait([
-        FirebaseFirestore.instance
-            .collection('dictionary')
-            .doc(docId)
-            .set(entry.toJson()),
-        if (isReviewing)
-          FirebaseFirestore.instance
-              .collection('dictionary')
-              .doc(hit?.entryID)
-              .delete(),
-      ]),
-    );
-
-    return true;
+    return await showLoadingDialog(
+          context,
+          Future.wait([
+            FirebaseFirestore.instance
+                .collection('dictionary')
+                .doc(docId)
+                .set(entry.toJson()),
+            if (isReviewing)
+              FirebaseFirestore.instance
+                  .collection('dictionary')
+                  .doc(hit?.entryID)
+                  .delete(),
+          ]),
+        ) !=
+        null;
   }
 
   Future<bool> delete(BuildContext context) async {
@@ -267,14 +266,14 @@ class EntryPage extends StatelessWidget {
       rejectText: 'Keep',
     );
     if (confirm) {
-      await showLoadingDialog(
-        context,
-        FirebaseFirestore.instance
-            .collection('dictionary')
-            .doc(hit?.entryID)
-            .delete(),
-      );
-      return true;
+      return await showLoadingDialog(
+            context,
+            FirebaseFirestore.instance
+                .collection('dictionary')
+                .doc(hit?.entryID)
+                .delete(),
+          ) !=
+          null;
     }
     return false;
   }

@@ -18,6 +18,6 @@ Future<T?> showLoadingDialog<T>(
   } catch (e) {
     Navigator.pop(context);
     showSnackbar(context);
-    // rethrow;
   }
+  return null;
 }
