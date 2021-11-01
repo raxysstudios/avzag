@@ -167,12 +167,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
     final sheetSize =
         1 - (kToolbarHeight + media.padding.top) / media.size.height;
 
-    final sourceEntry = entry!.contribution == null
+    final sourceEntry = entry!.contribution == null ||
+            entry!.contribution?.uid == EditorStore.uid
         ? null
         : await showLoadingDialog(
             context,
             FirebaseFirestore.instance
-                .doc('dictionary/${entry!.contribution!.overwriteId}')
+                .collection('dictionary')
+                .doc(entry!.contribution!.overwriteId)
                 .withConverter(
                   fromFirestore: (snapshot, _) =>
                       Entry.fromJson(snapshot.data()!),
@@ -182,7 +184,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 .then((s) => s.data()),
           );
 
-    final done = await showModalBottomSheet<bool>(
+    var done = await showModalBottomSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -214,15 +216,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
         );
       },
     );
-    if (sourceEntry != null) {
+    if (done == null && sourceEntry == null) {
+      done = true;
+    }
+    if (done != null) {
       setState(() {
-        isEditing = false;
-        entry = null;
-        hit = null;
-      });
-    } else if (done != null) {
-      setState(() {
-        isEditing = !done;
+        isEditing = !done!;
         if (done) {
           entry = null;
           hit = null;

@@ -25,7 +25,9 @@ class EntryPage extends StatelessWidget {
   final ScrollController? scroll;
 
   bool get isReviewing =>
-      entry.contribution?.uid != EditorStore.uid && entry.contribution != null;
+      entry.contribution != null &&
+      EditorStore.uid != null &&
+      entry.contribution?.uid != EditorStore.uid;
 
   const EntryPage(
     this.entry, {
@@ -212,7 +214,7 @@ class EntryPage extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.pending_actions_outlined),
               title: const Text('Reviewing contribution'),
-              subtitle: Text(entry.contribution!.uid),
+              subtitle: Text('Author: ' + entry.contribution!.uid),
               onTap: () => copyText(
                 context,
                 entry.contribution!.uid,
