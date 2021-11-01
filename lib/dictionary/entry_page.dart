@@ -218,7 +218,7 @@ class EntryPage extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.pending_actions_outlined),
               title: const Text('Reviewing contribution'),
-              subtitle: Text('Author: ' + entry.contribution!.uid),
+              subtitle: Text('By ' + entry.contribution!.uid),
               onTap: () => copyText(
                 context,
                 entry.contribution!.uid,
@@ -250,12 +250,14 @@ class EntryPage extends StatelessWidget {
         : isAuthor
             ? hit?.entryID
             : null;
-    entry.contribution = EditorStore.isAdmin || isReviewing
-        ? null
-        : Contribution(
-            EditorStore.uid!,
-            overwriteId: hit?.entryID,
-          );
+    if (EditorStore.isAdmin || isReviewing) {
+      entry.contribution = null;
+    } else {
+      entry.contribution ??= Contribution(
+        EditorStore.uid!,
+        overwriteId: hit?.entryID,
+      );
+    }
 
     return await showLoadingDialog(
           context,
