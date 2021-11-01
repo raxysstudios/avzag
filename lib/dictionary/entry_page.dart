@@ -190,18 +190,20 @@ class EntryPage extends StatelessWidget {
                     Navigator.of(context).pop(true);
                   },
                 ),
-              SpeedDialChild(
-                child: const Icon(Icons.delete_outline),
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                label: isReviewing ? 'Reject contribution' : 'Delete entry',
-                visible: true,
-                onTap: () async {
-                  if (await delete(context)) {
-                    Navigator.of(context).pop(true);
-                  }
-                },
-              ),
+              if (EditorStore.isAdmin ||
+                  entry.contribution?.uid == EditorStore.uid)
+                SpeedDialChild(
+                  child: const Icon(Icons.delete_outline),
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  label: isReviewing ? 'Reject contribution' : 'Delete entry',
+                  visible: true,
+                  onTap: () async {
+                    if (await delete(context)) {
+                      Navigator.of(context).pop(true);
+                    }
+                  },
+                ),
             ],
           );
         },
