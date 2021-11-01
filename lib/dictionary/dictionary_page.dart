@@ -163,6 +163,22 @@ class _DictionaryPageState extends State<DictionaryPage> {
     final media = MediaQuery.of(context);
     final sheetSize =
         1 - (kToolbarHeight + media.padding.top) / media.size.height;
+
+    final sourceEntry = entry!.contribution == null
+        ? null
+        : await showLoadingDialog(
+            context,
+            FirebaseFirestore.instance
+                .doc('dictionary/${entry!.contribution!.overwriteId}')
+                .withConverter(
+                  fromFirestore: (snapshot, _) =>
+                      Entry.fromJson(snapshot.data()!),
+                  toFirestore: (Entry object, _) => object.toJson(),
+                )
+                .get()
+                .then((s) => s.data()),
+          );
+
     final done = await showModalBottomSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -184,7 +200,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
               child: EntryPage(
                 entry!,
                 hit: hit,
-                editor: isEditing ? getEditor(setState) : null,
+                sourceEntry: sourceEntry,
+                editor: sourceEntry == null && isEditing
+                    ? getEditor(setState)
+                    : null,
                 scroll: scroll,
               ),
             );
@@ -192,7 +211,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
         );
       },
     );
-    if (done != null) {
+    if (sourceEntry != null) {
+      setState(() {
+        isEditing = false;
+        entry = null;
+        hit = null;
+      });
+    } else if (done != null) {
       setState(() {
         isEditing = !done;
         if (done) {

@@ -19,17 +19,107 @@ import 'entry.dart';
 class EntryPage extends StatelessWidget {
   final Entry entry;
   final EntryHit? hit;
+  final Entry? sourceEntry;
   final EditorCallback? editor;
-
   final ScrollController? scroll;
+
+  bool get isReviewing =>
+      entry.contribution?.email != EditorStore.email || sourceEntry != null;
 
   const EntryPage(
     this.entry, {
     this.hit,
+    this.sourceEntry,
     this.scroll,
     this.editor,
     Key? key,
   }) : super(key: key);
+
+  List<Widget> buildEntry(
+    BuildContext context,
+    Entry entry, [
+    EditorCallback? editor,
+  ]) {
+    return [
+      Column(
+        children: [
+          TextSampleTiles(
+            samples: entry.forms,
+            onEdited: editor?.call(
+              (v) => entry.forms = v ?? [],
+            ),
+            icon: Icons.layers_outlined,
+            name: 'form',
+          ),
+          TagsTile(
+            entry.tags,
+            onEdited: editor?.call(
+              (v) => entry.tags = v,
+            ),
+          ),
+          NoteTile(
+            entry.note,
+            onEdited: editor?.call(
+              (v) => entry.note = v,
+            ),
+          ),
+        ],
+      ),
+      for (final use in entry.uses)
+        Card(
+          child: Column(
+            children: [
+              MeaningTile(
+                use,
+                onEdited: editor?.call((v) {
+                  if (v == null) {
+                    entry.uses.remove(use);
+                  } else {
+                    entry.uses[entry.uses.indexOf(use)] = v;
+                  }
+                }),
+              ),
+              TagsTile(
+                use.tags,
+                onEdited: editor?.call(
+                  (v) => use.tags = v,
+                ),
+              ),
+              NoteTile(
+                use.note,
+                onEdited: editor?.call(
+                  (v) => use.note = v,
+                ),
+              ),
+              TextSampleTiles(
+                samples: use.samples,
+                onEdited: editor?.call(
+                  (v) => use.samples = v,
+                ),
+                icon: Icons.bookmark_outline,
+                translation: true,
+              ),
+            ],
+          ),
+        ),
+      if (editor != null)
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: TextButton.icon(
+            onPressed: () => MeaningTile.showEditor(
+              context: context,
+              callback: editor(
+                (v) {
+                  if (v != null) entry.uses.add(v);
+                },
+              ),
+            ),
+            icon: const Icon(Icons.add_outlined),
+            label: const Text('Add use'),
+          ),
+        )
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,27 +170,28 @@ class EntryPage extends StatelessWidget {
                 child: const Icon(Icons.upload_outlined),
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
-                label: 'Submit changes',
+                label: isReviewing ? 'Accept contribution' : 'Submit changes',
                 onTap: () async {
                   if (await submit(context)) {
                     Navigator.of(context).pop(true);
                   }
                 },
               ),
-              SpeedDialChild(
-                child: const Icon(Icons.cancel_outlined),
-                label: 'Discard changes',
-                backgroundColor: Colors.orange,
-                foregroundColor: Colors.white,
-                onTap: () {
-                  Navigator.of(context).pop(true);
-                },
-              ),
+              if (!isReviewing)
+                SpeedDialChild(
+                  child: const Icon(Icons.cancel_outlined),
+                  label: 'Discard changes',
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
+                  onTap: () {
+                    Navigator.of(context).pop(true);
+                  },
+                ),
               SpeedDialChild(
                 child: const Icon(Icons.delete_outline),
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
-                label: 'Delete entry',
+                label: isReviewing ? 'Reject contribution' : 'Delete entry',
                 visible: true,
                 onTap: () async {
                   if (await delete(context)) {
@@ -116,108 +207,53 @@ class EntryPage extends StatelessWidget {
         controller: scroll,
         padding: const EdgeInsets.only(bottom: 76),
         children: [
-          Column(
-            children: [
-              TextSampleTiles(
-                samples: entry.forms,
-                onEdited: editor?.call(
-                  (v) => entry.forms = v ?? [],
-                ),
-                icon: Icons.layers_outlined,
-                name: 'form',
-              ),
-              TagsTile(
-                entry.tags,
-                onEdited: editor?.call(
-                  (v) => entry.tags = v,
-                ),
-              ),
-              NoteTile(
-                entry.note,
-                onEdited: editor?.call(
-                  (v) => entry.note = v,
-                ),
-              ),
-            ],
-          ),
-          for (final use in entry.uses)
-            Card(
-              child: Column(
-                children: [
-                  MeaningTile(
-                    use,
-                    onEdited: editor?.call((v) {
-                      if (v == null) {
-                        entry.uses.remove(use);
-                      } else {
-                        entry.uses[entry.uses.indexOf(use)] = v;
-                      }
-                    }),
-                  ),
-                  TagsTile(
-                    use.tags,
-                    onEdited: editor?.call(
-                      (v) => use.tags = v,
-                    ),
-                  ),
-                  NoteTile(
-                    use.note,
-                    onEdited: editor?.call(
-                      (v) => use.note = v,
-                    ),
-                  ),
-                  TextSampleTiles(
-                    samples: use.samples,
-                    onEdited: editor?.call(
-                      (v) => use.samples = v,
-                    ),
-                    icon: Icons.bookmark_outline,
-                    translation: true,
-                  ),
-                ],
-              ),
-            ),
-          if (editor != null)
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: TextButton.icon(
-                onPressed: () => MeaningTile.showEditor(
-                  context: context,
-                  callback: editor!(
-                    (v) {
-                      if (v != null) entry.uses.add(v);
-                    },
-                  ),
-                ),
-                icon: const Icon(Icons.add_outlined),
-                label: const Text('Add use'),
-              ),
-            )
+          ...buildEntry(context, entry, editor),
+          if (isReviewing) ...[
+            const Divider(),
+            ...buildEntry(context, sourceEntry!),
+          ],
         ],
       ),
     );
   }
 
   Future<bool> submit(BuildContext context) async {
-    if (entry.uses.isEmpty || entry.forms.isEmpty) {
+    if (!isReviewing && (entry.uses.isEmpty || entry.forms.isEmpty)) {
       showSnackbar(
         context,
         text: 'Must have at least a form and a use.',
       );
       return false;
     }
+
+    final docId = isReviewing ? entry.contribution?.overwriteId : hit?.entryID;
+    entry.contribution = EditorStore.isAdmin || isReviewing
+        ? null
+        : Contribution(
+            email: EditorStore.email!,
+            overwriteId: hit?.entryID,
+          );
+
     await showLoadingDialog(
       context,
-      FirebaseFirestore.instance
-          .collection('dictionary')
-          .doc(hit?.entryID)
-          .set(entry.toJson()),
+      Future.wait([
+        FirebaseFirestore.instance
+            .collection('dictionary')
+            .doc(docId)
+            .set(entry.toJson()),
+        if (isReviewing)
+          FirebaseFirestore.instance
+              .collection('dictionary')
+              .doc(hit?.entryID)
+              .delete(),
+      ]),
     );
+
     return true;
   }
 
   Future<bool> delete(BuildContext context) async {
-    if (entry.uses.isNotEmpty) {
+    if (!isReviewing && entry.uses.isNotEmpty) {
       showSnackbar(
         context,
         text: 'Remove all uses first.',
@@ -226,14 +262,17 @@ class EntryPage extends StatelessWidget {
     }
     final confirm = await showDangerDialog(
       context,
-      'Delete entry?',
+      isReviewing ? 'Discard contribution?' : 'Delete entry?',
       confirmText: 'Delete',
       rejectText: 'Keep',
     );
     if (confirm) {
       await showLoadingDialog(
         context,
-        FirebaseFirestore.instance.doc('dictionary/${hit?.entryID}').delete(),
+        FirebaseFirestore.instance
+            .collection('dictionary')
+            .doc(hit?.entryID)
+            .delete(),
       );
       return true;
     }
