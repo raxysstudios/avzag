@@ -70,16 +70,15 @@ class HitTile extends StatelessWidget {
             style: theme.subtitle1?.copyWith(
               fontWeight: FontWeight.w500,
             ),
-            maxLines: 1,
           ),
           if (hit.form != null && hit.form != hit.headword) ...[
             const SizedBox(width: 4),
             Text(
               capitalize(hit.form!),
-              style: TextStyle(
+              style: theme.subtitle1?.copyWith(
+                fontWeight: FontWeight.w500,
                 color: theme.caption?.color,
               ),
-              maxLines: 1,
             ),
           ],
           const Spacer(),
