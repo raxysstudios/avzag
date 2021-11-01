@@ -1,7 +1,7 @@
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/global_store.dart';
-import 'package:avzag/utils.dart';
+import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/loading_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

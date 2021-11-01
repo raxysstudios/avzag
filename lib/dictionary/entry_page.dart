@@ -1,13 +1,14 @@
+import 'package:avzag/utils/contribution.dart';
 import 'package:avzag/dictionary/hit_tile.dart';
 
 import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
-import 'package:avzag/widgets/editor_utils.dart';
+import 'package:avzag/utils/editor_utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
-import 'package:avzag/widgets/snackbar_manager.dart';
+import 'package:avzag/utils/snackbar_manager.dart';
 import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/widgets/note_tile.dart';
@@ -24,7 +25,7 @@ class EntryPage extends StatelessWidget {
   final ScrollController? scroll;
 
   bool get isReviewing =>
-      entry.contribution?.email != EditorStore.email && sourceEntry != null;
+      entry.contribution?.uid != EditorStore.uid && sourceEntry != null;
 
   const EntryPage(
     this.entry, {
@@ -230,7 +231,7 @@ class EntryPage extends StatelessWidget {
     entry.contribution = EditorStore.isAdmin || isReviewing
         ? null
         : Contribution(
-            email: EditorStore.email!,
+            EditorStore.uid!,
             overwriteId: hit?.entryID,
           );
 

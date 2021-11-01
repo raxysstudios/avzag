@@ -1,7 +1,8 @@
-import 'package:avzag/widgets/snackbar_manager.dart';
+import 'package:avzag/utils/snackbar_manager.dart';
 
 import 'use.dart';
-import 'package:avzag/utils.dart';
+import 'package:avzag/utils/utils.dart';
+
 import 'package:flutter/material.dart';
 import 'package:avzag/widgets/editor_dialog.dart';
 

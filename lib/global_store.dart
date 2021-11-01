@@ -7,6 +7,8 @@ import 'home/language.dart';
 
 class EditorStore {
   static String? get email => FirebaseAuth.instance.currentUser?.email;
+  static String? get uid => FirebaseAuth.instance.currentUser?.uid;
+
   static bool isAdmin = false;
   static bool get isEditing => language != null;
 

@@ -1,4 +1,4 @@
-import 'package:avzag/utils.dart';
+import 'package:avzag/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class PageTitle extends StatelessWidget {

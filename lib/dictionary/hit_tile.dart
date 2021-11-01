@@ -1,5 +1,6 @@
 import 'package:algolia/algolia.dart';
-import 'package:avzag/utils.dart';
+import 'package:avzag/utils/utils.dart';
+
 import 'package:flutter/material.dart';
 
 class EntryHit {

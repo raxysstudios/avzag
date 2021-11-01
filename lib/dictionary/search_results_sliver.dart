@@ -1,7 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:avzag/utils.dart';
+import 'package:avzag/utils/utils.dart';
+
 
 import 'hit_tile.dart';
 import 'search_controller.dart';

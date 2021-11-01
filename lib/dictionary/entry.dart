@@ -1,27 +1,7 @@
+import 'package:avzag/utils/contribution.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/dictionary/use.dart';
-import 'package:avzag/utils.dart';
-
-class Contribution {
-  String email;
-  String? overwriteId;
-
-  Contribution({
-    required this.email,
-    this.overwriteId,
-  });
-
-  Contribution.fromJson(Map<String, dynamic> json)
-      : this(
-          email: json['email'],
-          overwriteId: json['overwriteId'],
-        );
-
-  Map<String, dynamic> toJson() => {
-        "email": email,
-        "overwriteId": overwriteId,
-      };
-}
+import 'package:avzag/utils/utils.dart';
 
 class Entry {
   List<TextSample> forms;

@@ -2,7 +2,7 @@ import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
-import 'package:avzag/widgets/editor_utils.dart';
+import 'package:avzag/utils/editor_utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';

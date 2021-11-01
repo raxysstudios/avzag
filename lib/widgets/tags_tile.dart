@@ -1,7 +1,7 @@
-import 'package:avzag/utils.dart';
+import 'package:avzag/utils/snackbar_manager.dart';
+import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/editor_dialog.dart';
 import 'package:flutter/material.dart';
-import 'snackbar_manager.dart';
 
 class TagsTile extends StatelessWidget {
   final List<String>? tags;

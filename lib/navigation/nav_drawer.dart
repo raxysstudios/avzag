@@ -1,7 +1,7 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/home_page.dart';
-import 'package:avzag/utils.dart';
+import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/expandable_tile.dart';
 import 'package:avzag/widgets/raxys_logo.dart';
 import 'package:flutter/cupertino.dart';

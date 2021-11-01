@@ -1,4 +1,4 @@
-import 'package:avzag/utils.dart';
+import 'package:avzag/utils/utils.dart';
 
 class LanguageStats {
   final int editors;

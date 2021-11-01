@@ -1,6 +1,7 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_avatar.dart';
-import 'package:avzag/utils.dart';
+import 'package:avzag/utils/utils.dart';
+
 import 'package:flutter/material.dart';
 
 class SearchModeButton extends StatelessWidget {

@@ -1,5 +1,5 @@
+import 'package:avzag/utils/snackbar_manager.dart';
 import 'package:avzag/widgets/loading_card.dart';
-import 'package:avzag/widgets/snackbar_manager.dart';
 import 'package:flutter/material.dart';
 
 Future<T?> showLoadingDialog<T>(
