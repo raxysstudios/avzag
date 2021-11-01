@@ -53,6 +53,7 @@ class EntryPage extends StatelessWidget {
       ),
       floatingActionButton: Builder(
         builder: (context) {
+          if (entry.language != GlobalStore.editing) return const SizedBox();
           if (!editor.editing) {
             return FloatingActionButton.extended(
               onPressed: () => editor.startEditing(entry, editor.id),
@@ -76,7 +77,7 @@ class EntryPage extends StatelessWidget {
                 label: 'Submit changes',
                 onTap: () async {
                   if (await submit(context)) {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(true);
                   }
                 },
               ),
@@ -84,8 +85,7 @@ class EntryPage extends StatelessWidget {
                 child: const Icon(Icons.cancel_outlined),
                 label: 'Discard changes',
                 onTap: () {
-                  editor.stopEditing();
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pop(true);
                 },
               ),
               SpeedDialChild(
@@ -96,7 +96,7 @@ class EntryPage extends StatelessWidget {
                 visible: true,
                 onTap: () async {
                   if (await delete(context)) {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(true);
                   }
                 },
               ),

@@ -70,7 +70,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
     final media = MediaQuery.of(context);
     final sheetSize =
         1 - (kToolbarHeight + media.padding.top) / media.size.height;
-    await showModalBottomSheet(
+    final done = await showModalBottomSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -99,6 +99,15 @@ class _DictionaryPageState extends State<DictionaryPage> {
         );
       },
     );
+    if (done ?? false) {
+      showLoadingDialog(
+        context,
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () => context.read<EditorController<Entry>>().stopEditing(),
+        ),
+      );
+    }
   }
 
   @override
@@ -129,6 +138,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   language: language,
                 ),
               ),
+              resume: true,
             ),
             icon: const Icon(Icons.add_outlined),
             label: const Text('New'),
