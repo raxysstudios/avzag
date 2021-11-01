@@ -17,24 +17,14 @@ class MeaningTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).textTheme;
     return ListTile(
       minVerticalPadding: 12,
       leading: const Icon(Icons.lightbulb_outline),
-      title: RichText(
-        maxLines: 1,
-        text: TextSpan(
-          style: theme.subtitle1,
-          children: [
-            TextSpan(
-              text: capitalize(use.term),
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            if (use.definition != null) TextSpan(text: ' ' + use.definition!),
-          ],
+      title: Text(
+        capitalize(use.term),
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
         ),
       ),
       subtitle: onEdited != null && (use.aliases?.isNotEmpty ?? false)
@@ -53,10 +43,7 @@ class MeaningTile extends StatelessWidget {
       onLongPress: onEdited == null
           ? () => copyText(
                 context,
-                [
-                  use.term,
-                  if (use.definition != null) use.definition,
-                ].join(' '),
+                use.term,
               )
           : null,
     );
@@ -89,17 +76,6 @@ class MeaningTile extends StatelessWidget {
             labelText: 'General term',
           ),
           validator: emptyValidator,
-          inputFormatters: [LowerCaseTextFormatter()],
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          initialValue: result.definition,
-          onChanged: (text) {
-            result.definition = text.trim();
-          },
-          decoration: const InputDecoration(
-            labelText: 'Specific definition',
-          ),
           inputFormatters: [LowerCaseTextFormatter()],
         ),
         const SizedBox(height: 8),
