@@ -3,7 +3,6 @@ import 'package:avzag/widgets/text_sample_tiles.dart';
 
 class Use {
   String term;
-  String? definition;
   List<String>? aliases;
   List<String>? tags;
   String? note;
@@ -11,7 +10,6 @@ class Use {
 
   Use({
     required this.term,
-    this.definition,
     this.aliases,
     this.tags,
     this.note,
@@ -21,7 +19,6 @@ class Use {
   Use.fromJson(Map<String, dynamic> json)
       : this(
           term: json['term'],
-          definition: json['definition'],
           aliases: json2list(json['aliases']),
           tags: json2list(json['tags']),
           note: json['note'],
@@ -34,7 +31,6 @@ class Use {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     data['term'] = term;
-    if (definition?.isNotEmpty ?? false) data['definition'] = definition;
     if (aliases?.isNotEmpty ?? false) data['aliases'] = aliases;
     if (tags?.isNotEmpty ?? false) data['tags'] = tags;
     if (note?.isNotEmpty ?? false) data['note'] = note;
