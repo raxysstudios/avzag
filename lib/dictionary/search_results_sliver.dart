@@ -2,23 +2,23 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:avzag/utils.dart';
-import 'package:provider/provider.dart';
 
 import 'hit_tile.dart';
 import 'search_controller.dart';
 
 class SearchResultsSliver extends StatelessWidget {
-  final ValueSetter<EntryHit>? onTap;
-
-  const SearchResultsSliver({
-    required this.onTap,
+  const SearchResultsSliver(
+    this.search, {
+    this.onTap,
     Key? key,
   }) : super(key: key);
+
+  final SearchController search;
+  final ValueSetter<EntryHit>? onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final controller = context.watch<SearchController>();
     return Theme(
       data: theme.copyWith(
         iconTheme: IconThemeData(
@@ -29,9 +29,9 @@ class SearchResultsSliver extends StatelessWidget {
       child: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
-            final id = controller.getId(index);
-            final hitGroups = controller.getHits(index);
-            final tags = controller.getTags(index);
+            final id = search.getId(index);
+            final hitGroups = search.getHits(index);
+            final tags = search.getTags(index);
             return Column(
               children: [
                 const SizedBox(height: 8),
@@ -88,7 +88,7 @@ class SearchResultsSliver extends StatelessWidget {
               ],
             );
           },
-          childCount: controller.length,
+          childCount: search.length,
         ),
       ),
     );

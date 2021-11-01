@@ -1,9 +1,11 @@
+import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/editor_utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 import 'entry.dart';
 import 'entry_page.dart';
@@ -23,6 +25,101 @@ class _DictionaryPageState extends State<DictionaryPage> {
   Entry? entry;
   EntryHit? hit;
   var isEditing = false;
+
+  late final SearchController search;
+
+  @override
+  void initState() {
+    super.initState();
+    search = SearchController(
+      GlobalStore.languages.keys,
+      GlobalStore.algolia.index('dictionary'),
+    );
+  }
+
+  @override
+  void dispose() {
+    search.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: search,
+      builder: (context, _) {
+        return Scaffold(
+          drawer: const NavDraver(title: 'dictionary'),
+          floatingActionButton: Builder(
+            builder: (context) {
+              final language = GlobalStore.editing;
+              if (language == null) return const SizedBox();
+              if (isEditing) {
+                return FloatingActionButton.extended(
+                  onPressed: () => openEntry(true),
+                  icon: const Icon(Icons.edit_outlined),
+                  label: const Text('Resume'),
+                );
+              }
+              return FloatingActionButton.extended(
+                onPressed: () {
+                  setState(() {
+                    entry = Entry(
+                      forms: [],
+                      uses: [],
+                      language: language,
+                    );
+                    hit = null;
+                    isEditing = true;
+                  });
+                  openEntry(true);
+                },
+                icon: const Icon(Icons.add_outlined),
+                label: const Text('New'),
+              );
+            },
+          ),
+          body: CustomScrollView(
+            slivers: [
+              const SliverAppBar(
+                pinned: true,
+                snap: true,
+                floating: true,
+                forceElevated: true,
+                title: Text('Dictionary'),
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(64),
+                  child: SearchToolbar(),
+                ),
+              ),
+              // if (GlobalStore.editing != null)
+              //   SliverList(
+              //     delegate: SliverChildListDelegate(
+              //       [
+              //         SwitchListTile(
+              //           value: controller.pendingOnly,
+              //           onChanged: (v) {
+              //             controller.pendingOnly = v;
+              //           },
+              //           title: const Text('Filter pending reviews'),
+              //           secondary: const Icon(Icons.pending_actions_outlined),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              SliverPadding(
+                padding: const EdgeInsets.only(bottom: 76),
+                sliver: SearchResultsSliver(
+                  context.watch<SearchController>(),
+                  onTap: loadEntry,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   Future loadEntry(EntryHit hit) async {
     if (isEditing) {
@@ -96,7 +193,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
         );
       },
     );
-
     if (done != null) {
       setState(() {
         isEditing = !done;
@@ -107,77 +203,5 @@ class _DictionaryPageState extends State<DictionaryPage> {
       });
       if (!done) openEntry(true);
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const NavDraver(title: 'dictionary'),
-      floatingActionButton: Builder(
-        builder: (context) {
-          final language = GlobalStore.editing;
-          if (language == null) return const SizedBox();
-          if (isEditing) {
-            return FloatingActionButton.extended(
-              onPressed: () => openEntry(true),
-              icon: const Icon(Icons.edit_outlined),
-              label: const Text('Resume'),
-            );
-          }
-          return FloatingActionButton.extended(
-            onPressed: () {
-              setState(() {
-                entry = Entry(
-                  forms: [],
-                  uses: [],
-                  language: language,
-                );
-                hit = null;
-                isEditing = true;
-              });
-              openEntry(true);
-            },
-            icon: const Icon(Icons.add_outlined),
-            label: const Text('New'),
-          );
-        },
-      ),
-      body: CustomScrollView(
-        slivers: [
-          const SliverAppBar(
-            pinned: true,
-            snap: true,
-            floating: true,
-            forceElevated: true,
-            title: Text('Dictionary'),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(64),
-              child: SearchToolbar(),
-            ),
-          ),
-          // if (GlobalStore.editing != null)
-          //   SliverList(
-          //     delegate: SliverChildListDelegate(
-          //       [
-          //         SwitchListTile(
-          //           value: controller.pendingOnly,
-          //           onChanged: (v) {
-          //             controller.pendingOnly = v;
-          //           },
-          //           title: const Text('Filter pending reviews'),
-          //           secondary: const Icon(Icons.pending_actions_outlined),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          SliverPadding(
-            padding: const EdgeInsets.only(bottom: 76),
-            sliver: SearchResultsSliver(
-              onTap: loadEntry,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
