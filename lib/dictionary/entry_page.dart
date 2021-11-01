@@ -25,7 +25,7 @@ class EntryPage extends StatelessWidget {
   final ScrollController? scroll;
 
   bool get isReviewing =>
-      entry.contribution?.uid != EditorStore.uid && sourceEntry != null;
+      entry.contribution?.uid != EditorStore.uid && entry.contribution != null;
 
   const EntryPage(
     this.entry, {
@@ -208,8 +208,20 @@ class EntryPage extends StatelessWidget {
         controller: scroll,
         padding: const EdgeInsets.only(bottom: 76),
         children: [
-          ...buildEntry(context, entry, editor),
           if (isReviewing) ...[
+            ListTile(
+              leading: const Icon(Icons.pending_actions_outlined),
+              title: const Text('Reviewing contribution'),
+              subtitle: Text(entry.contribution!.uid),
+              onTap: () => copyText(
+                context,
+                entry.contribution!.uid,
+              ),
+            ),
+            const Divider(height: 0)
+          ],
+          ...buildEntry(context, entry, editor),
+          if (sourceEntry != null) ...[
             const Divider(),
             ...buildEntry(context, sourceEntry!),
           ],
