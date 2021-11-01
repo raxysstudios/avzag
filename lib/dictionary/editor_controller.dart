@@ -31,4 +31,8 @@ class EditorController<T> with ChangeNotifier {
     _id = null;
     notifyListeners();
   }
+
+  void prepareId(String? id) {
+    _id = id;
+  }
 }

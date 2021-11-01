@@ -17,12 +17,10 @@ import 'use.dart';
 
 class EntryPage extends StatelessWidget {
   final Entry entry;
-  final String? id;
   final ScrollController? scroll;
 
   const EntryPage(
     this.entry, {
-    this.id,
     this.scroll,
     Key? key,
   }) : super(key: key);
@@ -30,7 +28,6 @@ class EntryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final editor = context.watch<EditorController<Entry>>();
-    final entry = editor.object!;
     return Scaffold(
       appBar: AppBar(
         title: editor.editing
@@ -57,7 +54,7 @@ class EntryPage extends StatelessWidget {
         builder: (context) {
           if (!editor.editing) {
             return FloatingActionButton.extended(
-              onPressed: () => editor.startEditing(entry, id),
+              onPressed: () => editor.startEditing(entry, editor.id),
               icon: const Icon(Icons.edit_outlined),
               label: const Text('Edit'),
             );
@@ -214,7 +211,10 @@ class EntryPage extends StatelessWidget {
     }
     await showLoadingDialog(
       context,
-      FirebaseFirestore.instance.doc('dictionary/$id').set(entry.toJson()),
+      FirebaseFirestore.instance
+          .collection('dictionary')
+          .doc(editor.id)
+          .set(entry.toJson()),
     );
     return true;
   }
@@ -222,7 +222,7 @@ class EntryPage extends StatelessWidget {
   Future<bool> delete(BuildContext context) async {
     final editor = context.read<EditorController<Entry>>();
     final entry = editor.object;
-    if (entry == null || id == null) return false;
+    if (entry == null || editor.id == null) return false;
     if (entry.uses.isNotEmpty) {
       showSnackbar(
         context,
@@ -239,7 +239,7 @@ class EntryPage extends StatelessWidget {
     if (confirm) {
       await showLoadingDialog(
         context,
-        FirebaseFirestore.instance.doc('dictionary/$id').delete(),
+        FirebaseFirestore.instance.doc('dictionary/${editor.id}').delete(),
       );
       return true;
     }

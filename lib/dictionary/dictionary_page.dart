@@ -22,7 +22,7 @@ class DictionaryPage extends StatefulWidget {
 
 class _DictionaryPageState extends State<DictionaryPage> {
   Future loadEntry(EntryHit hit) async {
-    final editor = context.read<EditorController>();
+    final editor = context.read<EditorController<Entry>>();
     if (editor.editing) {
       if (await showDangerDialog(
         context,
@@ -48,12 +48,17 @@ class _DictionaryPageState extends State<DictionaryPage> {
     if (snapshot?.exists ?? false) {
       await openEntry(
         snapshot!.data()!,
-        snapshot.id,
+        id: snapshot.id,
       );
     }
   }
 
-  Future openEntry(Entry entry, [String? id]) async {
+  Future openEntry(
+    Entry entry, {
+    String? id,
+    bool resume = false,
+  }) async {
+    final editor = context.read<EditorController<Entry>>();
     final media = MediaQuery.of(context);
     final sheetSize =
         1 - (kToolbarHeight + media.padding.top) / media.size.height;
@@ -61,11 +66,11 @@ class _DictionaryPageState extends State<DictionaryPage> {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (BuildContext context) {
+      builder: (context) {
         return DraggableScrollableSheet(
           minChildSize: .5,
           maxChildSize: sheetSize,
-          initialChildSize: .5,
+          initialChildSize: resume ? sheetSize : .5,
           builder: (context, scroll) {
             return Container(
               decoration: const BoxDecoration(
@@ -74,10 +79,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 ),
               ),
               clipBehavior: Clip.antiAlias,
-              child: EntryPage(
-                entry,
-                id: id,
-                scroll: scroll,
+              child: ChangeNotifierProvider.value(
+                value: editor,
+                child: EntryPage(
+                  entry,
+                  scroll: scroll,
+                ),
               ),
             );
           },
@@ -97,7 +104,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
           final editor = context.watch<EditorController<Entry>>();
           if (editor.editing) {
             return FloatingActionButton.extended(
-              onPressed: () => openEntry(editor.object!),
+              onPressed: () => openEntry(
+                editor.object!,
+                resume: true,
+              ),
               icon: const Icon(Icons.open_in_full_outlined),
               label: const Text('Resume'),
             );
