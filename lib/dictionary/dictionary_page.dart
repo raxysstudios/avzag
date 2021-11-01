@@ -24,6 +24,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
   Future loadEntry(EntryHit hit) async {
     final editor = context.read<EditorController<Entry>>();
     if (editor.editing) {
+      if (editor.id == hit.entryID) {
+        openEntry(
+          editor.object!,
+          resume: true,
+        );
+        return;
+      }
       if (await showDangerDialog(
         context,
         'Discard edits?',
@@ -46,6 +53,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
           .get(),
     );
     if (snapshot?.exists ?? false) {
+      editor.prepareId(hit.entryID);
       await openEntry(
         snapshot!.data()!,
         id: snapshot.id,

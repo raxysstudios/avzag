@@ -11,6 +11,7 @@ import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/widgets/note_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 import 'entry.dart';
 import 'use.dart';
@@ -59,10 +60,47 @@ class EntryPage extends StatelessWidget {
               label: const Text('Edit'),
             );
           }
-          return FloatingActionButton.extended(
-            onPressed: () => finishEditing(context),
-            icon: const Icon(Icons.done_all_outlined),
-            label: const Text('Finish'),
+          return SpeedDial(
+            icon: Icons.done_all_outlined,
+            activeIcon: Icons.remove_done_outlined,
+            // label: const Text('Finish editing'),
+            // activeLabel: const Text('Continue editing'),
+            // buttonSize: 48,
+            spaceBetweenChildren: 9,
+            spacing: 7,
+            children: [
+              SpeedDialChild(
+                child: const Icon(Icons.upload_outlined),
+                backgroundColor: Colors.indigo,
+                foregroundColor: Colors.white,
+                label: 'Submit changes',
+                onTap: () async {
+                  if (await submit(context)) {
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+              SpeedDialChild(
+                child: const Icon(Icons.cancel_outlined),
+                label: 'Discard changes',
+                onTap: () {
+                  editor.stopEditing();
+                  Navigator.of(context).pop();
+                },
+              ),
+              SpeedDialChild(
+                child: const Icon(Icons.delete_outline),
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                label: 'Delete entry',
+                visible: true,
+                onTap: () async {
+                  if (await delete(context)) {
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            ],
           );
         },
       ),
@@ -150,52 +188,6 @@ class EntryPage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Future finishEditing(BuildContext context) async {
-    final action = await showDialog<String>(
-      context: context,
-      builder: (context) {
-        return SimpleDialog(
-          title: const Text('Finish editing'),
-          children: [
-            SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, 'submit'),
-              child: const ListTile(
-                leading: Icon(Icons.upload_outlined),
-                title: Text('Submit changes'),
-              ),
-            ),
-            SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, 'close'),
-              child: const ListTile(
-                leading: Icon(Icons.close_outlined),
-                title: Text('Discard changes'),
-              ),
-            ),
-            SimpleDialogOption(
-              onPressed: () => Navigator.pop(context, 'delete'),
-              child: const ListTile(
-                leading: Icon(Icons.delete_outline),
-                title: Text('Delete entry'),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-    switch (action) {
-      case 'submit':
-        await submit(context);
-        break;
-      case 'close':
-        Navigator.of(context).pop();
-        context.read<EditorController<Entry>>().stopEditing();
-        break;
-      case 'delete':
-        await delete(context);
-        break;
-    }
   }
 
   Future<bool> submit(BuildContext context) async {
