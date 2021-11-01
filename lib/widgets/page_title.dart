@@ -5,10 +5,10 @@ class PageTitle extends StatelessWidget {
   final String title;
   final String? subtitle;
 
-  const PageTitle({
-    Key? key,
-    required this.title,
+  const PageTitle(
+    this.title, {
     this.subtitle,
+    Key? key,
   }) : super(key: key);
 
   @override

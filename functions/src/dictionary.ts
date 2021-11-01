@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as functions from "firebase-functions";
 import algoliasearch from "algoliasearch";
 
@@ -9,27 +11,29 @@ const dictionary = algoliasearch(
 
 export const indexDictionary = functions
     .region("europe-central2")
-    .firestore.document("languages/{language}/dictionary/{entryID}")
+    .firestore.document("dictionary/{entryID}")
     .onWrite(async (change, context) => {
+      const entryID = context.params.entryID;
       if (change.before.exists) {
         await dictionary.deleteBy({
-          filters: "entryID:" + context.params.entryID,
+          filters: "entryID:" + entryID,
         });
       }
       if (change.after.exists) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const entry = change.after.data()!;
         const base = {
-          entryID: context.params.entryID,
-          language: context.params.language,
+          entryID,
+          language: entry.language,
           forms: entry.forms.map(({plain}: never) => plain),
           headword: entry.forms[0].plain,
-          pendingReview: !!entry.pendingReview,
-        };
+        } as any;
+        if (entry.pendingReview) {
+          base.pendingReview = true;
+        }
+
         const records = [];
 
         for (const use of entry.uses) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const record = Object.assign({term: use.term}, base) as any;
           if (use.tags?.length || entry.tags?.length) {
             record.tags = (use.tags ?? []).concat(entry.tags ?? []);

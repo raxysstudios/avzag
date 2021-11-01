@@ -1,6 +1,6 @@
 name: avzag
 description: Extensible parallel language compendium.
-version: 0.3.21+26
+version: 0.3.22+27
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
@@ -19,8 +19,9 @@ dependencies:
   just_audio: ^0.9.5
   algolia: ^1.0.1
   flutter_markdown: ^0.6.3
-  sliding_up_panel: ^2.0.0+1
   package_info_plus: ^1.0.5
+  provider: ^6.0.1
+  flutter_speed_dial: ^4.6.6
 
 dev_dependencies:
   flutter_test:
