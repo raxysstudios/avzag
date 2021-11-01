@@ -1,6 +1,7 @@
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
+import 'package:avzag/widgets/editor_utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -87,9 +88,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               child: EntryPage(
                 entry!,
                 hit: hit,
-                editor: isEditing
-                    ? <V>(ValueSetter<V> f) => (V v) => setState(() => f(v))
-                    : null,
+                editor: isEditing ? getEditor(setState) : null,
                 scroll: scroll,
               ),
             );

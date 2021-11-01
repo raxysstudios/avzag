@@ -4,6 +4,7 @@ import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
+import 'package:avzag/widgets/editor_utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/widgets/snackbar_manager.dart';
@@ -18,7 +19,7 @@ import 'entry.dart';
 class EntryPage extends StatelessWidget {
   final Entry entry;
   final EntryHit? hit;
-  final ValueSetter<V> Function<V>(ValueSetter<V> action)? editor;
+  final EditorCallback? editor;
 
   final ScrollController? scroll;
 
