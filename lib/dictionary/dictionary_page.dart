@@ -174,6 +174,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
           minChildSize: .5,
           maxChildSize: sheetSize,
           initialChildSize: resume ? sheetSize : .5,
+          expand: false,
           builder: (context, scroll) {
             return Container(
               decoration: const BoxDecoration(
