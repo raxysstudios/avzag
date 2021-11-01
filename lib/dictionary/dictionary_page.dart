@@ -1,10 +1,8 @@
-import 'package:avzag/dictionary/editor_controller.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
 
 import 'entry.dart';
 import 'entry_page.dart';
@@ -21,15 +19,14 @@ class DictionaryPage extends StatefulWidget {
 }
 
 class _DictionaryPageState extends State<DictionaryPage> {
+  Entry? entry;
+  EntryHit? hit;
+  var isEditing = false;
+
   Future loadEntry(EntryHit hit) async {
-    final editor = context.read<EditorController<Entry>>();
-    if (editor.editing) {
-      if (editor.id == hit.entryID) {
-        openEntry(
-          editor.object!,
-          resume: true,
-        );
-        return;
+    if (isEditing) {
+      if (this.hit?.entryID == hit.entryID) {
+        return openEntry(true);
       }
       if (await showDangerDialog(
         context,
@@ -37,12 +34,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
         confirmText: 'Discard',
         rejectText: 'Edit',
       )) {
-        editor.stopEditing();
+        setState(() {
+          isEditing = false;
+        });
       } else {
         return;
       }
     }
-    final snapshot = await showLoadingDialog(
+    final entry = await showLoadingDialog(
       context,
       FirebaseFirestore.instance
           .doc('dictionary/${hit.entryID}')
@@ -50,23 +49,21 @@ class _DictionaryPageState extends State<DictionaryPage> {
             fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
             toFirestore: (Entry object, _) => object.toJson(),
           )
-          .get(),
+          .get()
+          .then((s) => s.data()),
     );
-    if (snapshot?.exists ?? false) {
-      editor.prepareId(hit.entryID);
-      await openEntry(
-        snapshot!.data()!,
-        id: snapshot.id,
-      );
+    if (entry != null) {
+      setState(() {
+        isEditing = false;
+        this.entry = entry;
+        this.hit = hit;
+      });
+      openEntry();
     }
   }
 
-  Future openEntry(
-    Entry entry, {
-    String? id,
-    bool resume = false,
-  }) async {
-    final editor = context.read<EditorController<Entry>>();
+  Future openEntry([bool resume = false]) async {
+    if (entry == null) return;
     final media = MediaQuery.of(context);
     final sheetSize =
         1 - (kToolbarHeight + media.padding.top) / media.size.height;
@@ -87,26 +84,29 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 ),
               ),
               clipBehavior: Clip.antiAlias,
-              child: ChangeNotifierProvider.value(
-                value: editor,
-                child: EntryPage(
-                  entry,
-                  scroll: scroll,
-                ),
+              child: EntryPage(
+                entry!,
+                hit: hit,
+                editor: isEditing
+                    ? <V>(ValueSetter<V> f) => (V v) => setState(() => f(v))
+                    : null,
+                scroll: scroll,
               ),
             );
           },
         );
       },
     );
-    if (done ?? false) {
-      showLoadingDialog(
-        context,
-        Future.delayed(
-          const Duration(milliseconds: 500),
-          () => context.read<EditorController<Entry>>().stopEditing(),
-        ),
-      );
+
+    if (done != null) {
+      setState(() {
+        isEditing = !done;
+        if (done) {
+          entry = null;
+          hit = null;
+        }
+      });
+      if (!done) openEntry(true);
     }
   }
 
@@ -118,28 +118,26 @@ class _DictionaryPageState extends State<DictionaryPage> {
         builder: (context) {
           final language = GlobalStore.editing;
           if (language == null) return const SizedBox();
-          final editor = context.watch<EditorController<Entry>>();
-          if (editor.editing) {
+          if (isEditing) {
             return FloatingActionButton.extended(
-              onPressed: () => openEntry(
-                editor.object!,
-                resume: true,
-              ),
-              icon: const Icon(Icons.open_in_full_outlined),
+              onPressed: () => openEntry(true),
+              icon: const Icon(Icons.edit_outlined),
               label: const Text('Resume'),
             );
           }
           return FloatingActionButton.extended(
-            onPressed: () => openEntry(
-              editor.startEditing(
-                Entry(
+            onPressed: () {
+              setState(() {
+                entry = Entry(
                   forms: [],
                   uses: [],
                   language: language,
-                ),
-              ),
-              resume: true,
-            ),
+                );
+                hit = null;
+                isEditing = true;
+              });
+              openEntry(true);
+            },
             icon: const Icon(Icons.add_outlined),
             label: const Text('New'),
           );

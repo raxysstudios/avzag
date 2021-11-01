@@ -1,6 +1,4 @@
 import 'package:avzag/dictionary/dictionary_page.dart';
-import 'package:avzag/dictionary/editor_controller.dart';
-import 'package:avzag/dictionary/entry.dart';
 import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/home_page.dart';
@@ -30,18 +28,11 @@ Future<void> navigate(
     builder = (_) => const HomePage();
     title = null;
   } else if (title == 'dictionary') {
-    builder = (_) => MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (_) => SearchController(
-                GlobalStore.languages.keys,
-                GlobalStore.algolia.instance.index('dictionary'),
-              ),
-            ),
-            ChangeNotifierProvider(
-              create: (_) => EditorController<Entry>(),
-            ),
-          ],
+    builder = (_) => ChangeNotifierProvider(
+          create: (_) => SearchController(
+            GlobalStore.languages.keys,
+            GlobalStore.algolia.instance.index('dictionary'),
+          ),
           child: const DictionaryPage(),
         );
   } else {
