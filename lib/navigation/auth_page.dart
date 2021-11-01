@@ -107,7 +107,7 @@ class _AuthPageState extends State<AuthPage> {
                         text:
                             'With any question regarding the language materials, use the contacts below.',
                       ),
-                      if (EditorStore.email != null) ...[
+                      if (editable.isNotEmpty) ...[
                         const TextSpan(text: '\n\nYou have admin rights for '),
                         TextSpan(
                           text: capitalize(editable.join(', ')),
