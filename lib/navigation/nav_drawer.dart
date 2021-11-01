@@ -5,6 +5,8 @@ import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/home_page.dart';
 import 'package:avzag/utils.dart';
+import 'package:avzag/widgets/expandable_tile.dart';
+import 'package:avzag/widgets/raxys_logo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -89,66 +91,77 @@ class NavDraver extends StatelessWidget {
         color: Theme.of(context).scaffoldBackgroundColor,
         child: ListView(
           children: [
-            Material(
-              color: Colors.transparent,
-              child: ExpandableTitle(
-                Card(
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: const Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Icon(Icons.send_outlined),
-                        ),
-                        title: const Text('Developer Contact'),
-                        subtitle: const Text('Raxys Studios'),
-                        onTap: () => launch('https://t.me/raxysstudios'),
-                      ),
-                      FutureBuilder<PackageInfo>(
-                        future: PackageInfo.fromPlatform(),
-                        builder: (context, snapshot) {
-                          var info = 'Loading...';
-                          final package = snapshot.data;
-                          if (package != null) {
-                            info = [
-                              'v' + package.version,
-                              'b' + package.buildNumber
-                            ].join(' • ');
-                          }
-                          return ListTile(
-                            leading: const Padding(
-                              padding: EdgeInsets.only(top: 8),
-                              child: Icon(Icons.code_outlined),
-                            ),
-                            title: const Text('GitHub Repository'),
-                            subtitle: Text(info),
-                            onTap: () => launch(
-                              'https://github.com/raxysstudios/avzag',
-                            ),
-                          );
-                        },
-                      ),
-                      SwitchListTile(
-                        title: const Text('Editor Mode'),
-                        subtitle: Text(
-                          GlobalStore.editing == null
-                              ? 'Off'
-                              : capitalize(GlobalStore.editing!),
-                        ),
-                        value: GlobalStore.editing != null,
-                        secondary: const Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Icon(Icons.edit_outlined),
-                        ),
-                        onChanged: (e) => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AuthPage(),
-                          ),
-                        ),
-                      ),
-                    ],
+            ExpandableTile(
+              header: const ListTile(
+                leading: RaxysLogo(
+                  opacity: .1,
+                  scale: 7,
+                ),
+                contentPadding: EdgeInsets.only(left: 20),
+                title: Text(
+                  'Ævzag',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
                   ),
+                ),
+              ),
+              body: Card(
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: const Padding(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Icon(Icons.send_outlined),
+                      ),
+                      title: const Text('Developer Contact'),
+                      subtitle: const Text('Raxys Studios'),
+                      onTap: () => launch('https://t.me/raxysstudios'),
+                    ),
+                    FutureBuilder<PackageInfo>(
+                      future: PackageInfo.fromPlatform(),
+                      builder: (context, snapshot) {
+                        var info = 'Loading...';
+                        final package = snapshot.data;
+                        if (package != null) {
+                          info = [
+                            'v' + package.version,
+                            'b' + package.buildNumber
+                          ].join(' • ');
+                        }
+                        return ListTile(
+                          leading: const Padding(
+                            padding: EdgeInsets.only(top: 8),
+                            child: Icon(Icons.code_outlined),
+                          ),
+                          title: const Text('GitHub Repository'),
+                          subtitle: Text(info),
+                          onTap: () => launch(
+                            'https://github.com/raxysstudios/avzag',
+                          ),
+                        );
+                      },
+                    ),
+                    SwitchListTile(
+                      title: const Text('Editor Mode'),
+                      subtitle: Text(
+                        GlobalStore.editing == null
+                            ? 'Off'
+                            : capitalize(GlobalStore.editing!),
+                      ),
+                      value: GlobalStore.editing != null,
+                      secondary: const Padding(
+                        padding: EdgeInsets.only(top: 8),
+                        child: Icon(Icons.edit_outlined),
+                      ),
+                      onChanged: (e) => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AuthPage(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
