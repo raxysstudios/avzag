@@ -154,7 +154,7 @@ class EntryPage extends StatelessWidget {
       floatingActionButton: Builder(
         builder: (context) {
           if (entry.language != EditorStore.language) return const SizedBox();
-          if (editor == null) {
+          if (editor == null && !isReviewing) {
             return FloatingActionButton.extended(
               onPressed: () => Navigator.of(context).pop(false),
               icon: const Icon(Icons.edit_outlined),
@@ -224,11 +224,11 @@ class EntryPage extends StatelessWidget {
                 entry.contribution!.uid,
               ),
             ),
-            const Divider(height: 0)
+            buildHeader(context, 'New'),
           ],
           ...buildEntry(context, entry, editor),
           if (sourceEntry != null) ...[
-            const Divider(),
+            buildHeader(context, 'Old'),
             ...buildEntry(context, sourceEntry!),
           ],
         ],
@@ -236,7 +236,19 @@ class EntryPage extends StatelessWidget {
     );
   }
 
+  Widget buildHeader(BuildContext context, String text) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.headline6,
+      ),
+    );
+  }
+
   Future<bool> submit(BuildContext context) async {
+    final isReviewing = this.isReviewing;
     if (!isReviewing && (entry.uses.isEmpty || entry.forms.isEmpty)) {
       showSnackbar(
         context,
@@ -244,7 +256,6 @@ class EntryPage extends StatelessWidget {
       );
       return false;
     }
-
     final docId = isReviewing
         ? entry.contribution?.overwriteId
         : isAuthor
@@ -258,8 +269,7 @@ class EntryPage extends StatelessWidget {
         overwriteId: hit?.entryID,
       );
     }
-
-    return await showLoadingDialog(
+    return await showLoadingDialog<bool>(
           context,
           Future.wait([
             FirebaseFirestore.instance
@@ -271,9 +281,9 @@ class EntryPage extends StatelessWidget {
                   .collection('dictionary')
                   .doc(hit?.entryID)
                   .delete(),
-          ]),
-        ) !=
-        null;
+          ]).then((_) => true),
+        ) ??
+        false;
   }
 
   Future<bool> delete(BuildContext context) async {
@@ -291,14 +301,15 @@ class EntryPage extends StatelessWidget {
       rejectText: 'Keep',
     );
     if (confirm) {
-      return await showLoadingDialog(
+      return await showLoadingDialog<bool>(
             context,
             FirebaseFirestore.instance
                 .collection('dictionary')
                 .doc(hit?.entryID)
-                .delete(),
-          ) !=
-          null;
+                .delete()
+                .then((_) => true),
+          ) ??
+          false;
     }
     return false;
   }

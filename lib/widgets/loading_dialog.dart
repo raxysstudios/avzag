@@ -19,5 +19,4 @@ Future<T?> showLoadingDialog<T>(
     Navigator.pop(context);
     showSnackbar(context);
   }
-  return null;
 }

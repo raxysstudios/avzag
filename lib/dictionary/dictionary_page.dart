@@ -184,7 +184,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 .get()
                 .then((s) => s.data()),
           );
-
     var done = await showModalBottomSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -196,21 +195,23 @@ class _DictionaryPageState extends State<DictionaryPage> {
           initialChildSize: resume ? sheetSize : .5,
           expand: false,
           builder: (context, scroll) {
-            return Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16),
+            return Center(
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
                 ),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: EntryPage(
-                entry!,
-                hit: hit,
-                sourceEntry: sourceEntry,
-                editor: sourceEntry == null && isEditing
-                    ? getEditor(setState)
-                    : null,
-                scroll: scroll,
+                clipBehavior: Clip.antiAlias,
+                child: EntryPage(
+                  entry!,
+                  hit: hit,
+                  sourceEntry: sourceEntry,
+                  editor: sourceEntry == null && isEditing
+                      ? getEditor(setState)
+                      : null,
+                  scroll: scroll,
+                ),
               ),
             );
           },
