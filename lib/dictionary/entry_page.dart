@@ -38,7 +38,7 @@ class EntryPage extends StatelessWidget {
         title: editor != null
             ? PageTitle(
                 'Entry editor',
-                subtitle: GlobalStore.editing,
+                subtitle: EditorStore.language,
               )
             : PageTitle(
                 entry.forms[0].plain,
@@ -57,7 +57,7 @@ class EntryPage extends StatelessWidget {
       ),
       floatingActionButton: Builder(
         builder: (context) {
-          if (entry.language != GlobalStore.editing) return const SizedBox();
+          if (entry.language != EditorStore.language) return const SizedBox();
           if (editor == null) {
             return FloatingActionButton.extended(
               onPressed: () => Navigator.of(context).pop(false),

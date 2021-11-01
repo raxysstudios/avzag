@@ -50,35 +50,30 @@ class _DictionaryPageState extends State<DictionaryPage> {
       builder: (context, _) {
         return Scaffold(
           drawer: const NavDraver(title: 'dictionary'),
-          floatingActionButton: Builder(
-            builder: (context) {
-              final language = GlobalStore.editing;
-              if (language == null) return const SizedBox();
-              if (isEditing) {
-                return FloatingActionButton.extended(
-                  onPressed: () => openEntry(true),
-                  icon: const Icon(Icons.edit_outlined),
-                  label: const Text('Resume'),
-                );
-              }
-              return FloatingActionButton.extended(
-                onPressed: () {
-                  setState(() {
-                    entry = Entry(
-                      forms: [],
-                      uses: [],
-                      language: language,
-                    );
-                    hit = null;
-                    isEditing = true;
-                  });
-                  openEntry(true);
-                },
-                icon: const Icon(Icons.add_outlined),
-                label: const Text('New'),
-              );
-            },
-          ),
+          floatingActionButton: EditorStore.isEditing
+              ? isEditing
+                  ? FloatingActionButton.extended(
+                      onPressed: () => openEntry(true),
+                      icon: const Icon(Icons.edit_outlined),
+                      label: const Text('Resume'),
+                    )
+                  : FloatingActionButton.extended(
+                      onPressed: () {
+                        setState(() {
+                          entry = Entry(
+                            forms: [],
+                            uses: [],
+                            language: EditorStore.language!,
+                          );
+                          hit = null;
+                          isEditing = true;
+                        });
+                        openEntry(true);
+                      },
+                      icon: const Icon(Icons.add_outlined),
+                      label: const Text('New'),
+                    )
+              : null,
           body: CustomScrollView(
             slivers: [
               const SliverAppBar(
@@ -92,21 +87,24 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   child: SearchToolbar(),
                 ),
               ),
-              // if (GlobalStore.editing != null)
-              //   SliverList(
-              //     delegate: SliverChildListDelegate(
-              //       [
-              //         SwitchListTile(
-              //           value: controller.pendingOnly,
-              //           onChanged: (v) {
-              //             controller.pendingOnly = v;
-              //           },
-              //           title: const Text('Filter pending reviews'),
-              //           secondary: const Icon(Icons.pending_actions_outlined),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
+              if (EditorStore.isAdmin)
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Consumer<SearchController>(
+                        builder: (context, search, _) {
+                          return SwitchListTile(
+                            value: search.pendingOnly,
+                            onChanged: (v) => search.pendingOnly = v,
+                            title: const Text('Filter pending reviews'),
+                            secondary:
+                                const Icon(Icons.pending_actions_outlined),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               SliverPadding(
                 padding: const EdgeInsets.only(bottom: 76),
                 sliver: SearchResultsSliver(

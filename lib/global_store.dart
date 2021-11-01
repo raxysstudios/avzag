@@ -5,6 +5,23 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home/language.dart';
 
+class EditorStore {
+  static String? get email => FirebaseAuth.instance.currentUser?.email;
+  static bool isAdmin = false;
+  static bool get isEditing => language != null;
+
+  static String? _language;
+  static String? get language => _language;
+  static set language(String? value) {
+    _language = value;
+    if (value == null) {
+      GlobalStore.prefs.remove('editorLanguage');
+    } else {
+      GlobalStore.prefs.setString('editorLanguage', value);
+    }
+  }
+}
+
 class GlobalStore {
   static bool _first = true;
   static late final Algolia algolia;
@@ -12,17 +29,6 @@ class GlobalStore {
 
   static Map<String, Language> _languages = {};
   static Map<String, Language> get languages => _languages;
-
-  static String? _editing;
-  static String? get editing => _editing;
-  static set editing(String? value) {
-    _editing = value;
-    if (value == null) {
-      prefs.remove('editor');
-    } else {
-      prefs.setString('editor', value);
-    }
-  }
 
   static String? get email => FirebaseAuth.instance.currentUser?.email;
 
@@ -49,9 +55,6 @@ class GlobalStore {
         };
       },
     );
-
-    _editing = prefs.getString('editor');
-    if (_editing != null && !_languages.containsKey(_editing)) editing = null;
 
     await prefs.setStringList(
       'languages',

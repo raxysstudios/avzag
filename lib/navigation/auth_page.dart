@@ -39,8 +39,6 @@ class _AuthPageState extends State<AuthPage> {
         await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
     setState(() {
       editable = json2list(token?.claims?['admin']) ?? [];
-      if (GlobalStore.editing != null &&
-          !editable.contains(GlobalStore.editing)) GlobalStore.editing = null;
     });
   }
 
@@ -50,7 +48,7 @@ class _AuthPageState extends State<AuthPage> {
     });
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
-    GlobalStore.editing = null;
+    EditorStore.language = null;
 
     final user = await GoogleSignIn().signIn();
     if (user != null) {
@@ -81,63 +79,50 @@ class _AuthPageState extends State<AuthPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => navigate(context, null),
-        icon: Icon(
-          GlobalStore.editing == null
-              ? Icons.edit_off_outlined
-              : Icons.edit_outlined,
-        ),
+        icon: Icon(EditorStore.isEditing
+            ? Icons.edit_outlined
+            : Icons.edit_off_outlined),
         label: const Text('Continue'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: ListView(
         padding: const EdgeInsets.only(bottom: 76),
         children: [
-          Card(
+          Padding(
+            padding: const EdgeInsets.all(8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: ElevatedButton.icon(
-                    onPressed: loading ? null : signIn,
-                    icon: const Icon(Icons.person_outlined),
-                    label: Text(
-                      GlobalStore.email ?? 'Sign In',
-                    ),
+                ElevatedButton.icon(
+                  onPressed: loading ? null : signIn,
+                  icon: const Icon(Icons.person_outlined),
+                  label: Text(
+                    GlobalStore.email ?? 'Sign In',
                   ),
                 ),
-                if (GlobalStore.email == null)
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 16),
-                    child: Text(
-                      'Sign in with Google to see your options.',
-                      textAlign: TextAlign.center,
-                    ),
-                  )
-                else ...[
-                  const Text(
-                    'With any question regarding the language materials, contact the corresponding editors below.',
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.bodyText2,
-                      children: [
-                        const TextSpan(text: 'You can edit '),
+                const SizedBox(height: 8),
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.bodyText2,
+                    children: [
+                      const TextSpan(
+                        text:
+                            'With any question regarding the language materials, use contacts below.',
+                      ),
+                      if (GlobalStore.email != null) ...[
+                        const TextSpan(text: '\n\nYou have admin rights for '),
                         TextSpan(
                           text: capitalize(editable.join(', ')),
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const TextSpan(text: ' yourself.'),
-                      ],
-                    ),
+                        const TextSpan(text: '.'),
+                      ]
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                ],
+                ),
               ],
             ),
           ),
@@ -148,8 +133,8 @@ class _AuthPageState extends State<AuthPage> {
                   for (final l in GlobalStore.languages.values)
                     Builder(
                       builder: (context) {
-                        final canEdit = editable.contains(l.name);
-                        final editing = l.name == GlobalStore.editing;
+                        final editing = l.name == EditorStore.language;
+                        final isAdmin = editable.contains(l.name);
                         return ListTile(
                           leading: LanguageAvatar(l.flag),
                           title: Text(
@@ -159,20 +144,19 @@ class _AuthPageState extends State<AuthPage> {
                               fontSize: 18,
                             ),
                           ),
-                          onTap: canEdit
-                              ? () => setState(() {
-                                    GlobalStore.editing =
-                                        editing ? null : l.name;
-                                  })
-                              : l.contact != null
-                                  ? () => launch(l.contact!)
-                                  : null,
+                          subtitle: isAdmin ? const Text('Admin') : null,
+                          onTap: () => setState(() {
+                            EditorStore.language = editing ? null : l.name;
+                            EditorStore.isAdmin = !editing && isAdmin;
+                          }),
                           selected: editing,
-                          trailing: canEdit
-                              ? const Icon(Icons.edit_outlined)
-                              : l.contact == null
-                                  ? null
-                                  : const Icon(Icons.send_outlined),
+                          trailing: l.contact == null
+                              ? null
+                              : IconButton(
+                                  onPressed: () => launch(l.contact!),
+                                  icon: const Icon(Icons.send_outlined),
+                                  tooltip: "Contact admin",
+                                ),
                         );
                       },
                     ),
