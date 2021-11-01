@@ -217,7 +217,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
         );
       },
     );
-    if (done == null && sourceEntry == null) {
+    if (done == null && !(sourceEntry == null && isEditing)) {
       done = true;
     }
     if (done != null) {

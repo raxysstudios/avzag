@@ -29,6 +29,9 @@ class EntryPage extends StatelessWidget {
       EditorStore.uid != null &&
       entry.contribution?.uid != EditorStore.uid;
 
+  bool get isAuthor =>
+      EditorStore.isAdmin || entry.contribution?.uid == EditorStore.uid;
+
   const EntryPage(
     this.entry, {
     this.hit,
@@ -190,8 +193,7 @@ class EntryPage extends StatelessWidget {
                     Navigator.of(context).pop(true);
                   },
                 ),
-              if (EditorStore.isAdmin ||
-                  entry.contribution?.uid == EditorStore.uid)
+              if (hit != null && isAuthor)
                 SpeedDialChild(
                   child: const Icon(Icons.delete_outline),
                   backgroundColor: Colors.red,
@@ -243,7 +245,11 @@ class EntryPage extends StatelessWidget {
       return false;
     }
 
-    final docId = isReviewing ? entry.contribution?.overwriteId : hit?.entryID;
+    final docId = isReviewing
+        ? entry.contribution?.overwriteId
+        : isAuthor
+            ? hit?.entryID
+            : null;
     entry.contribution = EditorStore.isAdmin || isReviewing
         ? null
         : Contribution(
