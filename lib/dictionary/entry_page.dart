@@ -1,5 +1,4 @@
 import 'package:avzag/utils/contribution.dart';
-import 'package:provider/provider.dart';
 
 import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/global_store.dart';
