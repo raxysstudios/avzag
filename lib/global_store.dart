@@ -56,6 +56,7 @@ class GlobalStore {
       },
     );
 
+    EditorStore._language = prefs.getString('editorLanguage');
     await prefs.setStringList(
       'languages',
       languages.where((l) => _languages.containsKey(l)).toList(),
