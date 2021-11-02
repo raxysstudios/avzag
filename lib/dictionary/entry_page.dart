@@ -244,7 +244,7 @@ class _EntryPageState extends State<EntryPage> {
                 leading: Icon(Icons.pending_actions_outlined),
                 title: Text('Unverified data'),
               ),
-            const Divider(height: 0),
+            const Divider(),
           ],
           ...buildEntry(
             context,

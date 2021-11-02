@@ -25,6 +25,7 @@ class _AppState extends State<App> {
     const cardTheme = CardTheme(
       clipBehavior: Clip.antiAlias,
     );
+    const dividerTheme = DividerThemeData(space: 0);
     return [
       ThemeData().copyWith(
         scaffoldBackgroundColor: Colors.blueGrey.shade50,
@@ -38,6 +39,7 @@ class _AppState extends State<App> {
         cardTheme: cardTheme,
         toggleableActiveColor: colorScheme.primary,
         floatingActionButtonTheme: floatingActionButtonTheme,
+        dividerTheme: dividerTheme,
       ),
       ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSwatch(
@@ -47,6 +49,7 @@ class _AppState extends State<App> {
         cardTheme: cardTheme,
         toggleableActiveColor: colorScheme.primary,
         floatingActionButtonTheme: floatingActionButtonTheme,
+        dividerTheme: dividerTheme,
       ),
     ];
   }

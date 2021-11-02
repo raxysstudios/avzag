@@ -73,7 +73,7 @@ class SearchResultsSliver extends StatelessWidget {
                       final hits = hitGroups[index];
                       return Column(
                         children: [
-                          if (index > 0) const Divider(height: 0),
+                          if (index > 0) const Divider(),
                           for (var i = 0; i < hits.length; i++)
                             HitTile(
                               hits[i],

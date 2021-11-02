@@ -98,6 +98,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                           );
                         },
                       ),
+                      const Divider(),
                     ],
                   ),
                 ),
