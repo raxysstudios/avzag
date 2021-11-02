@@ -1,8 +1,6 @@
 import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
-import 'package:avzag/widgets/danger_dialog.dart';
-import 'package:avzag/utils/editor_utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -23,8 +21,6 @@ class DictionaryPage extends StatefulWidget {
 
 class _DictionaryPageState extends State<DictionaryPage> {
   Entry? entry;
-  EntryHit? hit;
-  var isEditing = false;
 
   late final SearchController search;
 
@@ -51,27 +47,23 @@ class _DictionaryPageState extends State<DictionaryPage> {
         return Scaffold(
           drawer: const NavDraver(title: 'dictionary'),
           floatingActionButton: EditorStore.isEditing
-              ? isEditing
+              ? entry == null
                   ? FloatingActionButton.extended(
-                      onPressed: () => openEntry(true),
-                      icon: const Icon(Icons.edit_outlined),
-                      label: const Text('Resume'),
-                    )
-                  : FloatingActionButton.extended(
                       onPressed: () {
-                        setState(() {
-                          entry = Entry(
-                            forms: [],
-                            uses: [],
-                            language: EditorStore.language!,
-                          );
-                          hit = null;
-                          isEditing = true;
-                        });
-                        openEntry(true);
+                        entry = Entry(
+                          forms: [],
+                          uses: [],
+                          language: EditorStore.language!,
+                        );
+                        openEntry();
                       },
                       icon: const Icon(Icons.add_outlined),
                       label: const Text('New'),
+                    )
+                  : FloatingActionButton.extended(
+                      onPressed: openEntry,
+                      icon: const Icon(Icons.edit_outlined),
+                      label: const Text('Resume'),
                     )
               : null,
           body: CustomScrollView(
@@ -112,7 +104,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 padding: const EdgeInsets.only(bottom: 76),
                 sliver: SearchResultsSliver(
                   context.watch<SearchController>(),
-                  onTap: loadEntry,
+                  onTap: openEntry,
                 ),
               ),
             ],
@@ -122,95 +114,47 @@ class _DictionaryPageState extends State<DictionaryPage> {
     );
   }
 
-  Future loadEntry(EntryHit hit) async {
-    if (isEditing) {
-      if (this.hit?.entryID == hit.entryID) {
-        return openEntry(true);
-      }
-      if (await showDangerDialog(
-        context,
-        'Discard edits?',
-        confirmText: 'Discard',
-        rejectText: 'Edit',
-      )) {
-        setState(() {
-          isEditing = false;
-        });
-      } else {
-        return;
-      }
-    }
-    final entry = await showLoadingDialog(
+  Future openEntry([EntryHit? hit]) async {
+    late final Entry? sourceEntry;
+    await showLoadingDialog(
       context,
-      FirebaseFirestore.instance
-          .collection('dictionary')
-          .doc(hit.entryID)
-          .withConverter(
-            fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
-            toFirestore: (Entry object, _) => object.toJson(),
-          )
-          .get()
-          .then((s) => s.data()),
+      (() async {
+        if (hit != null) entry = await _loadEntry(hit.entryID);
+        sourceEntry = await _loadEntry(entry?.contribution?.overwriteId);
+      })(),
     );
-    if (entry != null) {
-      setState(() {
-        isEditing = false;
-        this.entry = entry;
-        this.hit = hit;
-      });
-      openEntry();
-    }
-  }
-
-  Future openEntry([bool resume = false]) async {
     if (entry == null) return;
-    final media = MediaQuery.of(context);
-    final sheetSize =
-        1 - (kToolbarHeight + media.padding.top) / media.size.height;
 
-    final sourceEntry = entry!.contribution == null ||
-            entry!.contribution?.uid == EditorStore.uid
-        ? null
-        : await showLoadingDialog(
-            context,
-            FirebaseFirestore.instance
-                .collection('dictionary')
-                .doc(entry!.contribution!.overwriteId)
-                .withConverter(
-                  fromFirestore: (snapshot, _) =>
-                      Entry.fromJson(snapshot.data()!),
-                  toFirestore: (Entry object, _) => object.toJson(),
-                )
-                .get()
-                .then((s) => s.data()),
-          );
-    var done = await showModalBottomSheet<bool>(
+    final media = MediaQuery.of(context);
+    final childSize =
+        1 - (kToolbarHeight + media.padding.top) / media.size.height;
+    await showModalBottomSheet<Entry>(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) {
         return DraggableScrollableSheet(
           minChildSize: .5,
-          maxChildSize: sheetSize,
-          initialChildSize: resume ? sheetSize : .5,
+          initialChildSize: .5,
+          maxChildSize: hit == null ? childSize : .5,
           expand: false,
           builder: (context, scroll) {
-            return Center(
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(16),
+            return Provider(
+              create: (context) => (Entry? e) => entry = e,
+              child: Center(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(16),
+                    ),
                   ),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: EntryPage(
-                  entry!,
-                  hit: hit,
-                  sourceEntry: sourceEntry,
-                  editor: sourceEntry == null && isEditing
-                      ? getEditor(setState)
-                      : null,
-                  scroll: scroll,
+                  clipBehavior: Clip.antiAlias,
+                  child: EntryPage(
+                    entry!,
+                    editing: hit == null,
+                    sourceEntry: sourceEntry,
+                    scroll: scroll,
+                  ),
                 ),
               ),
             );
@@ -218,18 +162,22 @@ class _DictionaryPageState extends State<DictionaryPage> {
         );
       },
     );
-    if (done == null && !(sourceEntry == null && isEditing)) {
-      done = true;
-    }
-    if (done != null) {
-      setState(() {
-        isEditing = !done!;
-        if (done) {
-          entry = null;
-          hit = null;
-        }
-      });
-      if (!done) openEntry(true);
-    }
+    setState(() {});
+  }
+
+  Future<Entry?> _loadEntry(String? id) async {
+    if (id == null) return null;
+    return await FirebaseFirestore.instance
+        .collection('dictionary')
+        .doc(id)
+        .withConverter(
+          fromFirestore: (snapshot, _) => Entry.fromJson(
+            snapshot.data()!,
+            snapshot.id,
+          ),
+          toFirestore: (Entry object, _) => object.toJson(),
+        )
+        .get()
+        .then((s) => s.data());
   }
 }

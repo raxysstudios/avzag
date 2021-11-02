@@ -4,6 +4,7 @@ import 'package:avzag/dictionary/use.dart';
 import 'package:avzag/utils/utils.dart';
 
 class Entry {
+  String? id;
   List<TextSample> forms;
   String language;
   List<String>? tags;
@@ -12,6 +13,7 @@ class Entry {
   Contribution? contribution;
 
   Entry({
+    this.id,
     required this.forms,
     required this.language,
     required this.uses,
@@ -20,8 +22,11 @@ class Entry {
     this.note,
   });
 
-  Entry.fromJson(Map<String, dynamic> json)
-      : this(
+  Entry.fromJson(
+    Map<String, dynamic> json, [
+    String? id,
+  ]) : this(
+          id: id,
           forms: listFromJson(json['forms'], (j) => TextSample.fromJson(j))!,
           language: json['language'],
           uses: listFromJson(json['uses'], (j) => Use.fromJson(j))!,

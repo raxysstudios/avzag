@@ -1,5 +1,5 @@
 import 'package:avzag/utils/contribution.dart';
-import 'package:avzag/dictionary/hit_tile.dart';
+import 'package:provider/provider.dart';
 
 import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/global_store.dart';
@@ -17,29 +17,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'entry.dart';
 
-class EntryPage extends StatelessWidget {
+class EntryPage extends StatefulWidget {
   final Entry entry;
-  final EntryHit? hit;
   final Entry? sourceEntry;
-  final EditorCallback? editor;
+  final bool editing;
   final ScrollController? scroll;
-
-  bool get isReviewing =>
-      entry.contribution != null &&
-      EditorStore.uid != null &&
-      entry.contribution?.uid != EditorStore.uid;
-
-  bool get isAuthor =>
-      EditorStore.isAdmin || entry.contribution?.uid == EditorStore.uid;
 
   const EntryPage(
     this.entry, {
-    this.hit,
     this.sourceEntry,
+    this.editing = false,
     this.scroll,
-    this.editor,
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<EntryPage> createState() => _EntryPageState();
+}
+
+class _EntryPageState extends State<EntryPage> {
+  Entry get entry => widget.entry;
+  EditorCallback? editor;
+
+  bool get isReviewing => widget.sourceEntry != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.editing) startEditing();
+  }
 
   List<Widget> buildEntry(
     BuildContext context,
@@ -131,14 +137,14 @@ class EntryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: editor != null
+        title: editor == null
             ? PageTitle(
-                'Entry editor',
-                subtitle: EditorStore.language,
-              )
-            : PageTitle(
                 entry.forms[0].plain,
                 subtitle: entry.language,
+              )
+            : PageTitle(
+                'Entry editor',
+                subtitle: EditorStore.language,
               ),
         actions: [
           Opacity(
@@ -153,10 +159,12 @@ class EntryPage extends StatelessWidget {
       ),
       floatingActionButton: Builder(
         builder: (context) {
-          if (entry.language != EditorStore.language) return const SizedBox();
-          if (editor == null && !isReviewing) {
+          if (entry.language != EditorStore.language) {
+            return const SizedBox();
+          }
+          if (editor == null && EditorStore.isAdmin && !isReviewing) {
             return FloatingActionButton.extended(
-              onPressed: () => Navigator.of(context).pop(false),
+              onPressed: startEditing,
               icon: const Icon(Icons.edit_outlined),
               label: const Text('Edit'),
             );
@@ -176,10 +184,10 @@ class EntryPage extends StatelessWidget {
                 child: const Icon(Icons.upload_outlined),
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
-                label: isReviewing ? 'Accept contribution' : 'Submit changes',
+                label: 'Submit changes',
                 onTap: () async {
                   if (await submit(context)) {
-                    Navigator.of(context).pop(true);
+                    exit(context);
                   }
                 },
               ),
@@ -189,20 +197,18 @@ class EntryPage extends StatelessWidget {
                   label: 'Discard changes',
                   backgroundColor: Colors.orange,
                   foregroundColor: Colors.white,
-                  onTap: () {
-                    Navigator.of(context).pop(true);
-                  },
+                  onTap: () => exit(context),
                 ),
-              if (hit != null && isAuthor)
+              if (entry.id != null)
                 SpeedDialChild(
                   child: const Icon(Icons.delete_outline),
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
-                  label: isReviewing ? 'Reject contribution' : 'Delete entry',
+                  label: 'Delete entry',
                   visible: true,
                   onTap: () async {
                     if (await delete(context)) {
-                      Navigator.of(context).pop(true);
+                      exit(context);
                     }
                   },
                 ),
@@ -211,7 +217,7 @@ class EntryPage extends StatelessWidget {
         },
       ),
       body: ListView(
-        controller: scroll,
+        controller: widget.scroll,
         padding: const EdgeInsets.only(bottom: 76),
         children: [
           if (isReviewing) ...[
@@ -227,9 +233,9 @@ class EntryPage extends StatelessWidget {
             buildHeader(context, 'New'),
           ],
           ...buildEntry(context, entry, editor),
-          if (sourceEntry != null) ...[
+          if (widget.sourceEntry != null) ...[
             buildHeader(context, 'Old'),
-            ...buildEntry(context, sourceEntry!),
+            ...buildEntry(context, widget.sourceEntry!),
           ],
         ],
       ),
@@ -248,7 +254,6 @@ class EntryPage extends StatelessWidget {
   }
 
   Future<bool> submit(BuildContext context) async {
-    final isReviewing = this.isReviewing;
     if (!isReviewing && (entry.uses.isEmpty || entry.forms.isEmpty)) {
       showSnackbar(
         context,
@@ -256,17 +261,13 @@ class EntryPage extends StatelessWidget {
       );
       return false;
     }
-    final docId = isReviewing
-        ? entry.contribution?.overwriteId
-        : isAuthor
-            ? hit?.entryID
-            : null;
+    final docId = isReviewing ? entry.contribution?.overwriteId : entry.id;
     if (EditorStore.isAdmin || isReviewing) {
       entry.contribution = null;
     } else {
       entry.contribution ??= Contribution(
         EditorStore.uid!,
-        overwriteId: hit?.entryID,
+        overwriteId: entry.id,
       );
     }
     return await showLoadingDialog<bool>(
@@ -279,7 +280,7 @@ class EntryPage extends StatelessWidget {
             if (isReviewing)
               FirebaseFirestore.instance
                   .collection('dictionary')
-                  .doc(hit?.entryID)
+                  .doc(entry.id)
                   .delete(),
           ]).then((_) => true),
         ) ??
@@ -287,16 +288,9 @@ class EntryPage extends StatelessWidget {
   }
 
   Future<bool> delete(BuildContext context) async {
-    if (!isReviewing && entry.uses.isNotEmpty) {
-      showSnackbar(
-        context,
-        text: 'Remove all uses first.',
-      );
-      return false;
-    }
     final confirm = await showDangerDialog(
       context,
-      isReviewing ? 'Discard contribution?' : 'Delete entry?',
+      'Delete entry?',
       confirmText: 'Delete',
       rejectText: 'Keep',
     );
@@ -305,12 +299,23 @@ class EntryPage extends StatelessWidget {
             context,
             FirebaseFirestore.instance
                 .collection('dictionary')
-                .doc(hit?.entryID)
+                .doc(entry.id)
                 .delete()
                 .then((_) => true),
           ) ??
           false;
     }
     return false;
+  }
+
+  void exit(BuildContext context) {
+    context.read<ValueSetter<Entry?>>()(null);
+    Navigator.pop(context);
+  }
+
+  void startEditing() {
+    setState(() {
+      editor = getEditor(setState);
+    });
   }
 }
