@@ -138,8 +138,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
       isScrollControlled: true,
       builder: (context) {
         return DraggableScrollableSheet(
-          minChildSize: .5,
-          initialChildSize: hit == null ? childSize : .5,
+          minChildSize: childSize - .1,
+          initialChildSize: childSize,
           maxChildSize: childSize,
           expand: false,
           builder: (context, scroll) {

@@ -41,7 +41,10 @@ class _EntryPageState extends State<EntryPage> {
   Entry get entry => widget.entry;
   EditorCallback? editor;
 
-  bool get isReviewing => EditorStore.isAdmin && entry.contribution != null;
+  bool get isReviewing =>
+      EditorStore.isAdmin &&
+      entry.language == EditorStore.language &&
+      entry.contribution != null;
   bool showSource = false;
 
   @override
@@ -225,17 +228,23 @@ class _EntryPageState extends State<EntryPage> {
         controller: widget.scroll,
         padding: const EdgeInsets.only(bottom: 76),
         children: [
-          if (isReviewing) ...[
-            SwitchListTile(
-              value: !showSource,
-              onChanged: widget.sourceEntry == null
-                  ? null
-                  : (v) => setState(() {
-                        showSource = !v;
-                      }),
-              secondary: const Icon(Icons.pending_actions_outlined),
-              title: const Text('Reviewing contribution'),
-            ),
+          if (entry.contribution != null) ...[
+            if (isReviewing)
+              SwitchListTile(
+                value: !showSource,
+                onChanged: widget.sourceEntry == null
+                    ? null
+                    : (v) => setState(() {
+                          showSource = !v;
+                        }),
+                secondary: const Icon(Icons.pending_actions_outlined),
+                title: const Text('Reviewing contribution'),
+              )
+            else
+              const ListTile(
+                leading: Icon(Icons.pending_actions_outlined),
+                title: Text('Unverified data'),
+              ),
             const Divider(height: 0),
           ],
           ...buildEntry(
