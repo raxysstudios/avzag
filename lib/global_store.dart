@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home/language.dart';
+import 'utils/utils.dart';
 
 class EditorStore {
   static String? get email => FirebaseAuth.instance.currentUser?.email;
@@ -17,10 +18,21 @@ class EditorStore {
   static set language(String? value) {
     _language = value;
     if (value == null) {
-      GlobalStore.prefs.remove('editorLanguage');
+      prefs.remove('editorLanguage');
     } else {
-      GlobalStore.prefs.setString('editorLanguage', value);
+      prefs.setString('editorLanguage', value);
     }
+  }
+
+  static get prefs => GlobalStore.prefs;
+
+  static Future _load() async {
+    EditorStore._language = prefs.getString('editorLanguage');
+    final token =
+        await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
+    EditorStore.isAdmin =
+        json2list(token?.claims?['admin'])?.contains(EditorStore._language) ??
+            false;
   }
 }
 
@@ -56,7 +68,7 @@ class GlobalStore {
       },
     );
 
-    EditorStore._language = prefs.getString('editorLanguage');
+    await EditorStore._load();
     await prefs.setStringList(
       'languages',
       languages.where((l) => _languages.containsKey(l)).toList(),
