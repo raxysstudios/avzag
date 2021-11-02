@@ -1,6 +1,6 @@
 name: avzag
 description: Extensible parallel language compendium.
-version: 0.4.10+30
+version: 0.4.11+31
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
