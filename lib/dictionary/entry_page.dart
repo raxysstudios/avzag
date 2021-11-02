@@ -41,7 +41,8 @@ class _EntryPageState extends State<EntryPage> {
   Entry get entry => widget.entry;
   EditorCallback? editor;
 
-  bool get isReviewing => widget.sourceEntry != null;
+  bool get isReviewing => EditorStore.isAdmin && entry.contribution != null;
+  bool showSource = false;
 
   @override
   void initState() {
@@ -161,61 +162,63 @@ class _EntryPageState extends State<EntryPage> {
       ),
       floatingActionButton: Builder(
         builder: (context) {
-          if (entry.language != EditorStore.language) {
-            return const SizedBox();
+          if (entry.language == EditorStore.language) {
+            if (editor != null || isReviewing) {
+              final theme = Theme.of(context).colorScheme;
+              return SpeedDial(
+                icon: Icons.done_all_outlined,
+                activeIcon: Icons.close_outlined,
+                backgroundColor: theme.primary,
+                foregroundColor: theme.onPrimary,
+                activeBackgroundColor: theme.surface,
+                activeForegroundColor: theme.onSurface,
+                spaceBetweenChildren: 9,
+                spacing: 7,
+                children: [
+                  SpeedDialChild(
+                    child: const Icon(Icons.upload_outlined),
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    label: 'Submit changes',
+                    onTap: () async {
+                      if (await submit(context)) {
+                        exit(context);
+                      }
+                    },
+                  ),
+                  if (!isReviewing)
+                    SpeedDialChild(
+                      child: const Icon(Icons.cancel_outlined),
+                      label: 'Discard changes',
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
+                      onTap: () => exit(context),
+                    ),
+                  if (entry.id != null && EditorStore.isAdmin)
+                    SpeedDialChild(
+                      child: const Icon(Icons.delete_outline),
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      label: 'Delete entry',
+                      visible: true,
+                      onTap: () async {
+                        if (await delete(context)) {
+                          exit(context);
+                        }
+                      },
+                    ),
+                ],
+              );
+            }
+            if (entry.contribution == null) {
+              return FloatingActionButton.extended(
+                onPressed: startEditing,
+                icon: const Icon(Icons.edit_outlined),
+                label: const Text('Edit'),
+              );
+            }
           }
-          if (editor == null && EditorStore.isAdmin && !isReviewing) {
-            return FloatingActionButton.extended(
-              onPressed: startEditing,
-              icon: const Icon(Icons.edit_outlined),
-              label: const Text('Edit'),
-            );
-          }
-          final theme = Theme.of(context).colorScheme;
-          return SpeedDial(
-            icon: Icons.done_all_outlined,
-            activeIcon: Icons.close_outlined,
-            backgroundColor: theme.primary,
-            foregroundColor: theme.onPrimary,
-            activeBackgroundColor: theme.surface,
-            activeForegroundColor: theme.onSurface,
-            spaceBetweenChildren: 9,
-            spacing: 7,
-            children: [
-              SpeedDialChild(
-                child: const Icon(Icons.upload_outlined),
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-                label: 'Submit changes',
-                onTap: () async {
-                  if (await submit(context)) {
-                    exit(context);
-                  }
-                },
-              ),
-              if (!isReviewing)
-                SpeedDialChild(
-                  child: const Icon(Icons.cancel_outlined),
-                  label: 'Discard changes',
-                  backgroundColor: Colors.orange,
-                  foregroundColor: Colors.white,
-                  onTap: () => exit(context),
-                ),
-              if (entry.id != null)
-                SpeedDialChild(
-                  child: const Icon(Icons.delete_outline),
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  label: 'Delete entry',
-                  visible: true,
-                  onTap: () async {
-                    if (await delete(context)) {
-                      exit(context);
-                    }
-                  },
-                ),
-            ],
-          );
+          return const SizedBox();
         },
       ),
       body: ListView(
@@ -223,22 +226,23 @@ class _EntryPageState extends State<EntryPage> {
         padding: const EdgeInsets.only(bottom: 76),
         children: [
           if (isReviewing) ...[
-            ListTile(
-              leading: const Icon(Icons.pending_actions_outlined),
+            SwitchListTile(
+              value: !showSource,
+              onChanged: widget.sourceEntry == null
+                  ? null
+                  : (v) => setState(() {
+                        showSource = !v;
+                      }),
+              secondary: const Icon(Icons.pending_actions_outlined),
               title: const Text('Reviewing contribution'),
-              subtitle: Text('By ' + entry.contribution!.uid),
-              onTap: () => copyText(
-                context,
-                entry.contribution!.uid,
-              ),
             ),
-            buildHeader(context, 'New'),
+            const Divider(height: 0),
           ],
-          ...buildEntry(context, entry, editor),
-          if (widget.sourceEntry != null) ...[
-            buildHeader(context, 'Old'),
-            ...buildEntry(context, widget.sourceEntry!),
-          ],
+          ...buildEntry(
+            context,
+            showSource ? widget.sourceEntry! : entry,
+            isReviewing ? null : editor,
+          ),
         ],
       ),
     );
@@ -256,35 +260,40 @@ class _EntryPageState extends State<EntryPage> {
   }
 
   Future<bool> submit(BuildContext context) async {
-    if (!isReviewing && (entry.uses.isEmpty || entry.forms.isEmpty)) {
+    if (!isReviewing && (this.entry.uses.isEmpty || this.entry.forms.isEmpty)) {
       showSnackbar(
         context,
         text: 'Must have at least a form and a use.',
       );
       return false;
     }
-    final docId = isReviewing ? entry.contribution?.overwriteId : entry.id;
-    if (EditorStore.isAdmin || isReviewing) {
-      entry.contribution = null;
-    } else {
-      entry.contribution ??= Contribution(
-        EditorStore.uid!,
-        overwriteId: entry.id,
-      );
-    }
+    final docId = isReviewing
+        ? this.entry.contribution?.overwriteId
+        : EditorStore.isAdmin
+            ? this.entry.id
+            : null;
+    final entry = Entry.fromJson(this.entry.toJson(), this.entry.id);
+    entry.contribution = EditorStore.isAdmin
+        ? null
+        : Contribution(
+            EditorStore.uid!,
+            overwriteId: entry.id,
+          );
+
     return await showLoadingDialog<bool>(
           context,
-          Future.wait([
-            FirebaseFirestore.instance
-                .collection('dictionary')
-                .doc(docId)
-                .set(entry.toJson()),
-            if (isReviewing)
-              FirebaseFirestore.instance
+          FirebaseFirestore.instance
+              .collection('dictionary')
+              .doc(docId)
+              .set(entry.toJson())
+              .then((_) {
+            if (isReviewing) {
+              return FirebaseFirestore.instance
                   .collection('dictionary')
                   .doc(entry.id)
-                  .delete(),
-          ]).then((_) => true),
+                  .delete();
+            }
+          }).then((_) => true),
         ) ??
         false;
   }

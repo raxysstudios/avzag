@@ -116,12 +116,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
   }
 
   Future openEntry({Entry? entry, EntryHit? hit}) async {
-    late final Entry? sourceEntry;
+    Entry? sourceEntry;
     await showLoadingDialog(
       context,
       (() async {
         if (entry == null && hit != null) entry = await _loadEntry(hit.entryID);
-        sourceEntry = await _loadEntry(entry?.contribution?.overwriteId);
+        if (EditorStore.isAdmin) {
+          sourceEntry = await _loadEntry(entry?.contribution?.overwriteId);
+        }
       })(),
     );
     entry ??= this.entry;
