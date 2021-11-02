@@ -20,11 +20,13 @@ import 'entry.dart';
 class EntryPage extends StatefulWidget {
   final Entry entry;
   final Entry? sourceEntry;
+  final ValueSetter<Entry?>? onEdited;
   final bool editing;
   final ScrollController? scroll;
 
   const EntryPage(
     this.entry, {
+    this.onEdited,
     this.sourceEntry,
     this.editing = false,
     this.scroll,
@@ -309,11 +311,12 @@ class _EntryPageState extends State<EntryPage> {
   }
 
   void exit(BuildContext context) {
-    context.read<ValueSetter<Entry?>>()(null);
+    widget.onEdited?.call(null);
     Navigator.pop(context);
   }
 
   void startEditing() {
+    widget.onEdited?.call(entry);
     setState(() {
       editor = getEditor(setState);
     });

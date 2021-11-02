@@ -50,12 +50,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
               ? entry == null
                   ? FloatingActionButton.extended(
                       onPressed: () {
-                        entry = Entry(
-                          forms: [],
-                          uses: [],
-                          language: EditorStore.language!,
+                        openEntry(
+                          entry: Entry(
+                            forms: [],
+                            uses: [],
+                            language: EditorStore.language!,
+                          ),
                         );
-                        openEntry();
                       },
                       icon: const Icon(Icons.add_outlined),
                       label: const Text('New'),
@@ -104,7 +105,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 padding: const EdgeInsets.only(bottom: 76),
                 sliver: SearchResultsSliver(
                   context.watch<SearchController>(),
-                  onTap: openEntry,
+                  onTap: (h) => openEntry(hit: h),
                 ),
               ),
             ],
@@ -114,15 +115,16 @@ class _DictionaryPageState extends State<DictionaryPage> {
     );
   }
 
-  Future openEntry([EntryHit? hit]) async {
+  Future openEntry({Entry? entry, EntryHit? hit}) async {
     late final Entry? sourceEntry;
     await showLoadingDialog(
       context,
       (() async {
-        if (hit != null) entry = await _loadEntry(hit.entryID);
+        if (entry == null && hit != null) entry = await _loadEntry(hit.entryID);
         sourceEntry = await _loadEntry(entry?.contribution?.overwriteId);
       })(),
     );
+    entry ??= this.entry;
     if (entry == null) return;
 
     final media = MediaQuery.of(context);
@@ -135,26 +137,24 @@ class _DictionaryPageState extends State<DictionaryPage> {
       builder: (context) {
         return DraggableScrollableSheet(
           minChildSize: .5,
-          initialChildSize: .5,
-          maxChildSize: hit == null ? childSize : .5,
+          initialChildSize: hit == null ? childSize : .5,
+          maxChildSize: childSize,
           expand: false,
           builder: (context, scroll) {
-            return Provider(
-              create: (context) => (Entry? e) => entry = e,
-              child: Center(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16),
-                    ),
+            return Center(
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16),
                   ),
-                  clipBehavior: Clip.antiAlias,
-                  child: EntryPage(
-                    entry!,
-                    editing: hit == null,
-                    sourceEntry: sourceEntry,
-                    scroll: scroll,
-                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: EntryPage(
+                  entry!,
+                  editing: hit == null,
+                  sourceEntry: sourceEntry,
+                  onEdited: (e) => this.entry = e,
+                  scroll: scroll,
                 ),
               ),
             );
