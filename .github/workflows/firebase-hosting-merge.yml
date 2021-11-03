@@ -19,9 +19,10 @@ jobs:
         uses: subosito/flutter-action@v1
 
       - name: Build 🛠️
-        run: flutter pub get
+        run: |
+          flutter pub get
         # run: flutter test
-        run: flutter build web
+          flutter build web
 
       - name: Deploy 📦
         uses: FirebaseExtended/action-hosting-deploy@v0
