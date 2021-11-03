@@ -10,8 +10,18 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: sudo snap install flutter --classic && flutter channel beta && flutter config --enable-web && flutter build web
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
+        with:
+          persist-credentials: false
+
+      - name: Build 🛠️
+      - uses: subosito/flutter-action@v1
+      - run: flutter pub get
+      # - run: flutter test
+      - run: flutter build web
+
+      - name: Deploy 📦
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
