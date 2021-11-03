@@ -19,7 +19,6 @@ jobs:
       - name: Build 🛠️
         run: |
           flutter pub get
-        # run: flutter test
           flutter build web
 
       - name: Deploy 📦
