@@ -10,9 +10,6 @@ class EditorStore {
   static String? get email => FirebaseAuth.instance.currentUser?.email;
   static String? get uid => FirebaseAuth.instance.currentUser?.uid;
 
-  static bool isAdmin = false;
-  static bool get isEditing => language != null;
-
   static String? _language;
   static String? get language => _language;
   static set language(String? value) {
@@ -24,15 +21,22 @@ class EditorStore {
     }
   }
 
-  static get prefs => GlobalStore.prefs;
+  static bool _isAdmin = false;
+  static bool get isAdmin => _isAdmin;
+  static bool get isEditing => language != null;
+  static SharedPreferences get prefs => GlobalStore.prefs;
 
-  static Future _load() async {
-    EditorStore._language = prefs.getString('editorLanguage');
-    final token =
-        await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
-    EditorStore.isAdmin =
-        json2list(token?.claims?['admin'])?.contains(EditorStore._language) ??
-            false;
+  static Future _load(Iterable<String> languages) async {
+    final saved = prefs.getString('editorLanguage');
+    language = languages.contains(saved) ? saved : null;
+    if (language == null) {
+      _isAdmin = false;
+    } else {
+      final token =
+          await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
+      _isAdmin = language != null &&
+          (json2list(token?.claims?['admin'])?.contains(language) ?? false);
+    }
   }
 }
 
@@ -68,7 +72,7 @@ class GlobalStore {
       },
     );
 
-    await EditorStore._load();
+    await EditorStore._load(_languages.keys);
     await prefs.setStringList(
       'languages',
       languages.where((l) => _languages.containsKey(l)).toList(),
