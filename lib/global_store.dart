@@ -21,8 +21,7 @@ class EditorStore {
     }
   }
 
-  static bool _isAdmin = false;
-  static bool get isAdmin => _isAdmin;
+  static bool isAdmin = false;
   static bool get isEditing => language != null;
   static SharedPreferences get prefs => GlobalStore.prefs;
 
@@ -30,11 +29,11 @@ class EditorStore {
     final saved = prefs.getString('editorLanguage');
     language = languages.contains(saved) ? saved : null;
     if (language == null) {
-      _isAdmin = false;
+      isAdmin = false;
     } else {
       final token =
           await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
-      _isAdmin = language != null &&
+      isAdmin = language != null &&
           (json2list(token?.claims?['admin'])?.contains(language) ?? false);
     }
   }
