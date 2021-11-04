@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                     style: Theme.of(context).textTheme.bodyText1,
                   )
                 : SizedBox(
-                    height: 64,
+                    height: kToolbarHeight,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
             bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(64),
+              preferredSize: const Size.fromHeight(kToolbarHeight + 7),
               child: Column(
                 children: [
                   Padding(
@@ -255,7 +255,7 @@ class _HomePageState extends State<HomePage> {
                                         child: ListTile(
                                           leading: Icon(ordering.icon),
                                           title: Text(
-                                            ordering.text,
+                                            capitalize(ordering.text),
                                             softWrap: false,
                                             overflow: TextOverflow.fade,
                                             style: const TextStyle(
