@@ -246,7 +246,7 @@ class _EntryPageState extends State<EntryPage> {
             showSource ? widget.sourceEntry! : entry,
             isReviewing ? null : editor,
           ),
-          if (editor == null && !isReviewing)
+          if (editor == null && !isReviewing && entry.contribution != null)
             Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
