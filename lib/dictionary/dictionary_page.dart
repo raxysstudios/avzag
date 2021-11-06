@@ -2,8 +2,6 @@ import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
-import 'package:avzag/widgets/span_icon.dart';
-import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -95,7 +93,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                             Icons.unpublished_outlined,
                             color: search.pendingOnly ? theme.primary : null,
                           ),
-                          tooltip: "Filter pending",
+                          tooltip: "Filter unverified",
                         );
                       },
                     ),
