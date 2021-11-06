@@ -2,6 +2,8 @@ import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
+import 'package:avzag/widgets/span_icon.dart';
+import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -69,39 +71,37 @@ class _DictionaryPageState extends State<DictionaryPage> {
               : null,
           body: CustomScrollView(
             slivers: [
-              const SliverAppBar(
+              SliverAppBar(
                 pinned: true,
                 snap: true,
                 floating: true,
                 forceElevated: true,
-                title: Text('Dictionary'),
-                bottom: PreferredSize(
+                title: const Text('Dictionary'),
+                bottom: const PreferredSize(
                   preferredSize: Size.fromHeight(kToolbarHeight + 7),
                   child: SearchToolbar(),
                 ),
+                actions: [
+                  if (EditorStore.isAdmin)
+                    Consumer<SearchController>(
+                      builder: (context, search, _) {
+                        final theme = Theme.of(context).colorScheme;
+                        return IconButton(
+                          onPressed: () => setState(() {
+                            search.pendingOnly = !search.pendingOnly;
+                            search.search();
+                          }),
+                          icon: Icon(
+                            Icons.unpublished_outlined,
+                            color: search.pendingOnly ? theme.primary : null,
+                          ),
+                          tooltip: "Filter pending",
+                        );
+                      },
+                    ),
+                  const SizedBox(width: 4),
+                ],
               ),
-              if (EditorStore.isAdmin)
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      Consumer<SearchController>(
-                        builder: (context, search, _) {
-                          return SwitchListTile(
-                            value: search.pendingOnly,
-                            onChanged: (v) {
-                              search.pendingOnly = v;
-                              search.search();
-                            },
-                            title: const Text('Filter pending reviews'),
-                            secondary:
-                                const Icon(Icons.pending_actions_outlined),
-                          );
-                        },
-                      ),
-                      const Divider(),
-                    ],
-                  ),
-                ),
               SliverPadding(
                 padding: const EdgeInsets.only(bottom: 76),
                 sliver: SearchResultsSliver(

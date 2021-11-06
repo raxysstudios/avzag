@@ -1,5 +1,6 @@
 import 'package:avzag/home/language.dart';
 import 'package:avzag/utils/utils.dart';
+import 'package:avzag/widgets/span_icon.dart';
 import 'language_flag.dart';
 import 'package:flutter/material.dart';
 
@@ -43,49 +44,41 @@ class LanguageCard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              subtitle: Theme(
-                data: ThemeData(
-                  iconTheme: IconThemeData(
-                    color: Theme.of(context).textTheme.caption?.color,
-                    size: 16,
-                  ),
-                ),
-                child: RichText(
-                  maxLines: 2,
-                  text: TextSpan(
-                    style: Theme.of(context).textTheme.caption?.copyWith(
-                          fontSize: 14,
-                        ),
-                    children: [
-                      if (language.family?.isNotEmpty ?? false)
-                        TextSpan(
-                          text: prettyTags(language.family)!,
-                        ),
-                      if (language.stats != null) ...[
-                        if (language.family?.isNotEmpty ?? false)
-                          const TextSpan(text: '\n'),
-                        const WidgetSpan(
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 2),
-                            child: Icon(Icons.person_outlined),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (language.family?.isNotEmpty ?? false)
+                    Text(
+                      prettyTags(language.family)!,
+                      maxLines: 1,
+                    ),
+                  if (language.stats != null)
+                    RichText(
+                      maxLines: 1,
+                      text: TextSpan(
+                        style: Theme.of(context).textTheme.caption?.copyWith(
+                              fontSize: 14,
+                            ),
+                        children: [
+                          const WidgetSpan(
+                            child: SpanIcon(Icons.person_outlined),
                           ),
-                        ),
-                        TextSpan(
-                          text: language.stats!.editors.toString(),
-                        ),
-                        const WidgetSpan(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 8, right: 2),
-                            child: Icon(Icons.book_outlined),
+                          TextSpan(
+                            text: language.stats!.editors.toString(),
                           ),
-                        ),
-                        TextSpan(
-                          text: language.stats!.dictionary.toString(),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
+                          const WidgetSpan(
+                            child: SpanIcon(
+                              Icons.book_outlined,
+                              padding: EdgeInsets.only(left: 4, right: 2),
+                            ),
+                          ),
+                          TextSpan(
+                            text: language.stats!.dictionary.toString(),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
               ),
             ),
           ],

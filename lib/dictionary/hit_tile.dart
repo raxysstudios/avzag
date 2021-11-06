@@ -1,5 +1,6 @@
 import 'package:algolia/algolia.dart';
 import 'package:avzag/utils/utils.dart';
+import 'package:avzag/widgets/span_icon.dart';
 
 import 'package:flutter/material.dart';
 
@@ -62,26 +63,28 @@ class HitTile extends StatelessWidget {
       dense: true,
       title: Row(
         children: [
-          if (hit.pendingReview) ...[
-            const Icon(Icons.pending_actions_outlined),
-            const SizedBox(width: 4),
-          ],
+          if (hit.pendingReview)
+            const SpanIcon(
+              Icons.unpublished_outlined,
+              padding: EdgeInsets.only(right: 4),
+            ),
           Text(
             capitalize(hit.headword),
             style: theme.subtitle1?.copyWith(
               fontWeight: FontWeight.w500,
             ),
           ),
-          if (hit.form != null && hit.form != hit.headword) ...[
-            const SizedBox(width: 4),
-            Text(
-              capitalize(hit.form!),
-              style: theme.subtitle1?.copyWith(
-                fontWeight: FontWeight.w500,
-                color: theme.caption?.color,
+          if (hit.form != null && hit.form != hit.headword)
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: Text(
+                capitalize(hit.form!),
+                style: theme.subtitle1?.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: theme.caption?.color,
+                ),
               ),
             ),
-          ],
           const Spacer(),
           if (showLanguage)
             Text(

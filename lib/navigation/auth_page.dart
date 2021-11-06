@@ -3,6 +3,7 @@ import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/loading_card.dart';
+import 'package:avzag/widgets/span_icon.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,7 @@ class _AuthPageState extends State<AuthPage> {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
     EditorStore.language = null;
+    EditorStore.isAdmin = false;
 
     final user = await GoogleSignIn().signIn();
     if (user != null) {
@@ -76,9 +78,7 @@ class _AuthPageState extends State<AuthPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => navigate(context, null),
-        icon: Icon(EditorStore.isEditing
-            ? Icons.edit_outlined
-            : Icons.edit_off_outlined),
+        icon: const Icon(Icons.check_outlined),
         label: const Text('Continue'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -92,7 +92,7 @@ class _AuthPageState extends State<AuthPage> {
               children: [
                 ElevatedButton.icon(
                   onPressed: loading ? null : signIn,
-                  icon: const Icon(Icons.person_outlined),
+                  icon: const Icon(Icons.login_outlined),
                   label: Text(
                     EditorStore.email ?? 'Sign In',
                   ),
@@ -108,7 +108,20 @@ class _AuthPageState extends State<AuthPage> {
                             'With any question regarding the language materials, use the contacts below.',
                       ),
                       if (editable.isNotEmpty) ...[
-                        const TextSpan(text: '\n\nYou have admin rights for '),
+                        const TextSpan(text: '\n\nYou have '),
+                        const WidgetSpan(
+                          child: SpanIcon(
+                            Icons.account_circle_outlined,
+                            color: SpanIconColor.text,
+                          ),
+                        ),
+                        const TextSpan(
+                          text: 'admin',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const TextSpan(text: ' rights for '),
                         TextSpan(
                           text: capitalize(editable.join(', ')),
                           style: const TextStyle(

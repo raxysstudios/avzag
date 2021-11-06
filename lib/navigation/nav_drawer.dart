@@ -4,6 +4,7 @@ import 'package:avzag/home/home_page.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/expandable_tile.dart';
 import 'package:avzag/widgets/raxys_logo.dart';
+import 'package:avzag/widgets/span_icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -126,15 +127,15 @@ class NavDraver extends StatelessWidget {
                     ),
                     SwitchListTile(
                       title: const Text('Editor Mode'),
-                      subtitle: Text(
-                        prettyTags(
-                          EditorStore.isEditing
-                              ? [
-                                  if (EditorStore.isAdmin) 'admin',
-                                  EditorStore.language!,
-                                ]
-                              : ['off'],
-                        )!,
+                      subtitle: Row(
+                        children: [
+                          if (EditorStore.isEditing) ...[
+                            if (EditorStore.isAdmin)
+                              const SpanIcon(Icons.account_circle_outlined),
+                            Text(capitalize(EditorStore.language)),
+                          ] else
+                            const Text('Off')
+                        ],
                       ),
                       value: EditorStore.language != null,
                       secondary: const Padding(

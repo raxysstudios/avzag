@@ -227,23 +227,17 @@ class _EntryPageState extends State<EntryPage> {
         controller: widget.scroll,
         padding: const EdgeInsets.only(bottom: 76),
         children: [
-          if (entry.contribution != null) ...[
-            if (isReviewing)
-              SwitchListTile(
-                value: !showSource,
-                onChanged: widget.sourceEntry == null
-                    ? null
-                    : (v) => setState(() {
-                          showSource = !v;
-                        }),
-                secondary: const Icon(Icons.pending_actions_outlined),
-                title: const Text('Reviewing contribution'),
-              )
-            else
-              const ListTile(
-                leading: Icon(Icons.pending_actions_outlined),
-                title: Text('Unverified data'),
-              ),
+          if (isReviewing) ...[
+            SwitchListTile(
+              value: !showSource,
+              onChanged: widget.sourceEntry == null
+                  ? null
+                  : (v) => setState(() {
+                        showSource = !v;
+                      }),
+              secondary: const Icon(Icons.pending_actions_outlined),
+              title: const Text('Reviewing contribution'),
+            ),
             const Divider(),
           ],
           ...buildEntry(

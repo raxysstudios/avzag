@@ -5,6 +5,7 @@ import 'package:avzag/global_store.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/utils/snackbar_manager.dart';
+import 'package:avzag/widgets/span_icon.dart';
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -227,16 +228,14 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Builder(builder: (context) {
-                          final theme = Theme.of(context).colorScheme;
                           return Badge(
                             ignorePointer: true,
                             animationType: BadgeAnimationType.fade,
                             position: BadgePosition.topStart(),
-                            badgeColor: theme.primary,
-                            badgeContent: Icon(
-                              ordering.icon,
-                              color: theme.onPrimary,
-                              size: 16,
+                            badgeColor: Theme.of(context).colorScheme.primary,
+                            badgeContent: SpanIcon(
+                              ordering.icon!,
+                              color: SpanIconColor.primary,
                             ),
                             child: PopupMenuButton(
                               icon: const Icon(Icons.filter_alt_outlined),
