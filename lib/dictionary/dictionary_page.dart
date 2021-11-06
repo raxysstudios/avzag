@@ -86,12 +86,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
                         final theme = Theme.of(context).colorScheme;
                         return IconButton(
                           onPressed: () => setState(() {
-                            search.pendingOnly = !search.pendingOnly;
+                            search.unverified = !search.unverified;
                             search.search();
                           }),
                           icon: Icon(
                             Icons.unpublished_outlined,
-                            color: search.pendingOnly ? theme.primary : null,
+                            color: search.unverified ? theme.primary : null,
                           ),
                           tooltip: "Filter unverified",
                         );
