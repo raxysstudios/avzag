@@ -236,7 +236,7 @@ class _EntryPageState extends State<EntryPage> {
                   : (v) => setState(() {
                         showSource = !v;
                       }),
-              secondary: const Icon(Icons.pending_actions_outlined),
+              secondary: const Icon(Icons.unpublished_outlined),
               title: const Text('Reviewing contribution'),
             ),
             const Divider(),
