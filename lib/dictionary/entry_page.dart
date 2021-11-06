@@ -8,6 +8,7 @@ import 'package:avzag/utils/editor_utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/utils/snackbar_manager.dart';
+import 'package:avzag/widgets/span_icon.dart';
 import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/widgets/note_tile.dart';
@@ -245,6 +246,22 @@ class _EntryPageState extends State<EntryPage> {
             showSource ? widget.sourceEntry! : entry,
             isReviewing ? null : editor,
           ),
+          if (!isReviewing && entry.contribution != null)
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: const [
+                  SpanIcon(Icons.unpublished_outlined),
+                  Text(
+                    'Unverified',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            )
         ],
       ),
     );

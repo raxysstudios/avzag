@@ -50,8 +50,11 @@ class _AuthPageState extends State<AuthPage> {
     });
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
-    EditorStore.language = null;
-    EditorStore.isAdmin = false;
+    setState(() {
+      EditorStore.language = null;
+      EditorStore.isAdmin = false;
+      editable.clear();
+    });
 
     final user = await GoogleSignIn().signIn();
     if (user != null) {
@@ -103,9 +106,10 @@ class _AuthPageState extends State<AuthPage> {
                   text: TextSpan(
                     style: Theme.of(context).textTheme.bodyText2,
                     children: [
-                      const TextSpan(
-                        text:
-                            'With any question regarding the language materials, use the contacts below.',
+                      TextSpan(
+                        text: EditorStore.uid != null
+                            ? 'With any question regarding the language materials, use the contacts below.'
+                            : 'Sign in to see your options.',
                       ),
                       if (editable.isNotEmpty) ...[
                         const TextSpan(text: '\n\nYou have '),
