@@ -61,6 +61,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    inputController.addListener(filterLanguages);
     load();
   }
 
@@ -92,26 +93,27 @@ class _HomePageState extends State<HomePage> {
           ...l.tags ?? [],
         ].join(' ')
     };
-    setState(() {
-      isLoading = false;
-      filterLanguages();
-    });
+
+    isLoading = false;
+    filterLanguages();
   }
 
   void filterLanguages() {
     if (isLoading) return;
     final query =
         inputController.text.trim().split(' ').where((s) => s.isNotEmpty);
-    languages
-      ..clear()
-      ..addAll(
-        query.isEmpty
-            ? catalogue
-            : catalogue.where((l) {
-                final t = tags[l.name]!;
-                return query.any((q) => t.contains(q));
-              }),
-      );
+    setState(() {
+      languages
+        ..clear()
+        ..addAll(
+          query.isEmpty
+              ? catalogue
+              : catalogue.where((l) {
+                  final t = tags[l.name]!;
+                  return query.any((q) => t.contains(q));
+                }),
+        );
+    });
   }
 
   @override
