@@ -28,7 +28,7 @@ export const indexDictionary = functions
           headword: entry.forms[0].plain,
         } as any;
         if (entry.contribution) {
-          base.pendingReview = true;
+          base.unverified = true;
         }
 
         const records = [];
