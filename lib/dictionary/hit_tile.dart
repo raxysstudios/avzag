@@ -10,7 +10,7 @@ class EntryHit {
   final String? form;
   final String language;
   final String term;
-  final bool pendingReview;
+  final bool unverified;
   final List<String>? tags;
 
   const EntryHit({
@@ -20,7 +20,7 @@ class EntryHit {
     required this.language,
     required this.term,
     this.tags,
-    this.pendingReview = false,
+    this.unverified = false,
   });
 
   factory EntryHit.fromAlgoliaHit(AlgoliaObjectSnapshot hit) {
@@ -38,7 +38,7 @@ class EntryHit {
       form: form >= 0 ? json2list(json['forms'])![form] : null,
       language: json['language'],
       term: json['term'],
-      pendingReview: json['pendingReview'] ?? false,
+      unverified: json['unverified'] ?? false,
       tags: json2list(json['tags']),
     );
   }
@@ -63,7 +63,7 @@ class HitTile extends StatelessWidget {
       dense: true,
       title: Row(
         children: [
-          if (hit.pendingReview)
+          if (hit.unverified)
             const SpanIcon(
               Icons.unpublished_outlined,
               padding: EdgeInsets.only(right: 4),
