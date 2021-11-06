@@ -15,10 +15,10 @@ class SearchController with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _pendingOnly = false;
-  bool get pendingOnly => _pendingOnly;
-  set pendingOnly(bool value) {
-    _pendingOnly = value;
+  bool _unverified = false;
+  bool get unverified => _unverified;
+  set unverified(bool value) {
+    _unverified = value;
     notifyListeners();
   }
 
@@ -54,7 +54,7 @@ class SearchController with ChangeNotifier {
     var query = _index.query(parsed[0]).filters(
           parsed[1].isEmpty ? languages : '${parsed[1]} AND ($languages)',
         );
-    if (pendingOnly) query = query.facetFilter('pendingReview:true');
+    if (unverified) query = query.facetFilter('unverified:true');
     if (monolingual) query = query.setRestrictSearchableAttributes(['forms']);
 
     _organizeHits(await _fetchHits(query));
