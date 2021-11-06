@@ -123,7 +123,7 @@ class _EntryPageState extends State<EntryPage> {
       if (editor != null)
         Padding(
           padding: const EdgeInsets.all(8),
-          child: TextButton.icon(
+          child: ElevatedButton.icon(
             onPressed: () => MeaningTile.showEditor(
               context: context,
               callback: editor(
@@ -246,18 +246,18 @@ class _EntryPageState extends State<EntryPage> {
             showSource ? widget.sourceEntry! : entry,
             isReviewing ? null : editor,
           ),
-          if (!isReviewing && entry.contribution != null)
+          if (editor == null && entry.contribution != null)
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(16),
               child: Row(
-                children: const [
-                  SpanIcon(Icons.unpublished_outlined),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SpanIcon(Icons.unpublished_outlined),
                   Text(
                     'Unverified',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: Theme.of(context).textTheme.caption?.copyWith(
+                          fontSize: 14,
+                        ),
                   ),
                 ],
               ),
