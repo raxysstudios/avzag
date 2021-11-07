@@ -102,9 +102,9 @@ class _AuthPageState extends State<AuthPage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  EditorStore.uid != null
-                      ? 'With any question regarding the language materials, use the contacts below.'
-                      : 'Sign in to see your options.',
+                  EditorStore.uid == null
+                      ? 'Sign in to see your options.'
+                      : 'With any question regarding the language materials, use the contacts below.',
                   style: Theme.of(context).textTheme.bodyText2,
                   textAlign: TextAlign.center,
                 ),
