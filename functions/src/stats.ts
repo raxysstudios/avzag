@@ -20,10 +20,6 @@ export const collectStats = functions
       for (const lang of langs) {
         await db.doc("languages/" + lang).update({
           stats: {
-            editors: await db
-                .collection("users")
-                .where("admin", "array-contains", lang)
-                .get().then((s) => s.size),
             dictionary: await dictionary
                 .search("", {
                   facetFilters: ["language:" + lang],
