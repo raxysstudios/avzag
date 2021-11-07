@@ -50,11 +50,13 @@ class LanguageCard extends StatelessWidget {
                   if (language.family?.isNotEmpty ?? false)
                     Text(
                       prettyTags(language.family)!,
+                      overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                   if (language.stats != null)
                     RichText(
                       maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       text: TextSpan(
                         style: Theme.of(context).textTheme.caption?.copyWith(
                               fontSize: 14,

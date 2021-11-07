@@ -101,18 +101,21 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                RichText(
+                Text(
+                  EditorStore.uid != null
+                      ? 'With any question regarding the language materials, use the contacts below.'
+                      : 'Sign in to see your options.',
+                  style: Theme.of(context).textTheme.bodyText2,
                   textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: Theme.of(context).textTheme.bodyText2,
-                    children: [
-                      TextSpan(
-                        text: EditorStore.uid != null
-                            ? 'With any question regarding the language materials, use the contacts below.'
-                            : 'Sign in to see your options.',
-                      ),
-                      if (editable.isNotEmpty) ...[
-                        const TextSpan(text: '\n\nYou have '),
+                ),
+                if (editable.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.bodyText2,
+                      children: [
+                        const TextSpan(text: 'You have '),
                         WidgetSpan(
                           child: SpanIcon(
                             Icons.account_circle_outlined,
@@ -133,10 +136,10 @@ class _AuthPageState extends State<AuthPage> {
                           ),
                         ),
                         const TextSpan(text: '.'),
-                      ]
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),
