@@ -27,6 +27,7 @@ class SearchResultsSliver extends StatelessWidget {
           final hitGroups = search.getHits(index);
           final tags = search.getTags(index);
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
               RichText(
