@@ -29,31 +29,36 @@ class SearchResultsSliver extends StatelessWidget {
           return Column(
             children: [
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  const SizedBox(width: 20),
-                  Text(
-                    capitalize(id),
-                    style: theme.textTheme.caption?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                    ),
+              RichText(
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                text: TextSpan(
+                  style: theme.textTheme.caption?.copyWith(
+                    fontSize: 14,
                   ),
-                  if (tags.isNotEmpty) ...[
-                    const SizedBox(width: 4),
-                    const SpanIcon(Icons.tag_outlined),
-                    Text(
-                      prettyTags(
+                  children: [
+                    const WidgetSpan(child: SizedBox(width: 20)),
+                    TextSpan(
+                      text: capitalize(id),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const WidgetSpan(
+                      child: SpanIcon(
+                        Icons.tag_outlined,
+                        padding: EdgeInsets.only(left: 4, right: 2),
+                      ),
+                    ),
+                    TextSpan(
+                      text: prettyTags(
                         tags,
                         separator: ' ',
                         capitalized: false,
-                      )!,
-                      style: theme.textTheme.caption?.copyWith(
-                        fontSize: 14,
                       ),
                     ),
                   ],
-                ],
+                ),
               ),
               Card(
                 child: ListView.builder(

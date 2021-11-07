@@ -1,22 +1,18 @@
 import 'package:avzag/utils/utils.dart';
 
 class LanguageStats {
-  final int editors;
   final int dictionary;
 
   LanguageStats({
-    this.editors = 0,
     this.dictionary = 0,
   });
 
   LanguageStats.fromJson(Map<String, Object?> json)
       : this(
-          editors: json['editors'] as int,
           dictionary: json['dictionary'] as int,
         );
 
   Map<String, Object?> toJson() => {
-        'editors': editors,
         'dictionary': dictionary,
       };
 }
