@@ -76,7 +76,7 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Editors'),
+        title: const Text('Editor Mode'),
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -113,10 +113,10 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       if (editable.isNotEmpty) ...[
                         const TextSpan(text: '\n\nYou have '),
-                        const WidgetSpan(
+                        WidgetSpan(
                           child: SpanIcon(
                             Icons.account_circle_outlined,
-                            color: SpanIconColor.text,
+                            color: Theme.of(context).textTheme.bodyText2?.color,
                           ),
                         ),
                         const TextSpan(

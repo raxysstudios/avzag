@@ -237,7 +237,8 @@ class _HomePageState extends State<HomePage> {
                             badgeColor: Theme.of(context).colorScheme.primary,
                             badgeContent: SpanIcon(
                               ordering.icon!,
-                              color: SpanIconColor.primary,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              padding: EdgeInsets.zero,
                             ),
                             child: PopupMenuButton(
                               icon: const Icon(Icons.filter_alt_outlined),
