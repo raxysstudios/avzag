@@ -41,9 +41,6 @@ class SearchController with ChangeNotifier {
     return languages.map((l) => hits[l]!).toList();
   }
 
-  bool _processing = false;
-  bool get processing => _processing;
-
   late AlgoliaQuery _query = _index.query('');
 
   void search([String text = ""]) {
@@ -63,7 +60,6 @@ class SearchController with ChangeNotifier {
   }
 
   Future fetchHits([int page = 0]) async {
-    _processing = true;
     notifyListeners();
 
     var hits = await _query
@@ -91,7 +87,6 @@ class SearchController with ChangeNotifier {
     tags.clear();
     _hits.clear();
     _organizeHits(hits.map((h) => EntryHit.fromAlgoliaHit(h)));
-    _processing = false;
     notifyListeners();
   }
 

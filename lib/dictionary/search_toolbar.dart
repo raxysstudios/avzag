@@ -98,9 +98,6 @@ class SearchToolbarState extends State<SearchToolbar> {
             ],
           ),
         ),
-        LinearProgressIndicator(
-          value: search.processing ? null : 0,
-        ),
       ],
     );
   }
