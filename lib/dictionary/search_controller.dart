@@ -97,13 +97,13 @@ class SearchController with ChangeNotifier {
 
   _organizeHits(Iterable<EntryHit> hits) {
     for (final hit in hits) {
-      final id = hit.term;
-      _hits.putIfAbsent(id, () {
-        tags[id] = <String>{};
-        return {for (final l in _languages) l: <EntryHit>[]};
+      final term = hit.term;
+      _hits.putIfAbsent(term, () {
+        tags[term] = <String>{};
+        return {for (final l in _languages) l: []};
       });
-      tags[id]!.addAll(hit.tags ?? []);
-      _hits[id]![hit.language]!.add(hit);
+      tags[term]?.addAll(hit.tags ?? []);
+      _hits[term]?[hit.language]?.add(hit);
     }
   }
 
