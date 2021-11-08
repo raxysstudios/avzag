@@ -33,7 +33,6 @@ class SearchController with ChangeNotifier {
   bool get monolingual => language.isNotEmpty && language != '_';
 
   int get length => _tags.length;
-  final _entryIDs = <String>{};
 
   final Map<String, Set<String>> _tags = {};
   Set<String> getTags(String term) => _tags[term] ?? {};
@@ -59,7 +58,6 @@ class SearchController with ChangeNotifier {
     if (unverified) _query = _query.facetFilter('unverified:true');
     if (monolingual) _query = _query.setRestrictSearchableAttributes(['forms']);
 
-    _entryIDs.clear();
     _tags.clear();
     _hits.clear();
     _onSearch?.call();
@@ -90,9 +88,6 @@ class SearchController with ChangeNotifier {
   List<String> _organizeHits(Iterable<EntryHit> hits) {
     final newTerms = <String>[];
     for (final hit in hits) {
-      if (_entryIDs.contains(hit.entryID)) continue;
-      _entryIDs.add(hit.entryID);
-
       final term = hit.term;
       _hits.putIfAbsent(term, () {
         _tags[term] = <String>{};
