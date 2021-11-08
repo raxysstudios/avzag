@@ -8,7 +8,10 @@ class SearchController with ChangeNotifier {
     this._languages,
     this._index, [
     this._onSearch,
-  ]);
+  ]) {
+    updateQuery();
+  }
+
   final Iterable<String> _languages;
   final AlgoliaIndexReference _index;
   final VoidCallback? _onSearch;
@@ -29,10 +32,11 @@ class SearchController with ChangeNotifier {
 
   bool get monolingual => language.isNotEmpty && language != '_';
 
-  int get length => tags.length;
+  int get length => _tags.length;
+  final _entryIDs = <String>{};
 
-  final Map<String, Set<String>> tags = {};
-  Set<String> getTags(String term) => tags[term] ?? {};
+  final Map<String, Set<String>> _tags = {};
+  Set<String> getTags(String term) => _tags[term] ?? {};
 
   final Map<String, Map<String, List<EntryHit>>> _hits = {};
   List<List<EntryHit>> getHits(String term) {
@@ -43,7 +47,7 @@ class SearchController with ChangeNotifier {
 
   late AlgoliaQuery _query = _index.query('');
 
-  void search([String text = ""]) {
+  void updateQuery([String text = '']) {
     final parsed = _parseQuery(text);
     final languages = _generateFilter(
       monolingual ? [language] : _languages,
@@ -55,51 +59,50 @@ class SearchController with ChangeNotifier {
     if (unverified) _query = _query.facetFilter('unverified:true');
     if (monolingual) _query = _query.setRestrictSearchableAttributes(['forms']);
 
+    _entryIDs.clear();
+    _tags.clear();
+    _hits.clear();
     _onSearch?.call();
-    fetchHits();
   }
 
-  Future fetchHits([int page = 0]) async {
-    notifyListeners();
-
-    var hits = await _query
-        .setPage(page)
-        .getObjects()
-        .then((s) => s.hits)
-        .onError((error, stackTrace) => []);
-
-    if (language == '_') {
+  Future<List<String>> fetchHits(int page) async {
+    var hits = await _query.setPage(page).getObjects().then((s) => s.hits);
+    if (hits.isNotEmpty && language == '_') {
+      final original = {
+        for (final hit in hits) hit.objectID: hit,
+      };
       final terms = _generateFilter(
         hits.map((hit) => hit.data['term']),
         'term',
       );
-      final original = {
-        for (final hit in hits) hit.objectID: hit,
-      };
+      final languages = _generateFilter(_languages, 'language');
       hits = await _index
-          .filters('($_languages) AND ($terms)')
+          .filters('($languages) AND ($terms)')
           .getObjects()
           .then((s) => s.hits.map((h) => original[h.objectID] ?? h))
-          .then((h) => h.toList())
-          .onError((error, stackTrace) => []);
+          .then((h) => h.toList());
     }
-
-    tags.clear();
-    _hits.clear();
-    _organizeHits(hits.map((h) => EntryHit.fromAlgoliaHit(h)));
-    notifyListeners();
+    return _organizeHits(
+      hits.map((h) => EntryHit.fromAlgoliaHit(h)),
+    );
   }
 
-  _organizeHits(Iterable<EntryHit> hits) {
+  List<String> _organizeHits(Iterable<EntryHit> hits) {
+    final newTerms = <String>[];
     for (final hit in hits) {
+      if (_entryIDs.contains(hit.entryID)) continue;
+      _entryIDs.add(hit.entryID);
+
       final term = hit.term;
       _hits.putIfAbsent(term, () {
-        tags[term] = <String>{};
+        _tags[term] = <String>{};
+        newTerms.add(term);
         return {for (final l in _languages) l: []};
       });
-      tags[term]?.addAll(hit.tags ?? []);
+      _tags[term]?.addAll(hit.tags ?? []);
       _hits[term]?[hit.language]?.add(hit);
     }
+    return newTerms;
   }
 
   static String _generateFilter(

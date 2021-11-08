@@ -51,7 +51,7 @@ class SearchToolbarState extends State<SearchToolbar> {
   }
 
   void search() =>
-      context.read<SearchController>().search(inputController.text);
+      context.read<SearchController>().updateQuery(inputController.text);
 
   @override
   Widget build(BuildContext context) {

@@ -35,7 +35,16 @@ class _DictionaryPageState extends State<DictionaryPage> {
   @override
   void initState() {
     super.initState();
-    paging.addPageRequestListener(search.fetchHits);
+    paging.addPageRequestListener(
+      (page) async {
+        final terms = await search.fetchHits(page);
+        if (terms.isEmpty) {
+          paging.appendLastPage([]);
+        } else {
+          paging.appendPage(terms, page + 1);
+        }
+      },
+    );
   }
 
   @override
@@ -93,7 +102,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                         return IconButton(
                           onPressed: () => setState(() {
                             search.unverified = !search.unverified;
-                            search.search();
+                            search.updateQuery();
                           }),
                           icon: Icon(
                             Icons.unpublished_outlined,
@@ -106,13 +115,18 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   const SizedBox(width: 4),
                 ],
               ),
-              SliverPadding(
-                padding: const EdgeInsets.only(bottom: 76),
-                sliver: SearchResultsSliver(
-                  context.watch<SearchController>(),
-                  paging,
-                  onTap: (h) => openEntry(hit: h),
-                ),
+              ChangeNotifierProvider.value(
+                value: paging,
+                builder: (context, _) {
+                  return SliverPadding(
+                    padding: const EdgeInsets.only(bottom: 76),
+                    sliver: SearchResultsSliver(
+                      context.watch<SearchController>(),
+                      context.watch<PagingController<int, String>>(),
+                      onTap: (h) => openEntry(hit: h),
+                    ),
+                  );
+                },
               ),
             ],
           ),
