@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
           );
           navigate(context);
         },
-        child: const Icon(Icons.check_outlined),
+        child: const Icon(Icons.done_all_outlined),
         tooltip: 'Continue',
       ),
       body: CustomScrollView(
