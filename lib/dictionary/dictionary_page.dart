@@ -82,7 +82,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 forceElevated: true,
                 title: const Text('Dictionary'),
                 bottom: const PreferredSize(
-                  preferredSize: Size.fromHeight(kToolbarHeight),
+                  preferredSize: Size.fromHeight(kToolbarHeight + 3),
                   child: SearchToolbar(),
                 ),
                 actions: [

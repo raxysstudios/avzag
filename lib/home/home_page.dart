@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () => setState(() {
                             selected.clear();
                           }),
-                          icon: const Icon(Icons.clear_outlined),
+                          icon: const Icon(Icons.cancel_outlined),
                           tooltip: 'Unselect all',
                         ),
                         const SizedBox(width: 18),
@@ -190,115 +190,117 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
             bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight + 7),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          tooltip: 'Toggle map',
-                          icon: const Icon(Icons.map_outlined),
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('The map comes soon'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Close'),
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 8),
-                            child: TextField(
-                              controller: inputController,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                labelText: "Search by names, tags, families",
-                              ),
-                            ),
-                          ),
-                        ),
-                        Builder(builder: (context) {
-                          return Badge(
-                            ignorePointer: true,
-                            animationType: BadgeAnimationType.fade,
-                            position: BadgePosition.topStart(),
-                            badgeColor: Theme.of(context).colorScheme.primary,
-                            badgeContent: SpanIcon(
-                              ordering.icon!,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              padding: EdgeInsets.zero,
-                            ),
-                            child: PopupMenuButton(
-                              icon: const Icon(Icons.filter_alt_outlined),
-                              tooltip: 'Order by',
-                              itemBuilder: (BuildContext context) {
-                                return <PopupMenuEntry>[
-                                  for (final ordering in orderings)
-                                    if (ordering == null)
-                                      const PopupMenuDivider(height: 0)
-                                    else
-                                      PopupMenuItem(
-                                        onTap: () {
-                                          this.ordering = ordering;
-                                          load();
-                                        },
-                                        child: ListTile(
-                                          leading: Icon(ordering.icon),
-                                          title: Text(
-                                            capitalize(ordering.text),
-                                            softWrap: false,
-                                            overflow: TextOverflow.fade,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          selected: this.ordering == ordering,
-                                        ),
-                                      )
-                                ];
-                              },
-                            ),
+              preferredSize: const Size.fromHeight(kToolbarHeight + 3),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Row(
+                  children: [
+                    IconButton(
+                      tooltip: 'Toggle map',
+                      icon: const Icon(Icons.map_outlined),
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('The map comes soon'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Close'),
+                              )
+                            ],
                           );
-                        }),
-                      ],
+                        },
+                      ),
                     ),
-                  ),
-                  LinearProgressIndicator(value: isLoading ? null : 0),
-                ],
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 8),
+                        child: TextField(
+                          controller: inputController,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            labelText: "Search by names, tags, families",
+                          ),
+                        ),
+                      ),
+                    ),
+                    Builder(builder: (context) {
+                      return Badge(
+                        ignorePointer: true,
+                        animationType: BadgeAnimationType.fade,
+                        position: BadgePosition.bottomStart(),
+                        badgeColor: Theme.of(context).colorScheme.primary,
+                        badgeContent: SpanIcon(
+                          ordering.icon!,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          padding: EdgeInsets.zero,
+                        ),
+                        child: PopupMenuButton(
+                          icon: const Icon(Icons.filter_alt_outlined),
+                          tooltip: 'Order by',
+                          itemBuilder: (BuildContext context) {
+                            return <PopupMenuEntry>[
+                              for (final ordering in orderings)
+                                if (ordering == null)
+                                  const PopupMenuDivider(height: 0)
+                                else
+                                  PopupMenuItem(
+                                    onTap: () {
+                                      this.ordering = ordering;
+                                      load();
+                                    },
+                                    child: ListTile(
+                                      leading: Icon(ordering.icon),
+                                      title: Text(
+                                        capitalize(ordering.text),
+                                        softWrap: false,
+                                        overflow: TextOverflow.fade,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      selected: this.ordering == ordering,
+                                    ),
+                                  )
+                            ];
+                          },
+                        ),
+                      );
+                    }),
+                  ],
+                ),
               ),
             ),
           ),
-          SliverPadding(
-            padding: const EdgeInsets.only(bottom: 76),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final language = languages[index];
-                  final selected = this.selected.contains(language);
-                  return LanguageCard(
-                    language,
-                    selected: selected,
-                    onTap: () => setState(
-                      () => selected
-                          ? this.selected.remove(language)
-                          : this.selected.add(language),
-                    ),
-                  );
-                },
-                childCount: languages.length,
+          if (isLoading)
+            const SliverFillRemaining(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.only(bottom: 76),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final language = languages[index];
+                    final selected = this.selected.contains(language);
+                    return LanguageCard(
+                      language,
+                      selected: selected,
+                      onTap: () => setState(
+                        () => selected
+                            ? this.selected.remove(language)
+                            : this.selected.add(language),
+                      ),
+                    );
+                  },
+                  childCount: languages.length,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
