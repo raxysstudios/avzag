@@ -4,6 +4,7 @@ import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import 'entry.dart';
 import 'entry_page.dart';
@@ -22,20 +23,25 @@ class DictionaryPage extends StatefulWidget {
 class _DictionaryPageState extends State<DictionaryPage> {
   Entry? entry;
 
-  late final SearchController search;
+  final paging = PagingController<int, String>(
+    firstPageKey: 0,
+  );
+  late final search = SearchController(
+    GlobalStore.languages.keys,
+    GlobalStore.algolia.index('dictionary'),
+    paging.refresh,
+  );
 
   @override
   void initState() {
     super.initState();
-    search = SearchController(
-      GlobalStore.languages.keys,
-      GlobalStore.algolia.index('dictionary'),
-    );
+    paging.addPageRequestListener(search.fetchHits);
   }
 
   @override
   void dispose() {
     search.dispose();
+    paging.dispose();
     super.dispose();
   }
 
@@ -104,6 +110,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 padding: const EdgeInsets.only(bottom: 76),
                 sliver: SearchResultsSliver(
                   context.watch<SearchController>(),
+                  paging,
                   onTap: (h) => openEntry(hit: h),
                 ),
               ),

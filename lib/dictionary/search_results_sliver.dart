@@ -3,29 +3,31 @@ import 'dart:ui';
 import 'package:avzag/widgets/span_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:avzag/utils/utils.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import 'hit_tile.dart';
 import 'search_controller.dart';
 
 class SearchResultsSliver extends StatelessWidget {
   const SearchResultsSliver(
-    this.search, {
+    this.search,
+    this.paging, {
     this.onTap,
     Key? key,
   }) : super(key: key);
 
   final SearchController search;
+  final PagingController<int, String> paging;
   final ValueSetter<EntryHit>? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final id = search.getId(index);
-          final hitGroups = search.getHits(index);
-          final tags = search.getTags(index);
+    return PagedSliverList(
+      pagingController: paging,
+      builderDelegate: PagedChildBuilderDelegate<String>(
+        itemBuilder: (context, term, _) {
+          final hitGroups = search.getHits(term);
+          final tags = search.getTags(term);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -34,13 +36,13 @@ class SearchResultsSliver extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 text: TextSpan(
-                  style: theme.textTheme.caption?.copyWith(
-                    fontSize: 14,
-                  ),
+                  style: Theme.of(context).textTheme.caption?.copyWith(
+                        fontSize: 14,
+                      ),
                   children: [
                     const WidgetSpan(child: SizedBox(width: 20)),
                     TextSpan(
-                      text: capitalize(id),
+                      text: capitalize(term),
                       style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       ),
@@ -86,7 +88,26 @@ class SearchResultsSliver extends StatelessWidget {
             ],
           );
         },
-        childCount: search.length,
+        noItemsFoundIndicatorBuilder: buildEndCaption,
+        noMoreItemsIndicatorBuilder: buildEndCaption,
+      ),
+    );
+  }
+
+  Widget buildEndCaption(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SpanIcon(Icons.check_outlined),
+          Text(
+            'End of results',
+            style: Theme.of(context).textTheme.caption?.copyWith(
+                  fontSize: 14,
+                ),
+          ),
+        ],
       ),
     );
   }

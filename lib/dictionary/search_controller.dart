@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'hit_tile.dart';
 
 class SearchController with ChangeNotifier {
-  SearchController(this._languages, this._index);
+  SearchController(
+    this._languages,
+    this._index, [
+    this._onSearch,
+  ]);
   final Iterable<String> _languages;
   final AlgoliaIndexReference _index;
+  final VoidCallback? _onSearch;
 
   String _language = '';
   String get language => _language;
@@ -24,46 +29,45 @@ class SearchController with ChangeNotifier {
 
   bool get monolingual => language.isNotEmpty && language != '_';
 
-  int get length => _tags.length;
+  int get length => tags.length;
 
-  final List<String> _ids = [];
-  String getId(int i) => _ids[i];
-
-  final Map<String, Set<String>> _tags = {};
-  Set<String> getTags(int i) => _tags[getId(i)]!;
+  final Map<String, Set<String>> tags = {};
+  Set<String> getTags(String term) => tags[term] ?? {};
 
   final Map<String, Map<String, List<EntryHit>>> _hits = {};
-  List<List<EntryHit>> getHits(int i) {
-    var hits = _hits[getId(i)]!;
-    var languages = _languages.where((l) => hits[l]!.isNotEmpty);
+  List<List<EntryHit>> getHits(String term) {
+    final hits = _hits[term] ?? {};
+    final languages = _languages.where((l) => hits[l]!.isNotEmpty);
     return languages.map((l) => hits[l]!).toList();
   }
 
   bool _processing = false;
   bool get processing => _processing;
 
-  void search([String text = ""]) async {
-    _processing = true;
-    notifyListeners();
+  late AlgoliaQuery _query = _index.query('');
 
+  void search([String text = ""]) {
     final parsed = _parseQuery(text);
     final languages = _generateFilter(
       monolingual ? [language] : _languages,
       'language',
     );
-    var query = _index.query(parsed[0]).filters(
+    _query = _index.query(parsed[0]).filters(
           parsed[1].isEmpty ? languages : '${parsed[1]} AND ($languages)',
         );
-    if (unverified) query = query.facetFilter('unverified:true');
-    if (monolingual) query = query.setRestrictSearchableAttributes(['forms']);
+    if (unverified) _query = _query.facetFilter('unverified:true');
+    if (monolingual) _query = _query.setRestrictSearchableAttributes(['forms']);
 
-    _organizeHits(await _fetchHits(query));
-    _processing = false;
-    notifyListeners();
+    _onSearch?.call();
+    fetchHits();
   }
 
-  Future<Iterable<EntryHit>> _fetchHits(AlgoliaQuery query) async {
-    var hits = await query
+  Future fetchHits([int page = 0]) async {
+    _processing = true;
+    notifyListeners();
+
+    var hits = await _query
+        .setPage(page)
         .getObjects()
         .then((s) => s.hits)
         .onError((error, stackTrace) => []);
@@ -83,21 +87,22 @@ class SearchController with ChangeNotifier {
           .then((h) => h.toList())
           .onError((error, stackTrace) => []);
     }
-    return hits.map((h) => EntryHit.fromAlgoliaHit(h));
+
+    tags.clear();
+    _hits.clear();
+    _organizeHits(hits.map((h) => EntryHit.fromAlgoliaHit(h)));
+    _processing = false;
+    notifyListeners();
   }
 
   _organizeHits(Iterable<EntryHit> hits) {
-    _ids.clear();
-    _tags.clear();
-    _hits.clear();
     for (final hit in hits) {
       final id = hit.term;
       _hits.putIfAbsent(id, () {
-        _tags[id] = <String>{};
-        _ids.add(id);
+        tags[id] = <String>{};
         return {for (final l in _languages) l: <EntryHit>[]};
       });
-      _tags[id]!.addAll(hit.tags ?? []);
+      tags[id]!.addAll(hit.tags ?? []);
       _hits[id]![hit.language]!.add(hit);
     }
   }
