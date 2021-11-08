@@ -1,7 +1,6 @@
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils/utils.dart';
-import 'package:avzag/widgets/loading_card.dart';
 import 'package:avzag/widgets/span_icon.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -146,7 +145,9 @@ class _AuthPageState extends State<AuthPage> {
           if (loading)
             const Padding(
               padding: EdgeInsets.all(16),
-              child: LoadingCard(),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
           if (EditorStore.email != null)
             Card(

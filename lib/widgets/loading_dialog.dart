@@ -1,5 +1,4 @@
 import 'package:avzag/utils/snackbar_manager.dart';
-import 'package:avzag/widgets/loading_card.dart';
 import 'package:flutter/material.dart';
 
 Future<T?> showLoadingDialog<T>(
@@ -9,7 +8,15 @@ Future<T?> showLoadingDialog<T>(
   showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (context) => const LoadingCard(),
+    builder: (context) => const Center(
+      child: Card(
+        shape: CircleBorder(),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    ),
   );
   try {
     final result = await future;
