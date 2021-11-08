@@ -13,9 +13,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'auth_page.dart';
 
 Future<void> navigate(
-  BuildContext context,
+  BuildContext context, [
   String? title,
-) async {
+]) async {
   final prefs = await SharedPreferences.getInstance();
   if (title == null) {
     title = prefs.getString('module');

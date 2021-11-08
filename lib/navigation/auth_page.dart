@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'nav_drawer.dart';
+
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
 
@@ -74,10 +76,15 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Editor Mode'),
         centerTitle: true,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => navigate(context),
+        child: const Icon(Icons.done_all_outlined),
+        tooltip: 'Continue',
+      ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 76),
         children: [

@@ -119,27 +119,25 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
           if (selected.isEmpty) {
             return showSnackbar(
               context,
               text: 'Select at least one language.',
             );
           }
-          showLoadingDialog(
+          await showLoadingDialog(
             context,
             GlobalStore.load(
               selected.map((s) => s.name).toList(),
-            ).then(
-              (_) => navigate(context, null),
             ),
           );
+          navigate(context);
         },
-        icon: const Icon(Icons.check_outlined),
-        label: const Text('Continue'),
+        child: const Icon(Icons.check_outlined),
+        tooltip: 'Continue',
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
