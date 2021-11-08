@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:avzag/widgets/caption.dart';
 import 'package:avzag/widgets/span_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:avzag/utils/utils.dart';
@@ -88,27 +89,16 @@ class SearchResultsSliver extends StatelessWidget {
             ],
           );
         },
-        noItemsFoundIndicatorBuilder: buildEndCaption,
-        noMoreItemsIndicatorBuilder: buildEndCaption,
+        noItemsFoundIndicatorBuilder: _buildEndCaption,
+        noMoreItemsIndicatorBuilder: _buildEndCaption,
       ),
     );
   }
 
-  Widget buildEndCaption(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SpanIcon(Icons.check_outlined),
-          Text(
-            'End of results',
-            style: Theme.of(context).textTheme.caption?.copyWith(
-                  fontSize: 14,
-                ),
-          ),
-        ],
-      ),
+  Widget _buildEndCaption(BuildContext context) {
+    return const Caption(
+      'End of results',
+      icon: Icons.check_outlined,
     );
   }
 }

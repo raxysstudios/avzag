@@ -3,6 +3,7 @@ import 'package:avzag/utils/contribution.dart';
 import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_flag.dart';
+import 'package:avzag/widgets/caption.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/utils/editor_utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
@@ -247,21 +248,10 @@ class _EntryPageState extends State<EntryPage> {
             isReviewing ? null : editor,
           ),
           if (editor == null && !isReviewing && entry.contribution != null)
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SpanIcon(Icons.unpublished_outlined),
-                  Text(
-                    'Unverified',
-                    style: Theme.of(context).textTheme.caption?.copyWith(
-                          fontSize: 14,
-                        ),
-                  ),
-                ],
-              ),
-            )
+            const Caption(
+              'Unverified',
+              icon: Icons.unpublished_outlined,
+            ),
         ],
       ),
     );
