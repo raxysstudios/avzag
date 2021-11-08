@@ -8,13 +8,13 @@ class LoadingCard extends StatelessWidget {
     return Center(
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(128),
+          borderRadius: BorderRadius.circular(32),
         ),
         child: const Padding(
-          padding: EdgeInsets.all(24),
+          padding: EdgeInsets.all(8),
           child: SizedBox(
-            width: 32,
-            height: 32,
+            width: 24,
+            height: 24,
             child: CircularProgressIndicator(),
           ),
         ),

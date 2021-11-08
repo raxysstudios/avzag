@@ -1,5 +1,4 @@
 import 'package:avzag/home/language_avatar.dart';
-import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/loading_card.dart';
@@ -75,14 +74,8 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         title: const Text('Editor Mode'),
         centerTitle: true,
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => navigate(context, null),
-        icon: const Icon(Icons.check_outlined),
-        label: const Text('Continue'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: ListView(

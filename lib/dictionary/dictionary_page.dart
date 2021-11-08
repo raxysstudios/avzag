@@ -48,7 +48,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
           drawer: const NavDraver(title: 'dictionary'),
           floatingActionButton: EditorStore.isEditing
               ? entry == null
-                  ? FloatingActionButton.extended(
+                  ? FloatingActionButton(
                       onPressed: () {
                         openEntry(
                           entry: Entry(
@@ -58,13 +58,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.add_outlined),
-                      label: const Text('New'),
+                      child: const Icon(Icons.add_outlined),
+                      tooltip: 'New',
                     )
-                  : FloatingActionButton.extended(
+                  : FloatingActionButton(
                       onPressed: openEntry,
-                      icon: const Icon(Icons.edit_outlined),
-                      label: const Text('Resume'),
+                      child: const Icon(Icons.edit_outlined),
+                      tooltip: 'Resume',
                     )
               : null,
           body: CustomScrollView(

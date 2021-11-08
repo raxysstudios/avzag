@@ -214,10 +214,10 @@ class _EntryPageState extends State<EntryPage> {
               );
             }
             if (entry.contribution == null) {
-              return FloatingActionButton.extended(
+              return FloatingActionButton(
                 onPressed: startEditing,
-                icon: const Icon(Icons.edit_outlined),
-                label: const Text('Edit'),
+                child: const Icon(Icons.edit_outlined),
+                tooltip: "Edit",
               );
             }
           }
