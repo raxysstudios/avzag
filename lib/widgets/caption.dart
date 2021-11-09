@@ -24,7 +24,7 @@ class Caption extends StatelessWidget {
         children: [
           if (icon != null) SpanIcon(icon!),
           Text(
-            'End of results',
+            text,
             style: Theme.of(context).textTheme.caption?.copyWith(
                   fontSize: 14,
                 ),
