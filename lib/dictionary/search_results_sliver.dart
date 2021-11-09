@@ -96,8 +96,8 @@ class SearchResultsSliver extends StatelessWidget {
   }
 
   Widget _buildEndCaption(BuildContext context) {
-    return Caption(
-      search.monolingual ? 'End of results' : 'Cannot paginate on this mode',
+    return const Caption(
+      'End of results',
       icon: Icons.check_outlined,
     );
   }
