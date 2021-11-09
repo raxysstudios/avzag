@@ -40,6 +40,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
         final terms = await search.fetchHits(page);
         if (terms.isEmpty) {
           paging.appendLastPage([]);
+        } else if (search.monolingual) {
+          paging.appendLastPage(terms);
         } else {
           paging.appendPage(terms, page + 1);
         }

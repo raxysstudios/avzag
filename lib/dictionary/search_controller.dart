@@ -35,11 +35,11 @@ class SearchController with ChangeNotifier {
   int get length => _tags.length;
 
   final Map<String, Set<String>> _tags = {};
-  Set<String> getTags(String term) => _tags[term] ?? {};
+  Set<String> getTags(String id) => _tags[id] ?? {};
 
   final Map<String, Map<String, List<EntryHit>>> _hits = {};
-  List<List<EntryHit>> getHits(String term) {
-    final hits = _hits[term] ?? {};
+  List<List<EntryHit>> getHits(String id) {
+    final hits = _hits[id] ?? {};
     final languages = _languages.where((l) => hits[l]!.isNotEmpty);
     return languages.map((l) => hits[l]!).toList();
   }
@@ -55,8 +55,12 @@ class SearchController with ChangeNotifier {
     _query = _index.query(parsed[0]).filters(
           parsed[1].isEmpty ? languages : '${parsed[1]} AND ($languages)',
         );
-    if (unverified) _query = _query.facetFilter('unverified:true');
-    if (monolingual) _query = _query.setRestrictSearchableAttributes(['forms']);
+    if (unverified) {
+      _query = _query.facetFilter('unverified:true');
+    }
+    _query = monolingual
+        ? _query.setRestrictSearchableAttributes(['forms'])
+        : _query.setHitsPerPage(50);
 
     _tags.clear();
     _hits.clear();
@@ -86,18 +90,18 @@ class SearchController with ChangeNotifier {
   }
 
   List<String> _organizeHits(Iterable<EntryHit> hits) {
-    final newTerms = <String>[];
+    final newIds = <String>[];
     for (final hit in hits) {
-      final term = hit.term;
-      _hits.putIfAbsent(term, () {
-        _tags[term] = <String>{};
-        newTerms.add(term);
+      final id = monolingual ? hit.entryID : hit.term;
+      _hits.putIfAbsent(id, () {
+        _tags[id] = <String>{};
+        newIds.add(id);
         return {for (final l in _languages) l: []};
       });
-      _tags[term]?.addAll(hit.tags ?? []);
-      _hits[term]?[hit.language]?.add(hit);
+      _tags[id]?.addAll(hit.tags ?? []);
+      _hits[id]?[hit.language]?.add(hit);
     }
-    return newTerms;
+    return newIds;
   }
 
   static String _generateFilter(

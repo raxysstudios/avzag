@@ -26,9 +26,9 @@ class SearchResultsSliver extends StatelessWidget {
     return PagedSliverList(
       pagingController: paging,
       builderDelegate: PagedChildBuilderDelegate<String>(
-        itemBuilder: (context, term, _) {
-          final hitGroups = search.getHits(term);
-          final tags = search.getTags(term);
+        itemBuilder: (context, id, _) {
+          final hitGroups = search.getHits(id);
+          final tags = search.getTags(id);
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -43,7 +43,7 @@ class SearchResultsSliver extends StatelessWidget {
                   children: [
                     const WidgetSpan(child: SizedBox(width: 20)),
                     TextSpan(
-                      text: capitalize(term),
+                      text: capitalize(hitGroups.first.first.term),
                       style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       ),
@@ -96,8 +96,8 @@ class SearchResultsSliver extends StatelessWidget {
   }
 
   Widget _buildEndCaption(BuildContext context) {
-    return const Caption(
-      'End of results',
+    return Caption(
+      search.monolingual ? 'End of results' : 'Cannot paginate on this mode',
       icon: Icons.check_outlined,
     );
   }
