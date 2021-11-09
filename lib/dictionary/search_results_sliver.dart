@@ -33,35 +33,37 @@ class SearchResultsSliver extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              RichText(
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.caption?.copyWith(
-                        fontSize: 14,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: RichText(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.caption?.copyWith(
+                          fontSize: 14,
+                        ),
+                    children: [
+                      TextSpan(
+                        text: capitalize(hitGroups.first.first.term),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                  children: [
-                    const WidgetSpan(child: SizedBox(width: 20)),
-                    TextSpan(
-                      text: capitalize(hitGroups.first.first.term),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
+                      const WidgetSpan(
+                        child: SpanIcon(
+                          Icons.tag_outlined,
+                          padding: EdgeInsets.only(left: 4, right: 2),
+                        ),
                       ),
-                    ),
-                    const WidgetSpan(
-                      child: SpanIcon(
-                        Icons.tag_outlined,
-                        padding: EdgeInsets.only(left: 4, right: 2),
+                      TextSpan(
+                        text: prettyTags(
+                          tags,
+                          separator: ' ',
+                          capitalized: false,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: prettyTags(
-                        tags,
-                        separator: ' ',
-                        capitalized: false,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Card(

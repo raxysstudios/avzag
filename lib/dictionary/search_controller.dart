@@ -20,6 +20,7 @@ class SearchController with ChangeNotifier {
   String get language => _language;
   set language(String value) {
     _language = value;
+    updateQuery();
     notifyListeners();
   }
 
@@ -27,6 +28,7 @@ class SearchController with ChangeNotifier {
   bool get unverified => _unverified;
   set unverified(bool value) {
     _unverified = value;
+    updateQuery();
     notifyListeners();
   }
 

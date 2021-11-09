@@ -47,7 +47,7 @@ class TagsTile extends StatelessWidget {
   }
 
   void showEditor(BuildContext context) {
-    var result = [...tags ?? []];
+    var result = <String>[...tags ?? []];
     final index =
         algoliaIndex == null ? null : GlobalStore.algolia.index(algoliaIndex!);
     var suggested = <String>[];
