@@ -41,9 +41,9 @@ class _DictionaryPageState extends State<DictionaryPage> {
         if (terms.isEmpty) {
           paging.appendLastPage([]);
         } else if (search.monolingual) {
-          paging.appendLastPage(terms);
-        } else {
           paging.appendPage(terms, page + 1);
+        } else {
+          paging.appendLastPage(terms);
         }
       },
     );

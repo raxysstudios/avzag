@@ -92,7 +92,7 @@ class SearchController with ChangeNotifier {
   List<String> _organizeHits(Iterable<EntryHit> hits) {
     final newIds = <String>[];
     for (final hit in hits) {
-      final id = monolingual ? hit.entryID : hit.term;
+      final id = monolingual ? hit.objectID : hit.term;
       _hits.putIfAbsent(id, () {
         _tags[id] = <String>{};
         newIds.add(id);

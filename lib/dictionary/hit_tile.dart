@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 class EntryHit {
   final String entryID;
+  final String objectID;
   final String headword;
   final String? form;
   final String language;
@@ -15,6 +16,7 @@ class EntryHit {
 
   const EntryHit({
     required this.entryID,
+    required this.objectID,
     required this.headword,
     this.form,
     required this.language,
@@ -33,6 +35,7 @@ class EntryHit {
         -1;
 
     return EntryHit(
+      objectID: hit.objectID,
       entryID: json['entryID'],
       headword: json['headword'],
       form: form >= 0 ? json2list(json['forms'])![form] : null,
