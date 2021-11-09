@@ -27,7 +27,9 @@ class SearchToolbarState extends State<SearchToolbar> {
     super.initState();
     inputController.addListener(() {
       if (lastText == inputController.text) return;
-      lastText = inputController.text;
+      setState(() {
+        lastText = inputController.text;
+      });
       timer.cancel();
       if (inputController.text.isEmpty) {
         search();
