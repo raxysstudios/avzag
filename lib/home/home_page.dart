@@ -100,8 +100,11 @@ class _HomePageState extends State<HomePage> {
 
   void filterLanguages() {
     if (isLoading) return;
-    final query =
-        inputController.text.trim().split(' ').where((s) => s.isNotEmpty);
+    final query = inputController.text
+        .trim()
+        .toLowerCase()
+        .split(' ')
+        .where((s) => s.isNotEmpty);
     setState(() {
       languages
         ..clear()
