@@ -68,7 +68,7 @@ class HitTile extends StatelessWidget {
         children: [
           if (hit.unverified)
             const SpanIcon(
-              Icons.unpublished_outlined,
+              Icons.unpublished_rounded,
               padding: EdgeInsets.only(right: 4),
             ),
           Text(

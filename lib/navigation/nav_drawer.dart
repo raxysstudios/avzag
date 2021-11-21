@@ -51,7 +51,7 @@ class _NavModule {
         capitalize(text),
         style: const TextStyle(fontSize: 18),
       ),
-      trailing: enabled ? null : const Icon(Icons.construction_outlined),
+      trailing: enabled ? null : const Icon(Icons.construction_rounded),
       selected: route == text,
       onTap: enabled ? () => navigate(context, text) : null,
       enabled: enabled,
@@ -95,7 +95,7 @@ class NavDraver extends StatelessWidget {
                     ListTile(
                       leading: const Padding(
                         padding: EdgeInsets.only(top: 8),
-                        child: Icon(Icons.send_outlined),
+                        child: Icon(Icons.send_rounded),
                       ),
                       title: const Text('Developer Contact'),
                       subtitle: const Text('Raxys Studios'),
@@ -115,7 +115,7 @@ class NavDraver extends StatelessWidget {
                         return ListTile(
                           leading: const Padding(
                             padding: EdgeInsets.only(top: 8),
-                            child: Icon(Icons.code_outlined),
+                            child: Icon(Icons.code_rounded),
                           ),
                           title: const Text('GitHub Repository'),
                           subtitle: Text(info),
@@ -131,7 +131,7 @@ class NavDraver extends StatelessWidget {
                         children: [
                           if (EditorStore.isEditing) ...[
                             if (EditorStore.isAdmin)
-                              const SpanIcon(Icons.account_circle_outlined),
+                              const SpanIcon(Icons.account_circle_rounded),
                             Text(capitalize(EditorStore.language)),
                           ] else
                             const Text('Off')
@@ -140,7 +140,7 @@ class NavDraver extends StatelessWidget {
                       value: EditorStore.language != null,
                       secondary: const Padding(
                         padding: EdgeInsets.only(top: 8),
-                        child: Icon(Icons.edit_outlined),
+                        child: Icon(Icons.edit_rounded),
                       ),
                       onChanged: (e) => Navigator.push(
                         context,
@@ -157,20 +157,20 @@ class NavDraver extends StatelessWidget {
               child: Column(
                 children: [
                   _NavModule(
-                    Icons.home_outlined,
+                    Icons.home_rounded,
                     'home',
                   ).build(context, title),
                   const Divider(),
                   _NavModule(
-                    Icons.book_outlined,
+                    Icons.book_rounded,
                     'dictionary',
                   ).build(context, title),
                   const Divider(),
                   ...[
-                    _NavModule(Icons.music_note_outlined, 'phonology'),
-                    _NavModule(Icons.switch_left_outlined, 'converter'),
-                    _NavModule(Icons.forum_outlined, 'phrasebook'),
-                    _NavModule(Icons.local_library_outlined, 'bootcamp'),
+                    _NavModule(Icons.music_note_rounded, 'phonology'),
+                    _NavModule(Icons.switch_left_rounded, 'converter'),
+                    _NavModule(Icons.forum_rounded, 'phrasebook'),
+                    _NavModule(Icons.local_library_rounded, 'bootcamp'),
                   ].map((t) => t.build(context)),
                 ],
               ),

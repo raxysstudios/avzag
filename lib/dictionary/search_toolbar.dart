@@ -93,7 +93,7 @@ class SearchToolbarState extends State<SearchToolbar> {
           IconButton(
             onPressed:
                 inputController.text.isEmpty ? null : inputController.clear,
-            icon: const Icon(Icons.clear_outlined),
+            icon: const Icon(Icons.clear_rounded),
           ),
         ],
       ),

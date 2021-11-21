@@ -20,7 +20,7 @@ class MeaningTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       minVerticalPadding: 12,
-      leading: const Icon(Icons.lightbulb_outline),
+      leading: const Icon(Icons.lightbulb_rounded),
       title: Text(
         capitalize(use.term),
         style: const TextStyle(

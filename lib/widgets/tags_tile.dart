@@ -18,7 +18,7 @@ class TagsTile extends StatelessWidget {
     if (tags == null && onEdited == null) return const Offstage();
     return ListTile(
       minVerticalPadding: 12,
-      leading: const Icon(Icons.tag_outlined),
+      leading: const Icon(Icons.tag_rounded),
       title: (tags?.isEmpty ?? true)
           ? Text(
               'Tap to add tags',

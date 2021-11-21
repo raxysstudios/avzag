@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 void showSnackbar(
   BuildContext context, {
-  icon = Icons.error_outline_outlined,
+  icon = Icons.error_rounded,
   text = 'Error!',
   short = false,
 }) {
@@ -42,7 +42,7 @@ void copyText(BuildContext context, String? text) async {
     );
     showSnackbar(
       context,
-      icon: Icons.content_copy_outlined,
+      icon: Icons.content_copy_rounded,
       text: 'Copied to clipboard.',
       short: true,
     );

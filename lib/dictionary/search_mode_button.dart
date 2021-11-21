@@ -18,9 +18,9 @@ class SearchModeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton(
       icon: language.isEmpty
-          ? const Icon(Icons.language_outlined)
+          ? const Icon(Icons.language_rounded)
           : language == '_'
-              ? const Icon(Icons.layers_outlined)
+              ? const Icon(Icons.layers_rounded)
               : LanguageAvatar(
                   GlobalStore.languages[language]!.flag,
                 ),
@@ -30,7 +30,7 @@ class SearchModeButton extends StatelessWidget {
           buildOption(
             context,
             '',
-            leading: const Icon(Icons.language_outlined),
+            leading: const Icon(Icons.language_rounded),
             text:
                 GlobalStore.languages.length == 1 ? 'english' : 'multilingual',
           ),
@@ -38,7 +38,7 @@ class SearchModeButton extends StatelessWidget {
             buildOption(
               context,
               '_',
-              leading: const Icon(Icons.layers_outlined),
+              leading: const Icon(Icons.layers_rounded),
               text: 'cross-lingual',
             ),
           const PopupMenuDivider(height: 0),

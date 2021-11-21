@@ -75,12 +75,12 @@ class _DictionaryPageState extends State<DictionaryPage> {
                           ),
                         );
                       },
-                      child: const Icon(Icons.add_outlined),
+                      child: const Icon(Icons.add_rounded),
                       tooltip: 'New',
                     )
                   : FloatingActionButton(
                       onPressed: openEntry,
-                      child: const Icon(Icons.edit_outlined),
+                      child: const Icon(Icons.edit_rounded),
                       tooltip: 'Resume',
                     )
               : null,
@@ -107,7 +107,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                             search.updateQuery();
                           }),
                           icon: Icon(
-                            Icons.unpublished_outlined,
+                            Icons.unpublished_rounded,
                             color: search.unverified ? theme.primary : null,
                           ),
                           tooltip: "Filter unverified",

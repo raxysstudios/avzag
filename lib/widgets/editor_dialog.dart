@@ -38,14 +38,14 @@ void showEditorDialog<T>(
                   Navigator.pop(context);
                   callback(null);
                 },
-                icon: const Icon(Icons.delete_outlined),
+                icon: const Icon(Icons.delete_rounded),
                 color: theme.colorScheme.error,
                 splashColor: theme.colorScheme.error.withOpacity(0.1),
               ),
               const Spacer(),
               TextButton.icon(
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.close_outlined),
+                icon: const Icon(Icons.close_rounded),
                 label: const Text('Cancel'),
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all(theme.hintColor),
@@ -61,7 +61,7 @@ void showEditorDialog<T>(
                     callback(result());
                   }
                 },
-                icon: const Icon(Icons.done_outlined),
+                icon: const Icon(Icons.done_rounded),
                 label: const Text('Save'),
               ),
             ],

@@ -81,7 +81,7 @@ class _AuthPageState extends State<AuthPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => navigate(context),
-        child: const Icon(Icons.done_all_outlined),
+        child: const Icon(Icons.done_all_rounded),
         tooltip: 'Continue',
       ),
       body: ListView(
@@ -94,7 +94,7 @@ class _AuthPageState extends State<AuthPage> {
               children: [
                 ElevatedButton.icon(
                   onPressed: loading ? null : signIn,
-                  icon: const Icon(Icons.login_outlined),
+                  icon: const Icon(Icons.login_rounded),
                   label: Text(
                     EditorStore.email ?? 'Sign In',
                   ),
@@ -117,7 +117,7 @@ class _AuthPageState extends State<AuthPage> {
                         const TextSpan(text: 'You have '),
                         WidgetSpan(
                           child: SpanIcon(
-                            Icons.account_circle_outlined,
+                            Icons.account_circle_rounded,
                             color: Theme.of(context).textTheme.bodyText2?.color,
                           ),
                         ),
@@ -176,7 +176,7 @@ class _AuthPageState extends State<AuthPage> {
                               ? null
                               : IconButton(
                                   onPressed: () => launch(l.contact!),
-                                  icon: const Icon(Icons.send_outlined),
+                                  icon: const Icon(Icons.send_rounded),
                                   tooltip: "Contact admin",
                                 ),
                         );

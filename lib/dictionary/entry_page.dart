@@ -66,7 +66,7 @@ class _EntryPageState extends State<EntryPage> {
             onEdited: editor?.call(
               (v) => entry.forms = v ?? [],
             ),
-            icon: Icons.layers_outlined,
+            icon: Icons.layers_rounded,
             name: 'form',
           ),
           TagsTile(
@@ -114,7 +114,7 @@ class _EntryPageState extends State<EntryPage> {
                 onEdited: editor?.call(
                   (v) => use.samples = v,
                 ),
-                icon: Icons.bookmark_outline,
+                icon: Icons.bookmark_rounded,
                 translation: true,
               ),
             ],
@@ -132,7 +132,7 @@ class _EntryPageState extends State<EntryPage> {
                 },
               ),
             ),
-            icon: const Icon(Icons.add_outlined),
+            icon: const Icon(Icons.add_rounded),
             label: const Text('Add use'),
           ),
         )
@@ -169,8 +169,8 @@ class _EntryPageState extends State<EntryPage> {
             if (editor != null || isReviewing) {
               final theme = Theme.of(context).colorScheme;
               return SpeedDial(
-                icon: Icons.done_all_outlined,
-                activeIcon: Icons.close_outlined,
+                icon: Icons.done_all_rounded,
+                activeIcon: Icons.close_rounded,
                 backgroundColor: theme.primary,
                 foregroundColor: theme.onPrimary,
                 activeBackgroundColor: theme.surface,
@@ -179,7 +179,7 @@ class _EntryPageState extends State<EntryPage> {
                 spacing: 7,
                 children: [
                   SpeedDialChild(
-                    child: const Icon(Icons.upload_outlined),
+                    child: const Icon(Icons.upload_rounded),
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
                     label: 'Submit changes',
@@ -191,7 +191,7 @@ class _EntryPageState extends State<EntryPage> {
                   ),
                   if (!isReviewing)
                     SpeedDialChild(
-                      child: const Icon(Icons.cancel_outlined),
+                      child: const Icon(Icons.cancel_rounded),
                       label: 'Discard changes',
                       backgroundColor: Colors.orange,
                       foregroundColor: Colors.white,
@@ -199,7 +199,7 @@ class _EntryPageState extends State<EntryPage> {
                     ),
                   if (entry.id != null && EditorStore.isAdmin)
                     SpeedDialChild(
-                      child: const Icon(Icons.delete_outline),
+                      child: const Icon(Icons.delete_rounded),
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
                       label: 'Delete entry',
@@ -216,7 +216,7 @@ class _EntryPageState extends State<EntryPage> {
             if (entry.contribution == null) {
               return FloatingActionButton(
                 onPressed: startEditing,
-                child: const Icon(Icons.edit_outlined),
+                child: const Icon(Icons.edit_rounded),
                 tooltip: "Edit",
               );
             }
@@ -236,7 +236,7 @@ class _EntryPageState extends State<EntryPage> {
                   : (v) => setState(() {
                         showSource = !v;
                       }),
-              secondary: const Icon(Icons.unpublished_outlined),
+              secondary: const Icon(Icons.unpublished_rounded),
               title: const Text('Reviewing contribution'),
             ),
             const Divider(),
@@ -249,7 +249,7 @@ class _EntryPageState extends State<EntryPage> {
           if (editor == null && !isReviewing && entry.contribution != null)
             const Caption(
               'Unverified',
-              icon: Icons.unpublished_outlined,
+              icon: Icons.unpublished_rounded,
             ),
         ],
       ),

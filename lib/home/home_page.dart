@@ -44,12 +44,12 @@ class _HomePageState extends State<HomePage> {
   var isLoading = false;
 
   final orderings = [
-    _LanguageOrdering('name', icon: Icons.label_outline),
-    _LanguageOrdering('family', icon: Icons.public_outlined),
+    _LanguageOrdering('name', icon: Icons.label_rounded),
+    _LanguageOrdering('family', icon: Icons.public_rounded),
     null,
     _LanguageOrdering(
       'dictionary',
-      icon: Icons.book_outlined,
+      icon: Icons.book_rounded,
       field: 'stats.dictionary',
       descending: true,
     ),
@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
           );
           navigate(context);
         },
-        child: const Icon(Icons.done_all_outlined),
+        child: const Icon(Icons.done_all_rounded),
         tooltip: 'Continue',
       ),
       body: CustomScrollView(
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () => setState(() {
                             selected.clear();
                           }),
-                          icon: const Icon(Icons.cancel_outlined),
+                          icon: const Icon(Icons.cancel_rounded),
                           tooltip: 'Unselect all',
                         ),
                         const SizedBox(width: 18),
@@ -197,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     IconButton(
                       tooltip: 'Toggle map',
-                      icon: const Icon(Icons.map_outlined),
+                      icon: const Icon(Icons.map_rounded),
                       onPressed: () => showDialog(
                         context: context,
                         builder: (context) {
@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                           padding: EdgeInsets.zero,
                         ),
                         child: PopupMenuButton(
-                          icon: const Icon(Icons.filter_alt_outlined),
+                          icon: const Icon(Icons.filter_alt_rounded),
                           tooltip: 'Order by',
                           itemBuilder: (BuildContext context) {
                             return <PopupMenuEntry>[

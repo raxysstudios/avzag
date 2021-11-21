@@ -63,7 +63,7 @@ class LanguageCard extends StatelessWidget {
                             ),
                         children: [
                           const WidgetSpan(
-                            child: SpanIcon(Icons.book_outlined),
+                            child: SpanIcon(Icons.book_rounded),
                           ),
                           TextSpan(
                             text: language.stats!.dictionary.toString(),

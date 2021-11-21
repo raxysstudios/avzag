@@ -18,7 +18,7 @@ class NoteTile extends StatelessWidget {
     if (note == null && onEdited == null) return const Offstage();
     return ListTile(
       minVerticalPadding: 12,
-      leading: const Icon(Icons.info_outline),
+      leading: const Icon(Icons.info_rounded),
       title: note?.isEmpty ?? true
           ? Text(
               'Tap to add note',

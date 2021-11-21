@@ -51,7 +51,7 @@ class SearchResultsSliver extends StatelessWidget {
                       ),
                       const WidgetSpan(
                         child: SpanIcon(
-                          Icons.tag_outlined,
+                          Icons.tag_rounded,
                           padding: EdgeInsets.only(left: 4, right: 2),
                         ),
                       ),
@@ -100,7 +100,7 @@ class SearchResultsSliver extends StatelessWidget {
   Widget _buildEndCaption(BuildContext context) {
     return const Caption(
       'End of results',
-      icon: Icons.check_outlined,
+      icon: Icons.check_rounded,
     );
   }
 }

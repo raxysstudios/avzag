@@ -37,7 +37,7 @@ class _LanguageAvatarState extends State<LanguageAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    if (url == null) return const Icon(Icons.flag_outlined);
+    if (url == null) return const Icon(Icons.flag_rounded);
     return Transform.scale(
       scale: widget.radius / LanguageAvatar.R,
       child: CircleAvatar(
