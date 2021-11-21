@@ -121,8 +121,10 @@ class SearchController with ChangeNotifier {
     final words = <String>[];
     query.split(' ').forEach((e) {
       if (e.startsWith('#')) {
-        tags.add(e.substring(1));
-      } else {
+        if (e != '#') {
+          tags.add(e.substring(1));
+        }
+      } else if (e.isNotEmpty) {
         words.add(e);
       }
     });
