@@ -2,6 +2,7 @@ import 'package:avzag/dictionary/search_controller.dart';
 import 'package:avzag/dictionary/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
+import 'package:avzag/widgets/rounded_menu_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -87,15 +88,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
-                pinned: true,
-                snap: true,
-                floating: true,
-                forceElevated: true,
+                leading: const RoundedDrawerButton(),
                 title: const Text('Dictionary'),
-                bottom: const PreferredSize(
-                  preferredSize: Size.fromHeight(kToolbarHeight + 3),
-                  child: SearchToolbar(),
-                ),
                 actions: [
                   if (EditorStore.isAdmin)
                     Consumer<SearchController>(
@@ -116,6 +110,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     ),
                   const SizedBox(width: 4),
                 ],
+                bottom: const PreferredSize(
+                  preferredSize: Size.fromHeight(kToolbarHeight + 3),
+                  child: SearchToolbar(),
+                ),
+                pinned: true,
+                snap: true,
+                floating: true,
+                forceElevated: true,
               ),
               ChangeNotifierProvider.value(
                 value: paging,
