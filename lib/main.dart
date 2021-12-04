@@ -1,5 +1,5 @@
 import 'package:avzag/global_store.dart';
-import 'package:avzag/widgets/raxys_logo.dart';
+import 'package:avzag/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'navigation/nav_drawer.dart';
 
@@ -61,43 +61,16 @@ class _AppState extends State<App> {
       title: 'Avzag',
       theme: themes[0],
       darkTheme: themes[1],
-      home: FutureBuilder(
-        future: Future.wait([
+      home: SplashScreen(
+        title: 'ÆVZAG',
+        future: Future.wait<void>([
           Future.delayed(const Duration(seconds: 1)),
           GlobalStore.load(),
         ]),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            navigate(
-              context,
-              GlobalStore.prefs.getString('module') ?? 'home',
-            );
-          }
-          return Material(
-            child: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  RaxysLogo(size: 256),
-                  Text(
-                    'ÆVZAG',
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text('Made with honor in'),
-                  Text(
-                    'North Caucasus',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+        onLoaded: (context, _) => navigate(
+          context,
+          GlobalStore.prefs.getString('module') ?? 'home',
+        ),
       ),
     );
   }
