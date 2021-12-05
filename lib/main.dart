@@ -8,14 +8,9 @@ void main() async {
   runApp(const App());
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
-  @override
-  _AppState createState() => _AppState();
-}
-
-class _AppState extends State<App> {
   List<ThemeData> getThemes(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final floatingActionButtonTheme = FloatingActionButtonThemeData(
@@ -55,7 +50,7 @@ class _AppState extends State<App> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     final themes = getThemes(context);
     return MaterialApp(
       title: 'Avzag',
@@ -63,11 +58,8 @@ class _AppState extends State<App> {
       darkTheme: themes[1],
       home: SplashScreen(
         title: 'ÆVZAG',
-        future: Future.wait<void>([
-          Future.delayed(const Duration(seconds: 1)),
-          GlobalStore.load(),
-        ]),
-        onLoaded: (context, _) => navigate(
+        future: GlobalStore.load(),
+        onLoaded: (context) => navigate(
           context,
           GlobalStore.prefs.getString('module') ?? 'home',
         ),
