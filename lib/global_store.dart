@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'firebase_options.dart';
 import 'home/language.dart';
 import 'utils/utils.dart';
 
@@ -80,7 +81,9 @@ class GlobalStore {
 
   static Future<void> _init() async {
     _first = false;
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     prefs = await SharedPreferences.getInstance();
     algolia = const Algolia.init(
       applicationId: 'NYVVAA43NI',
