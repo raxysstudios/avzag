@@ -177,7 +177,7 @@ class _AuthPageState extends State<AuthPage> {
                               : IconButton(
                                   onPressed: () => launch(l.contact!),
                                   icon: const Icon(Icons.send_rounded),
-                                  tooltip: "Contact admin",
+                                  tooltip: 'Contact admin',
                                 ),
                         );
                       },

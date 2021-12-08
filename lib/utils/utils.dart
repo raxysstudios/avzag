@@ -24,14 +24,18 @@ String? prettyTags(
 }
 
 List<String>? json2list(Object? array) {
-  return (array as Iterable<dynamic>?)?.map((i) => i as String).toList();
+  return (array as Iterable<dynamic>?)
+      ?.map((dynamic i) => i as String)
+      .toList();
 }
 
 List<T>? listFromJson<T>(
   Object? array,
   T Function(dynamic) fromJson,
 ) {
-  return (array as Iterable<dynamic>?)?.map((i) => fromJson(i)).toList();
+  return (array as Iterable<dynamic>?)
+      ?.map((dynamic i) => fromJson(i))
+      .toList();
 }
 
 class LowerCaseTextFormatter extends TextInputFormatter {

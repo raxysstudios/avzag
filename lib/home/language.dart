@@ -47,7 +47,7 @@ class Language {
         );
 
   Map<String, Object?> toJson() {
-    final Map<String, dynamic> data = {};
+    final data = <String, dynamic>{};
     data['name'] = name;
     if (data['flag'] != null) data['flag'] = flag;
     if (contact?.isNotEmpty ?? false) data['contact'] = contact;

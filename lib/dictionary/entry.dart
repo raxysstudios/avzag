@@ -27,14 +27,22 @@ class Entry {
     String? id,
   ]) : this(
           id: id,
-          forms: listFromJson(json['forms'], (j) => TextSample.fromJson(j))!,
-          language: json['language'],
-          uses: listFromJson(json['uses'], (j) => Use.fromJson(j))!,
+          forms: listFromJson(
+            json['forms'],
+            (dynamic j) => TextSample.fromJson(j as Map<String, dynamic>),
+          )!,
+          language: json['language'] as String,
+          uses: listFromJson(
+            json['uses'],
+            (dynamic j) => Use.fromJson(j as Map<String, dynamic>),
+          )!,
           tags: json2list(json['tags']),
-          note: json['note'],
+          note: json['note'] as String?,
           contribution: json['contribution'] == null
               ? null
-              : Contribution.fromJson(json['contribution']),
+              : Contribution.fromJson(
+                  json['contribution'] as Map<String, dynamic>,
+                ),
         );
 
   Map<String, dynamic> toJson() {

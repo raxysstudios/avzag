@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                       tooltip: 'Toggle map',
                       icon: const Icon(Icons.map_rounded),
-                      onPressed: () => showDialog(
+                      onPressed: () => showDialog<void>(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                           controller: inputController,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
-                            labelText: "Search by names, tags, families",
+                            labelText: 'Search by names, tags, families',
                           ),
                         ),
                       ),
@@ -239,20 +239,21 @@ class _HomePageState extends State<HomePage> {
                           color: Theme.of(context).colorScheme.onPrimary,
                           padding: EdgeInsets.zero,
                         ),
-                        child: PopupMenuButton(
+                        child: PopupMenuButton<_LanguageOrdering>(
                           icon: const Icon(Icons.filter_alt_rounded),
                           tooltip: 'Order by',
-                          itemBuilder: (BuildContext context) {
-                            return <PopupMenuEntry>[
+                          onSelected: (value) {
+                            ordering = value;
+                            load();
+                          },
+                          itemBuilder: (context) {
+                            return [
                               for (final ordering in orderings)
                                 if (ordering == null)
                                   const PopupMenuDivider(height: 0)
                                 else
                                   PopupMenuItem(
-                                    onTap: () {
-                                      this.ordering = ordering;
-                                      load();
-                                    },
+                                    value: ordering,
                                     child: ListTile(
                                       leading: Icon(ordering.icon),
                                       title: Text(

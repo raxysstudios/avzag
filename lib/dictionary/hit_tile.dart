@@ -30,18 +30,18 @@ class EntryHit {
 
     final form = listFromJson(
           hit.highlightResult?['forms'],
-          (i) => i['matchLevel'] != 'none',
+          (dynamic i) => i['matchLevel'] != 'none',
         )?.indexOf(true) ??
         -1;
 
     return EntryHit(
       objectID: hit.objectID,
-      entryID: json['entryID'],
-      headword: json['headword'],
+      entryID: json['entryID'] as String,
+      headword: json['headword'] as String,
       form: form >= 0 ? json2list(json['forms'])![form] : null,
-      language: json['language'],
-      term: json['term'],
-      unverified: json['unverified'] ?? false,
+      language: json['language'] as String,
+      term: json['term'] as String,
+      unverified: json['unverified'] as bool? ?? false,
       tags: json2list(json['tags']),
     );
   }

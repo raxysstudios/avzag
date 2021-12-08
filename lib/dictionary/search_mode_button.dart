@@ -16,7 +16,7 @@ class SearchModeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
+    return PopupMenuButton<String>(
       icon: language.isEmpty
           ? const Icon(Icons.language_rounded)
           : language == '_'
@@ -25,8 +25,9 @@ class SearchModeButton extends StatelessWidget {
                   GlobalStore.languages[language]!.flag,
                 ),
       tooltip: 'Select search mode',
+      onSelected: (value) => onSelected(value),
       itemBuilder: (BuildContext context) {
-        return <PopupMenuEntry>[
+        return [
           buildOption(
             context,
             '',
@@ -53,14 +54,14 @@ class SearchModeButton extends StatelessWidget {
     );
   }
 
-  PopupMenuItem buildOption(
+  PopupMenuItem<String> buildOption(
     BuildContext context,
     String value, {
     Widget? leading,
     String? text,
   }) {
     return PopupMenuItem(
-      onTap: () => onSelected(value),
+      value: value,
       child: ListTile(
         leading: leading,
         title: Text(

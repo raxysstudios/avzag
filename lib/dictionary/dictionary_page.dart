@@ -104,7 +104,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                             Icons.unpublished_rounded,
                             color: search.unverified ? theme.primary : null,
                           ),
-                          tooltip: "Filter unverified",
+                          tooltip: 'Filter unverified',
                         );
                       },
                     ),

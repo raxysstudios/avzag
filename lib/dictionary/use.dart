@@ -18,18 +18,18 @@ class Use {
 
   Use.fromJson(Map<String, dynamic> json)
       : this(
-          term: json['term'],
+          term: json['term'] as String,
           aliases: json2list(json['aliases']),
           tags: json2list(json['tags']),
-          note: json['note'],
+          note: json['note'] as String?,
           samples: listFromJson(
             json['samples'],
-            (j) => TextSample.fromJson(j),
+            (dynamic j) => TextSample.fromJson(j as Map<String, dynamic>),
           ),
         );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
+    final data = <String, dynamic>{};
     data['term'] = term;
     if (aliases?.isNotEmpty ?? false) data['aliases'] = aliases;
     if (tags?.isNotEmpty ?? false) data['tags'] = tags;

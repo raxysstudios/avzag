@@ -6,16 +6,16 @@ String? emptyValidator(String? value) {
   if (value.isEmpty) return 'Cannot be empty';
 }
 
-void showEditorDialog<T>(
+Future<void> showEditorDialog<T>(
   BuildContext context, {
   required ValueGetter<T?> result,
   required ValueSetter<T?> callback,
   required String title,
   required List<Widget> children,
-}) {
+}) async {
   final form = GlobalKey<FormState>();
   final theme = Theme.of(context);
-  showDialog(
+  await showDialog<void>(
     context: context,
     builder: (context) {
       return AlertDialog(

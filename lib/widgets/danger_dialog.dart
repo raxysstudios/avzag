@@ -4,8 +4,8 @@ Future<bool> showDangerDialog(
   BuildContext context,
   String title, {
   VoidCallback? onConfirm,
-  confirmText = 'Delete',
-  rejectText = 'Keep',
+  String confirmText = 'Delete',
+  String rejectText = 'Keep',
 }) {
   return showDialog<bool>(
     context: context,

@@ -76,7 +76,7 @@ class SearchController with ChangeNotifier {
         for (final hit in hits) hit.objectID: hit,
       };
       final terms = _generateFilter(
-        hits.map((hit) => hit.data['term']),
+        hits.map((hit) => hit.data['term'] as String),
         'term',
       );
       final languages = _generateFilter(_languages, 'language');
@@ -108,7 +108,7 @@ class SearchController with ChangeNotifier {
 
   static String _generateFilter(
     Iterable<String> values, [
-    filter = 'tags',
+    String filter = 'tags',
     bool and = false,
   ]) {
     final joint = and ? 'AND' : 'OR';

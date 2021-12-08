@@ -18,14 +18,14 @@ class TextSample {
 
   TextSample.fromJson(Map<String, dynamic> json)
       : this(
-          json['plain'],
-          ipa: json['ipa'],
-          glossed: json['glossed'],
-          translation: json['translation'],
+          json['plain'] as String,
+          ipa: json['ipa'] as String?,
+          glossed: json['glossed'] as String?,
+          translation: json['translation'] as String?,
         );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
+    final data = <String, dynamic>{};
     data['plain'] = plain;
     if (ipa?.isNotEmpty ?? false) data['ipa'] = ipa;
     if (glossed?.isNotEmpty ?? false) data['glossed'] = glossed;

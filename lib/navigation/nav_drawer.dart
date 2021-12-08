@@ -29,11 +29,12 @@ Future<void> navigate(
   } else if (title == 'dictionary') {
     builder = (_) => const DictionaryPage();
   } else {
-    builder = (_) => const Text("No Route");
+    builder = (_) => const Text('No Route');
   }
 
   if (title != null) await prefs.setString('module', title);
-  await Navigator.of(context).pushReplacement(
+  await Navigator.pushReplacement<void, void>(
+    context,
     MaterialPageRoute(builder: builder),
   );
 }
@@ -142,7 +143,7 @@ class NavDraver extends StatelessWidget {
                         padding: EdgeInsets.only(top: 8),
                         child: Icon(Icons.edit_rounded),
                       ),
-                      onChanged: (e) => Navigator.push(
+                      onChanged: (e) => Navigator.push<void>(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const AuthPage(),

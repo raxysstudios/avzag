@@ -9,12 +9,14 @@ class Contribution {
 
   Contribution.fromJson(Map<String, dynamic> json)
       : this(
-          json['uid'],
-          overwriteId: json['overwriteId'],
+          json['uid'] as String,
+          overwriteId: json['overwriteId'] as String?,
         );
 
-  Map<String, dynamic> toJson() => {
-        "uid": uid,
-        "overwriteId": overwriteId,
-      };
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'uid': uid,
+      'overwriteId': overwriteId,
+    };
+  }
 }
