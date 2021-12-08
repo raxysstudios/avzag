@@ -98,8 +98,8 @@ class SearchResultsSliver extends StatelessWidget {
   }
 
   Widget _buildEndCaption(BuildContext context) {
-    return const Caption(
-      'End of results',
+    return Caption(
+      search.monolingual ? 'End of results' : 'Shown first 50 results',
       icon: Icons.check_rounded,
     );
   }
