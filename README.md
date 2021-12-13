@@ -14,7 +14,7 @@ Built with Flutter & Firebase & Algolia.
 - [x] November: release of crowdsourcing functionality.
 - [x] December: general availability on Android & Web.
 
-### 2021
+### 2022
 - [ ] February: Home-screen map, deep-linking (sharing entries), iOS release.
 - [ ] Summer: Converter release.
 - [ ] Autumn: Phonology release.
