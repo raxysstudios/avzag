@@ -1,6 +1,7 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'home/map_sample.dart';
 import 'navigation/nav_drawer.dart';
 
 void main() async {
@@ -56,14 +57,15 @@ class App extends StatelessWidget {
       title: 'Avzag',
       theme: themes[0],
       darkTheme: themes[1],
-      home: SplashScreen(
-        title: 'ÆVZAG',
-        future: GlobalStore.load(),
-        onLoaded: (context) => navigate(
-          context,
-          GlobalStore.prefs.getString('module') ?? 'home',
-        ),
-      ),
+      home: MapSample(),
+      // home: SplashScreen(
+      //   title: 'ÆVZAG',
+      //   future: GlobalStore.load(),
+      //   onLoaded: (context) => navigate(
+      //     context,
+      //     GlobalStore.prefs.getString('module') ?? 'home',
+      //   ),
+      // ),
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:avzag/widgets/caption.dart';
 import 'package:avzag/widgets/span_icon.dart';
 import 'package:flutter/material.dart';

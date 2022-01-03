@@ -1,6 +1,6 @@
 name: avzag
 description: Extensible parallel language compendium.
-publish_to: 'none'
+publish_to: "none"
 version: 0.4.30+50
 
 environment:
@@ -23,6 +23,8 @@ dependencies:
   flutter_speed_dial: ^4.6.6
   badges: ^2.0.2
   infinite_scroll_pagination: ^3.1.0
+  flutter_map: ^0.14.0
+  latlong: ^0.6.1
 
 dev_dependencies:
   flutter_test:
