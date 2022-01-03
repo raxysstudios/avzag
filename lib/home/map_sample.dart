@@ -10,8 +10,13 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  List<bool> selected = [true, false, false, false];
-  List<String> lects = ['Iron', 'Digor', 'Kabardian', 'Temirgoi'];
+  final selected = {'Kaitag'};
+  final lects = {
+    'Iron': [42.865209, 44.245623],
+    'Digor': [43.172488, 43.871052],
+    'Kabardian': [43.762647, 42.769419],
+    'Kaitag': [42.082736, 47.822142]
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +34,11 @@ class MapSampleState extends State<MapSample> {
         ),
         MarkerLayerOptions(
           markers: [
-            for (var i = 0; i < lects.length; i++)
+            for (final entry in lects.entries)
               Marker(
                 width: 128,
                 height: 128,
-                point: LatLng(i * 5.0, i * 5.0),
+                point: LatLng(entry.value[0], entry.value[1]),
                 builder: (ctx) => Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -48,22 +53,32 @@ class MapSampleState extends State<MapSample> {
                     ),
                     TextButton(
                       child: Text(
-                        lects[i],
+                        entry.key,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: selected[i] ? Colors.blue : Colors.black,
+                          color: selected.contains(entry.key)
+                              ? Colors.blue
+                              : Colors.black,
                           shadows: [
                             Shadow(
                               blurRadius: 8.0,
-                              color:
-                                  selected[i] ? Colors.white : Colors.black45,
+                              color: selected.contains(entry.key)
+                                  ? Colors.white
+                                  : Colors.black45,
                             ),
                           ],
                         ),
                       ),
-                      onPressed: () =>
-                          setState(() => selected[i] = !selected[i]),
+                      onPressed: () => setState(
+                        () {
+                          if (selected.contains(entry.key)) {
+                            selected.remove(entry.key);
+                          } else {
+                            selected.add(entry.key);
+                          }
+                        },
+                      ),
                     )
                   ],
                 ),
