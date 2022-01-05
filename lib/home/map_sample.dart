@@ -1,3 +1,5 @@
+import 'package:avzag/home/language_avatar.dart';
+import 'package:avzag/home/language_card.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -48,6 +50,7 @@ class MapSample extends StatelessWidget {
                 ),
                 anchorPos: AnchorPos.align(AnchorAlign.bottom),
                 builder: (context) {
+                  final selected = this.selected.contains(language);
                   return Stack(
                     children: [
                       const Align(
@@ -60,14 +63,31 @@ class MapSample extends StatelessWidget {
                           child: Text(
                             capitalize(language.name),
                             style: TextStyle(
-                              color: selected.contains(language)
+                              color: selected
                                   ? theme.colorScheme.primary
                                   : theme.textTheme.bodyText1?.color,
                             ),
                           ),
                           onPressed: () => onToggle(language),
+                          onLongPress: () => showModalBottomSheet<void>(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            constraints: const BoxConstraints.tightFor(
+                              height: 94,
+                            ),
+                            builder: (context) {
+                              return LanguageCard(
+                                language,
+                                selected: selected,
+                                onTap: () {
+                                  onToggle(language);
+                                  Navigator.pop(context);
+                                },
+                              );
+                            },
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   );
                 },
