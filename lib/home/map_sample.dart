@@ -37,7 +37,9 @@ class MapSample extends StatelessWidget {
           urlTemplate:
               'https://tile.jawg.io/$mapStyleUrl/{z}/{x}/{y}.png?access-token=6F94UuT7990iq8Z5yQpnbyujlm0Zr7bZkJwMshoaTEtYnsabLMp2EttcF6fCoW10',
           subdomains: ['a', 'b', 'c'],
-          backgroundColor: theme.colorScheme.surface,
+          backgroundColor: theme.brightness == Brightness.light
+              ? const Color(0xffcad2d3)
+              : const Color(0xff191a1a),
         ),
         MarkerLayerOptions(
           markers: [
