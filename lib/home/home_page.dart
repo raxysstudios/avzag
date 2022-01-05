@@ -10,6 +10,7 @@ import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
+import 'map_sample.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -38,10 +39,11 @@ class _HomePageState extends State<HomePage> {
   var catalogue = <Language>[];
   var tags = <String, String>{};
   var languages = <Language>[];
-  var selected = <Language>[];
+  var selected = <Language>{};
 
   final inputController = TextEditingController();
   var isLoading = false;
+  var isMap = false;
 
   final orderings = [
     _LanguageOrdering('name', icon: Icons.label_rounded),
@@ -84,7 +86,7 @@ class _HomePageState extends State<HomePage> {
 
     selected = GlobalStore.languages.keys
         .map((n) => catalogue.firstWhere((l) => l.name == n))
-        .toList();
+        .toSet();
     tags = {
       for (var l in catalogue)
         l.name: [
@@ -116,6 +118,17 @@ class _HomePageState extends State<HomePage> {
                   return query.any((q) => t.contains(q));
                 }),
         );
+    });
+  }
+
+  void toggleLanguage(Language language) {
+    final has = selected.contains(language);
+    setState(() {
+      if (has) {
+        selected.remove(language);
+      } else {
+        selected.add(language);
+      }
     });
   }
 
@@ -199,22 +212,13 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     IconButton(
-                      tooltip: 'Toggle map',
-                      icon: const Icon(Icons.map_rounded),
-                      onPressed: () => showDialog<void>(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('The map comes soon'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Close'),
-                              )
-                            ],
-                          );
-                        },
+                      tooltip: isMap ? 'Show list' : 'Show map',
+                      icon: Icon(
+                        isMap ? Icons.view_list_rounded : Icons.map_rounded,
                       ),
+                      onPressed: () => setState(() {
+                        isMap = !isMap;
+                      }),
                     ),
                     Expanded(
                       child: Padding(
@@ -283,6 +287,14 @@ class _HomePageState extends State<HomePage> {
                 child: CircularProgressIndicator(),
               ),
             )
+          else if (isMap)
+            SliverFillRemaining(
+              child: MapSample(
+                onToggle: toggleLanguage,
+                selected: selected,
+                languages: languages,
+              ),
+            )
           else
             SliverPadding(
               padding: const EdgeInsets.only(bottom: 76),
@@ -290,15 +302,10 @@ class _HomePageState extends State<HomePage> {
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final language = languages[index];
-                    final selected = this.selected.contains(language);
                     return LanguageCard(
                       language,
-                      selected: selected,
-                      onTap: () => setState(
-                        () => selected
-                            ? this.selected.remove(language)
-                            : this.selected.add(language),
-                      ),
+                      selected: selected.contains(language),
+                      onTap: () => toggleLanguage(language),
                     );
                   },
                   childCount: languages.length,

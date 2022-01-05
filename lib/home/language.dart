@@ -1,4 +1,5 @@
 import 'package:avzag/utils/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LanguageStats {
   final int dictionary;
@@ -23,6 +24,7 @@ class Language {
   final String? contact;
   final List<String>? family;
   final List<String>? tags;
+  final GeoPoint? location;
   final LanguageStats? stats;
 
   const Language({
@@ -31,6 +33,7 @@ class Language {
     this.contact,
     this.tags,
     this.family,
+    this.location,
     this.stats,
   });
 
@@ -41,6 +44,8 @@ class Language {
           contact: json['contact'] as String?,
           family: json2list(json['family']),
           tags: json2list(json['tags']),
+          location:
+              json['location'] == null ? null : json['location'] as GeoPoint,
           stats: json['stats'] == null
               ? null
               : LanguageStats.fromJson(json['stats'] as Map<String, Object?>),
@@ -53,6 +58,7 @@ class Language {
     if (contact?.isNotEmpty ?? false) data['contact'] = contact;
     if (family?.isNotEmpty ?? false) data['family'] = family;
     if (tags?.isNotEmpty ?? false) data['tags'] = tags;
+    if (location != null) data['location'] = location;
     if (stats != null) data['stats'] = stats!.toJson();
     return data;
   }

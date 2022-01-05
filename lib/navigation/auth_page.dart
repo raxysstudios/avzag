@@ -3,7 +3,6 @@ import 'package:avzag/global_store.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/span_icon.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
