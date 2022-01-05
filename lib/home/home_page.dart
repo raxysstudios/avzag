@@ -282,12 +282,10 @@ class _HomePageState extends State<HomePage> {
               child: CircularProgressIndicator(),
             )
           : isMap
-              ? Expanded(
-                  child: MapSample(
-                    onToggle: toggleLanguage,
-                    selected: selected,
-                    languages: languages,
-                  ),
+              ? MapSample(
+                  onToggle: toggleLanguage,
+                  selected: selected,
+                  languages: languages,
                 )
               : ListView.builder(
                   padding: const EdgeInsets.only(bottom: 76),
