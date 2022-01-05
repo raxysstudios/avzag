@@ -1,87 +1,76 @@
+import 'package:avzag/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
-class MapSample extends StatefulWidget {
-  const MapSample({Key? key}) : super(key: key);
+import 'language.dart';
+
+class MapSample extends StatelessWidget {
+  const MapSample({
+    required this.languages,
+    required this.selected,
+    required this.onToggle,
+    Key? key,
+  }) : super(key: key);
+
+  final List<Language> languages;
+  final Set<Language> selected;
+  final ValueSetter<Language> onToggle;
 
   @override
-  State<MapSample> createState() => MapSampleState();
-}
+  Widget build(context) {
+    final theme = Theme.of(context);
+    final mapStyleUrl = theme.brightness == Brightness.light
+        ? '4bfb6bd9-e4e9-42b5-abfe-9f90ecb11e6b'
+        : '5b319ec1-f075-4278-b743-31be8b4a0808';
 
-class MapSampleState extends State<MapSample> {
-  final selected = {'Kaitag'};
-  final lects = {
-    'Iron': [42.865209, 44.245623],
-    'Digor': [43.172488, 43.871052],
-    'Kabardian': [43.762647, 42.769419],
-    'Kaitag': [42.082736, 47.822142]
-  };
-
-  @override
-  Widget build(BuildContext context) {
     return FlutterMap(
       options: MapOptions(
-        center: LatLng(51.5, -0.09),
-        zoom: 13.0,
+        center: LatLng(43, 45),
+        zoom: 5,
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
       ),
       layers: [
         TileLayerOptions(
           urlTemplate:
-              'https://tile.jawg.io/jawg-light/{z}/{x}/{y}.png?access-token=6F94UuT7990iq8Z5yQpnbyujlm0Zr7bZkJwMshoaTEtYnsabLMp2EttcF6fCoW10',
+              'https://tile.jawg.io/$mapStyleUrl/{z}/{x}/{y}.png?access-token=6F94UuT7990iq8Z5yQpnbyujlm0Zr7bZkJwMshoaTEtYnsabLMp2EttcF6fCoW10',
           subdomains: ['a', 'b', 'c'],
         ),
         MarkerLayerOptions(
           markers: [
-            for (final entry in lects.entries)
+            for (final language in languages.where((l) => l.location != null))
               Marker(
-                width: 128,
-                height: 128,
-                point: LatLng(entry.value[0], entry.value[1]),
-                builder: (ctx) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 32),
-                    const SizedBox(
-                      height: 8,
-                      child: Icon(
-                        Icons.keyboard_arrow_up,
-                        size: 32,
-                      ),
-                    ),
-                    TextButton(
-                      child: Text(
-                        entry.key,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: selected.contains(entry.key)
-                              ? Colors.blue
-                              : Colors.black,
-                          shadows: [
-                            Shadow(
-                              blurRadius: 8.0,
-                              color: selected.contains(entry.key)
-                                  ? Colors.white
-                                  : Colors.black45,
-                            ),
-                          ],
-                        ),
-                      ),
-                      onPressed: () => setState(
-                        () {
-                          if (selected.contains(entry.key)) {
-                            selected.remove(entry.key);
-                          } else {
-                            selected.add(entry.key);
-                          }
-                        },
-                      ),
-                    )
-                  ],
+                width: 160,
+                height: 48,
+                point: LatLng(
+                  language.location!.latitude,
+                  language.location!.longitude,
                 ),
+                anchorPos: AnchorPos.align(AnchorAlign.bottom),
+                builder: (context) {
+                  return Stack(
+                    children: [
+                      const Align(
+                        alignment: Alignment.topCenter,
+                        child: Icon(Icons.arrow_drop_up_rounded),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: TextButton(
+                          child: Text(
+                            capitalize(language.name),
+                            style: TextStyle(
+                              color: selected.contains(language)
+                                  ? theme.colorScheme.primary
+                                  : theme.textTheme.bodyText1?.color,
+                            ),
+                          ),
+                          onPressed: () => onToggle(language),
+                        ),
+                      )
+                    ],
+                  );
+                },
               ),
           ],
         ),
