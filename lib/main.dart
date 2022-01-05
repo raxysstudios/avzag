@@ -1,10 +1,14 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'navigation/nav_drawer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   runApp(const App());
 }
 
