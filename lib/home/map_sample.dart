@@ -68,7 +68,6 @@ class MapSample extends StatelessWidget {
                               color: selected
                                   ? theme.colorScheme.primary
                                   : theme.textTheme.bodyText1?.color,
-                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           onPressed: () => onToggle(language),
