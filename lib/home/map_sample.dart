@@ -2,6 +2,7 @@ import 'package:avzag/home/language_card.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'language.dart';
@@ -30,6 +31,9 @@ class MapSample extends StatelessWidget {
         center: LatLng(43, 45),
         zoom: 5,
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+        plugins: [
+          MarkerClusterPlugin(),
+        ],
       ),
       layers: [
         TileLayerOptions(
@@ -40,7 +44,12 @@ class MapSample extends StatelessWidget {
               ? const Color(0xffcad2d3)
               : const Color(0xff191a1a),
         ),
-        MarkerLayerOptions(
+        MarkerClusterLayerOptions(
+          size: const Size.square(48),
+          showPolygon: false,
+          fitBoundsOptions: const FitBoundsOptions(
+            padding: EdgeInsets.all(96),
+          ),
           markers: [
             for (final language in languages.where((l) => l.location != null))
               Marker(
@@ -68,6 +77,7 @@ class MapSample extends StatelessWidget {
                               color: selected
                                   ? theme.colorScheme.primary
                                   : theme.textTheme.bodyText1?.color,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           onPressed: () => onToggle(language),
@@ -95,6 +105,23 @@ class MapSample extends StatelessWidget {
                 },
               ),
           ],
+          builder: (context, markers) {
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32),
+              ),
+              child: InkWell(
+                child: Center(
+                  child: Text(
+                    markers.length.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
