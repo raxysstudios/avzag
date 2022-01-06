@@ -1,5 +1,5 @@
+import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/home/language_card.dart';
-import 'package:avzag/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -47,60 +47,56 @@ class LanguagesMap extends StatelessWidget {
         MarkerClusterLayerOptions(
           size: const Size.square(48),
           showPolygon: false,
+          maxClusterRadius: 32,
           fitBoundsOptions: const FitBoundsOptions(
-            padding: EdgeInsets.all(96),
+            padding: EdgeInsets.all(128),
+          ),
+          animationsOptions: const AnimationsOptions(
+            zoom: Duration(milliseconds: 250),
+            fitBound: Duration(milliseconds: 250),
+            centerMarker: Duration(milliseconds: 250),
+            spiderfy: Duration(milliseconds: 250),
           ),
           markers: [
             for (final language in languages.where((l) => l.location != null))
               Marker(
-                width: 160,
+                width: 48,
                 height: 48,
                 point: LatLng(
                   language.location!.latitude,
                   language.location!.longitude,
                 ),
-                anchorPos: AnchorPos.align(AnchorAlign.bottom),
+                // anchorPos: AnchorPos.align(AnchorAlign.bottom),
                 builder: (context) {
                   final selected = this.selected.contains(language);
-                  return Stack(
-                    children: [
-                      const Align(
-                        alignment: Alignment.topCenter,
-                        child: Icon(Icons.arrow_drop_up_rounded),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: TextButton(
-                          child: Text(
-                            capitalize(language.name),
-                            style: TextStyle(
-                              color: selected
-                                  ? theme.colorScheme.primary
-                                  : theme.textTheme.bodyText1?.color,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          onPressed: () => onToggle(language),
-                          onLongPress: () => showModalBottomSheet<void>(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            constraints: const BoxConstraints.tightFor(
-                              height: 94,
-                            ),
-                            builder: (context) {
-                              return LanguageCard(
-                                language,
-                                selected: selected,
-                                onTap: () {
-                                  onToggle(language);
-                                  Navigator.pop(context);
-                                },
-                              );
-                            },
-                          ),
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32),
+                    ),
+                    child: InkWell(
+                      onTap: () => onToggle(language),
+                      onLongPress: () => showModalBottomSheet<void>(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        constraints: const BoxConstraints.tightFor(
+                          height: 94,
                         ),
+                        builder: (context) {
+                          return LanguageCard(
+                            language,
+                            selected: selected,
+                            onTap: () {
+                              onToggle(language);
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
                       ),
-                    ],
+                      child: LanguageAvatar(
+                        language.flag,
+                        radius: 10,
+                      ),
+                    ),
                   );
                 },
               ),
@@ -110,13 +106,11 @@ class LanguagesMap extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(32),
               ),
-              child: InkWell(
-                child: Center(
-                  child: Text(
-                    markers.length.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+              child: Center(
+                child: Text(
+                  markers.length.toString(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
