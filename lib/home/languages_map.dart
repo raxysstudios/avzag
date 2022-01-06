@@ -7,8 +7,8 @@ import 'package:latlong2/latlong.dart';
 
 import 'language.dart';
 
-class MapSample extends StatelessWidget {
-  const MapSample({
+class LanguagesMap extends StatelessWidget {
+  const LanguagesMap({
     required this.languages,
     required this.selected,
     required this.onToggle,

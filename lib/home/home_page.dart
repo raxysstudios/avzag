@@ -10,7 +10,7 @@ import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'language_card.dart';
-import 'map_sample.dart';
+import 'languages_map.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -282,7 +282,7 @@ class _HomePageState extends State<HomePage> {
               child: CircularProgressIndicator(),
             )
           : isMap
-              ? MapSample(
+              ? LanguagesMap(
                   onToggle: toggleLanguage,
                   selected: selected,
                   languages: languages,
