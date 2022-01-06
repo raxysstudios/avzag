@@ -70,32 +70,32 @@ class LanguagesMap extends StatelessWidget {
                 // anchorPos: AnchorPos.align(AnchorAlign.bottom),
                 builder: (context) {
                   final selected = this.selected.contains(language);
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32),
-                    ),
-                    child: InkWell(
-                      onTap: () => onToggle(language),
-                      onLongPress: () => showModalBottomSheet<void>(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        constraints: const BoxConstraints.tightFor(
-                          height: 94,
-                        ),
-                        builder: (context) {
-                          return LanguageCard(
-                            language,
-                            selected: selected,
-                            onTap: () {
-                              onToggle(language);
-                              Navigator.pop(context);
-                            },
-                          );
-                        },
+                  return AnimatedOpacity(
+                    opacity: selected ? 1 : 0.4,
+                    duration: const Duration(milliseconds: 250),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32),
                       ),
-                      child: AnimatedOpacity(
-                        opacity: selected ? 1 : 0.4,
-                        duration: const Duration(milliseconds: 250),
+                      child: InkWell(
+                        onTap: () => onToggle(language),
+                        onLongPress: () => showModalBottomSheet<void>(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          constraints: const BoxConstraints.tightFor(
+                            height: 94,
+                          ),
+                          builder: (context) {
+                            return LanguageCard(
+                              language,
+                              selected: selected,
+                              onTap: () {
+                                onToggle(language);
+                                Navigator.pop(context);
+                              },
+                            );
+                          },
+                        ),
                         child: LanguageAvatar(
                           language.flag,
                           radius: 10,
