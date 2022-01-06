@@ -57,6 +57,7 @@ class LanguagesMap extends StatelessWidget {
             centerMarker: Duration(milliseconds: 250),
             spiderfy: Duration(milliseconds: 250),
           ),
+          centerMarkerOnClick: false,
           markers: [
             for (final language in languages.where((l) => l.location != null))
               Marker(
@@ -92,9 +93,13 @@ class LanguagesMap extends StatelessWidget {
                           );
                         },
                       ),
-                      child: LanguageAvatar(
-                        language.flag,
-                        radius: 10,
+                      child: AnimatedOpacity(
+                        opacity: selected ? 1 : 0.4,
+                        duration: const Duration(milliseconds: 250),
+                        child: LanguageAvatar(
+                          language.flag,
+                          radius: 10,
+                        ),
                       ),
                     ),
                   );
