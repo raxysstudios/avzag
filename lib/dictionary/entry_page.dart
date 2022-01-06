@@ -156,7 +156,7 @@ class _EntryPageState extends State<EntryPage> {
               ),
         actions: [
           Opacity(
-            opacity: 0.4,
+            opacity: 0.5,
             child: LanguageFlag(
               GlobalStore.languages[entry.language]!.flag,
               offset: const Offset(-40, 4),

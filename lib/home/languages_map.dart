@@ -71,7 +71,7 @@ class LanguagesMap extends StatelessWidget {
                 builder: (context) {
                   final selected = this.selected.contains(language);
                   return AnimatedOpacity(
-                    opacity: selected ? 1 : 0.4,
+                    opacity: selected ? 1 : .5,
                     duration: const Duration(milliseconds: 250),
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -107,18 +107,26 @@ class LanguagesMap extends StatelessWidget {
               ),
           ],
           builder: (context, markers) {
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
-              ),
-              child: Center(
-                child: Text(
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                Positioned.fill(
+                  child: Opacity(
+                    opacity: .5,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
                   markers.length.toString(),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
+              ],
             );
           },
         ),
