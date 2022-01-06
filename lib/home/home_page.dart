@@ -9,6 +9,7 @@ import 'package:avzag/widgets/span_icon.dart';
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'language_card.dart';
 import 'languages_map.dart';
 
@@ -59,6 +60,7 @@ class _HomePageState extends State<HomePage> {
   late var ordering = orderings.first!;
 
   late final Future<void> loader;
+  final chipsScroll = ScrollController();
 
   @override
   void initState() {
@@ -128,6 +130,13 @@ class _HomePageState extends State<HomePage> {
         selected.remove(language);
       } else {
         selected.add(language);
+        SchedulerBinding.instance?.addPostFrameCallback(
+          (_) => chipsScroll.animateTo(
+            chipsScroll.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.ease,
+          ),
+        );
       }
     });
   }
@@ -166,6 +175,7 @@ class _HomePageState extends State<HomePage> {
             : SizedBox(
                 height: kToolbarHeight,
                 child: ListView(
+                  controller: chipsScroll,
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   children: [
