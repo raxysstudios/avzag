@@ -117,34 +117,25 @@ class _SignInButtonsState extends State<SignInButtons> {
     }
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: Column(
+      child: Row(
         children: [
-          Text(
-            'Sign in with',
-            style: Theme.of(context).textTheme.button,
+          Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () => signIn(getGoogleCredentials),
+              icon: const Icon(Icons.login_rounded),
+              label: const Text('Google Sign In'),
+            ),
           ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () => signIn(getGoogleCredentials),
-                  icon: const Icon(Icons.login_rounded),
-                  label: const Text('Google'),
-                ),
-              ),
-              if (Platform.isIOS) ...[
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextButton.icon(
-                    onPressed: () => signIn(getAppleCredentials),
-                    icon: const Icon(Icons.login_rounded),
-                    label: const Text('Apple'),
-                  ),
-                ),
-              ],
-            ],
+          // if (Platform.isIOS) ...[
+          const SizedBox(width: 8),
+          Expanded(
+            child: TextButton.icon(
+              onPressed: () => signIn(getAppleCredentials),
+              icon: const Icon(Icons.login_rounded),
+              label: const Text('Apple Sign In'),
+            ),
           ),
+          // ],
         ],
       ),
     );
