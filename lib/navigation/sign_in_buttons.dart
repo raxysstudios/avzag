@@ -126,16 +126,16 @@ class _SignInButtonsState extends State<SignInButtons> {
               label: const Text('Google Sign In'),
             ),
           ),
-          // if (Platform.isIOS) ...[
-          const SizedBox(width: 8),
-          Expanded(
-            child: TextButton.icon(
-              onPressed: () => signIn(getAppleCredentials),
-              icon: const Icon(Icons.login_rounded),
-              label: const Text('Apple Sign In'),
+          if (Platform.isIOS) ...[
+            const SizedBox(width: 8),
+            Expanded(
+              child: TextButton.icon(
+                onPressed: () => signIn(getAppleCredentials),
+                icon: const Icon(Icons.login_rounded),
+                label: const Text('Apple Sign In'),
+              ),
             ),
-          ),
-          // ],
+          ],
         ],
       ),
     );
