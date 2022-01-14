@@ -51,61 +51,53 @@ class _EditorModePageState extends State<EditorModePage> {
       body: ListView(
         padding: const EdgeInsets.only(bottom: 76),
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SignInButtons(
-                  onSignOut: () => setState(() {
-                    EditorStore.language = null;
-                    EditorStore.isAdmin = false;
-                    editable.clear();
-                  }),
-                  onSingIn: updateEditable,
-                ),
-                const SizedBox(height: 8),
-                if (EditorStore.uid != null)
-                  Text(
-                    'With any question regarding the language materials, use the contacts below.',
-                    style: Theme.of(context).textTheme.bodyText2,
-                    textAlign: TextAlign.center,
-                  ),
-                if (editable.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.bodyText2,
-                      children: [
-                        const TextSpan(text: 'You have '),
-                        WidgetSpan(
-                          child: SpanIcon(
-                            Icons.account_circle_rounded,
-                            color: Theme.of(context).textTheme.bodyText2?.color,
-                          ),
-                        ),
-                        const TextSpan(
-                          text: 'admin',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const TextSpan(text: ' rights for '),
-                        TextSpan(
-                          text: capitalize(editable.join(', ')),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const TextSpan(text: '.'),
-                      ],
-                    ),
-                  ),
-                ],
-              ],
-            ),
+          SignInButtons(
+            onSignOut: () => setState(() {
+              EditorStore.language = null;
+              EditorStore.isAdmin = false;
+              editable.clear();
+            }),
+            onSingIn: updateEditable,
           ),
+          if (EditorStore.uid != null)
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.bodyText2,
+                  children: [
+                    const TextSpan(
+                      text:
+                          'With any question regarding the language materials, use the contacts below.',
+                    ),
+                    if (editable.isNotEmpty) ...[
+                      const TextSpan(text: '\n\nYou have '),
+                      WidgetSpan(
+                        child: SpanIcon(
+                          Icons.account_circle_rounded,
+                          color: Theme.of(context).textTheme.bodyText2?.color,
+                        ),
+                      ),
+                      const TextSpan(
+                        text: 'admin',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const TextSpan(text: ' rights for '),
+                      TextSpan(
+                        text: capitalize(editable.join(', ')),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const TextSpan(text: '.'),
+                    ],
+                  ],
+                ),
+              ),
+            ),
           if (EditorStore.uid != null)
             Card(
               child: Column(

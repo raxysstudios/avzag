@@ -100,7 +100,7 @@ class _SignInButtonsState extends State<SignInButtons> {
     }
     if (FirebaseAuth.instance.currentUser != null) {
       final user = FirebaseAuth.instance.currentUser!;
-      ListTile(
+      return ListTile(
         leading: CircleAvatar(
           backgroundImage:
               user.photoURL == null ? null : NetworkImage(user.photoURL!),
@@ -111,40 +111,42 @@ class _SignInButtonsState extends State<SignInButtons> {
         trailing: IconButton(
           onPressed: signOut,
           icon: const Icon(Icons.logout_rounded),
+          tooltip: 'Sign out',
         ),
       );
     }
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: [
+          Text(
             'Sign in with',
             style: Theme.of(context).textTheme.button,
           ),
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed: () => signIn(getGoogleCredentials),
-                icon: const Icon(Icons.login_rounded),
-                label: const Text('Google'),
-              ),
-            ),
-            if (Platform.isIOS) ...[
-              const SizedBox(width: 8),
+          const SizedBox(height: 8),
+          Row(
+            children: [
               Expanded(
-                child: TextButton.icon(
-                  onPressed: () => signIn(getAppleCredentials),
+                child: ElevatedButton.icon(
+                  onPressed: () => signIn(getGoogleCredentials),
                   icon: const Icon(Icons.login_rounded),
-                  label: const Text('Apple'),
+                  label: const Text('Google'),
                 ),
               ),
+              if (Platform.isIOS) ...[
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextButton.icon(
+                    onPressed: () => signIn(getAppleCredentials),
+                    icon: const Icon(Icons.login_rounded),
+                    label: const Text('Apple'),
+                  ),
+                ),
+              ],
             ],
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }
