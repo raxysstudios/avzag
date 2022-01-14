@@ -1,37 +1,29 @@
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/global_store.dart';
+import 'package:avzag/navigation/sign_in_buttons.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/span_icon.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'nav_drawer.dart';
 
-class AuthPage extends StatefulWidget {
-  const AuthPage({Key? key}) : super(key: key);
+class EditorModePage extends StatefulWidget {
+  const EditorModePage({Key? key}) : super(key: key);
 
   @override
-  _AuthPageState createState() => _AuthPageState();
+  _EditorModePageState createState() => _EditorModePageState();
 }
 
-class _AuthPageState extends State<AuthPage> {
-  bool loading = false;
+class _EditorModePageState extends State<EditorModePage> {
   List<String> editable = [];
 
   @override
   void initState() {
     super.initState();
     if (FirebaseAuth.instance.currentUser != null) {
-      setState(() {
-        loading = true;
-      });
-      updateEditable().then(
-        (_) => setState(() {
-          loading = false;
-        }),
-      );
+      updateEditable().then((_) => setState(() {}));
     }
   }
 
@@ -40,33 +32,6 @@ class _AuthPageState extends State<AuthPage> {
         await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
     setState(() {
       editable = json2list(token?.claims?['admin']) ?? [];
-    });
-  }
-
-  Future<void> signIn() async {
-    setState(() {
-      loading = true;
-    });
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut();
-    setState(() {
-      EditorStore.language = null;
-      EditorStore.isAdmin = false;
-      editable.clear();
-    });
-
-    final user = await GoogleSignIn().signIn();
-    if (user != null) {
-      final auth = await user.authentication;
-      final cred = GoogleAuthProvider.credential(
-        accessToken: auth.accessToken,
-        idToken: auth.idToken,
-      );
-      await FirebaseAuth.instance.signInWithCredential(cred);
-      await updateEditable();
-    }
-    setState(() {
-      loading = false;
     });
   }
 
@@ -91,21 +56,21 @@ class _AuthPageState extends State<AuthPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                ElevatedButton.icon(
-                  onPressed: loading ? null : signIn,
-                  icon: const Icon(Icons.login_rounded),
-                  label: Text(
-                    EditorStore.email ?? 'Sign In',
-                  ),
+                SignInButtons(
+                  onSignOut: () => setState(() {
+                    EditorStore.language = null;
+                    EditorStore.isAdmin = false;
+                    editable.clear();
+                  }),
+                  onSingIn: updateEditable,
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  EditorStore.uid == null
-                      ? 'Sign in to see your options.'
-                      : 'With any question regarding the language materials, use the contacts below.',
-                  style: Theme.of(context).textTheme.bodyText2,
-                  textAlign: TextAlign.center,
-                ),
+                if (EditorStore.uid != null)
+                  Text(
+                    'With any question regarding the language materials, use the contacts below.',
+                    style: Theme.of(context).textTheme.bodyText2,
+                    textAlign: TextAlign.center,
+                  ),
                 if (editable.isNotEmpty) ...[
                   const SizedBox(height: 8),
                   RichText(
@@ -141,14 +106,7 @@ class _AuthPageState extends State<AuthPage> {
               ],
             ),
           ),
-          if (loading)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          if (EditorStore.email != null)
+          if (EditorStore.uid != null)
             Card(
               child: Column(
                 children: [

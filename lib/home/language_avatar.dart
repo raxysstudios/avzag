@@ -45,5 +45,6 @@ class _LanguageAvatarState extends State<LanguageAvatar> {
         backgroundImage: NetworkImage(url!),
       ),
     );
+    // TODO bg color
   }
 }
