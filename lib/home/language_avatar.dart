@@ -43,8 +43,8 @@ class _LanguageAvatarState extends State<LanguageAvatar> {
       child: CircleAvatar(
         radius: LanguageAvatar.R,
         backgroundImage: NetworkImage(url!),
+        backgroundColor: Colors.transparent,
       ),
     );
-    // TODO bg color
   }
 }
