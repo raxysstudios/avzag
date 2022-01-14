@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:io' show Platform;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -100,11 +100,17 @@ class _SignInButtonsState extends State<SignInButtons> {
     }
     if (FirebaseAuth.instance.currentUser != null) {
       final user = FirebaseAuth.instance.currentUser!;
-      return TextButton.icon(
-        onPressed: signOut,
-        icon: const Icon(Icons.logout_rounded),
-        label: Text(
-          user.email ?? user.displayName ?? 'Some User',
+      ListTile(
+        leading: CircleAvatar(
+          backgroundImage:
+              user.photoURL == null ? null : NetworkImage(user.photoURL!),
+          backgroundColor: Colors.transparent,
+        ),
+        title: Text(user.displayName ?? '[no name]'),
+        subtitle: Text(user.email ?? '[no email]'),
+        trailing: IconButton(
+          onPressed: signOut,
+          icon: const Icon(Icons.logout_rounded),
         ),
       );
     }
@@ -126,14 +132,16 @@ class _SignInButtonsState extends State<SignInButtons> {
                 label: const Text('Google'),
               ),
             ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed: () => signIn(getAppleCredentials),
-                icon: const Icon(Icons.login_rounded),
-                label: const Text('Apple'),
+            if (Platform.isIOS) ...[
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: () => signIn(getAppleCredentials),
+                  icon: const Icon(Icons.login_rounded),
+                  label: const Text('Apple'),
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ],
