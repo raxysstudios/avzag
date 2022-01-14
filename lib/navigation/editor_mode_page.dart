@@ -23,7 +23,7 @@ class _EditorModePageState extends State<EditorModePage> {
   void initState() {
     super.initState();
     if (FirebaseAuth.instance.currentUser != null) {
-      updateEditable().then((_) => setState(() {}));
+      updateEditable();
     }
   }
 
