@@ -127,7 +127,7 @@ class _SignInButtonsState extends State<SignInButtons> {
               label: const Text('Google Sign In'),
             ),
           ),
-          if (Platform.isIOS || kIsWeb) ...[
+          if (kIsWeb || Platform.isIOS) ...[
             const SizedBox(width: 8),
             Expanded(
               child: TextButton.icon(
