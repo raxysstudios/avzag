@@ -56,10 +56,6 @@ class _SignInButtonsState extends State<SignInButtons> {
       case 'google.com':
         await GoogleSignIn().signOut();
         break;
-      case 'apple.com':
-        // TODO await appleSignOut;
-        break;
-      default:
     }
     await widget.onSignOut?.call();
     setState(() {
@@ -157,19 +153,19 @@ class _SignInButtonsState extends State<SignInButtons> {
       child: Row(
         children: [
           Expanded(
-            child: ElevatedButton.icon(
+            child: OutlinedButton.icon(
               onPressed: () => signIn(getGoogleCredentials),
               icon: const Icon(Icons.login_rounded),
-              label: const Text('Google Sign In'),
+              label: const Text('Sign in with Google'),
             ),
           ),
           if (kIsWeb || Platform.isIOS) ...[
             const SizedBox(width: 8),
             Expanded(
-              child: TextButton.icon(
+              child: OutlinedButton.icon(
                 onPressed: () => signIn(getAppleCredentials),
                 icon: const Icon(Icons.login_rounded),
-                label: const Text('Apple Sign In'),
+                label: const Text('Sign in with Apple'),
               ),
             ),
           ],
