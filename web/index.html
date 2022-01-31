@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <base href="/" />
 
-<head>
-  <base href="/" />
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <meta name="description" content="A new Flutter project." />
 
-  <meta charset="UTF-8" />
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
-  <meta name="description" content="A new Flutter project." />
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="avzag" />
+    <meta
+      name="google-signin-client_id"
+      content="882503981771-qim7pqjv06p4ujj0m1htbs68gmg2e26v.apps.googleusercontent.com"
+    />
+    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+    <script
+      type="text/javascript"
+      src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+    ></script>
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="apple-mobile-web-app-title" content="avzag" />
-  <meta name="google-signin-client_id"
-    content="882503981771-qim7pqjv06p4ujj0m1htbs68gmg2e26v.apps.googleusercontent.com" />
-  <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png" />
+    <title>avzag</title>
+    <link rel="manifest" href="manifest.json" />
+  </head>
 
-  <title>avzag</title>
-  <link rel="manifest" href="manifest.json" />
-</head>
-
-<body>
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("flutter-first-frame", function () {
-        navigator.serviceWorker.register("flutter_service_worker.js");
-      });
-    }
-  </script>
-  <script src="main.dart.js" type="application/javascript"></script>
-</body>
-
+  <body>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("flutter-first-frame", function () {
+          navigator.serviceWorker.register("flutter_service_worker.js");
+        });
+      }
+    </script>
+    <script src="main.dart.js" type="application/javascript"></script>
+  </body>
 </html>
