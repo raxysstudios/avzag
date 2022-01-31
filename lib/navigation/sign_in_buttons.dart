@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'dart:math';
+
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -97,8 +98,8 @@ class _SignInButtonsState extends State<SignInButtons> {
     } else {
       final rawNonce = generateNonce();
       final nonce = sha256ofString(rawNonce);
-      var redirectURL = 'https://andaxapp.firebaseapp.com/__/auth/handler';
-      var clientID = 'andaxapp';
+      var redirectURL = 'https://avzagapp.firebaseapp.com/__/auth/handler';
+      var clientID = 'avzagapp';
       final appleIdCredential =
           await apple.SignInWithApple.getAppleIDCredential(
         scopes: [
