@@ -15,7 +15,7 @@ Built with Flutter & Firebase & Algolia.
 - [x] December: general availability on Android & Web.
 
 ### 2022
-- [ ] February: Home-screen map, deep-linking (sharing entries), iOS release.
+- [ ] Spring: Home-screen map, deep-linking (sharing entries), iOS release.
 - [ ] Summer: Converter release.
 - [ ] Autumn: Phonology release.
 - [ ] Winter: Phrasebook beta-test.
