@@ -73,6 +73,7 @@ class _SignInButtonsState extends State<SignInButtons> {
         idToken: auth.idToken,
       );
     }
+    return null;
   }
 
   Future<AuthCredential?> getAppleCredentials() async {
@@ -117,6 +118,7 @@ class _SignInButtonsState extends State<SignInButtons> {
         rawNonce: rawNonce,
       );
     }
+    return null;
   }
 
   @override

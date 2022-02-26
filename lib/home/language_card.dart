@@ -1,8 +1,9 @@
 import 'package:avzag/home/language.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/span_icon.dart';
-import 'language_flag.dart';
 import 'package:flutter/material.dart';
+
+import 'language_flag.dart';
 
 class LanguageCard extends StatelessWidget {
   final Language language;

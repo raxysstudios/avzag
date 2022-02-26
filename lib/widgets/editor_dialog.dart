@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 String? emptyValidator(String? value) {
   value = value?.trim() ?? '';
   if (value.isEmpty) return 'Cannot be empty';
+  return null;
 }
 
 Future<void> showEditorDialog<T>(

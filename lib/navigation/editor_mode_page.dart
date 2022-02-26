@@ -1,5 +1,5 @@
-import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/global_store.dart';
+import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/navigation/sign_in_buttons.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/span_icon.dart';

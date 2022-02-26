@@ -1,7 +1,7 @@
-import 'package:avzag/utils/contribution.dart';
-import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:avzag/dictionary/use.dart';
+import 'package:avzag/utils/contribution.dart';
 import 'package:avzag/utils/utils.dart';
+import 'package:avzag/widgets/text_sample_tiles.dart';
 
 class Entry {
   String? id;

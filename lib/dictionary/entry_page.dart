@@ -1,21 +1,21 @@
-import 'package:avzag/utils/contribution.dart';
-
 import 'package:avzag/dictionary/meaning_tile.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_flag.dart';
+import 'package:avzag/utils/contribution.dart';
+import 'package:avzag/utils/editor_utils.dart';
+import 'package:avzag/utils/snackbar_manager.dart';
 import 'package:avzag/widgets/caption.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
-import 'package:avzag/utils/editor_utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
+import 'package:avzag/widgets/note_tile.dart';
 import 'package:avzag/widgets/page_title.dart';
-import 'package:avzag/utils/snackbar_manager.dart';
 import 'package:avzag/widgets/rounded_back_button.dart';
 import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
-import 'package:avzag/widgets/note_tile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
 import 'entry.dart';
 
 class EntryPage extends StatefulWidget {

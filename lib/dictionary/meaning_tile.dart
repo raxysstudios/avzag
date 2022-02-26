@@ -1,10 +1,9 @@
 import 'package:avzag/utils/snackbar_manager.dart';
+import 'package:avzag/utils/utils.dart';
+import 'package:avzag/widgets/editor_dialog.dart';
+import 'package:flutter/material.dart';
 
 import 'use.dart';
-import 'package:avzag/utils/utils.dart';
-
-import 'package:flutter/material.dart';
-import 'package:avzag/widgets/editor_dialog.dart';
 
 class MeaningTile extends StatelessWidget {
   final Use use;

@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:avzag/utils/utils.dart';
-
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'search_controller.dart';
