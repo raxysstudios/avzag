@@ -1,8 +1,8 @@
 import 'package:avzag/global_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'config/themes.dart';
 import 'navigation/nav_drawer.dart';
-import 'utils/themes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final themes = getThemes(context);
+    final themes = Themes(Theme.of(context).colorScheme);
     return MaterialApp(
       title: 'Avzag',
       theme: themes.light,
