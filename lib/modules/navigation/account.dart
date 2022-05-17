@@ -1,6 +1,6 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/modules/navigation/sign_in_buttons.dart';
-import 'package:avzag/shared/utils/link.dart';
+import 'package:avzag/shared/utils/open_link.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
@@ -12,14 +12,14 @@ import 'package:flutter/material.dart';
 
 import 'nav_drawer.dart';
 
-class EditorModePage extends StatefulWidget {
-  const EditorModePage({Key? key}) : super(key: key);
+class AccountScreen extends StatefulWidget {
+  const AccountScreen({Key? key}) : super(key: key);
 
   @override
-  State<EditorModePage> createState() => _EditorModePageState();
+  State<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _EditorModePageState extends State<EditorModePage> {
+class _AccountScreenState extends State<AccountScreen> {
   List<String> editable = [];
 
   @override

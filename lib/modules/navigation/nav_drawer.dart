@@ -1,7 +1,7 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/home/home_page.dart';
-import 'package:avzag/shared/utils/link.dart';
+import 'package:avzag/shared/utils/open_link.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/expandable_tile.dart';
@@ -10,7 +10,7 @@ import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'editor_mode_page.dart';
+import 'account.dart';
 
 Future<void> navigate(
   BuildContext context, [
@@ -147,7 +147,7 @@ class NavDraver extends StatelessWidget {
                     onChanged: (e) => Navigator.push<void>(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const EditorModePage(),
+                        builder: (context) => const AccountScreen(),
                       ),
                     ),
                   ),
