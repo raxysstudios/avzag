@@ -2,13 +2,14 @@ import 'package:avzag/global_store.dart';
 import 'package:avzag/modules/dictionary/widgets/samples_list.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
+import 'package:avzag/shared/widgets/column_card.dart';
+import 'package:avzag/shared/widgets/markdown_text.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:avzag/shared/widgets/snackbar_manager.dart';
 
 import 'package:flutter/material.dart';
 
 import '../models/word.dart';
-import '../widgets/segment.dart';
 
 class WordScreen extends StatefulWidget {
   const WordScreen(
@@ -28,6 +29,7 @@ class _WordScreenState extends State<WordScreen> {
   @override
   Widget build(BuildContext context) {
     final word = widget.word;
+    final theme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
         leading: const RoundedBackButton(),
@@ -54,11 +56,28 @@ class _WordScreenState extends State<WordScreen> {
         controller: widget.scroll,
         padding: const EdgeInsets.only(bottom: 76),
         children: [
-          Segment(
-            title: capitalize(word.headword),
-            altTitle: word.ipa == null ? null : '/ ${word.ipa} /',
-            subtitle: prettyTags(word.tags),
-            body: word.note,
+          ColumnCard(
+            divider: const SizedBox(height: 8),
+            padding: const EdgeInsets.all(16),
+            children: [
+              Text(
+                capitalize(word.headword),
+                style: theme.headline6,
+              ),
+              if (word.ipa != null)
+                Text(
+                  word.ipa!,
+                  style: theme.bodyText1?.copyWith(
+                    color: theme.caption?.color,
+                  ),
+                ),
+              if (word.tags != null)
+                Text(
+                  prettyTags(word.tags)!,
+                  style: theme.caption,
+                ),
+              if (word.note != null) MarkdownText(word.note!),
+            ],
           ),
           if (word.forms != null)
             SamplesList(
@@ -66,10 +85,21 @@ class _WordScreenState extends State<WordScreen> {
               inline: true,
             ),
           for (final u in word.uses) ...[
-            Segment(
-              title: capitalize(u.term),
-              subtitle: prettyTags(u.tags),
-              body: u.note,
+            ColumnCard(
+              divider: const SizedBox(height: 8),
+              padding: const EdgeInsets.all(16),
+              children: [
+                Text(
+                  capitalize(u.term),
+                  style: theme.headline6?.copyWith(fontSize: 18),
+                ),
+                if (u.tags != null)
+                  Text(
+                    prettyTags(u.tags)!,
+                    style: theme.caption,
+                  ),
+                if (u.note != null) MarkdownText(u.note!),
+              ],
             ),
             if (u.samples != null) SamplesList(u.samples!),
           ],
