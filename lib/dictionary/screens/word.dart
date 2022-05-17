@@ -197,6 +197,8 @@ class _WordScreenState extends State<WordScreen> {
                       },
                     ),
                 ],
+                elevated: true,
+                icon: const Icon(Icons.done_all_rounded),
               );
             }
             if (entry.contribution == null) {

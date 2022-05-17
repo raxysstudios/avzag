@@ -21,7 +21,9 @@ class EntryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
     return ListTile(
-      dense: true,
+      visualDensity: const VisualDensity(
+        vertical: VisualDensity.minimumDensity,
+      ),
       title: Row(
         children: [
           if (hit.unverified)

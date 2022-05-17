@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 import 'language_flag.dart';
 
-class LanguageCard extends StatelessWidget {
+class LanguageTile extends StatelessWidget {
   final Language language;
   final bool selected;
   final VoidCallback? onTap;
 
-  const LanguageCard(
+  const LanguageTile(
     this.language, {
     Key? key,
     this.selected = false,
@@ -19,7 +19,7 @@ class LanguageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return ClipRect(
       child: InkWell(
         onTap: onTap,
         child: Stack(
@@ -31,7 +31,7 @@ class LanguageCard extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: LanguageFlag(
                   language.flag,
-                  offset: const Offset(-34, 40),
+                  offset: const Offset(-32, 32),
                 ),
               ),
             ),
@@ -45,35 +45,31 @@ class LanguageCard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (language.family?.isNotEmpty ?? false)
-                    Text(
-                      prettyTags(language.family)!,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  if (language.stats != null)
-                    RichText(
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(
-                        style: Theme.of(context).textTheme.caption?.copyWith(
-                              fontSize: 14,
-                            ),
-                        children: [
-                          const WidgetSpan(
-                            child: SpanIcon(Icons.book_rounded),
+              subtitle: language.stats == null
+                  ? null
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(
+                            style:
+                                Theme.of(context).textTheme.caption?.copyWith(
+                                      fontSize: 14,
+                                    ),
+                            children: [
+                              const WidgetSpan(
+                                child: SpanIcon(Icons.book_rounded),
+                              ),
+                              TextSpan(
+                                text: language.stats!.dictionary.toString(),
+                              ),
+                            ],
                           ),
-                          TextSpan(
-                            text: language.stats!.dictionary.toString(),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                ],
-              ),
             ),
           ],
         ),

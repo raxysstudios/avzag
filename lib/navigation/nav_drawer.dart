@@ -1,6 +1,7 @@
 import 'package:avzag/dictionary/screens/dictionary.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/home_page.dart';
+import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/expandable_tile.dart';
 import 'package:avzag/widgets/raxys_logo.dart';
@@ -89,95 +90,93 @@ class NavDraver extends StatelessWidget {
                   ),
                 ),
               ),
-              body: Card(
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: const Padding(
-                        padding: EdgeInsets.only(top: 8),
-                        child: Icon(Icons.send_rounded),
-                      ),
-                      title: const Text('Developer Contact'),
-                      subtitle: const Text('Raxys Studios'),
-                      onTap: () => launchUrl(
-                        Uri.parse('https://t.me/raxysstudios'),
-                      ),
-                    ),
-                    FutureBuilder<PackageInfo>(
-                      future: PackageInfo.fromPlatform(),
-                      builder: (context, snapshot) {
-                        var info = 'Loading...';
-                        final package = snapshot.data;
-                        if (package != null) {
-                          info = [
-                            'v${package.version}',
-                            'b${package.buildNumber}'
-                          ].join(' • ');
-                        }
-                        return ListTile(
-                          leading: const Padding(
-                            padding: EdgeInsets.only(top: 8),
-                            child: Icon(Icons.code_rounded),
-                          ),
-                          title: const Text('GitHub Repository'),
-                          subtitle: Text(info),
-                          onTap: () => launchUrl(
-                            Uri.parse(
-                              'https://github.com/raxysstudios/avzag',
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    SwitchListTile(
-                      title: const Text('Editor Mode'),
-                      subtitle: Row(
-                        children: [
-                          if (EditorStore.isEditing) ...[
-                            if (EditorStore.isAdmin)
-                              const SpanIcon(Icons.account_circle_rounded),
-                            Text(capitalize(EditorStore.language)),
-                          ] else
-                            const Text('Off')
-                        ],
-                      ),
-                      value: EditorStore.language != null,
-                      secondary: const Padding(
-                        padding: EdgeInsets.only(top: 8),
-                        child: Icon(Icons.edit_rounded),
-                      ),
-                      onChanged: (e) => Navigator.push<void>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EditorModePage(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              child: Column(
+              body: ColumnCard(
+                divider: null,
+                margin: const EdgeInsets.only(bottom: 12),
                 children: [
-                  _NavModule(
-                    Icons.home_rounded,
-                    'home',
-                  ).build(context, title),
-                  const Divider(),
-                  _NavModule(
-                    Icons.book_rounded,
-                    'dictionary',
-                  ).build(context, title),
-                  const Divider(),
-                  ...[
-                    _NavModule(Icons.music_note_rounded, 'phonology'),
-                    _NavModule(Icons.switch_left_rounded, 'converter'),
-                    _NavModule(Icons.forum_rounded, 'phrasebook'),
-                    _NavModule(Icons.local_library_rounded, 'bootcamp'),
-                  ].map((t) => t.build(context)),
+                  ListTile(
+                    leading: const Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Icon(Icons.send_rounded),
+                    ),
+                    title: const Text('Developer Contact'),
+                    subtitle: const Text('Raxys Studios'),
+                    onTap: () => launchUrl(
+                      Uri.parse('https://t.me/raxysstudios'),
+                    ),
+                  ),
+                  FutureBuilder<PackageInfo>(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (context, snapshot) {
+                      var info = 'Loading...';
+                      final package = snapshot.data;
+                      if (package != null) {
+                        info = [
+                          'v${package.version}',
+                          'b${package.buildNumber}'
+                        ].join(' • ');
+                      }
+                      return ListTile(
+                        leading: const Padding(
+                          padding: EdgeInsets.only(top: 8),
+                          child: Icon(Icons.code_rounded),
+                        ),
+                        title: const Text('GitHub Repository'),
+                        subtitle: Text(info),
+                        onTap: () => launchUrl(
+                          Uri.parse(
+                            'https://github.com/raxysstudios/avzag',
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  SwitchListTile(
+                    title: const Text('Editor Mode'),
+                    subtitle: Row(
+                      children: [
+                        if (EditorStore.isEditing) ...[
+                          if (EditorStore.isAdmin)
+                            const SpanIcon(Icons.account_circle_rounded),
+                          Text(capitalize(EditorStore.language)),
+                        ] else
+                          const Text('Off')
+                      ],
+                    ),
+                    value: EditorStore.language != null,
+                    secondary: const Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Icon(Icons.edit_rounded),
+                    ),
+                    onChanged: (e) => Navigator.push<void>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const EditorModePage(),
+                      ),
+                    ),
+                  ),
                 ],
               ),
+            ),
+            ColumnCard(
+              divider: null,
+              margin: EdgeInsets.zero,
+              children: [
+                _NavModule(
+                  Icons.home_rounded,
+                  'home',
+                ).build(context, title),
+                _NavModule(
+                  Icons.book_rounded,
+                  'dictionary',
+                ).build(context, title),
+                ...[
+                  _NavModule(Icons.music_note_rounded, 'phonology'),
+                  _NavModule(Icons.switch_left_rounded, 'converter'),
+                  _NavModule(Icons.forum_rounded, 'phrasebook'),
+                  _NavModule(Icons.local_library_rounded, 'bootcamp'),
+                ].map((t) => t.build(context)),
+              ],
             )
           ],
         ),

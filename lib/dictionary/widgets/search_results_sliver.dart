@@ -1,3 +1,4 @@
+import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/caption.dart';
 import 'package:avzag/widgets/span_icon.dart';
@@ -31,9 +32,8 @@ class SearchResultsSliver extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 8),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(18, 8, 18, 4),
                 child: RichText(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -65,27 +65,25 @@ class SearchResultsSliver extends StatelessWidget {
                   ),
                 ),
               ),
-              Card(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: hitGroups.length,
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) {
-                    final hits = hitGroups[index];
-                    return Column(
+              ColumnCard(
+                margin: EdgeInsets.zero,
+                children: [
+                  for (final group in hitGroups)
+                    Column(
                       children: [
-                        if (index > 0) const Divider(),
-                        for (var i = 0; i < hits.length; i++)
+                        for (var i = 0; i < group.length; i++)
                           EntryTile(
-                            hits[i],
-                            showLanguage: i == 0,
-                            onTap: onTap == null ? null : () => onTap!(hits[i]),
+                            group[i],
+                            showLanguage: !search.monolingual && i == 0,
+                            onTap: onTap == null
+                                ? null
+                                : () => onTap!(
+                                      group[i],
+                                    ),
                           ),
                       ],
-                    );
-                  },
-                ),
+                    )
+                ],
               ),
             ],
           );
