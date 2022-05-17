@@ -45,8 +45,8 @@ class _EditorModePageState extends State<EditorModePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => navigate(context),
-        child: const Icon(Icons.done_all_rounded),
         tooltip: 'Continue',
+        child: const Icon(Icons.done_all_rounded),
       ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 76),
@@ -124,7 +124,9 @@ class _EditorModePageState extends State<EditorModePage> {
                           trailing: l.contact == null
                               ? null
                               : IconButton(
-                                  onPressed: () => launch(l.contact!),
+                                  onPressed: () => launchUrl(
+                                    Uri.parse(l.contact!),
+                                  ),
                                   icon: const Icon(Icons.send_rounded),
                                   tooltip: 'Contact admin',
                                 ),

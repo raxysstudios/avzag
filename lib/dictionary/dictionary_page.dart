@@ -76,13 +76,13 @@ class _DictionaryPageState extends State<DictionaryPage> {
                           ),
                         );
                       },
-                      child: const Icon(Icons.add_rounded),
                       tooltip: 'New',
+                      child: const Icon(Icons.add_rounded),
                     )
                   : FloatingActionButton(
                       onPressed: openEntry,
-                      child: const Icon(Icons.edit_rounded),
                       tooltip: 'Resume',
+                      child: const Icon(Icons.edit_rounded),
                     )
               : null,
           body: CustomScrollView(

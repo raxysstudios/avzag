@@ -218,8 +218,8 @@ class _EntryPageState extends State<EntryPage> {
             if (entry.contribution == null) {
               return FloatingActionButton(
                 onPressed: startEditing,
-                child: const Icon(Icons.edit_rounded),
                 tooltip: 'Edit',
+                child: const Icon(Icons.edit_rounded),
               );
             }
           }

@@ -76,8 +76,7 @@ class SearchToolbarState extends State<SearchToolbar> {
                   var label = 'Search ';
                   label += search.monolingual
                       ? 'forms in ${capitalize(search.language)}'
-                      : (search.language.isEmpty ? 'over' : 'across') +
-                          ' the languages';
+                      : '${search.language.isEmpty ? 'over' : 'across'} the languages';
                   return TextField(
                     controller: inputController,
                     decoration: InputDecoration(

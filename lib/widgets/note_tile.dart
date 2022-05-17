@@ -39,7 +39,7 @@ class NoteTile extends StatelessWidget {
                 ),
               ),
               onTapLink: (_, link, __) {
-                if (link != null) launch(link);
+                if (link != null) launchUrl(Uri.parse(link));
               },
             ),
       onTap: onEdited == null ? null : () => showEditor(context),

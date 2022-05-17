@@ -26,7 +26,7 @@ class SplashScreen extends StatelessWidget {
       ]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          SchedulerBinding.instance?.addPostFrameCallback(
+          SchedulerBinding.instance.addPostFrameCallback(
             (_) => onLoaded(context),
           );
         }

@@ -23,7 +23,7 @@ class PageTitle extends StatelessWidget {
           ),
           if (subtitle != null)
             TextSpan(
-              text: '\n' + capitalize(subtitle!),
+              text: '\n${capitalize(subtitle!)}',
               style: theme.subtitle2?.copyWith(
                 color: theme.caption?.color,
               ),

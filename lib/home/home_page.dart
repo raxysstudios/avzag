@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
         selected.remove(language);
       } else {
         selected.add(language);
-        SchedulerBinding.instance?.addPostFrameCallback(
+        SchedulerBinding.instance.addPostFrameCallback(
           (_) => chipsScroll.animateTo(
             chipsScroll.position.maxScrollExtent,
             duration: const Duration(milliseconds: 250),
@@ -161,8 +161,8 @@ class _HomePageState extends State<HomePage> {
           );
           navigate(context);
         },
-        child: const Icon(Icons.done_all_rounded),
         tooltip: 'Continue',
+        child: const Icon(Icons.done_all_rounded),
       ),
       appBar: AppBar(
         automaticallyImplyLeading: false,

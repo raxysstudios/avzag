@@ -99,7 +99,9 @@ class NavDraver extends StatelessWidget {
                       ),
                       title: const Text('Developer Contact'),
                       subtitle: const Text('Raxys Studios'),
-                      onTap: () => launch('https://t.me/raxysstudios'),
+                      onTap: () => launchUrl(
+                        Uri.parse('https://t.me/raxysstudios'),
+                      ),
                     ),
                     FutureBuilder<PackageInfo>(
                       future: PackageInfo.fromPlatform(),
@@ -108,8 +110,8 @@ class NavDraver extends StatelessWidget {
                         final package = snapshot.data;
                         if (package != null) {
                           info = [
-                            'v' + package.version,
-                            'b' + package.buildNumber
+                            'v${package.version}',
+                            'b${package.buildNumber}'
                           ].join(' • ');
                         }
                         return ListTile(
@@ -119,8 +121,10 @@ class NavDraver extends StatelessWidget {
                           ),
                           title: const Text('GitHub Repository'),
                           subtitle: Text(info),
-                          onTap: () => launch(
-                            'https://github.com/raxysstudios/avzag',
+                          onTap: () => launchUrl(
+                            Uri.parse(
+                              'https://github.com/raxysstudios/avzag',
+                            ),
                           ),
                         );
                       },
