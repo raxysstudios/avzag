@@ -1,9 +1,11 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/navigation/sign_in_buttons.dart';
+import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/utils/open_link.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/span_icon.dart';
+import 'package:badges/badges.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +39,7 @@ class _EditorModePageState extends State<EditorModePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -59,80 +62,52 @@ class _EditorModePageState extends State<EditorModePage> {
             }),
             onSingIn: updateEditable,
           ),
-          if (EditorStore.uid != null)
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.bodyText2,
-                  children: [
-                    const TextSpan(
-                      text:
-                          'With any question regarding the language materials, use the contacts below.',
-                    ),
-                    if (editable.isNotEmpty) ...[
-                      const TextSpan(text: '\n\nYou have '),
-                      WidgetSpan(
-                        child: SpanIcon(
-                          Icons.account_circle_rounded,
-                          color: Theme.of(context).textTheme.bodyText2?.color,
+          if (EditorStore.uid != null && GlobalStore.languages.isNotEmpty)
+            ColumnCard(
+              children: [
+                for (final l in GlobalStore.languages.values)
+                  Builder(
+                    builder: (context) {
+                      final editing = l.name == EditorStore.language;
+                      final isAdmin = editable.contains(l.name);
+                      return ListTile(
+                        leading: Badge(
+                          padding: EdgeInsets.zero,
+                          ignorePointer: true,
+                          badgeColor: theme.surface,
+                          position: BadgePosition.topEnd(end: -20),
+                          badgeContent: isAdmin
+                              ? SpanIcon(
+                                  Icons.account_circle_rounded,
+                                  padding: const EdgeInsets.all(2),
+                                  color: theme.onSurface,
+                                )
+                              : null,
+                          child: LanguageAvatar(l.flag),
                         ),
-                      ),
-                      const TextSpan(
-                        text: 'admin',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const TextSpan(text: ' rights for '),
-                      TextSpan(
-                        text: capitalize(editable.join(', ')),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const TextSpan(text: '.'),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          if (EditorStore.uid != null)
-            Card(
-              child: Column(
-                children: [
-                  for (final l in GlobalStore.languages.values)
-                    Builder(
-                      builder: (context) {
-                        final editing = l.name == EditorStore.language;
-                        final isAdmin = editable.contains(l.name);
-                        return ListTile(
-                          leading: LanguageAvatar(l.flag),
-                          title: Text(
-                            capitalize(l.name),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
-                            ),
+                        title: Text(
+                          capitalize(l.name),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
                           ),
-                          onTap: () => setState(() {
-                            EditorStore.language = editing ? null : l.name;
-                            EditorStore.isAdmin = !editing && isAdmin;
-                          }),
-                          selected: editing,
-                          trailing: l.contact == null
-                              ? null
-                              : IconButton(
-                                  onPressed: () => openLink(l.contact!),
-                                  icon: const Icon(Icons.send_rounded),
-                                  tooltip: 'Contact admin',
-                                ),
-                        );
-                      },
-                    ),
-                ],
-              ),
+                        ),
+                        onTap: () => setState(() {
+                          EditorStore.language = editing ? null : l.name;
+                          EditorStore.isAdmin = !editing && isAdmin;
+                        }),
+                        selected: editing,
+                        trailing: l.contact == null
+                            ? null
+                            : IconButton(
+                                onPressed: () => openLink(l.contact!),
+                                icon: const Icon(Icons.send_rounded),
+                                tooltip: 'Contact admin',
+                              ),
+                      );
+                    },
+                  ),
+              ],
             ),
         ],
       ),
