@@ -1,7 +1,6 @@
 import 'package:avzag/global_store.dart';
-import 'package:avzag/modules/dictionary/widgets/sample_tile.dart';
+import 'package:avzag/modules/dictionary/widgets/samples_list.dart';
 import 'package:avzag/shared/utils/utils.dart';
-import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 
 import 'package:flutter/material.dart';
@@ -30,11 +29,7 @@ class _WordScreenState extends State<WordScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const RoundedBackButton(),
-        title: LanguageFlag(
-          GlobalStore.languages[word.language]!.flag,
-          offset: const Offset(32, 0),
-          scale: 15,
-        ),
+        title: Text(capitalize(word.language)),
         actions: [
           IconButton(
             onPressed: () {},
@@ -56,18 +51,23 @@ class _WordScreenState extends State<WordScreen> {
         padding: const EdgeInsets.only(bottom: 76),
         children: [
           Segment(
-            title: capitalize(word.forms.first.text),
+            title: capitalize(word.headword),
+            altTitle: word.ipa == null ? null : '/ ${word.ipa} /',
             subtitle: prettyTags(word.tags),
             body: word.note,
           ),
-          SamplesText(word.forms),
+          if (word.forms != null)
+            SamplesList(
+              word.forms!.skip(1),
+              inline: true,
+            ),
           for (final u in word.uses) ...[
             Segment(
               title: capitalize(u.term),
               subtitle: prettyTags(u.tags),
               body: u.note,
             ),
-            if (u.samples != null) SamplesText(u.samples!),
+            if (u.samples != null) SamplesList(u.samples!),
           ],
         ],
       ),

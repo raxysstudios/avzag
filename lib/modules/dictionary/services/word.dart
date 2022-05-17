@@ -23,7 +23,7 @@ Future<Word?> loadWord(String? id) async {
   return doc.data();
 }
 
-Future<bool> submitWord(BuildContext context, Word word) async {
+Future<void> submitWord(BuildContext context, Word word) async {
   final overwrite = word.contribution?.overwriteId;
   final id = overwrite ?? word.id;
   word.contribution = EditorStore.isAdmin
@@ -33,25 +33,24 @@ Future<bool> submitWord(BuildContext context, Word word) async {
           overwriteId: id,
         );
 
-  return await showLoadingDialog<bool>(
-        context,
+  await showLoadingDialog(
+    context,
+    FirebaseFirestore.instance
+        .collection('dictionary')
+        .doc(id)
+        .set(word.toJson())
+        .then((_) {
+      if (overwrite != null) {
         FirebaseFirestore.instance
             .collection('dictionary')
-            .doc(id)
-            .set(word.toJson())
-            .then((_) {
-          if (overwrite != null) {
-            return FirebaseFirestore.instance
-                .collection('dictionary')
-                .doc(word.id)
-                .delete();
-          }
-        }).then((_) => true),
-      ) ??
-      false;
+            .doc(word.id)
+            .delete();
+      }
+    }),
+  );
 }
 
-Future<bool> deleteWord(BuildContext context, String id) async {
+Future<void> deleteWord(BuildContext context, String id) async {
   final confirm = await showDangerDialog(
     context,
     'Delete entry?',
@@ -59,15 +58,9 @@ Future<bool> deleteWord(BuildContext context, String id) async {
     rejectText: 'Keep',
   );
   if (confirm) {
-    return await showLoadingDialog<bool>(
-          context,
-          FirebaseFirestore.instance
-              .collection('dictionary')
-              .doc(id)
-              .delete()
-              .then((_) => true),
-        ) ??
-        false;
+    await showLoadingDialog(
+      context,
+      FirebaseFirestore.instance.collection('dictionary').doc(id).delete(),
+    );
   }
-  return false;
 }

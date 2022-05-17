@@ -1,7 +1,7 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/home/home_page.dart';
-import 'package:avzag/shared/utils/open_link.dart';
+import 'package:avzag/shared/utils/link.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/expandable_tile.dart';

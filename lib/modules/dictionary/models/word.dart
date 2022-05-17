@@ -6,7 +6,9 @@ import 'use.dart';
 
 class Word {
   String? id;
-  List<Sample> forms;
+  String headword;
+  String? ipa;
+  List<Sample>? forms;
   String language;
   List<String>? tags;
   String? note;
@@ -15,9 +17,11 @@ class Word {
 
   Word({
     this.id,
-    required this.forms,
+    required this.headword,
+    this.ipa,
     required this.language,
     required this.uses,
+    this.forms,
     this.contribution,
     this.tags,
     this.note,
@@ -28,6 +32,14 @@ class Word {
     String? id,
   ]) : this(
           id: id,
+          // headword: json['headword'] as String,
+          headword: listFromJson(
+            json['forms'],
+            (dynamic j) => Sample.fromJson(j as Map<String, dynamic>),
+          )!
+              .first
+              .text,
+          ipa: json['ipa'] as String?,
           forms: listFromJson(
             json['forms'],
             (dynamic j) => Sample.fromJson(j as Map<String, dynamic>),
@@ -48,7 +60,9 @@ class Word {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['forms'] = forms.map((v) => v.toJson()).toList();
+    data['language'] = language;
+    if (ipa != null) data['ipa'] = ipa;
+    data['forms'] = forms?.map((v) => v.toJson()).toList();
     data['language'] = language;
     if (tags?.isNotEmpty ?? false) data['tags'] = tags;
     if (note?.isNotEmpty ?? false) data['note'] = note;

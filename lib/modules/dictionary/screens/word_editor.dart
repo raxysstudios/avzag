@@ -36,7 +36,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
     super.initState();
     word = widget.word ??
         Word(
-          forms: [],
+          headword: '',
           uses: [],
           language: EditorStore.language!,
         );
@@ -70,11 +70,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   OptionItem.simple(
                     Icons.delete_rounded,
                     'Delete',
-                    () async {
-                      if (await deleteWord(context, word.id!)) {
-                        exit();
-                      }
-                    },
+                    () => deleteWord(context, word.id!).then((_) => exit()),
                   ),
               ],
               icon: const Icon(Icons.done_all_rounded),
@@ -85,9 +81,8 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.done_all_rounded),
         onPressed: () async {
-          if ((form.currentState?.validate() ?? false) &&
-              await submitWord(context, word)) {
-            exit();
+          if (form.currentState?.validate() ?? false) {
+            submitWord(context, word).then((_) => exit());
           }
         },
       ),

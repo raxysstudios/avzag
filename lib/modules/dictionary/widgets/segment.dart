@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 class Segment extends StatelessWidget {
   const Segment({
     required this.title,
+    this.altTitle,
     this.subtitle,
     this.body,
     Key? key,
   }) : super(key: key);
 
   final String title;
+  final String? altTitle;
   final String? subtitle;
   final String? body;
 
@@ -25,6 +27,13 @@ class Segment extends StatelessWidget {
           title,
           style: theme.headline6,
         ),
+        if (altTitle != null)
+          Text(
+            altTitle!,
+            style: theme.bodyText1?.copyWith(
+              color: theme.caption?.color,
+            ),
+          ),
         if (subtitle != null)
           Text(
             subtitle!,
