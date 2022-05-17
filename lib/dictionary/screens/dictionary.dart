@@ -3,7 +3,7 @@ import 'package:avzag/dictionary/widgets/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
-import 'package:avzag/widgets/rounded_menu_button.dart';
+import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
