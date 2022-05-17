@@ -13,6 +13,8 @@ analyzer:
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
+  exclude:
+    - 'lib/**/*.g.dart'
 
 linter:
   # The lint rules applied to this project can be customized in the
