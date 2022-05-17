@@ -2,7 +2,6 @@ import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language.dart';
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
-import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/utils/snackbar_manager.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
@@ -12,7 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import 'language_tile.dart';
+import 'language_card.dart';
 import 'languages_map.dart';
 
 class HomePage extends StatefulWidget {
@@ -303,18 +302,18 @@ class _HomePageState extends State<HomePage> {
               languages: languages,
             );
           }
-          return SingleChildScrollView(
-            child: ColumnCard(
-              margin: const EdgeInsets.only(top: 12, bottom: 76),
-              children: [
-                for (final l in languages)
-                  LanguageTile(
-                    l,
-                    selected: selected.contains(l),
-                    onTap: () => toggleLanguage(l),
-                  )
-              ],
-            ),
+          return ListView.separated(
+            itemCount: languages.length,
+            padding: const EdgeInsets.only(top: 12, bottom: 76),
+            separatorBuilder: (_, __) => const Divider(),
+            itemBuilder: (context, index) {
+              final language = languages[index];
+              return LanguageCard(
+                language,
+                selected: selected.contains(language),
+                onTap: () => toggleLanguage(language),
+              );
+            },
           );
         },
       ),

@@ -1,7 +1,5 @@
 import 'package:avzag/home/language_avatar.dart';
-import 'package:avzag/home/language_tile.dart';
-import 'package:avzag/shared/widgets/column_card.dart';
-import 'package:avzag/shared/widgets/scrollable_modal_sheet.dart';
+import 'package:avzag/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -79,30 +77,15 @@ class LanguagesMap extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(32),
                       ),
-                      child: InkWell(
-                        onTap: () => onToggle(language),
-                        onLongPress: () => showScrollableModalSheet<void>(
-                          transparent: true,
-                          context: context,
-                          builder: (context, scroll) {
-                            return ColumnCard(
-                              margin: EdgeInsets.zero,
-                              children: [
-                                LanguageTile(
-                                  language,
-                                  selected: selected,
-                                  onTap: () {
-                                    onToggle(language);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                        child: LanguageAvatar(
-                          language.flag,
-                          radius: 10,
+                      child: Tooltip(
+                        message: capitalize(language.name),
+                        preferBelow: false,
+                        child: InkWell(
+                          onTap: () => onToggle(language),
+                          child: LanguageAvatar(
+                            language.flag,
+                            radius: 10,
+                          ),
                         ),
                       ),
                     ),

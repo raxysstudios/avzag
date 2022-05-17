@@ -5,21 +5,23 @@ import 'package:flutter/material.dart';
 
 import 'language_flag.dart';
 
-class LanguageTile extends StatelessWidget {
+class LanguageCard extends StatelessWidget {
   final Language language;
   final bool selected;
   final VoidCallback? onTap;
 
-  const LanguageTile(
+  const LanguageCard(
     this.language, {
-    Key? key,
     this.selected = false,
     this.onTap,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
+    return Card(
+      shape: const RoundedRectangleBorder(),
+      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
         child: Stack(
