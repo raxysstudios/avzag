@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
-import 'home/language.dart';
-import 'utils/utils.dart';
+import 'models/language.dart';
+import 'shared/utils/utils.dart';
 
 class EditorStore {
   static String? get email => FirebaseAuth.instance.currentUser?.email;

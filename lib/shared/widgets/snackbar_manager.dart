@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 void showSnackbar(
-  BuildContext context, [
+  BuildContext context, {
   IconData icon = Icons.error_outline_outlined,
   String text = 'Error!',
   bool floating = true,
-]) {
+}) {
   final theme = Theme.of(context);
   final messenger = ScaffoldMessenger.of(context);
   messenger.hideCurrentSnackBar();
