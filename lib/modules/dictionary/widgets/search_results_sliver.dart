@@ -24,6 +24,7 @@ class SearchResultsSliver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).textTheme;
     return PagedSliverList(
       pagingController: paging,
       builderDelegate: PagedChildBuilderDelegate<String>(
@@ -35,35 +36,33 @@ class SearchResultsSliver extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                child: RichText(
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(
-                    style: Theme.of(context).textTheme.caption?.copyWith(
-                          fontSize: 14,
-                        ),
-                    children: [
-                      TextSpan(
-                        text: capitalize(hitGroups.first.first.term),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
+                child: Row(
+                  textBaseline: TextBaseline.alphabetic,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  children: [
+                    Text(
+                      capitalize(hitGroups.first.first.term),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    if (tags.isNotEmpty)
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Text(
+                            prettyTags(
+                              tags,
+                              separator: ' ',
+                              capitalized: false,
+                            )!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.caption,
+                          ),
                         ),
                       ),
-                      const WidgetSpan(
-                        child: SpanIcon(
-                          Icons.tag_rounded,
-                          padding: EdgeInsets.only(left: 4, right: 2),
-                        ),
-                      ),
-                      TextSpan(
-                        text: prettyTags(
-                          tags,
-                          separator: ' ',
-                          capitalized: false,
-                        ),
-                      ),
-                    ],
-                  ),
+                  ],
                 ),
               ),
               ColumnCard(
@@ -97,8 +96,8 @@ class SearchResultsSliver extends StatelessWidget {
 
   Widget _buildEndCaption(BuildContext context) {
     return Caption(
-      search.monolingual ? 'End of results' : 'Shown first 50 results',
-      icon: Icons.check_rounded,
+      search.monolingual ? 'End of results' : 'Showing first 50 entries',
+      icon: Icons.done_all_rounded,
     );
   }
 }

@@ -49,7 +49,7 @@ class SamplesList extends StatelessWidget {
                           text: inline
                               ? s.translation!.toUpperCase()
                               : s.translation,
-                          style: theme.caption,
+                          style: TextStyle(color: theme.caption?.color),
                         ),
                       ],
                     ],

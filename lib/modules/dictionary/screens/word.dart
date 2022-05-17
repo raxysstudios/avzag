@@ -1,7 +1,9 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/modules/dictionary/widgets/samples_list.dart';
 import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
+import 'package:avzag/shared/widgets/snackbar_manager.dart';
 
 import 'package:flutter/material.dart';
 
@@ -31,21 +33,23 @@ class _WordScreenState extends State<WordScreen> {
         leading: const RoundedBackButton(),
         title: Text(capitalize(word.language)),
         actions: [
-          IconButton(
-            onPressed: () {},
-            tooltip: 'Share',
-            icon: const Icon(Icons.share_rounded),
-          ),
+          if (word.language == EditorStore.language)
+            IconButton(
+              onPressed: () {},
+              tooltip: 'Edit',
+              icon: const Icon(Icons.edit_rounded),
+            ),
           const SizedBox(width: 4),
         ],
       ),
-      floatingActionButton: word.language == EditorStore.language
-          ? FloatingActionButton(
-              onPressed: () {},
-              tooltip: 'Edit',
-              child: const Icon(Icons.edit_rounded),
-            )
-          : null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showSnackbar(
+          context,
+          text: 'Word sharing is coming soon',
+        ),
+        tooltip: 'Share',
+        child: const Icon(Icons.share_rounded),
+      ),
       body: ListView(
         controller: widget.scroll,
         padding: const EdgeInsets.only(bottom: 76),
@@ -69,6 +73,11 @@ class _WordScreenState extends State<WordScreen> {
             ),
             if (u.samples != null) SamplesList(u.samples!),
           ],
+          if (word.contribution != null)
+            const Caption(
+              'Unverified',
+              icon: Icons.unpublished_rounded,
+            ),
         ],
       ),
     );

@@ -21,12 +21,19 @@ class Caption extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (icon != null) SpanIcon(icon!),
+          if (icon != null)
+            SpanIcon(
+              icon!,
+              padding: const EdgeInsets.only(right: 8),
+            ),
           Text(
             text,
-            style: Theme.of(context).textTheme.caption?.copyWith(
-                  fontSize: 14,
-                ),
+            style: TextStyle(
+              color: Theme.of(context).textTheme.caption?.color,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              fontStyle: FontStyle.italic,
+            ),
           ),
         ],
       ),
