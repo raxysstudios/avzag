@@ -23,7 +23,7 @@ class LanguageFlag extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _LanguageFlagState createState() => _LanguageFlagState();
+  State<LanguageFlag> createState() => _LanguageFlagState();
 }
 
 class _LanguageFlagState extends State<LanguageFlag> {

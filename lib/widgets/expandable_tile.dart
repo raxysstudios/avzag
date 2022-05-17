@@ -11,7 +11,7 @@ class ExpandableTile extends StatefulWidget {
   final Widget body;
 
   @override
-  _ExpandableTileState createState() => _ExpandableTileState();
+  State<ExpandableTile> createState() => _ExpandableTileState();
 }
 
 class _ExpandableTileState extends State<ExpandableTile> {

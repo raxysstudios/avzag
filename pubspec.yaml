@@ -17,6 +17,7 @@ dependencies:
   firebase_auth: ^3.3.18
   google_sign_in: ^5.3.1
   sign_in_with_apple: ^3.3.0
+  crypto: ^3.0.2
   algolia: ^1.1.1
   flutter_markdown: ^0.6.10
   package_info_plus: ^1.4.2
@@ -27,6 +28,7 @@ dependencies:
   latlong: ^0.6.1
   flutter_map: ^0.14.0
   flutter_map_marker_cluster: ^0.4.4
+  latlong2: ^0.8.1
 
 dev_dependencies:
   flutter_test:

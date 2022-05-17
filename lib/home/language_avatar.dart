@@ -14,7 +14,7 @@ class LanguageAvatar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _LanguageAvatarState createState() => _LanguageAvatarState();
+  State<LanguageAvatar> createState() => _LanguageAvatarState();
 }
 
 class _LanguageAvatarState extends State<LanguageAvatar> {

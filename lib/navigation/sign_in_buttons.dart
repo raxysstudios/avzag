@@ -21,7 +21,7 @@ class SignInButtons extends StatefulWidget {
   final FutureOr<void> Function()? onSignOut;
 
   @override
-  _SignInButtonsState createState() => _SignInButtonsState();
+  State<SignInButtons> createState() => _SignInButtonsState();
 }
 
 class _SignInButtonsState extends State<SignInButtons> {

@@ -51,7 +51,7 @@ class TextSampleTiles extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TextSampleTilesState createState() => _TextSampleTilesState();
+  State<TextSampleTiles> createState() => _TextSampleTilesState();
 }
 
 class _TextSampleTilesState extends State<TextSampleTiles> {
