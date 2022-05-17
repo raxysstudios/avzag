@@ -1,6 +1,7 @@
 import 'package:avzag/dictionary/widgets/meaning_tile.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_flag.dart';
+import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/utils/contribution.dart';
 import 'package:avzag/utils/editor_utils.dart';
 import 'package:avzag/utils/snackbar_manager.dart';
@@ -14,7 +15,6 @@ import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../models/word.dart';
 
@@ -169,44 +169,28 @@ class _WordScreenState extends State<WordScreen> {
         builder: (context) {
           if (entry.language == EditorStore.language) {
             if (editor != null || isReviewing) {
-              final theme = Theme.of(context).colorScheme;
-              return SpeedDial(
-                icon: Icons.done_all_rounded,
-                activeIcon: Icons.close_rounded,
-                backgroundColor: theme.primary,
-                foregroundColor: theme.onPrimary,
-                activeBackgroundColor: theme.surface,
-                activeForegroundColor: theme.onSurface,
-                spaceBetweenChildren: 9,
-                spacing: 7,
-                children: [
-                  SpeedDialChild(
-                    child: const Icon(Icons.upload_rounded),
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                    label: 'Submit changes',
-                    onTap: () async {
+              return OptionsButton(
+                [
+                  OptionItem.simple(
+                    Icons.upload_rounded,
+                    'Submit changes',
+                    () async {
                       if (await submit(context)) {
                         exit(context);
                       }
                     },
                   ),
                   if (!isReviewing)
-                    SpeedDialChild(
-                      child: const Icon(Icons.cancel_rounded),
-                      label: 'Discard changes',
-                      backgroundColor: Colors.orange,
-                      foregroundColor: Colors.white,
-                      onTap: () => exit(context),
+                    OptionItem.simple(
+                      Icons.cancel_rounded,
+                      'Discard changes',
+                      () => exit(context),
                     ),
                   if (entry.id != null && EditorStore.isAdmin)
-                    SpeedDialChild(
-                      child: const Icon(Icons.delete_rounded),
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                      label: 'Delete entry',
-                      visible: true,
-                      onTap: () async {
+                    OptionItem.simple(
+                      Icons.delete_rounded,
+                      'Delete entry',
+                      () async {
                         if (await delete(context)) {
                           exit(context);
                         }

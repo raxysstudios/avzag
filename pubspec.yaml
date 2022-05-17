@@ -22,7 +22,6 @@ dependencies:
   flutter_markdown: ^0.6.10
   package_info_plus: ^1.4.2
   provider: ^6.0.2
-  flutter_speed_dial: ^6.0.0
   badges: ^2.0.2
   infinite_scroll_pagination: ^3.1.0
   flutter_map: ^0.14.0
