@@ -12,9 +12,9 @@ class EntryTile extends StatelessWidget {
 
   const EntryTile(
     this.hit, {
-    Key? key,
     this.showLanguage = true,
     this.onTap,
+    Key? key,
   }) : super(key: key);
 
   @override

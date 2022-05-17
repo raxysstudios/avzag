@@ -1,16 +1,16 @@
 import 'dart:async';
 
+import 'package:avzag/global_store.dart';
+import 'package:avzag/home/language_avatar.dart';
+import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../search_controller.dart';
-import 'search_mode_button.dart';
 
 class SearchToolbar extends StatefulWidget {
-  const SearchToolbar({
-    Key? key,
-  }) : super(key: key);
+  const SearchToolbar({Key? key}) : super(key: key);
 
   @override
   SearchToolbarState createState() => SearchToolbarState();
@@ -54,6 +54,11 @@ class SearchToolbarState extends State<SearchToolbar> {
   void search() =>
       context.read<SearchController>().updateQuery(inputController.text);
 
+  void setLanguage(String language) {
+    context.read<SearchController>().language = language;
+    inputController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     final search = context.watch<SearchController>();
@@ -61,12 +66,40 @@ class SearchToolbarState extends State<SearchToolbar> {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Row(
         children: [
-          SearchModeButton(
-            search.language,
-            onSelected: (l) {
-              search.language = l;
-              inputController.clear();
-            },
+          OptionsButton(
+            [
+              OptionItem.simple(
+                Icons.language_rounded,
+                GlobalStore.languages.length == 1 ? 'English' : 'Multilingual',
+                () => setLanguage(''),
+              ),
+              OptionItem.simple(
+                Icons.layers_rounded,
+                'Cross-lingual',
+                () => setLanguage('_'),
+              ),
+              OptionItem.divider(),
+              for (final l in GlobalStore.languages.values)
+                OptionItem.tile(
+                  LanguageAvatar(l.flag),
+                  Text(
+                    capitalize(l.name),
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  () => setLanguage(l.name),
+                )
+            ],
+            icon: Builder(builder: (context) {
+              if (search.language.isEmpty) {
+                return const Icon(Icons.language_rounded);
+              }
+              if (search.language == '_') {
+                return const Icon(Icons.layers_rounded);
+              }
+              return LanguageAvatar(
+                GlobalStore.languages[search.language]!.flag,
+              );
+            }),
           ),
           Expanded(
             child: Padding(
@@ -88,11 +121,11 @@ class SearchToolbarState extends State<SearchToolbar> {
               ),
             ),
           ),
-          IconButton(
-            onPressed:
-                inputController.text.isEmpty ? null : inputController.clear,
-            icon: const Icon(Icons.clear_rounded),
-          ),
+          if (inputController.text.isNotEmpty)
+            IconButton(
+              onPressed: inputController.clear,
+              icon: const Icon(Icons.clear_rounded),
+            ),
         ],
       ),
     );

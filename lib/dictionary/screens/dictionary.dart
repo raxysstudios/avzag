@@ -3,16 +3,13 @@ import 'package:avzag/dictionary/widgets/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/shared/widgets/rounded_menu_button.dart';
-import 'package:avzag/widgets/loading_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
-import '../models/entry.dart';
 import '../models/word.dart';
+import '../services/sheets.dart';
 import '../widgets/search_toolbar.dart';
-import 'word.dart';
 
 class DictionaryScreen extends StatefulWidget {
   const DictionaryScreen({Key? key}) : super(key: key);
@@ -74,13 +71,20 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                             uses: [],
                             language: EditorStore.language!,
                           ),
+                          elseEntry: entry,
+                          onEdit: (e) => entry = e,
+                          context: context,
                         );
                       },
                       tooltip: 'New',
                       child: const Icon(Icons.add_rounded),
                     )
                   : FloatingActionButton(
-                      onPressed: openEntry,
+                      onPressed: () => openEntry(
+                        elseEntry: entry,
+                        onEdit: (e) => entry = e,
+                        context: context,
+                      ),
                       tooltip: 'Resume',
                       child: const Icon(Icons.edit_rounded),
                     )
@@ -127,7 +131,12 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                     sliver: SearchResultsSliver(
                       context.watch<SearchController>(),
                       context.watch<PagingController<int, String>>(),
-                      onTap: (h) => openEntry(hit: h),
+                      onTap: (h) => openEntry(
+                        hit: h,
+                        elseEntry: entry,
+                        onEdit: (e) => entry = e,
+                        context: context,
+                      ),
                     ),
                   );
                 },
@@ -137,73 +146,5 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
         );
       },
     );
-  }
-
-  Future openEntry({Word? entry, Entry? hit}) async {
-    Word? sourceEntry;
-    await showLoadingDialog(
-      context,
-      (() async {
-        if (entry == null && hit != null) entry = await _loadEntry(hit.entryID);
-        if (EditorStore.isAdmin) {
-          sourceEntry = await _loadEntry(entry?.contribution?.overwriteId);
-        }
-      })(),
-    );
-    entry ??= this.entry;
-    if (entry == null) return;
-
-    final media = MediaQuery.of(context);
-    final childSize =
-        1 - (kToolbarHeight + media.padding.top) / media.size.height;
-    await showModalBottomSheet<Word>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          minChildSize: childSize - .1,
-          initialChildSize: childSize,
-          maxChildSize: childSize,
-          expand: false,
-          builder: (context, scroll) {
-            return Center(
-              child: Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(16),
-                  ),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: WordScreen(
-                  entry!,
-                  editing: hit == null,
-                  sourceEntry: sourceEntry,
-                  onEdited: (e) => this.entry = e,
-                  scroll: scroll,
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-    setState(() {});
-  }
-
-  Future<Word?> _loadEntry(String? id) async {
-    if (id == null) return null;
-    return await FirebaseFirestore.instance
-        .collection('dictionary')
-        .doc(id)
-        .withConverter(
-          fromFirestore: (snapshot, _) => Word.fromJson(
-            snapshot.data()!,
-            snapshot.id,
-          ),
-          toFirestore: (Word object, _) => object.toJson(),
-        )
-        .get()
-        .then((s) => s.data());
   }
 }

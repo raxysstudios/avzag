@@ -23,6 +23,20 @@ class OptionItem {
           ],
         );
 
+  OptionItem.tile(
+    Widget leading,
+    Widget title, [
+    this.onTap,
+  ]) : widget = Row(
+          children: [
+            const SizedBox(width: 16),
+            leading,
+            const SizedBox(width: 16),
+            title,
+            const SizedBox(width: 16),
+          ],
+        );
+
   OptionItem.divider()
       : widget = null,
         onTap = null;

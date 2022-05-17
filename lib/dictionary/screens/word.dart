@@ -2,21 +2,17 @@ import 'package:avzag/dictionary/widgets/meaning_tile.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
-import 'package:avzag/utils/contribution.dart';
 import 'package:avzag/utils/editor_utils.dart';
-import 'package:avzag/utils/snackbar_manager.dart';
 import 'package:avzag/widgets/caption.dart';
-import 'package:avzag/widgets/danger_dialog.dart';
-import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:avzag/widgets/note_tile.dart';
 import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/widgets/rounded_back_button.dart';
 import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../models/word.dart';
+import '../services/word.dart';
 
 class WordScreen extends StatefulWidget {
   final Word entry;
@@ -175,7 +171,11 @@ class _WordScreenState extends State<WordScreen> {
                     Icons.upload_rounded,
                     'Submit changes',
                     () async {
-                      if (await submit(context)) {
+                      if (await submitWord(
+                        context,
+                        entry,
+                        isReviewing,
+                      )) {
                         exit(context);
                       }
                     },
@@ -191,7 +191,7 @@ class _WordScreenState extends State<WordScreen> {
                       Icons.delete_rounded,
                       'Delete entry',
                       () async {
-                        if (await delete(context)) {
+                        if (await deleteWord(context, entry.id!)) {
                           exit(context);
                         }
                       },
@@ -253,66 +253,6 @@ class _WordScreenState extends State<WordScreen> {
         style: Theme.of(context).textTheme.headline6,
       ),
     );
-  }
-
-  Future<bool> submit(BuildContext context) async {
-    if (!isReviewing && (this.entry.uses.isEmpty || this.entry.forms.isEmpty)) {
-      showSnackbar(
-        context,
-        text: 'Must have at least a form and a use.',
-      );
-      return false;
-    }
-    final docId = isReviewing
-        ? this.entry.contribution?.overwriteId
-        : EditorStore.isAdmin
-            ? this.entry.id
-            : null;
-    final entry = Word.fromJson(this.entry.toJson(), this.entry.id);
-    entry.contribution = EditorStore.isAdmin
-        ? null
-        : Contribution(
-            EditorStore.uid!,
-            overwriteId: entry.id,
-          );
-
-    return await showLoadingDialog<bool>(
-          context,
-          FirebaseFirestore.instance
-              .collection('dictionary')
-              .doc(docId)
-              .set(entry.toJson())
-              .then((_) {
-            if (isReviewing) {
-              return FirebaseFirestore.instance
-                  .collection('dictionary')
-                  .doc(entry.id)
-                  .delete();
-            }
-          }).then((_) => true),
-        ) ??
-        false;
-  }
-
-  Future<bool> delete(BuildContext context) async {
-    final confirm = await showDangerDialog(
-      context,
-      'Delete entry?',
-      confirmText: 'Delete',
-      rejectText: 'Keep',
-    );
-    if (confirm) {
-      return await showLoadingDialog<bool>(
-            context,
-            FirebaseFirestore.instance
-                .collection('dictionary')
-                .doc(entry.id)
-                .delete()
-                .then((_) => true),
-          ) ??
-          false;
-    }
-    return false;
   }
 
   void exit(BuildContext context) {

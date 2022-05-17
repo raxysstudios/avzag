@@ -11,8 +11,8 @@ class MeaningTile extends StatelessWidget {
 
   const MeaningTile(
     this.use, {
-    Key? key,
     this.onEdited,
+    Key? key,
   }) : super(key: key);
 
   @override
