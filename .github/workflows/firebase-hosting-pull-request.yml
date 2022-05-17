@@ -2,7 +2,14 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on PR
-'on': pull_request
+'on':
+  pull_request:
+    paths-ignore:
+      - 'android/**'
+      - 'functions/**'
+      - 'ios/**'
+      - '**.md'
+
 jobs:
   build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
@@ -16,10 +23,23 @@ jobs:
       - name: Flutter 🦋
         uses: subosito/flutter-action@v1
 
-      - name: Build 🛠️
+      - name: Install dependencies 🧰
         run: |
           flutter pub get
-          flutter build web
+          flutter pub run build_runner build
+
+      - name: Analyze 🔍
+        uses: invertase/github-action-dart-analyzer@v1
+        with:
+          annotate: true
+          fatal-warnings: true
+          working-directory: ./
+
+      - name: Check formatting 🔬
+        run: dart format . -o none --set-exit-if-changed
+
+      - name: Build 🛠️
+        run: flutter build web
 
       - name: Deploy 📦
         uses: FirebaseExtended/action-hosting-deploy@v0
