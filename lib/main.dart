@@ -1,5 +1,4 @@
 import 'package:avzag/global_store.dart';
-import 'package:avzag/widgets/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'navigation/nav_drawer.dart';
@@ -60,13 +59,17 @@ class App extends StatelessWidget {
       title: 'Avzag',
       theme: themes[0],
       darkTheme: themes[1],
-      home: SplashScreen(
-        title: 'ÆVZAG',
+      home: FutureBuilder(
         future: GlobalStore.load(),
-        onLoaded: (context) => navigate(
-          context,
-          GlobalStore.prefs.getString('module') ?? 'home',
-        ),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            navigate(
+              context,
+              GlobalStore.prefs.getString('module') ?? 'home',
+            );
+          }
+          return const SizedBox();
+        },
       ),
     );
   }
