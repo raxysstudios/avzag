@@ -1,6 +1,5 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/utils/contribution.dart';
-import 'package:avzag/utils/snackbar_manager.dart';
 import 'package:avzag/widgets/danger_dialog.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,42 +23,27 @@ Future<Word?> loadWord(String? id) async {
   return doc.data();
 }
 
-Future<bool> submitWord(
-  BuildContext context,
-  Word word, [
-  bool isReviewing = false,
-]) async {
-  if (!isReviewing && (word.uses.isEmpty || word.forms.isEmpty)) {
-    showSnackbar(
-      context,
-      text: 'Must have at least a form and a use.',
-    );
-    return false;
-  }
-  final docId = isReviewing
-      ? word.contribution?.overwriteId
-      : EditorStore.isAdmin
-          ? word.id
-          : null;
-  final entry = Word.fromJson(word.toJson(), word.id);
-  entry.contribution = EditorStore.isAdmin
+Future<bool> submitWord(BuildContext context, Word word) async {
+  final overwrite = word.contribution?.overwriteId;
+  final id = overwrite ?? word.id;
+  word.contribution = EditorStore.isAdmin
       ? null
       : Contribution(
           EditorStore.uid!,
-          overwriteId: entry.id,
+          overwriteId: id,
         );
 
   return await showLoadingDialog<bool>(
         context,
         FirebaseFirestore.instance
             .collection('dictionary')
-            .doc(docId)
-            .set(entry.toJson())
+            .doc(id)
+            .set(word.toJson())
             .then((_) {
-          if (isReviewing) {
+          if (overwrite != null) {
             return FirebaseFirestore.instance
                 .collection('dictionary')
-                .doc(entry.id)
+                .doc(word.id)
                 .delete();
           }
         }).then((_) => true),

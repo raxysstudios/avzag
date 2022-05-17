@@ -64,27 +64,29 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
           floatingActionButton: EditorStore.isEditing
               ? entry == null
                   ? FloatingActionButton(
-                      onPressed: () {
-                        openEntry(
-                          entry: Word(
-                            forms: [],
-                            uses: [],
-                            language: EditorStore.language!,
-                          ),
-                          elseEntry: entry,
-                          onEdit: (e) => entry = e,
-                          context: context,
-                        );
-                      },
+                      // onPressed: () {
+                      //   openEntry(
+                      //     entry: Word(
+                      //       forms: [],
+                      //       uses: [],
+                      //       language: EditorStore.language!,
+                      //     ),
+                      //     elseEntry: entry,
+                      //     onEdit: (e) => entry = e,
+                      //     context: context,
+                      //   );
+                      // },
+                      onPressed: () {},
                       tooltip: 'New',
                       child: const Icon(Icons.add_rounded),
                     )
                   : FloatingActionButton(
-                      onPressed: () => openEntry(
-                        elseEntry: entry,
-                        onEdit: (e) => entry = e,
-                        context: context,
-                      ),
+                      onPressed: () {},
+                      // onPressed: () => openEntry(
+                      //   elseEntry: entry,
+                      //   onEdit: (e) => entry = e,
+                      //   context: context,
+                      // ),
                       tooltip: 'Resume',
                       child: const Icon(Icons.edit_rounded),
                     )
@@ -131,12 +133,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                     sliver: SearchResultsSliver(
                       context.watch<SearchController>(),
                       context.watch<PagingController<int, String>>(),
-                      onTap: (h) => openEntry(
-                        hit: h,
-                        elseEntry: entry,
-                        onEdit: (e) => entry = e,
-                        context: context,
-                      ),
+                      onTap: (h) => openWord(context, h.entryID),
                     ),
                   );
                 },

@@ -1,55 +1,35 @@
 import 'package:avzag/dictionary/widgets/meaning_tile.dart';
+import 'package:avzag/dictionary/widgets/sample_tile.dart';
+import 'package:avzag/dictionary/widgets/segment.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_flag.dart';
-import 'package:avzag/shared/widgets/options_button.dart';
+import 'package:avzag/shared/widgets/column_card.dart';
+import 'package:avzag/shared/widgets/markdown_text.dart';
 import 'package:avzag/utils/editor_utils.dart';
-import 'package:avzag/widgets/caption.dart';
+import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/note_tile.dart';
-import 'package:avzag/widgets/page_title.dart';
 import 'package:avzag/widgets/rounded_back_button.dart';
 import 'package:avzag/widgets/tags_tile.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 import 'package:flutter/material.dart';
 
 import '../models/word.dart';
-import '../services/word.dart';
 
 class WordScreen extends StatefulWidget {
-  final Word entry;
-  final Word? sourceEntry;
-  final ValueSetter<Word?>? onEdited;
-  final bool editing;
-  final ScrollController? scroll;
-
   const WordScreen(
-    this.entry, {
-    this.onEdited,
-    this.sourceEntry,
-    this.editing = false,
+    this.word, {
     this.scroll,
     Key? key,
   }) : super(key: key);
+
+  final Word word;
+  final ScrollController? scroll;
 
   @override
   State<WordScreen> createState() => _WordScreenState();
 }
 
 class _WordScreenState extends State<WordScreen> {
-  Word get entry => widget.entry;
-  EditorCallback? editor;
-
-  bool get isReviewing =>
-      EditorStore.isAdmin &&
-      entry.language == EditorStore.language &&
-      entry.contribution != null;
-  bool showSource = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.editing) startEditing();
-  }
-
   List<Widget> buildEntry(
     BuildContext context,
     Word entry, [
@@ -138,132 +118,55 @@ class _WordScreenState extends State<WordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final word = widget.word;
     return Scaffold(
       appBar: AppBar(
         leading: const RoundedBackButton(),
-        title: editor == null
-            ? PageTitle(
-                entry.forms[0].plain,
-                subtitle: entry.language,
-              )
-            : PageTitle(
-                'Entry editor',
-                subtitle: EditorStore.language,
-              ),
+        title: LanguageFlag(
+          GlobalStore.languages[word.language]!.flag,
+          offset: const Offset(32, 0),
+          scale: 15,
+        ),
         actions: [
-          Opacity(
-            opacity: 0.5,
-            child: LanguageFlag(
-              GlobalStore.languages[entry.language]!.flag,
-              offset: const Offset(-40, 4),
-              scale: 9,
-            ),
+          IconButton(
+            onPressed: () {},
+            tooltip: 'Share',
+            icon: const Icon(Icons.share_rounded),
           ),
+          const SizedBox(width: 4),
         ],
       ),
-      floatingActionButton: Builder(
-        builder: (context) {
-          if (entry.language == EditorStore.language) {
-            if (editor != null || isReviewing) {
-              return OptionsButton(
-                [
-                  OptionItem.simple(
-                    Icons.upload_rounded,
-                    'Submit changes',
-                    () async {
-                      if (await submitWord(
-                        context,
-                        entry,
-                        isReviewing,
-                      )) {
-                        exit(context);
-                      }
-                    },
-                  ),
-                  if (!isReviewing)
-                    OptionItem.simple(
-                      Icons.cancel_rounded,
-                      'Discard changes',
-                      () => exit(context),
-                    ),
-                  if (entry.id != null && EditorStore.isAdmin)
-                    OptionItem.simple(
-                      Icons.delete_rounded,
-                      'Delete entry',
-                      () async {
-                        if (await deleteWord(context, entry.id!)) {
-                          exit(context);
-                        }
-                      },
-                    ),
-                ],
-                elevated: true,
-                icon: const Icon(Icons.done_all_rounded),
-              );
-            }
-            if (entry.contribution == null) {
-              return FloatingActionButton(
-                onPressed: startEditing,
-                tooltip: 'Edit',
-                child: const Icon(Icons.edit_rounded),
-              );
-            }
-          }
-          return const SizedBox();
-        },
-      ),
+      floatingActionButton: word.language == EditorStore.language
+          ? FloatingActionButton(
+              onPressed: () {},
+              tooltip: 'Edit',
+              child: const Icon(Icons.edit_rounded),
+            )
+          : null,
       body: ListView(
         controller: widget.scroll,
         padding: const EdgeInsets.only(bottom: 76),
         children: [
-          if (isReviewing) ...[
-            SwitchListTile(
-              value: !showSource,
-              onChanged: widget.sourceEntry == null
-                  ? null
-                  : (v) => setState(() {
-                        showSource = !v;
-                      }),
-              secondary: const Icon(Icons.unpublished_rounded),
-              title: const Text('Reviewing contribution'),
-            ),
-            const Divider(),
-          ],
-          ...buildEntry(
-            context,
-            showSource ? widget.sourceEntry! : entry,
-            isReviewing ? null : editor,
+          Segment(
+            title: capitalize(word.forms.first.plain),
+            subtitle: prettyTags(word.tags),
+            body: word.note,
+            children: [
+              for (final f in word.forms) SampleTile(f),
+            ],
           ),
-          if (editor == null && !isReviewing && entry.contribution != null)
-            const Caption(
-              'Unverified',
-              icon: Icons.unpublished_rounded,
+          for (final u in word.uses)
+            Segment(
+              title: capitalize(u.term),
+              subtitle: prettyTags(u.tags),
+              body: u.note,
+              children: [
+                if (u.samples != null)
+                  for (final s in u.samples!) SampleTile(s),
+              ],
             ),
         ],
       ),
     );
-  }
-
-  Widget buildHeader(BuildContext context, String text) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headline6,
-      ),
-    );
-  }
-
-  void exit(BuildContext context) {
-    widget.onEdited?.call(null);
-    Navigator.pop(context);
-  }
-
-  void startEditing() {
-    widget.onEdited?.call(entry);
-    setState(() {
-      editor = getEditor(setState);
-    });
   }
 }

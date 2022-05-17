@@ -54,7 +54,7 @@ class MeaningTile extends StatelessWidget {
     Use? use,
     required ValueSetter<Use?> callback,
   }) {
-    final result = use == null ? Use(term: '') : Use.fromJson(use.toJson());
+    final result = use == null ? Use('') : Use.fromJson(use.toJson());
     var aliases = result.aliases?.join(' ');
     showEditorDialog(
       context,

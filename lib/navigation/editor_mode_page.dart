@@ -43,7 +43,7 @@ class _EditorModePageState extends State<EditorModePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Editor Mode'),
+        title: const Text('Account'),
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(

@@ -1,11 +1,12 @@
 import 'package:avzag/dictionary/models/use.dart';
 import 'package:avzag/utils/contribution.dart';
 import 'package:avzag/utils/utils.dart';
-import 'package:avzag/widgets/text_sample_tiles.dart';
+
+import 'sample.dart';
 
 class Word {
   String? id;
-  List<TextSample> forms;
+  List<Sample> forms;
   String language;
   List<String>? tags;
   String? note;
@@ -29,7 +30,7 @@ class Word {
           id: id,
           forms: listFromJson(
             json['forms'],
-            (dynamic j) => TextSample.fromJson(j as Map<String, dynamic>),
+            (dynamic j) => Sample.fromJson(j as Map<String, dynamic>),
           )!,
           language: json['language'] as String,
           uses: listFromJson(

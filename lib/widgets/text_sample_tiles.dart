@@ -1,42 +1,12 @@
+import 'package:avzag/dictionary/models/sample.dart';
 import 'package:avzag/utils/snackbar_manager.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'editor_dialog.dart';
 
-class TextSample {
-  String plain;
-  String? ipa;
-  String? glossed;
-  String? translation;
-
-  TextSample(
-    this.plain, {
-    this.ipa,
-    this.glossed,
-    this.translation,
-  });
-
-  TextSample.fromJson(Map<String, dynamic> json)
-      : this(
-          json['plain'] as String,
-          ipa: json['ipa'] as String?,
-          glossed: json['glossed'] as String?,
-          translation: json['translation'] as String?,
-        );
-
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['plain'] = plain;
-    if (ipa?.isNotEmpty ?? false) data['ipa'] = ipa;
-    if (glossed?.isNotEmpty ?? false) data['glossed'] = glossed;
-    if (translation?.isNotEmpty ?? false) data['translation'] = translation;
-    return data;
-  }
-}
-
 class TextSampleTiles extends StatefulWidget {
-  final List<TextSample>? samples;
-  final ValueSetter<List<TextSample>?>? onEdited;
+  final List<Sample>? samples;
+  final ValueSetter<List<Sample>?>? onEdited;
   final String name;
   final IconData? icon;
   final bool translation;
@@ -92,9 +62,9 @@ class _TextSampleTilesState extends State<TextSampleTiles> {
   void showEditor(BuildContext context, int index) {
     final samples = widget.samples ?? [];
     final result = index < samples.length
-        ? TextSample.fromJson(samples[index].toJson())
-        : TextSample('');
-    showEditorDialog<List<TextSample>>(
+        ? Sample.fromJson(samples[index].toJson())
+        : Sample('');
+    showEditorDialog<List<Sample>>(
       context,
       result: () {
         if (index < samples.length) {

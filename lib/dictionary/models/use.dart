@@ -1,15 +1,17 @@
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 
+import 'sample.dart';
+
 class Use {
   String term;
   List<String>? aliases;
   List<String>? tags;
   String? note;
-  List<TextSample>? samples;
+  List<Sample>? samples;
 
-  Use({
-    required this.term,
+  Use(
+    this.term, {
     this.aliases,
     this.tags,
     this.note,
@@ -18,13 +20,13 @@ class Use {
 
   Use.fromJson(Map<String, dynamic> json)
       : this(
-          term: json['term'] as String,
+          json['term'] as String,
           aliases: json2list(json['aliases']),
           tags: json2list(json['tags']),
           note: json['note'] as String?,
           samples: listFromJson(
             json['samples'],
-            (dynamic j) => TextSample.fromJson(j as Map<String, dynamic>),
+            (dynamic j) => Sample.fromJson(j as Map<String, dynamic>),
           ),
         );
 
