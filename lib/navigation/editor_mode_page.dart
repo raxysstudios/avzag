@@ -13,7 +13,7 @@ class EditorModePage extends StatefulWidget {
   const EditorModePage({Key? key}) : super(key: key);
 
   @override
-  _EditorModePageState createState() => _EditorModePageState();
+  State<EditorModePage> createState() => _EditorModePageState();
 }
 
 class _EditorModePageState extends State<EditorModePage> {

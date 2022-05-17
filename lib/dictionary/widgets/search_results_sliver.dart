@@ -4,8 +4,9 @@ import 'package:avzag/widgets/span_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import 'hit_tile.dart';
-import 'search_controller.dart';
+import '../models/entry.dart';
+import '../search_controller.dart';
+import 'entry_tile.dart';
 
 class SearchResultsSliver extends StatelessWidget {
   const SearchResultsSliver(
@@ -17,7 +18,7 @@ class SearchResultsSliver extends StatelessWidget {
 
   final SearchController search;
   final PagingController<int, String> paging;
-  final ValueSetter<EntryHit>? onTap;
+  final ValueSetter<Entry>? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +77,7 @@ class SearchResultsSliver extends StatelessWidget {
                       children: [
                         if (index > 0) const Divider(),
                         for (var i = 0; i < hits.length; i++)
-                          HitTile(
+                          EntryTile(
                             hits[i],
                             showLanguage: i == 0,
                             onTap: onTap == null ? null : () => onTap!(hits[i]),

@@ -1,7 +1,7 @@
 import 'package:algolia/algolia.dart';
 import 'package:flutter/material.dart';
 
-import 'hit_tile.dart';
+import 'models/entry.dart';
 
 class SearchController with ChangeNotifier {
   SearchController(
@@ -39,8 +39,8 @@ class SearchController with ChangeNotifier {
   final Map<String, Set<String>> _tags = {};
   Set<String> getTags(String id) => _tags[id] ?? {};
 
-  final Map<String, Map<String, List<EntryHit>>> _hits = {};
-  List<List<EntryHit>> getHits(String id) {
+  final Map<String, Map<String, List<Entry>>> _hits = {};
+  List<List<Entry>> getHits(String id) {
     final hits = _hits[id] ?? {};
     final languages = _languages.where((l) => hits[l]!.isNotEmpty);
     return languages.map((l) => hits[l]!).toList();
@@ -87,11 +87,11 @@ class SearchController with ChangeNotifier {
           .then((h) => h.toList());
     }
     return _organizeHits(
-      hits.map((h) => EntryHit.fromAlgoliaHit(h)),
+      hits.map((h) => Entry.fromAlgoliaHit(h)),
     );
   }
 
-  List<String> _organizeHits(Iterable<EntryHit> hits) {
+  List<String> _organizeHits(Iterable<Entry> hits) {
     final newIds = <String>[];
     for (final hit in hits) {
       final id = monolingual ? hit.objectID : hit.term;

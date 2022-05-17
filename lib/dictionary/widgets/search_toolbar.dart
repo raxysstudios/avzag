@@ -4,7 +4,7 @@ import 'package:avzag/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'search_controller.dart';
+import '../search_controller.dart';
 import 'search_mode_button.dart';
 
 class SearchToolbar extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:avzag/dictionary/search_controller.dart';
-import 'package:avzag/dictionary/search_results_sliver.dart';
+import 'package:avzag/dictionary/widgets/search_results_sliver.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
 import 'package:avzag/widgets/loading_dialog.dart';
@@ -9,20 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
-import 'entry.dart';
-import 'entry_page.dart';
-import 'hit_tile.dart';
-import 'search_toolbar.dart';
+import '../models/entry.dart';
+import '../models/word.dart';
+import '../widgets/search_toolbar.dart';
+import 'word.dart';
 
-class DictionaryPage extends StatefulWidget {
-  const DictionaryPage({Key? key}) : super(key: key);
+class DictionaryScreen extends StatefulWidget {
+  const DictionaryScreen({Key? key}) : super(key: key);
 
   @override
-  _DictionaryPageState createState() => _DictionaryPageState();
+  State<DictionaryScreen> createState() => _DictionaryScreenState();
 }
 
-class _DictionaryPageState extends State<DictionaryPage> {
-  Entry? entry;
+class _DictionaryScreenState extends State<DictionaryScreen> {
+  Word? entry;
 
   final paging = PagingController<int, String>(
     firstPageKey: 0,
@@ -69,7 +69,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   ? FloatingActionButton(
                       onPressed: () {
                         openEntry(
-                          entry: Entry(
+                          entry: Word(
                             forms: [],
                             uses: [],
                             language: EditorStore.language!,
@@ -139,8 +139,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
     );
   }
 
-  Future openEntry({Entry? entry, EntryHit? hit}) async {
-    Entry? sourceEntry;
+  Future openEntry({Word? entry, Entry? hit}) async {
+    Word? sourceEntry;
     await showLoadingDialog(
       context,
       (() async {
@@ -156,7 +156,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
     final media = MediaQuery.of(context);
     final childSize =
         1 - (kToolbarHeight + media.padding.top) / media.size.height;
-    await showModalBottomSheet<Entry>(
+    await showModalBottomSheet<Word>(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -175,7 +175,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                   ),
                 ),
                 clipBehavior: Clip.antiAlias,
-                child: EntryPage(
+                child: WordScreen(
                   entry!,
                   editing: hit == null,
                   sourceEntry: sourceEntry,
@@ -191,17 +191,17 @@ class _DictionaryPageState extends State<DictionaryPage> {
     setState(() {});
   }
 
-  Future<Entry?> _loadEntry(String? id) async {
+  Future<Word?> _loadEntry(String? id) async {
     if (id == null) return null;
     return await FirebaseFirestore.instance
         .collection('dictionary')
         .doc(id)
         .withConverter(
-          fromFirestore: (snapshot, _) => Entry.fromJson(
+          fromFirestore: (snapshot, _) => Word.fromJson(
             snapshot.data()!,
             snapshot.id,
           ),
-          toFirestore: (Entry object, _) => object.toJson(),
+          toFirestore: (Word object, _) => object.toJson(),
         )
         .get()
         .then((s) => s.data());

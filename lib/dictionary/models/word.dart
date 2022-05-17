@@ -1,9 +1,9 @@
-import 'package:avzag/dictionary/use.dart';
+import 'package:avzag/dictionary/models/use.dart';
 import 'package:avzag/utils/contribution.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/text_sample_tiles.dart';
 
-class Entry {
+class Word {
   String? id;
   List<TextSample> forms;
   String language;
@@ -12,7 +12,7 @@ class Entry {
   List<Use> uses;
   Contribution? contribution;
 
-  Entry({
+  Word({
     this.id,
     required this.forms,
     required this.language,
@@ -22,7 +22,7 @@ class Entry {
     this.note,
   });
 
-  Entry.fromJson(
+  Word.fromJson(
     Map<String, dynamic> json, [
     String? id,
   ]) : this(

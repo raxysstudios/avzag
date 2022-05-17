@@ -3,7 +3,7 @@ import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/editor_dialog.dart';
 import 'package:flutter/material.dart';
 
-import 'use.dart';
+import '../models/use.dart';
 
 class MeaningTile extends StatelessWidget {
   final Use use;

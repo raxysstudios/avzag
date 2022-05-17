@@ -1,4 +1,4 @@
-import 'package:avzag/dictionary/meaning_tile.dart';
+import 'package:avzag/dictionary/widgets/meaning_tile.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_flag.dart';
 import 'package:avzag/utils/contribution.dart';
@@ -16,16 +16,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-import 'entry.dart';
+import '../models/word.dart';
 
-class EntryPage extends StatefulWidget {
-  final Entry entry;
-  final Entry? sourceEntry;
-  final ValueSetter<Entry?>? onEdited;
+class WordScreen extends StatefulWidget {
+  final Word entry;
+  final Word? sourceEntry;
+  final ValueSetter<Word?>? onEdited;
   final bool editing;
   final ScrollController? scroll;
 
-  const EntryPage(
+  const WordScreen(
     this.entry, {
     this.onEdited,
     this.sourceEntry,
@@ -35,11 +35,11 @@ class EntryPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<EntryPage> createState() => _EntryPageState();
+  State<WordScreen> createState() => _WordScreenState();
 }
 
-class _EntryPageState extends State<EntryPage> {
-  Entry get entry => widget.entry;
+class _WordScreenState extends State<WordScreen> {
+  Word get entry => widget.entry;
   EditorCallback? editor;
 
   bool get isReviewing =>
@@ -56,7 +56,7 @@ class _EntryPageState extends State<EntryPage> {
 
   List<Widget> buildEntry(
     BuildContext context,
-    Entry entry, [
+    Word entry, [
     EditorCallback? editor,
   ]) {
     return [
@@ -282,7 +282,7 @@ class _EntryPageState extends State<EntryPage> {
         : EditorStore.isAdmin
             ? this.entry.id
             : null;
-    final entry = Entry.fromJson(this.entry.toJson(), this.entry.id);
+    final entry = Word.fromJson(this.entry.toJson(), this.entry.id);
     entry.contribution = EditorStore.isAdmin
         ? null
         : Contribution(

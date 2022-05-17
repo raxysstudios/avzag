@@ -1,4 +1,4 @@
-import 'package:avzag/dictionary/dictionary_page.dart';
+import 'package:avzag/dictionary/screens/dictionary.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/home_page.dart';
 import 'package:avzag/utils/utils.dart';
@@ -26,7 +26,7 @@ Future<void> navigate(
     builder = (_) => const HomePage();
     title = null;
   } else if (title == 'dictionary') {
-    builder = (_) => const DictionaryPage();
+    builder = (_) => const DictionaryScreen();
   } else {
     builder = (_) => const Text('No Route');
   }
