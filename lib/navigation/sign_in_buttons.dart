@@ -108,7 +108,9 @@ class _SignInButtonsState extends State<SignInButtons> {
           apple.AppleIDAuthorizationScopes.fullName,
         ],
         webAuthenticationOptions: apple.WebAuthenticationOptions(
-            clientId: clientID, redirectUri: Uri.parse(redirectURL)),
+          clientId: clientID,
+          redirectUri: Uri.parse(redirectURL),
+        ),
         nonce: nonce,
       );
       // Create an `OAuthCredential` from the credential returned by Apple.

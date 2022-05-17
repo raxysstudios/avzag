@@ -1,19 +1,22 @@
+import 'package:avzag/utils/open_link.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class MarkdownText extends StatelessWidget {
   const MarkdownText(
     this.text, {
+    this.selectable = true,
     Key? key,
   }) : super(key: key);
 
+  final bool selectable;
   final String text;
 
   @override
   Widget build(BuildContext context) {
     return MarkdownBody(
       data: text,
+      selectable: selectable,
       styleSheet: MarkdownStyleSheet(
         p: const TextStyle(
           fontSize: 16,
@@ -23,12 +26,7 @@ class MarkdownText extends StatelessWidget {
         ),
       ),
       onTapLink: (_, link, __) {
-        if (link != null) {
-          launchUrl(
-            Uri.parse(link),
-            mode: LaunchMode.externalApplication,
-          );
-        }
+        if (link != null) openLink(link);
       },
     );
   }

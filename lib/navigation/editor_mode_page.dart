@@ -1,11 +1,11 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/language_avatar.dart';
 import 'package:avzag/navigation/sign_in_buttons.dart';
+import 'package:avzag/utils/open_link.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/span_icon.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'nav_drawer.dart';
 
@@ -124,9 +124,7 @@ class _EditorModePageState extends State<EditorModePage> {
                           trailing: l.contact == null
                               ? null
                               : IconButton(
-                                  onPressed: () => launchUrl(
-                                    Uri.parse(l.contact!),
-                                  ),
+                                  onPressed: () => openLink(l.contact!),
                                   icon: const Icon(Icons.send_rounded),
                                   tooltip: 'Contact admin',
                                 ),

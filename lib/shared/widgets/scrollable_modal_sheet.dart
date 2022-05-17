@@ -1,11 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 Future<T?> showScrollableModalSheet<T>({
   required BuildContext context,
   required ScrollableWidgetBuilder builder,
-  bool transparent = false,
 }) {
   final media = MediaQueryData.fromWindow(window);
   final size =
@@ -21,16 +19,12 @@ Future<T?> showScrollableModalSheet<T>({
         maxChildSize: size,
         builder: (context, controller) {
           return Material(
-            shape: transparent
-                ? null
-                : const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(16),
-                    ),
-                  ),
-            color: transparent
-                ? Colors.transparent
-                : Theme.of(context).scaffoldBackgroundColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
+            ),
+            color: Theme.of(context).scaffoldBackgroundColor,
             clipBehavior: Clip.antiAlias,
             child: builder(context, controller),
           );

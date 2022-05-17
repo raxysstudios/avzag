@@ -1,7 +1,6 @@
+import 'package:avzag/shared/widgets/markdown_text.dart';
 import 'package:avzag/widgets/editor_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class NoteTile extends StatelessWidget {
   final String? note;
@@ -27,20 +26,9 @@ class NoteTile extends StatelessWidget {
                 color: Theme.of(context).textTheme.caption?.color,
               ),
             )
-          : MarkdownBody(
-              data: note!,
+          : MarkdownText(
+              note!,
               selectable: onEdited == null,
-              styleSheet: MarkdownStyleSheet(
-                p: const TextStyle(
-                  fontSize: 16,
-                ),
-                strong: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onTapLink: (_, link, __) {
-                if (link != null) launchUrl(Uri.parse(link));
-              },
             ),
       onTap: onEdited == null ? null : () => showEditor(context),
     );

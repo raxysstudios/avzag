@@ -2,6 +2,7 @@ import 'package:avzag/dictionary/screens/dictionary.dart';
 import 'package:avzag/global_store.dart';
 import 'package:avzag/home/home_page.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
+import 'package:avzag/utils/open_link.dart';
 import 'package:avzag/utils/utils.dart';
 import 'package:avzag/widgets/expandable_tile.dart';
 import 'package:avzag/widgets/raxys_logo.dart';
@@ -9,7 +10,6 @@ import 'package:avzag/widgets/span_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'editor_mode_page.dart';
 
 Future<void> navigate(
@@ -101,9 +101,7 @@ class NavDraver extends StatelessWidget {
                     ),
                     title: const Text('Developer Contact'),
                     subtitle: const Text('Raxys Studios'),
-                    onTap: () => launchUrl(
-                      Uri.parse('https://t.me/raxysstudios'),
-                    ),
+                    onTap: () => openLink('https://t.me/raxysstudios'),
                   ),
                   FutureBuilder<PackageInfo>(
                     future: PackageInfo.fromPlatform(),
@@ -123,10 +121,8 @@ class NavDraver extends StatelessWidget {
                         ),
                         title: const Text('GitHub Repository'),
                         subtitle: Text(info),
-                        onTap: () => launchUrl(
-                          Uri.parse(
-                            'https://github.com/raxysstudios/avzag',
-                          ),
+                        onTap: () => openLink(
+                          'https://github.com/raxysstudios/avzag',
                         ),
                       );
                     },

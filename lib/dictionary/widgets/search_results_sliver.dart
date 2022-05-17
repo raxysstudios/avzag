@@ -33,7 +33,7 @@ class SearchResultsSliver extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(18, 8, 18, 4),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
                 child: RichText(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
