@@ -23,7 +23,7 @@ class App extends StatelessWidget {
       theme: themes.light,
       darkTheme: themes.dark,
       home: FutureBuilder(
-        future:  GlobalStore.init(),
+        future: GlobalStore.init(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             navigate(
