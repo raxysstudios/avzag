@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:avzag/global_store.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
@@ -79,14 +79,14 @@ class SearchToolbarState extends State<SearchToolbar> {
                 () => setLanguage('_'),
               ),
               OptionItem.divider(),
-              for (final l in GlobalStore.languages.values)
+              for (final l in GlobalStore.languages.keys)
                 OptionItem.tile(
-                  LanguageAvatar(l.name),
+                  LanguageAvatar(l),
                   Text(
-                    capitalize(l.name),
+                    capitalize(l),
                     style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
-                  () => setLanguage(l.name),
+                  () => setLanguage(l),
                 )
             ],
             icon: Builder(builder: (context) {
@@ -96,9 +96,7 @@ class SearchToolbarState extends State<SearchToolbar> {
               if (search.language == '_') {
                 return const Icon(Icons.layers_rounded);
               }
-              return LanguageAvatar(
-                GlobalStore.languages[search.language]!.name,
-              );
+              return LanguageAvatar(search.language);
             }),
           ),
           Expanded(

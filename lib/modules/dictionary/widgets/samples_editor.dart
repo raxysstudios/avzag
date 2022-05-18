@@ -55,7 +55,7 @@ class _SamplesEditorState extends State<SamplesEditor> {
                     () => setState(() {
                       widget.samples.remove(s);
                     }),
-                    'Delete sample',
+                    'Delete the sample?',
                   ),
                   icon: const Icon(Icons.cancel_rounded),
                 ),

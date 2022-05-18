@@ -1,4 +1,4 @@
-import 'package:avzag/global_store.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/models/language.dart';
 import 'package:avzag/modules/navigation/nav_drawer.dart';
 import 'package:avzag/shared/utils/utils.dart';

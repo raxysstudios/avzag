@@ -1,4 +1,4 @@
-import 'package:avzag/global_store.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/home/screens/home.dart';
 import 'package:avzag/shared/utils/open_link.dart';

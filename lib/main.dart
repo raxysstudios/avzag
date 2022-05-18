@@ -1,4 +1,4 @@
-import 'package:avzag/global_store.dart';
+import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'config/themes.dart';
@@ -23,7 +23,7 @@ class App extends StatelessWidget {
       theme: themes.light,
       darkTheme: themes.dark,
       home: FutureBuilder(
-        future: GlobalStore.load(),
+        future:  GlobalStore.init(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             navigate(

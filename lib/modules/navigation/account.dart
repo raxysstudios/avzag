@@ -1,4 +1,4 @@
-import 'package:avzag/global_store.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/modules/navigation/sign_in_buttons.dart';
 import 'package:avzag/shared/utils/open_link.dart';
 import 'package:avzag/shared/utils/utils.dart';
@@ -66,11 +66,11 @@ class _AccountScreenState extends State<AccountScreen> {
           if (EditorStore.uid != null && GlobalStore.languages.isNotEmpty)
             ColumnCard(
               children: [
-                for (final l in GlobalStore.languages.values)
+                for (final l in GlobalStore.languages.keys)
                   Builder(
                     builder: (context) {
-                      final editing = l.name == EditorStore.language;
-                      final isAdmin = editable.contains(l.name);
+                      final editing = l == EditorStore.language;
+                      final isAdmin = editable.contains(l);
                       return ListTile(
                         leading: Badge(
                           padding: EdgeInsets.zero,
@@ -84,27 +84,32 @@ class _AccountScreenState extends State<AccountScreen> {
                                   color: theme.onSurface,
                                 )
                               : null,
-                          child: LanguageAvatar(l.name),
+                          child: LanguageAvatar(l),
                         ),
                         title: Text(
-                          capitalize(l.name),
+                          capitalize(l),
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 18,
                           ),
                         ),
                         onTap: () => setState(() {
-                          EditorStore.language = editing ? null : l.name;
+                          EditorStore.language = editing ? null : l;
                           EditorStore.isAdmin = !editing && isAdmin;
                         }),
                         selected: editing,
-                        trailing: l.contact == null
-                            ? null
-                            : IconButton(
-                                onPressed: () => openLink(l.contact!),
-                                icon: const Icon(Icons.send_rounded),
-                                tooltip: 'Contact admin',
-                              ),
+                        trailing: Builder(
+                          builder: (context) {
+                            final contact = GlobalStore.languages[l]?.contact;
+                            return contact == null
+                                ? const SizedBox()
+                                : IconButton(
+                                    onPressed: () => openLink(contact),
+                                    icon: const Icon(Icons.send_rounded),
+                                    tooltip: 'Contact admin',
+                                  );
+                          },
+                        ),
                       );
                     },
                   ),

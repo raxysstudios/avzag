@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:avzag/global_store.dart';
+import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 
 class LanguageFlag extends StatefulWidget {

@@ -41,46 +41,38 @@ class EditorStore {
 }
 
 class GlobalStore {
-  static bool _first = true;
   static late final Algolia algolia;
   static late final SharedPreferences prefs;
 
-  static Map<String, Language> _languages = {};
-  static Map<String, Language> get languages => _languages;
+  static Map<String, Language?> _languages = {};
+  static Map<String, Language?> get languages => _languages;
 
   static Future<void> load([List<String>? languages]) async {
-    if (_first) await _init();
     languages ??= prefs.getStringList('languages') ?? ['iron'];
+    _languages = {for (final l in languages) l: null};
 
-    await Future.wait<Language?>(
-      languages.map(
-        (l) => FirebaseFirestore.instance
-            .doc('languages/$l')
-            .withConverter(
-              fromFirestore: (snapshot, _) =>
-                  Language.fromJson(snapshot.data()!),
-              toFirestore: (_, __) => {},
-            )
-            .get()
-            .then((r) => r.data()),
-      ),
-    ).then(
-      (c) {
-        _languages = {
-          for (final l in c.where((l) => l != null)) l!.name: l,
-        };
-      },
-    );
+    for (final l in languages) {
+      FirebaseFirestore.instance
+          .doc('languages/$l')
+          .withConverter(
+            fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
+            toFirestore: (_, __) => {},
+          )
+          .get()
+          .then((r) {
+        final l = r.data();
+        if (l != null) _languages[l.name] = l;
+      });
+    }
 
-    await EditorStore._load(_languages.keys);
-    await prefs.setStringList(
+    EditorStore._load(_languages.keys);
+    prefs.setStringList(
       'languages',
       languages.where((l) => _languages.containsKey(l)).toList(),
     );
   }
 
-  static Future<void> _init() async {
-    _first = false;
+  static Future<void> init() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
@@ -89,5 +81,6 @@ class GlobalStore {
       applicationId: 'NYVVAA43NI',
       apiKey: 'cf52a68ac340fc555978892202ce37df',
     );
+    await load();
   }
 }

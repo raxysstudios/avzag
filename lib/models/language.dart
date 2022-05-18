@@ -38,9 +38,9 @@ class Language {
   Language.fromJson(Map<String, Object?> json)
       : this(
           name: json['name'] as String,
-          flag: json['flag'] as String,
+          flag: json['flag'] as String?,
           contact: json['contact'] as String?,
-          aliases: json2list(json['family']),
+          aliases: json2list(json['aliases']),
           location:
               json['location'] == null ? null : json['location'] as GeoPoint,
           stats: json['stats'] == null

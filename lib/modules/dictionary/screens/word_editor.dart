@@ -1,4 +1,4 @@
-import 'package:avzag/global_store.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -53,7 +53,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
           Opacity(
             opacity: .5,
             child: LanguageFlag(
-              GlobalStore.languages[word.language]?.name,
+              word.language,
               width: 160,
               offset: const Offset(32, -2),
               scale: 1.25,

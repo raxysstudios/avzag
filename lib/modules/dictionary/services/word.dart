@@ -1,4 +1,4 @@
-import 'package:avzag/global_store.dart';
+import 'package:avzag/store.dart';
 import 'package:avzag/shared/utils/contribution.dart';
 import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
 import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
