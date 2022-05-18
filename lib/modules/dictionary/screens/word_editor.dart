@@ -3,6 +3,7 @@ import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/compact_input.dart';
+import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
@@ -49,6 +50,15 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
         leading: const RoundedBackButton(),
         title: Text(capitalize(EditorStore.language)),
         actions: [
+          Opacity(
+            opacity: .5,
+            child: LanguageFlag(
+              GlobalStore.languages[word.language]!.flag,
+              width: 160,
+              offset: const Offset(32, -2),
+              scale: 1.25,
+            ),
+          ),
           if (EditorStore.isAdmin)
             OptionsButton(
               [
@@ -107,7 +117,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   (s) => word.tags = s.split(' '),
                 ),
                 CompactInput(
-                  Icons.info_outline_rounded,
+                  Icons.note_rounded,
                   'General note',
                   word.note,
                   (s) => word.note = s,
@@ -150,7 +160,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                     (s) => u.tags = s.split(' '),
                   ),
                   CompactInput(
-                    Icons.info_outline_rounded,
+                    Icons.note_rounded,
                     'Usage note',
                     u.note,
                     (s) => u.note = s,

@@ -29,9 +29,7 @@ class _SamplesEditorState extends State<SamplesEditor> {
       children: [
         ListTile(
           horizontalTitleGap: 0,
-          visualDensity: const VisualDensity(
-            vertical: VisualDensity.minimumDensity,
-          ),
+          visualDensity: VisualDensity.compact,
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           leading: Icon(widget.icon),
           title: Center(child: Text(widget.title)),
@@ -63,7 +61,7 @@ class _SamplesEditorState extends State<SamplesEditor> {
                 ),
               ),
               CompactInput(
-                Icons.lightbulb_rounded,
+                Icons.info_outline_rounded,
                 'Meaning',
                 s.meaning,
                 (t) => s.meaning = t,

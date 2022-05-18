@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class LanguageFlag extends StatefulWidget {
   final String? flag;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final double rotation;
   final Offset offset;
   final double scale;
@@ -15,11 +15,11 @@ class LanguageFlag extends StatefulWidget {
   const LanguageFlag(
     this.flag, {
     Key? key,
-    this.width = 16,
-    this.height = 4,
+    this.width,
+    this.height,
     this.rotation = -pi / 4,
     this.offset = const Offset(0, 0),
-    this.scale = 18,
+    this.scale = 1,
   }) : super(key: key);
 
   @override
@@ -47,19 +47,18 @@ class _LanguageFlagState extends State<LanguageFlag> {
   @override
   Widget build(BuildContext context) {
     if (url == null) return const Offstage();
-    return SizedBox(
-      width: widget.width,
-      height: widget.height,
-      child: Transform.translate(
-        offset: widget.offset,
-        child: Transform.rotate(
-          angle: widget.rotation,
-          child: Transform.scale(
-            scale: widget.scale,
-            child: Image.network(
-              url!,
-              repeat: ImageRepeat.repeatX,
-            ),
+    return Transform.translate(
+      offset: widget.offset,
+      child: Transform.rotate(
+        angle: widget.rotation,
+        child: Transform.scale(
+          scale: widget.scale,
+          child: Image.network(
+            url!,
+            repeat: ImageRepeat.repeatX,
+            fit: BoxFit.contain,
+            width: widget.width,
+            height: widget.height,
           ),
         ),
       ),

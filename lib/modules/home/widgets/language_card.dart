@@ -32,7 +32,10 @@ class LanguageCard extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: LanguageFlag(
                   language.flag,
-                  offset: const Offset(-32, 32),
+                  height: 32,
+                  width: 96,
+                  scale: 2,
+                  offset: const Offset(-16, 18),
                 ),
               ),
             ),

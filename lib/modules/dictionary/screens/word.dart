@@ -1,7 +1,9 @@
+import 'package:avzag/global_store.dart';
 import 'package:avzag/modules/dictionary/widgets/samples_list.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
+import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/markdown_text.dart';
 import 'package:avzag/shared/widgets/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
@@ -33,8 +35,22 @@ class _WordScreenState extends State<WordScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const RoundedBackButton(),
-        title: Text(capitalize(word.language)),
+        title: Stack(
+          alignment: Alignment.center,
+          children: [
+            Text(capitalize(word.language)),
+          ],
+        ),
         actions: [
+          Opacity(
+            opacity: .5,
+            child: LanguageFlag(
+              GlobalStore.languages[word.language]!.flag,
+              width: 160,
+              offset: const Offset(32, -2),
+              scale: 1.25,
+            ),
+          ),
           if (widget.onEdit != null)
             IconButton(
               onPressed: () {
@@ -100,7 +116,7 @@ class _WordScreenState extends State<WordScreen> {
               children: [
                 Text(
                   capitalize(u.term),
-                  style: theme.headline6?.copyWith(fontSize: 16),
+                  style: theme.headline6?.copyWith(fontSize: 18),
                 ),
                 if (u.tags.isNotEmpty)
                   Text(
