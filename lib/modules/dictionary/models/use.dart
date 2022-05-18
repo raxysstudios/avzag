@@ -24,7 +24,7 @@ class Use {
           tags: json2list(json['tags']) ?? [],
           note: json['note'] as String?,
           examples: listFromJson(
-                json['samples'],
+                json['examples'],
                 (dynamic j) => Sample.fromJson(j as Map<String, dynamic>),
               ) ??
               [],
@@ -37,7 +37,7 @@ class Use {
     if (tags.isNotEmpty) data['tags'] = tags;
     if (note?.isNotEmpty ?? false) data['note'] = note;
     if (examples.isNotEmpty) {
-      data['samples'] = examples.map((v) => v.toJson()).toList();
+      data['examples'] = examples.map((v) => v.toJson()).toList();
     }
     return data;
   }
