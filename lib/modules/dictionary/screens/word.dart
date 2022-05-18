@@ -3,9 +3,8 @@ import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/markdown_text.dart';
+import 'package:avzag/shared/widgets/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
-import 'package:avzag/shared/widgets/snackbar_manager.dart';
-
 import 'package:flutter/material.dart';
 
 import '../models/word.dart';

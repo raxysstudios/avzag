@@ -1,8 +1,8 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
-import 'package:avzag/shared/widgets/danger_dialog.dart';
-import 'package:avzag/shared/widgets/editor_dialog.dart';
+import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
+import 'package:avzag/shared/widgets/modals/editor_dialog.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:flutter/material.dart';

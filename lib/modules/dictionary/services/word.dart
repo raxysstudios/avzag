@@ -1,7 +1,7 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/shared/utils/contribution.dart';
-import 'package:avzag/shared/widgets/danger_dialog.dart';
-import 'package:avzag/shared/widgets/loading_dialog.dart';
+import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
+import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
