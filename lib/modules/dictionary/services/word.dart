@@ -2,6 +2,7 @@ import 'package:avzag/global_store.dart';
 import 'package:avzag/shared/utils/contribution.dart';
 import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
 import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
+import 'package:avzag/shared/widgets/modals/snackbar_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,17 @@ Future<Word?> loadWord(String? id) async {
   return doc.data();
 }
 
-Future<void> submitWord(BuildContext context, Word word) async {
+void submitWord(
+  BuildContext context,
+  Word word, [
+  VoidCallback? after,
+]) async {
+  if (word.uses.isEmpty) {
+    return showSnackbar(
+      context,
+      text: 'Must have at least one use',
+    );
+  }
   final overwrite = word.contribution?.overwriteId;
   final id = overwrite ?? word.id;
   word.contribution = EditorStore.isAdmin
@@ -47,16 +58,20 @@ Future<void> submitWord(BuildContext context, Word word) async {
             .delete();
       }
     }),
-  );
+  ).then((_) => after?.call());
 }
 
-Future<void> deleteWord(BuildContext context, String id) async {
-  await showDangerDialog(
+void deleteWord(
+  BuildContext context,
+  String id, [
+  VoidCallback? after,
+]) {
+  showDangerDialog(
     context,
-    await showLoadingDialog(
+    () => showLoadingDialog(
       context,
       FirebaseFirestore.instance.collection('dictionary').doc(id).delete(),
-    ),
+    ).then((_) => after?.call()),
     'Delete entry?',
     confirmText: 'Delete',
     rejectText: 'Keep',

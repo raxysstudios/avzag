@@ -58,7 +58,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
   void edit([Word? word]) {
     if (word != null) {
       setState(() {
-        editing = Word.fromJson(word.toJson());
+        editing = Word.fromJson(word.toJson(), word.id);
       });
     }
     editing ??= Word(

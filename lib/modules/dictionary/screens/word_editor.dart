@@ -88,13 +88,13 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   OptionItem.simple(
                     Icons.cancel_rounded,
                     'Discard',
-                    () => exit(),
+                    exit,
                   ),
                 if (word.id != null)
                   OptionItem.simple(
                     Icons.delete_forever_rounded,
                     'Delete',
-                    () => deleteWord(context, word.id!).then((_) => exit()),
+                    () => deleteWord(context, word.id!, exit),
                   ),
               ],
             ),
@@ -105,7 +105,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
         child: const Icon(Icons.upload_rounded),
         onPressed: () async {
           if (form.currentState?.validate() ?? false) {
-            submitWord(context, word).then((_) => exit());
+            submitWord(context, word, exit);
           }
         },
       ),
