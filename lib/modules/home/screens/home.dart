@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.only(right: 4),
                         child: InputChip(
                           avatar: LanguageAvatar(
-                            language.name,
+                            null,
                             url: language.flag,
                             radius: 12,
                           ),
