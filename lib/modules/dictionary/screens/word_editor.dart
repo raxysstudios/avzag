@@ -1,4 +1,3 @@
-import 'package:avzag/store.dart';
 import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -7,6 +6,7 @@ import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
+import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 
 import '../models/use.dart';

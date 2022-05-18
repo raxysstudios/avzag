@@ -1,4 +1,3 @@
-import 'package:avzag/store.dart';
 import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/home/screens/home.dart';
 import 'package:avzag/shared/utils/open_link.dart';
@@ -7,9 +6,11 @@ import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/expandable_tile.dart';
 import 'package:avzag/shared/widgets/raxys_logo.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
+import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'account.dart';
 
 Future<void> navigate(
