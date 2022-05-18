@@ -35,7 +35,7 @@ class LanguageCard extends StatelessWidget {
                   height: 32,
                   width: 96,
                   scale: 2,
-                  offset: const Offset(-16, 18),
+                  offset: const Offset(0, 18),
                 ),
               ),
             ),
