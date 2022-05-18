@@ -27,7 +27,7 @@ export const indexDictionary = functions
           language: entry.language,
           forms: [
             entry.headword,
-            ...entry.forms.map(({text}: never) => text),
+            ...(entry.forms?.map((s: any) => s.text) ?? []),
           ],
         } as any;
         if (entry.contribution) {
