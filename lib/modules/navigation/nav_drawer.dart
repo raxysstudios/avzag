@@ -81,7 +81,7 @@ class NavDraver extends StatelessWidget {
                   opacity: .1,
                   scale: 7,
                 ),
-                contentPadding: EdgeInsets.only(left: 20),
+                contentPadding: EdgeInsets.only(left: 16),
                 title: Text(
                   'Ævzag',
                   style: TextStyle(
