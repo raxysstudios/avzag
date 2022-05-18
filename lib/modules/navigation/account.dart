@@ -1,11 +1,10 @@
-import 'package:avzag/store.dart';
 import 'package:avzag/modules/navigation/sign_in_buttons.dart';
 import 'package:avzag/shared/utils/open_link.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
-
+import 'package:avzag/store.dart';
 import 'package:badges/badges.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

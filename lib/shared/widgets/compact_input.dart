@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../utils/utils.dart';
-import 'modals/editor_dialog.dart';
+String? _emptyValidator(String? value) {
+  value = value?.trim() ?? '';
+  return value.isEmpty ? '' : null;
+}
 
 class CompactInput extends StatelessWidget {
   const CompactInput(
@@ -43,9 +45,12 @@ class CompactInput extends StatelessWidget {
         ),
         maxLines: multiline ? 0 : null,
         initialValue: initial,
-        validator: noEmpty ? emptyValidator : null,
-        inputFormatters: lowercase ? [LowerCaseTextFormatter()] : null,
-        onChanged: (s) => onChanged(s.trim()),
+        validator: noEmpty ? _emptyValidator : null,
+        onChanged: (s) {
+          s = s.trim();
+          if (lowercase) s = s.toLowerCase();
+          onChanged(s);
+        },
       ),
     );
   }

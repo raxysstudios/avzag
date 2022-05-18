@@ -1,4 +1,3 @@
-import 'package:avzag/store.dart';
 import 'package:avzag/modules/dictionary/widgets/samples_column.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
