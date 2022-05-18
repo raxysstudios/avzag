@@ -35,7 +35,8 @@ class EntryGroup extends StatelessWidget {
             children: [
               Text(
                 capitalize(groups.first.first.term),
-                style: const TextStyle(
+                style: TextStyle(
+                  color: theme.caption?.color,
                   fontWeight: FontWeight.w500,
                 ),
               ),

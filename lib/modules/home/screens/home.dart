@@ -11,14 +11,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-import 'language_card.dart';
-import 'languages_map.dart';
+import '../widgets/language_card.dart';
+import '../widgets/languages_map.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _LanguageOrdering {
@@ -37,7 +37,7 @@ class _LanguageOrdering {
   }
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   var catalogue = <Language>[];
   var tags = <String, String>{};
   var languages = <Language>[];

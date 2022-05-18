@@ -56,18 +56,19 @@ class DictionaryScreenState extends State<DictionaryScreen> {
   }
 
   void edit([Word? word]) {
-    if (word != null) {
-      setState(() {
+    setState(() {
+      if (word == null) {
+        editing ??= Word(
+          headword: '',
+          uses: [],
+          language: EditorStore.language!,
+          tags: [],
+          forms: [],
+        );
+      } else {
         editing = Word.fromJson(word.toJson(), word.id);
-      });
-    }
-    editing ??= Word(
-      headword: '',
-      uses: [],
-      language: EditorStore.language!,
-      tags: [],
-      forms: [],
-    );
+      }
+    });
     editWord(
       context,
       editing!,

@@ -107,7 +107,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   (s) => word.tags = s.split(' '),
                 ),
                 CompactInput(
-                  Icons.info_rounded,
+                  Icons.info_outline_rounded,
                   'General note',
                   word.note,
                   (s) => word.note = s,
@@ -116,7 +116,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
               ],
             ),
             SamplesEditor(Icons.layers_rounded, 'Forms', word.forms),
-            for (final u in word.uses)
+            for (final u in word.uses) ...[
               ColumnCard(
                 divider: null,
                 children: [
@@ -132,7 +132,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                         () => setState(() {
                           word.uses.remove(u);
                         }),
-                        'Delete this use?',
+                        'Delete the use?',
                       ),
                       icon: const Icon(Icons.delete_rounded),
                     ),
@@ -140,17 +140,17 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   CompactInput(
                     Icons.label_rounded,
                     'Aliases',
-                    u.aliases?.join(' '),
+                    u.aliases.join(' '),
                     (s) => u.aliases = s.split(' '),
                   ),
                   CompactInput(
                     Icons.tag_rounded,
                     'Semantic tags',
-                    u.tags?.join(' '),
+                    u.tags.join(' '),
                     (s) => u.tags = s.split(' '),
                   ),
                   CompactInput(
-                    Icons.info_rounded,
+                    Icons.info_outline_rounded,
                     'Usage note',
                     u.note,
                     (s) => u.note = s,
@@ -158,11 +158,20 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   ),
                 ],
               ),
+              SamplesEditor(Icons.notes_rounded, 'Examples', u.examples),
+            ],
             Padding(
               padding: const EdgeInsets.all(8),
               child: TextButton.icon(
                 onPressed: () => setState(() {
-                  word.uses.add(Use(''));
+                  word.uses.add(
+                    Use(
+                      '',
+                      aliases: [],
+                      tags: [],
+                      examples: [],
+                    ),
+                  );
                 }),
                 icon: const Icon(Icons.add_rounded),
                 label: const Text('Add use'),

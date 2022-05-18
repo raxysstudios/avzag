@@ -72,7 +72,7 @@ void deleteWord(
       context,
       FirebaseFirestore.instance.collection('dictionary').doc(id).delete(),
     ).then((_) => after?.call()),
-    'Delete entry?',
+    'Delete the word?',
     confirmText: 'Delete',
     rejectText: 'Keep',
   );

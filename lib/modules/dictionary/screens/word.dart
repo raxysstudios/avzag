@@ -60,8 +60,11 @@ class _WordScreenState extends State<WordScreen> {
         padding: const EdgeInsets.only(bottom: 76),
         children: [
           ColumnCard(
-            divider: const SizedBox(height: 8),
-            padding: const EdgeInsets.all(16),
+            divider: const SizedBox(height: 4),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
             children: [
               Text(
                 capitalize(word.headword),
@@ -89,14 +92,17 @@ class _WordScreenState extends State<WordScreen> {
             ),
           for (final u in word.uses) ...[
             ColumnCard(
-              divider: const SizedBox(height: 8),
-              padding: const EdgeInsets.all(16),
+              divider: const SizedBox(height: 4),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
               children: [
                 Text(
                   capitalize(u.term),
                   style: theme.headline6?.copyWith(fontSize: 16),
                 ),
-                if (u.tags != null)
+                if (u.tags.isNotEmpty)
                   Text(
                     prettyTags(u.tags)!,
                     style: theme.caption,
@@ -104,7 +110,7 @@ class _WordScreenState extends State<WordScreen> {
                 if (u.note != null) MarkdownText(u.note!),
               ],
             ),
-            if (u.samples != null) SamplesList(u.samples!),
+            if (u.examples.isNotEmpty) SamplesList(u.examples),
           ],
           if (word.contribution != null)
             const Caption(

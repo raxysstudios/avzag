@@ -16,7 +16,7 @@ class CompactInput extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final IconData icon;
+  final IconData? icon;
   final String label;
   final String? initial;
   final ValueSetter<String> onChanged;

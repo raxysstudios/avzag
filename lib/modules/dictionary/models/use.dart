@@ -4,39 +4,40 @@ import 'sample.dart';
 
 class Use {
   String term;
-  List<String>? aliases;
-  List<String>? tags;
+  List<String> aliases;
+  List<String> tags;
   String? note;
-  List<Sample>? samples;
+  List<Sample> examples;
 
   Use(
     this.term, {
-    this.aliases,
-    this.tags,
+    required this.aliases,
+    required this.tags,
     this.note,
-    this.samples,
+    required this.examples,
   });
 
   Use.fromJson(Map<String, dynamic> json)
       : this(
           json['term'] as String,
-          aliases: json2list(json['aliases']),
-          tags: json2list(json['tags']),
+          aliases: json2list(json['aliases']) ?? [],
+          tags: json2list(json['tags']) ?? [],
           note: json['note'] as String?,
-          samples: listFromJson(
-            json['samples'],
-            (dynamic j) => Sample.fromJson(j as Map<String, dynamic>),
-          ),
+          examples: listFromJson(
+                json['samples'],
+                (dynamic j) => Sample.fromJson(j as Map<String, dynamic>),
+              ) ??
+              [],
         );
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['term'] = term;
-    if (aliases?.isNotEmpty ?? false) data['aliases'] = aliases;
-    if (tags?.isNotEmpty ?? false) data['tags'] = tags;
+    if (aliases.isNotEmpty) data['aliases'] = aliases;
+    if (tags.isNotEmpty) data['tags'] = tags;
     if (note?.isNotEmpty ?? false) data['note'] = note;
-    if (samples?.isNotEmpty ?? false) {
-      data['samples'] = samples!.map((v) => v.toJson()).toList();
+    if (examples.isNotEmpty) {
+      data['samples'] = examples.map((v) => v.toJson()).toList();
     }
     return data;
   }

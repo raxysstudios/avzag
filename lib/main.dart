@@ -31,7 +31,7 @@ class App extends StatelessWidget {
               GlobalStore.prefs.getString('module') ?? 'home',
             );
           }
-          return const SizedBox();
+          return const Material();
         },
       ),
     );

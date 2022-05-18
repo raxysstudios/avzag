@@ -1,6 +1,6 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/modules/dictionary/screens/dictionary.dart';
-import 'package:avzag/modules/home/home_page.dart';
+import 'package:avzag/modules/home/screens/home.dart';
 import 'package:avzag/shared/utils/open_link.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -24,7 +24,7 @@ Future<void> navigate(
 
   late Widget Function(BuildContext) builder;
   if (title == 'home') {
-    builder = (_) => const HomePage();
+    builder = (_) => const HomeScreen();
     title = null;
   } else if (title == 'dictionary') {
     builder = (_) => const DictionaryScreen();

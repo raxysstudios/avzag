@@ -29,6 +29,9 @@ class _SamplesEditorState extends State<SamplesEditor> {
       children: [
         ListTile(
           horizontalTitleGap: 0,
+          visualDensity: const VisualDensity(
+            vertical: VisualDensity.minimumDensity,
+          ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 20),
           leading: Icon(widget.icon),
           title: Center(child: Text(widget.title)),
@@ -56,7 +59,7 @@ class _SamplesEditorState extends State<SamplesEditor> {
                     }),
                     'Delete sample',
                   ),
-                  icon: const Icon(Icons.delete_rounded),
+                  icon: const Icon(Icons.cancel_rounded),
                 ),
               ),
               CompactInput(
