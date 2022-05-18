@@ -25,7 +25,10 @@ export const indexDictionary = functions
           entryID,
           headword: entry.headword,
           language: entry.language,
-          forms: entry.forms.map(({text}: never) => text),
+          forms: [
+            entry.headword,
+            ...entry.forms.map(({text}: never) => text),
+          ],
         } as any;
         if (entry.contribution) {
           base.unverified = true;
