@@ -1,5 +1,7 @@
 import 'package:avzag/global_store.dart';
+import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
 import 'package:avzag/modules/navigation/nav_drawer.dart';
+import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -8,18 +10,17 @@ import 'package:provider/provider.dart';
 import '../models/word.dart';
 import '../search_controller.dart';
 import '../services/sheets.dart';
-import '../widgets/search_results_sliver.dart';
 import '../widgets/search_toolbar.dart';
 
 class DictionaryScreen extends StatefulWidget {
   const DictionaryScreen({Key? key}) : super(key: key);
 
   @override
-  State<DictionaryScreen> createState() => _DictionaryScreenState();
+  State<DictionaryScreen> createState() => DictionaryScreenState();
 }
 
-class _DictionaryScreenState extends State<DictionaryScreen> {
-  Word? entry;
+class DictionaryScreenState extends State<DictionaryScreen> {
+  Word? editing;
 
   final paging = PagingController<int, String>(
     firstPageKey: 0,
@@ -54,6 +55,26 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
     super.dispose();
   }
 
+  void edit([Word? word]) {
+    if (word != null) {
+      setState(() {
+        editing = Word.fromJson(word.toJson());
+      });
+    }
+    editing ??= Word(
+      headword: '',
+      uses: [],
+      language: EditorStore.language!,
+    );
+    editWord(
+      context,
+      editing!,
+      () => setState(() {
+        editing = null;
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
@@ -62,34 +83,13 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
         return Scaffold(
           drawer: const NavDraver(title: 'dictionary'),
           floatingActionButton: EditorStore.isEditing
-              ? entry == null
-                  ? FloatingActionButton(
-                      // onPressed: () {
-                      //   openEntry(
-                      //     entry: Word(
-                      //       forms: [],
-                      //       uses: [],
-                      //       language: EditorStore.language!,
-                      //     ),
-                      //     elseEntry: entry,
-                      //     onEdit: (e) => entry = e,
-                      //     context: context,
-                      //   );
-                      // },
-                      onPressed: () {},
-                      tooltip: 'New',
-                      child: const Icon(Icons.add_rounded),
-                    )
-                  : FloatingActionButton(
-                      onPressed: () {},
-                      // onPressed: () => openEntry(
-                      //   elseEntry: entry,
-                      //   onEdit: (e) => entry = e,
-                      //   context: context,
-                      // ),
-                      tooltip: 'Resume',
-                      child: const Icon(Icons.edit_rounded),
-                    )
+              ? FloatingActionButton(
+                  onPressed: edit,
+                  tooltip: editing == null ? 'New' : 'Resume',
+                  child: Icon(
+                    editing == null ? Icons.add_rounded : Icons.edit_rounded,
+                  ),
+                )
               : null,
           body: CustomScrollView(
             slivers: [
@@ -98,21 +98,18 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                 title: const Text('Dictionary'),
                 actions: [
                   if (EditorStore.isAdmin)
-                    Consumer<SearchController>(
-                      builder: (context, search, _) {
-                        final theme = Theme.of(context).colorScheme;
-                        return IconButton(
-                          onPressed: () => setState(() {
-                            search.unverified = !search.unverified;
-                            search.updateQuery();
-                          }),
-                          icon: Icon(
-                            Icons.unpublished_rounded,
-                            color: search.unverified ? theme.primary : null,
-                          ),
-                          tooltip: 'Filter unverified',
-                        );
-                      },
+                    IconButton(
+                      onPressed: () => setState(() {
+                        search.unverified = !search.unverified;
+                        search.updateQuery();
+                      }),
+                      icon: Icon(
+                        Icons.unpublished_rounded,
+                        color: search.unverified
+                            ? Theme.of(context).colorScheme.primary
+                            : null,
+                      ),
+                      tooltip: 'Unverified',
                     ),
                   const SizedBox(width: 4),
                 ],
@@ -125,23 +122,45 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                 floating: true,
                 forceElevated: true,
               ),
-              ChangeNotifierProvider.value(
-                value: paging,
-                builder: (context, _) {
-                  return SliverPadding(
-                    padding: const EdgeInsets.only(bottom: 76),
-                    sliver: SearchResultsSliver(
-                      context.watch<SearchController>(),
-                      context.watch<PagingController<int, String>>(),
-                      onTap: (h) => openWord(context, h.entryID),
-                    ),
-                  );
-                },
+              PagedSliverList(
+                pagingController: paging,
+                builderDelegate: PagedChildBuilderDelegate<String>(
+                  itemBuilder: (context, id, _) {
+                    return EntryGroup(
+                      search.getHits(id),
+                      onTap: (e) => openWord(
+                        context,
+                        e.entryID,
+                        editing == null &&
+                                e.language == EditorStore.language &&
+                                EditorStore.isEditing
+                            ? edit
+                            : null,
+                      ),
+                      showLanguage: GlobalStore.languages.length > 1 &&
+                          !search.monolingual,
+                    );
+                  },
+                  noItemsFoundIndicatorBuilder: _endCaption,
+                  noMoreItemsIndicatorBuilder: _endCaption,
+                ),
+              ),
+              const SliverPadding(
+                padding: EdgeInsets.only(bottom: 76),
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _endCaption(BuildContext context) {
+    return Caption(
+      search.monolingual
+          ? 'End of the results'
+          : 'Showing the first 50 entries',
+      icon: Icons.done_all_rounded,
     );
   }
 }

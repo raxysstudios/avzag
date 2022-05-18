@@ -1,4 +1,3 @@
-import 'package:avzag/global_store.dart';
 import 'package:avzag/modules/dictionary/widgets/samples_list.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
@@ -15,11 +14,13 @@ class WordScreen extends StatefulWidget {
   const WordScreen(
     this.word, {
     this.scroll,
+    this.onEdit,
     Key? key,
   }) : super(key: key);
 
   final Word word;
   final ScrollController? scroll;
+  final ValueSetter<Word>? onEdit;
 
   @override
   State<WordScreen> createState() => _WordScreenState();
@@ -35,9 +36,12 @@ class _WordScreenState extends State<WordScreen> {
         leading: const RoundedBackButton(),
         title: Text(capitalize(word.language)),
         actions: [
-          if (word.language == EditorStore.language)
+          if (widget.onEdit != null)
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+                widget.onEdit!(word);
+              },
               tooltip: 'Edit',
               icon: const Icon(Icons.edit_rounded),
             ),
@@ -91,7 +95,7 @@ class _WordScreenState extends State<WordScreen> {
               children: [
                 Text(
                   capitalize(u.term),
-                  style: theme.headline6?.copyWith(fontSize: 18),
+                  style: theme.headline6?.copyWith(fontSize: 16),
                 ),
                 if (u.tags != null)
                   Text(

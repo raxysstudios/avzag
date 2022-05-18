@@ -1,6 +1,7 @@
 import 'package:avzag/global_store.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
+import 'package:avzag/shared/widgets/danger_dialog.dart';
 import 'package:avzag/shared/widgets/editor_dialog.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
@@ -13,49 +14,72 @@ import '../services/word.dart';
 class WordEditorScreen extends StatefulWidget {
   const WordEditorScreen(
     this.word, {
+    this.scroll,
+    this.onDone,
     Key? key,
   }) : super(key: key);
 
-  final Word? word;
+  final Word word;
+  final ScrollController? scroll;
+  final VoidCallback? onDone;
 
   @override
   State<WordEditorScreen> createState() => _WordEditorScreenState();
 }
 
 class _WordEditorScreenState extends State<WordEditorScreen> {
-  late final Word word;
   final form = GlobalKey<FormState>();
 
+  Word get word => widget.word;
   bool get isReviewing =>
       EditorStore.isAdmin &&
       word.language == EditorStore.language &&
       word.contribution != null;
 
-  @override
-  void initState() {
-    super.initState();
-    word = widget.word ??
-        Word(
-          headword: '',
-          uses: [],
-          language: EditorStore.language!,
-        );
+  void exit() {
+    Navigator.pop(context);
+    widget.onDone?.call();
   }
 
-  void exit() => Navigator.pop(context);
+  Widget _inputField(
+    IconData icon,
+    String label,
+    String? initial,
+    ValueSetter<String> onChanged, {
+    bool lowercase = true,
+    bool noEmpty = false,
+    Widget? trailing,
+    bool multiline = false,
+  }) {
+    return ListTile(
+      minVerticalPadding: 0,
+      visualDensity: const VisualDensity(
+        vertical: VisualDensity.minimumDensity,
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+      trailing: trailing,
+      title: TextFormField(
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon),
+          labelText: label,
+          isDense: true,
+          border: InputBorder.none,
+        ),
+        maxLines: multiline ? 0 : null,
+        initialValue: initial,
+        validator: noEmpty ? emptyValidator : null,
+        inputFormatters: lowercase ? [LowerCaseTextFormatter()] : null,
+        onChanged: (s) => onChanged(s.trim()),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: const RoundedBackButton(),
-        title: Row(
-          children: [
-            const Icon(Icons.edit_rounded),
-            const SizedBox(width: 16),
-            Text(capitalize(EditorStore.language))
-          ],
-        ),
+        title: Text(capitalize(EditorStore.language)),
         actions: [
           if (EditorStore.isAdmin)
             OptionsButton(
@@ -68,18 +92,17 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   ),
                 if (word.id != null)
                   OptionItem.simple(
-                    Icons.delete_rounded,
+                    Icons.delete_forever_rounded,
                     'Delete',
                     () => deleteWord(context, word.id!).then((_) => exit()),
                   ),
               ],
-              icon: const Icon(Icons.done_all_rounded),
             ),
           const SizedBox(width: 4),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.done_all_rounded),
+        child: const Icon(Icons.upload_rounded),
         onPressed: () async {
           if (form.currentState?.validate() ?? false) {
             submitWord(context, word).then((_) => exit());
@@ -90,83 +113,85 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
         key: form,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
+          controller: widget.scroll,
           padding: const EdgeInsets.only(bottom: 76),
           children: [
-            ListTile(
-              leading: const Icon(Icons.tag_rounded),
-              title: TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Form tags',
+            ColumnCard(
+              divider: null,
+              children: [
+                _inputField(
+                  Icons.bookmark_rounded,
+                  'Headword',
+                  word.headword,
+                  (s) => word.headword = s,
+                  noEmpty: true,
                 ),
-                initialValue: word.tags?.join(' '),
-                inputFormatters: [LowerCaseTextFormatter()],
-                onChanged: (s) => word.tags = s.trim().split(' '),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.info_rounded),
-              title: TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'General note',
+                _inputField(
+                  Icons.volume_up_rounded,
+                  'Headword IPA',
+                  word.ipa,
+                  (s) => word.ipa = s,
                 ),
-                initialValue: word.note,
-                inputFormatters: [LowerCaseTextFormatter()],
-                onChanged: (s) => word.note = s.trim(),
-              ),
+                _inputField(
+                  Icons.tag_rounded,
+                  'Form tags',
+                  word.tags?.join(' '),
+                  (s) => word.tags = s.split(' '),
+                ),
+                _inputField(
+                  Icons.info_rounded,
+                  'General note',
+                  word.note,
+                  (s) => word.note = s,
+                  lowercase: false,
+                ),
+              ],
             ),
-            for (final use in word.uses)
+            for (final u in word.uses)
               ColumnCard(
+                divider: null,
                 children: [
-                  ListTile(
-                    leading: const Icon(Icons.lightbulb_rounded),
-                    title: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Term',
+                  _inputField(
+                    Icons.lightbulb_rounded,
+                    'Term',
+                    u.term,
+                    (s) => u.term = s,
+                    noEmpty: true,
+                    trailing: IconButton(
+                      onPressed: () => showDangerDialog(
+                        context,
+                        () => setState(() {
+                          word.uses.remove(u);
+                        }),
+                        'Delete this use?',
                       ),
-                      initialValue: use.term,
-                      validator: emptyValidator,
-                      inputFormatters: [LowerCaseTextFormatter()],
-                      onChanged: (s) => use.term = s.trim(),
+                      icon: const Icon(Icons.delete_rounded),
                     ),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.label_rounded),
-                    title: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Aliases',
-                      ),
-                      initialValue: use.aliases?.join(' '),
-                      inputFormatters: [LowerCaseTextFormatter()],
-                      onChanged: (s) => use.aliases = s.trim().split(' '),
-                    ),
+                  _inputField(
+                    Icons.label_rounded,
+                    'Aliases',
+                    u.aliases?.join(' '),
+                    (s) => u.aliases = s.split(' '),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.tag_rounded),
-                    title: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Semantic tags',
-                      ),
-                      initialValue: use.tags?.join(' '),
-                      inputFormatters: [LowerCaseTextFormatter()],
-                      onChanged: (s) => use.tags = s.trim().split(' '),
-                    ),
+                  _inputField(
+                    Icons.tag_rounded,
+                    'Semantic tags',
+                    u.tags?.join(' '),
+                    (s) => u.tags = s.split(' '),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.info_rounded),
-                    title: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Note',
-                      ),
-                      initialValue: use.note,
-                      inputFormatters: [LowerCaseTextFormatter()],
-                      onChanged: (s) => use.note = s.trim(),
-                    ),
+                  _inputField(
+                    Icons.info_rounded,
+                    'Usage note',
+                    u.note,
+                    (s) => u.note = s,
+                    lowercase: false,
                   ),
                 ],
               ),
             Padding(
               padding: const EdgeInsets.all(8),
-              child: ElevatedButton.icon(
+              child: TextButton.icon(
                 onPressed: () => setState(() {
                   word.uses.add(Use(''));
                 }),

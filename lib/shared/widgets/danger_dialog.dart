@@ -1,14 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-Future<bool> showDangerDialog(
+Future<T?> showDangerDialog<T>(
   BuildContext context,
+  FutureOr<T> onConfirm,
   String title, {
   IconData confirmIcon = Icons.delete_rounded,
   String confirmText = 'Delete',
   IconData rejectIcon = Icons.edit_rounded,
   String rejectText = 'Keep',
 }) {
-  return showDialog<bool>(
+  return showDialog<T>(
     context: context,
     builder: (context) {
       final theme = Theme.of(context).colorScheme;
@@ -16,7 +19,10 @@ Future<bool> showDangerDialog(
         title: Text(title),
         actions: [
           TextButton.icon(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () async => Navigator.pop(
+              context,
+              await onConfirm,
+            ),
             icon: Icon(confirmIcon),
             label: Text(confirmText),
             style: ButtonStyle(
@@ -27,12 +33,12 @@ Future<bool> showDangerDialog(
             ),
           ),
           TextButton.icon(
-            onPressed: () => Navigator.pop(context, false),
+            onPressed: () => Navigator.pop(context),
             icon: Icon(rejectIcon),
             label: Text(rejectText),
           ),
         ],
       );
     },
-  ).then((value) => value ?? false);
+  );
 }

@@ -26,10 +26,8 @@ Future<T?> showLoadingDialog<T>(
     Navigator.pop(context);
     return result;
   } catch (e) {
-    // ignore: avoid_print
-    print(e);
     Navigator.pop(context);
     showSnackbar(context);
-    return null;
+    rethrow;
   }
 }

@@ -51,16 +51,14 @@ Future<void> submitWord(BuildContext context, Word word) async {
 }
 
 Future<void> deleteWord(BuildContext context, String id) async {
-  final confirm = await showDangerDialog(
+  await showDangerDialog(
     context,
+    await showLoadingDialog(
+      context,
+      FirebaseFirestore.instance.collection('dictionary').doc(id).delete(),
+    ),
     'Delete entry?',
     confirmText: 'Delete',
     rejectText: 'Keep',
   );
-  if (confirm) {
-    await showLoadingDialog(
-      context,
-      FirebaseFirestore.instance.collection('dictionary').doc(id).delete(),
-    );
-  }
 }
