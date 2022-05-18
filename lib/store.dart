@@ -47,7 +47,18 @@ class GlobalStore {
   static Map<String, Language?> _languages = {};
   static Map<String, Language?> get languages => _languages;
 
-  static Future<void> load([List<String>? languages]) async {
+  static Future<void> set(List<Language> languages) async {
+    _languages = {
+      for (final l in languages) l.name: l,
+    };
+    await EditorStore._load(_languages.keys);
+    await prefs.setStringList(
+      'languages',
+      languages.map((l) => l.name).toList(),
+    );
+  }
+
+  static Future<void> _load([List<String>? languages]) async {
     languages ??= prefs.getStringList('languages') ?? ['iron'];
     _languages = {for (final l in languages) l: null};
 
@@ -81,6 +92,6 @@ class GlobalStore {
       applicationId: 'NYVVAA43NI',
       apiKey: 'cf52a68ac340fc555978892202ce37df',
     );
-    await load();
+    await _load();
   }
 }

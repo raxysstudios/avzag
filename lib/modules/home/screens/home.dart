@@ -1,4 +1,3 @@
-import 'package:avzag/store.dart';
 import 'package:avzag/models/language.dart';
 import 'package:avzag/modules/navigation/nav_drawer.dart';
 import 'package:avzag/shared/utils/utils.dart';
@@ -6,6 +5,7 @@ import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
 import 'package:avzag/shared/widgets/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
+import 'package:avzag/store.dart';
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -154,9 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           await showLoadingDialog(
             context,
-            GlobalStore.load(
-              selected.map((s) => s.name).toList(),
-            ),
+            GlobalStore.set(selected.toList()),
           );
           navigate(context);
         },

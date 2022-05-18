@@ -32,6 +32,7 @@ class LanguageCard extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: LanguageFlag(
                   language.name,
+                  url: language.flag,
                   height: 32,
                   width: 96,
                   scale: 2,
