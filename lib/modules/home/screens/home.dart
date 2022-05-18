@@ -191,6 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: InputChip(
                           avatar: LanguageAvatar(
                             language.name,
+                            url: language.flag,
                             radius: 12,
                           ),
                           label: Text(
