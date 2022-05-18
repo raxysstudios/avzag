@@ -61,8 +61,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '882503981771',
     projectId: 'avzagapp',
     storageBucket: 'avzagapp.appspot.com',
-    androidClientId: '882503981771-3p0m53d8evsh2jmgoce6r9tb0qqomlnt.apps.googleusercontent.com',
-    iosClientId: '882503981771-nnnd93giupoogi7qiqpn039bq1kca0ap.apps.googleusercontent.com',
+    androidClientId:
+        '882503981771-3p0m53d8evsh2jmgoce6r9tb0qqomlnt.apps.googleusercontent.com',
+    iosClientId:
+        '882503981771-nnnd93giupoogi7qiqpn039bq1kca0ap.apps.googleusercontent.com',
     iosBundleId: 'com.alkaitagi.avzag',
   );
 }
