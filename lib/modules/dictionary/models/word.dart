@@ -32,13 +32,7 @@ class Word {
     String? id,
   ]) : this(
           id: id,
-          // headword: json['headword'] as String,
-          headword: listFromJson(
-            json['forms'],
-            (dynamic j) => Sample.fromJson(j as Map<String, dynamic>),
-          )!
-              .first
-              .text,
+          headword: json['headword'] as String,
           ipa: json['ipa'] as String?,
           forms: listFromJson(
                 json['forms'],
@@ -62,6 +56,7 @@ class Word {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['language'] = language;
+    data['headword'] = headword;
     if (ipa != null) data['ipa'] = ipa;
     if (forms.isNotEmpty) data['forms'] = forms.map((v) => v.toJson()).toList();
     data['language'] = language;

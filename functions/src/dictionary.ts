@@ -23,9 +23,9 @@ export const indexDictionary = functions
         const entry = change.after.data()!;
         const base = {
           entryID,
+          headword: entry.headword,
           language: entry.language,
-          forms: entry.forms.map(({plain}: never) => plain),
-          headword: entry.forms[0].plain,
+          forms: entry.forms.map(({text}: never) => text),
         } as any;
         if (entry.contribution) {
           base.unverified = true;

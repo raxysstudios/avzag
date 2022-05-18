@@ -9,14 +9,14 @@ class Sample {
 
   Sample.fromJson(Map<String, dynamic> json)
       : this(
-          json['plain'] as String,
-          meaning: json['translation'] as String?,
+          json['text'] as String,
+          meaning: json['meaning'] as String?,
         );
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['plain'] = text;
-    if (meaning?.isNotEmpty ?? false) data['translation'] = meaning;
+    data['text'] = text;
+    if (meaning?.isNotEmpty ?? false) data['meaning'] = meaning;
     return data;
   }
 }
