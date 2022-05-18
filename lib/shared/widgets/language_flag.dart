@@ -1,19 +1,17 @@
 import 'dart:math';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:avzag/global_store.dart';
 import 'package:flutter/material.dart';
 
 class LanguageFlag extends StatefulWidget {
-  final String? flag;
+  final String? language;
   final double? width;
   final double? height;
   final double rotation;
   final Offset offset;
   final double scale;
 
-  static final Map<String, String> urls = {};
-
   const LanguageFlag(
-    this.flag, {
+    this.language, {
     Key? key,
     this.width,
     this.height,
@@ -27,26 +25,10 @@ class LanguageFlag extends StatefulWidget {
 }
 
 class _LanguageFlagState extends State<LanguageFlag> {
-  String? get url => LanguageFlag.urls[widget.flag];
-
-  @override
-  void initState() {
-    super.initState();
-    if (url == null && widget.flag != null) {
-      FirebaseStorage.instance
-          .ref('flags/${widget.flag}.png')
-          .getDownloadURL()
-          .then(
-            (u) => setState(() {
-              LanguageFlag.urls[widget.flag!] = u;
-            }),
-          );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (url == null) return const Offstage();
+    final url = GlobalStore.languages[widget.language]?.flag;
+    if (url == null) return SizedBox();
     return Transform.translate(
       offset: widget.offset,
       child: Transform.rotate(
@@ -54,7 +36,7 @@ class _LanguageFlagState extends State<LanguageFlag> {
         child: Transform.scale(
           scale: widget.scale,
           child: Image.network(
-            url!,
+            url,
             repeat: ImageRepeat.repeatX,
             fit: BoxFit.contain,
             width: widget.width,

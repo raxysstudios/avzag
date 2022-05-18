@@ -53,7 +53,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
           Opacity(
             opacity: .5,
             child: LanguageFlag(
-              GlobalStore.languages[word.language]!.flag,
+              GlobalStore.languages[word.language]?.name,
               width: 160,
               offset: const Offset(32, -2),
               scale: 1.25,
@@ -106,7 +106,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                 ),
                 CompactInput(
                   Icons.volume_up_rounded,
-                  'Headword IPA',
+                  'IPA',
                   word.ipa,
                   (s) => word.ipa = s,
                 ),

@@ -22,8 +22,7 @@ class Language {
   final String name;
   final String? flag;
   final String? contact;
-  final List<String>? family;
-  final List<String>? tags;
+  final List<String>? aliases;
   final GeoPoint? location;
   final LanguageStats? stats;
 
@@ -31,8 +30,7 @@ class Language {
     required this.name,
     this.flag,
     this.contact,
-    this.tags,
-    this.family,
+    this.aliases,
     this.location,
     this.stats,
   });
@@ -42,24 +40,11 @@ class Language {
           name: json['name'] as String,
           flag: json['flag'] as String,
           contact: json['contact'] as String?,
-          family: json2list(json['family']),
-          tags: json2list(json['tags']),
+          aliases: json2list(json['family']),
           location:
               json['location'] == null ? null : json['location'] as GeoPoint,
           stats: json['stats'] == null
               ? null
               : LanguageStats.fromJson(json['stats'] as Map<String, Object?>),
         );
-
-  Map<String, Object?> toJson() {
-    final data = <String, dynamic>{};
-    data['name'] = name;
-    if (data['flag'] != null) data['flag'] = flag;
-    if (contact?.isNotEmpty ?? false) data['contact'] = contact;
-    if (family?.isNotEmpty ?? false) data['family'] = family;
-    if (tags?.isNotEmpty ?? false) data['tags'] = tags;
-    if (location != null) data['location'] = location;
-    if (stats != null) data['stats'] = stats!.toJson();
-    return data;
-  }
 }

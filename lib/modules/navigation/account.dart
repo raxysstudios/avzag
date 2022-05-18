@@ -84,7 +84,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   color: theme.onSurface,
                                 )
                               : null,
-                          child: LanguageAvatar(l.flag),
+                          child: LanguageAvatar(l.name),
                         ),
                         title: Text(
                           capitalize(l.name),

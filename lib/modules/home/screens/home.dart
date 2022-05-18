@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
     catalogue = await query
         .withConverter(
           fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
-          toFirestore: (Language language, _) => language.toJson(),
+          toFirestore: (__, _) => {},
         )
         .get()
         .then((r) => r.docs.map((d) => d.data()).toList());
@@ -94,8 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
       for (var l in catalogue)
         l.name: [
           l.name,
-          ...l.family ?? [],
-          ...l.tags ?? [],
+          ...l.aliases ?? [],
         ].join(' ')
     };
 
@@ -193,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.only(right: 4),
                         child: InputChip(
                           avatar: LanguageAvatar(
-                            language.flag,
+                            language.name,
                             radius: 12,
                           ),
                           label: Text(

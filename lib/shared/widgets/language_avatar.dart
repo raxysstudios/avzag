@@ -1,16 +1,15 @@
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:avzag/global_store.dart';
 import 'package:flutter/material.dart';
-import 'language_flag.dart';
 
 class LanguageAvatar extends StatefulWidget {
-  final String? flag;
+  final String? language;
   final double radius;
   static const double R = 12;
 
   const LanguageAvatar(
-    this.flag, {
-    Key? key,
+    this.language, {
     this.radius = 1.5 * R,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -18,31 +17,15 @@ class LanguageAvatar extends StatefulWidget {
 }
 
 class _LanguageAvatarState extends State<LanguageAvatar> {
-  String? get url => LanguageFlag.urls[widget.flag];
-
-  @override
-  void initState() {
-    super.initState();
-    if (url == null && widget.flag != null) {
-      FirebaseStorage.instance
-          .ref('flags/${widget.flag}.png')
-          .getDownloadURL()
-          .then(
-            (u) => setState(() {
-              LanguageFlag.urls[widget.flag!] = u;
-            }),
-          );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final url = GlobalStore.languages[widget.language]?.flag;
     if (url == null) return const Icon(Icons.flag_rounded);
     return Transform.scale(
       scale: widget.radius / LanguageAvatar.R,
       child: CircleAvatar(
         radius: LanguageAvatar.R,
-        backgroundImage: NetworkImage(url!),
+        backgroundImage: NetworkImage(url),
         backgroundColor: Colors.transparent,
       ),
     );

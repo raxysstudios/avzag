@@ -81,7 +81,7 @@ class SearchToolbarState extends State<SearchToolbar> {
               OptionItem.divider(),
               for (final l in GlobalStore.languages.values)
                 OptionItem.tile(
-                  LanguageAvatar(l.flag),
+                  LanguageAvatar(l.name),
                   Text(
                     capitalize(l.name),
                     style: const TextStyle(fontWeight: FontWeight.w500),
@@ -97,7 +97,7 @@ class SearchToolbarState extends State<SearchToolbar> {
                 return const Icon(Icons.layers_rounded);
               }
               return LanguageAvatar(
-                GlobalStore.languages[search.language]!.flag,
+                GlobalStore.languages[search.language]!.name,
               );
             }),
           ),

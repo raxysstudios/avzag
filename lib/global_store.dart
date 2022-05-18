@@ -59,7 +59,7 @@ class GlobalStore {
             .withConverter(
               fromFirestore: (snapshot, _) =>
                   Language.fromJson(snapshot.data()!),
-              toFirestore: (Language language, _) => language.toJson(),
+              toFirestore: (_, __) => {},
             )
             .get()
             .then((r) => r.data()),
