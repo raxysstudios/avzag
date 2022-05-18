@@ -1,5 +1,5 @@
 import 'package:avzag/global_store.dart';
-import 'package:avzag/modules/dictionary/widgets/samples_list.dart';
+import 'package:avzag/modules/dictionary/widgets/samples_column.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -102,7 +102,7 @@ class _WordScreenState extends State<WordScreen> {
             ],
           ),
           if (word.forms.isNotEmpty)
-            SamplesList(
+            SamplesColumn(
               word.forms.skip(1),
               inline: true,
             ),
@@ -126,7 +126,7 @@ class _WordScreenState extends State<WordScreen> {
                 if (u.note != null) MarkdownText(u.note!),
               ],
             ),
-            if (u.examples.isNotEmpty) SamplesList(u.examples),
+            if (u.examples.isNotEmpty) SamplesColumn(u.examples),
           ],
           if (word.contribution != null)
             const Caption(

@@ -2,8 +2,8 @@ import 'package:avzag/shared/utils/text.dart';
 import 'package:flutter/material.dart';
 import '../models/sample.dart';
 
-class SamplesList extends StatelessWidget {
-  const SamplesList(
+class SamplesColumn extends StatelessWidget {
+  const SamplesColumn(
     this.samples, {
     this.inline = false,
     this.padding = const EdgeInsets.only(top: 4),
