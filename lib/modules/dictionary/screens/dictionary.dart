@@ -65,6 +65,8 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       headword: '',
       uses: [],
       language: EditorStore.language!,
+      tags: [],
+      forms: [],
     );
     editWord(
       context,

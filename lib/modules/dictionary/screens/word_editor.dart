@@ -1,8 +1,9 @@
 import 'package:avzag/global_store.dart';
+import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
+import 'package:avzag/shared/widgets/compact_input.dart';
 import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
-import 'package:avzag/shared/widgets/modals/editor_dialog.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:flutter/material.dart';
@@ -39,39 +40,6 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
   void exit() {
     Navigator.pop(context);
     widget.onDone?.call();
-  }
-
-  Widget _inputField(
-    IconData icon,
-    String label,
-    String? initial,
-    ValueSetter<String> onChanged, {
-    bool lowercase = true,
-    bool noEmpty = false,
-    Widget? trailing,
-    bool multiline = false,
-  }) {
-    return ListTile(
-      minVerticalPadding: 0,
-      visualDensity: const VisualDensity(
-        vertical: VisualDensity.minimumDensity,
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-      trailing: trailing,
-      title: TextFormField(
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon),
-          labelText: label,
-          isDense: true,
-          border: InputBorder.none,
-        ),
-        maxLines: multiline ? 0 : null,
-        initialValue: initial,
-        validator: noEmpty ? emptyValidator : null,
-        inputFormatters: lowercase ? [LowerCaseTextFormatter()] : null,
-        onChanged: (s) => onChanged(s.trim()),
-      ),
-    );
   }
 
   @override
@@ -119,26 +87,26 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
             ColumnCard(
               divider: null,
               children: [
-                _inputField(
+                CompactInput(
                   Icons.bookmark_rounded,
                   'Headword',
                   word.headword,
                   (s) => word.headword = s,
                   noEmpty: true,
                 ),
-                _inputField(
+                CompactInput(
                   Icons.volume_up_rounded,
                   'Headword IPA',
                   word.ipa,
                   (s) => word.ipa = s,
                 ),
-                _inputField(
+                CompactInput(
                   Icons.tag_rounded,
                   'Form tags',
-                  word.tags?.join(' '),
+                  word.tags.join(' '),
                   (s) => word.tags = s.split(' '),
                 ),
-                _inputField(
+                CompactInput(
                   Icons.info_rounded,
                   'General note',
                   word.note,
@@ -147,11 +115,12 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                 ),
               ],
             ),
+            SamplesEditor(Icons.layers_rounded, 'Forms', word.forms),
             for (final u in word.uses)
               ColumnCard(
                 divider: null,
                 children: [
-                  _inputField(
+                  CompactInput(
                     Icons.lightbulb_rounded,
                     'Term',
                     u.term,
@@ -168,19 +137,19 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                       icon: const Icon(Icons.delete_rounded),
                     ),
                   ),
-                  _inputField(
+                  CompactInput(
                     Icons.label_rounded,
                     'Aliases',
                     u.aliases?.join(' '),
                     (s) => u.aliases = s.split(' '),
                   ),
-                  _inputField(
+                  CompactInput(
                     Icons.tag_rounded,
                     'Semantic tags',
                     u.tags?.join(' '),
                     (s) => u.tags = s.split(' '),
                   ),
-                  _inputField(
+                  CompactInput(
                     Icons.info_rounded,
                     'Usage note',
                     u.note,

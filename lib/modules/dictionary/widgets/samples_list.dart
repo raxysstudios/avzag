@@ -27,8 +27,8 @@ class SamplesList extends StatelessWidget {
               onLongPress: () {
                 final text = [
                   s.text,
-                  if (s.translation != null)
-                    inline ? s.translation!.toUpperCase() : s.translation,
+                  if (s.meaning != null)
+                    inline ? s.meaning!.toUpperCase() : s.meaning
                 ].join(inline ? ' ' : '\n');
                 copyText(context, text);
               },
@@ -42,12 +42,10 @@ class SamplesList extends StatelessWidget {
                     style: theme.bodyText2,
                     children: [
                       TextSpan(text: s.text),
-                      if (s.translation != null) ...[
+                      if (s.meaning != null) ...[
                         TextSpan(text: inline ? ' ' : '\n'),
                         TextSpan(
-                          text: inline
-                              ? s.translation!.toUpperCase()
-                              : s.translation,
+                          text: inline ? s.meaning!.toUpperCase() : s.meaning,
                           style: TextStyle(color: theme.caption?.color),
                         ),
                       ],

@@ -8,9 +8,9 @@ class Word {
   String? id;
   String headword;
   String? ipa;
-  List<Sample>? forms;
+  List<Sample> forms;
   String language;
-  List<String>? tags;
+  List<String> tags;
   String? note;
   List<Use> uses;
   Contribution? contribution;
@@ -21,9 +21,9 @@ class Word {
     this.ipa,
     required this.language,
     required this.uses,
-    this.forms,
+    required this.forms,
+    required this.tags,
     this.contribution,
-    this.tags,
     this.note,
   });
 
@@ -41,15 +41,16 @@ class Word {
               .text,
           ipa: json['ipa'] as String?,
           forms: listFromJson(
-            json['forms'],
-            (dynamic j) => Sample.fromJson(j as Map<String, dynamic>),
-          )!,
+                json['forms'],
+                (dynamic j) => Sample.fromJson(j as Map<String, dynamic>),
+              ) ??
+              [],
           language: json['language'] as String,
           uses: listFromJson(
             json['uses'],
             (dynamic j) => Use.fromJson(j as Map<String, dynamic>),
           )!,
-          tags: json2list(json['tags']),
+          tags: json2list(json['tags']) ?? [],
           note: json['note'] as String?,
           contribution: json['contribution'] == null
               ? null
@@ -62,9 +63,9 @@ class Word {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['language'] = language;
     if (ipa != null) data['ipa'] = ipa;
-    data['forms'] = forms?.map((v) => v.toJson()).toList();
+    if (forms.isNotEmpty) data['forms'] = forms.map((v) => v.toJson()).toList();
     data['language'] = language;
-    if (tags?.isNotEmpty ?? false) data['tags'] = tags;
+    if (tags.isNotEmpty) data['tags'] = tags;
     if (note?.isNotEmpty ?? false) data['note'] = note;
     data['uses'] = uses.map((v) => v.toJson()).toList();
     if (contribution != null) data['contribution'] = contribution!.toJson();

@@ -1,22 +1,22 @@
 class Sample {
   String text;
-  String? translation;
+  String? meaning;
 
   Sample(
     this.text, {
-    this.translation,
+    this.meaning,
   });
 
   Sample.fromJson(Map<String, dynamic> json)
       : this(
           json['plain'] as String,
-          translation: json['translation'] as String?,
+          meaning: json['translation'] as String?,
         );
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['plain'] = text;
-    if (translation?.isNotEmpty ?? false) data['translation'] = translation;
+    if (meaning?.isNotEmpty ?? false) data['translation'] = meaning;
     return data;
   }
 }

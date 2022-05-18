@@ -74,7 +74,7 @@ class _WordScreenState extends State<WordScreen> {
                     color: theme.caption?.color,
                   ),
                 ),
-              if (word.tags != null)
+              if (word.tags.isNotEmpty)
                 Text(
                   prettyTags(word.tags)!,
                   style: theme.caption,
@@ -82,9 +82,9 @@ class _WordScreenState extends State<WordScreen> {
               if (word.note != null) MarkdownText(word.note!),
             ],
           ),
-          if (word.forms != null)
+          if (word.forms.isNotEmpty)
             SamplesList(
-              word.forms!.skip(1),
+              word.forms.skip(1),
               inline: true,
             ),
           for (final u in word.uses) ...[
