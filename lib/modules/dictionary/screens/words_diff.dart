@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import '../models/word.dart';
 import '../services/word.dart';
 
-class WordsDiffScreen extends StatefulWidget {
+class WordsDiffScreen extends StatelessWidget {
   const WordsDiffScreen(
     this.base,
     this.overwrite, {
@@ -21,11 +21,6 @@ class WordsDiffScreen extends StatefulWidget {
   final ScrollController? scroll;
 
   @override
-  State<WordsDiffScreen> createState() => _WordsDiffScreenState();
-}
-
-class _WordsDiffScreenState extends State<WordsDiffScreen> {
-  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
@@ -34,7 +29,7 @@ class _WordsDiffScreenState extends State<WordsDiffScreen> {
           leading: RoundedBackButton(
             icon: Icons.close_rounded,
           ),
-          title: Text(capitalize(widget.overwrite.language)),
+          title: Text(capitalize(overwrite.language)),
           bottom: TabBar(
             labelColor: Theme.of(context).colorScheme.onSurface,
             tabs: [
@@ -52,7 +47,7 @@ class _WordsDiffScreenState extends State<WordsDiffScreen> {
             Opacity(
               opacity: .5,
               child: LanguageFlag(
-                widget.overwrite.language,
+                overwrite.language,
                 width: 160,
                 offset: const Offset(16, -2),
                 scale: 1.25,
@@ -61,7 +56,7 @@ class _WordsDiffScreenState extends State<WordsDiffScreen> {
             IconButton(
               onPressed: () => deleteWord(
                 context,
-                widget.overwrite.id!,
+                overwrite.id!,
                 after: () => Navigator.pop(context),
                 title: 'Reject the contribution?',
               ),
@@ -75,13 +70,13 @@ class _WordsDiffScreenState extends State<WordsDiffScreen> {
           child: const Icon(Icons.upload_rounded),
           onPressed: () async => acceptContribution(
             context,
-            widget.overwrite,
+            overwrite,
             after: () => Navigator.pop(context),
           ),
         ),
         body: TabBarView(
           children: [
-            widget.base == null
+            base == null
                 ? Center(
                     child: Caption(
                       'No base word',
@@ -89,11 +84,11 @@ class _WordsDiffScreenState extends State<WordsDiffScreen> {
                     ),
                   )
                 : WordScreen(
-                    widget.base!,
+                    base!,
                     embedded: true,
                   ),
             WordScreen(
-              widget.overwrite,
+              overwrite,
               embedded: true,
             ),
           ],

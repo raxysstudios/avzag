@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 import '../models/word.dart';
 
-class WordScreen extends StatefulWidget {
+class WordScreen extends StatelessWidget {
   const WordScreen(
     this.word, {
     this.scroll,
@@ -25,16 +25,10 @@ class WordScreen extends StatefulWidget {
   final ValueSetter<Word>? onEdit;
 
   @override
-  State<WordScreen> createState() => _WordScreenState();
-}
-
-class _WordScreenState extends State<WordScreen> {
-  @override
   Widget build(BuildContext context) {
-    final word = widget.word;
     final theme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: widget.embedded
+      appBar: embedded
           ? null
           : AppBar(
               leading: const RoundedBackButton(),
@@ -54,11 +48,11 @@ class _WordScreenState extends State<WordScreen> {
                     scale: 1.25,
                   ),
                 ),
-                if (widget.onEdit != null)
+                if (onEdit != null)
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      widget.onEdit!(word);
+                      onEdit!(word);
                     },
                     tooltip: 'Edit',
                     icon: const Icon(Icons.edit_rounded),
@@ -66,7 +60,7 @@ class _WordScreenState extends State<WordScreen> {
                 const SizedBox(width: 4),
               ],
             ),
-      floatingActionButton: widget.embedded
+      floatingActionButton: embedded
           ? null
           : FloatingActionButton(
               onPressed: () => showSnackbar(
@@ -77,7 +71,7 @@ class _WordScreenState extends State<WordScreen> {
               child: const Icon(Icons.share_rounded),
             ),
       body: ListView(
-        controller: widget.scroll,
+        controller: scroll,
         padding: const EdgeInsets.only(bottom: 76),
         children: [
           ColumnCard(
