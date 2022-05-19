@@ -7,9 +7,11 @@ import 'firebase_options.dart';
 import 'models/language.dart';
 import 'shared/utils/utils.dart';
 
+late final Algolia algolia;
+late final SharedPreferences prefs;
+
 class EditorStore {
-  static String? get email => FirebaseAuth.instance.currentUser?.email;
-  static String? get uid => FirebaseAuth.instance.currentUser?.uid;
+  static List<String> adminable = [];
 
   static String? _language;
   static String? get language => _language;
@@ -22,47 +24,51 @@ class EditorStore {
     }
   }
 
-  static bool isAdmin = false;
-  static bool get isEditing => language != null;
-  static SharedPreferences get prefs => GlobalStore.prefs;
+  static User? get user => FirebaseAuth.instance.currentUser;
+  static bool get editor => user != null && language != null;
+  static bool get admin => editor && adminable.contains(language);
 
-  static Future _load(Iterable<String> languages) async {
-    final saved = prefs.getString('editorLanguage');
-    language = languages.contains(saved) ? saved : null;
-    if (language == null) {
-      isAdmin = false;
-    } else {
-      final token =
-          await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
-      isAdmin = language != null &&
-          (json2list(token?.claims?['admin'])?.contains(language) ?? false);
+  static Future _check(User? user) async {
+    if (user == null) {
+      adminable.clear();
+      language = null;
+      return;
     }
+    final token = await user.getIdTokenResult(true);
+    adminable = json2list(token.claims?['admin']) ?? [];
+  }
+
+  static Future _init() async {
+    _language = prefs.getString('editorLanguage');
+    _check(user);
+    FirebaseAuth.instance.userChanges().listen(_check);
   }
 }
 
 class GlobalStore {
-  static late final Algolia algolia;
-  static late final SharedPreferences prefs;
+  static Map<String, Language?> languages = {};
 
-  static Map<String, Language?> _languages = {};
-  static Map<String, Language?> get languages => _languages;
-
-  static Future<void> set(List<Language> languages) async {
-    _languages = {
-      for (final l in languages) l.name: l,
-    };
-    await EditorStore._load(_languages.keys);
-    await prefs.setStringList(
-      'languages',
-      languages.map((l) => l.name).toList(),
-    );
+  static Future<void> set({
+    Iterable<String>? names,
+    Iterable<Language>? objects,
+  }) async {
+    if (objects != null) {
+      languages = {for (final l in objects) l.name: l};
+    } else if (names != null) {
+      languages = {for (final l in names) l: null};
+    }
+    if (!languages.containsKey(EditorStore.language)) {
+      EditorStore.language = null;
+    }
+    prefs.setStringList('languages', languages.keys.toList());
   }
 
-  static Future<void> _load([List<String>? languages]) async {
-    languages ??= prefs.getStringList('languages') ?? ['iron'];
-    _languages = {for (final l in languages) l: null};
+  static Future<void> _load([List<String>? names]) async {
+    set(
+      names: names ?? prefs.getStringList('languages') ?? ['iron'],
+    );
 
-    for (final l in languages) {
+    for (final l in languages.keys) {
       FirebaseFirestore.instance
           .doc('languages/$l')
           .withConverter(
@@ -72,15 +78,9 @@ class GlobalStore {
           .get()
           .then((r) {
         final l = r.data();
-        if (l != null) _languages[l.name] = l;
+        if (l != null) languages[l.name] = l;
       });
     }
-
-    EditorStore._load(_languages.keys);
-    prefs.setStringList(
-      'languages',
-      languages.where((l) => _languages.containsKey(l)).toList(),
-    );
   }
 
   static Future<void> init() async {
@@ -92,6 +92,7 @@ class GlobalStore {
       applicationId: 'NYVVAA43NI',
       apiKey: 'cf52a68ac340fc555978892202ce37df',
     );
+    await EditorStore._init();
     await _load();
   }
 }

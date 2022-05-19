@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
+import '../models/entry.dart';
 import '../models/word.dart';
 import '../search_controller.dart';
 import '../services/sheets.dart';
@@ -27,7 +28,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
   );
   late final search = SearchController(
     GlobalStore.languages.keys,
-    GlobalStore.algolia.index('dictionary'),
+    algolia.index('dictionary'),
     paging.refresh,
   );
 
@@ -78,6 +79,13 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     );
   }
 
+  bool canEdit(Entry e) {
+    return editing == null &&
+        e.language == EditorStore.language &&
+        EditorStore.editor &&
+        (!e.unverified || EditorStore.admin);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
@@ -85,7 +93,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       builder: (context, _) {
         return Scaffold(
           drawer: const NavDraver(title: 'dictionary'),
-          floatingActionButton: EditorStore.isEditing
+          floatingActionButton: EditorStore.editor
               ? FloatingActionButton(
                   onPressed: edit,
                   tooltip: editing == null ? 'New' : 'Resume',
@@ -100,7 +108,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                 leading: const RoundedDrawerButton(),
                 title: const Text('Dictionary'),
                 actions: [
-                  if (EditorStore.isAdmin)
+                  if (EditorStore.admin)
                     IconButton(
                       onPressed: () => setState(() {
                         search.unverified = !search.unverified;
@@ -134,11 +142,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                       onTap: (e) => openWord(
                         context,
                         e.entryID,
-                        editing == null &&
-                                e.language == EditorStore.language &&
-                                EditorStore.isEditing
-                            ? edit
-                            : null,
+                        canEdit(e) ? edit : null,
                       ),
                       showLanguage: GlobalStore.languages.length > 1 &&
                           !search.monolingual,

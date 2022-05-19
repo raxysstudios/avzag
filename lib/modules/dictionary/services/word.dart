@@ -35,23 +35,30 @@ void submitWord(
       text: 'Must have at least one use',
     );
   }
-  final overwrite = word.contribution?.overwriteId;
-  final id = overwrite ?? word.id;
-  word.contribution = EditorStore.isAdmin
-      ? null
-      : Contribution(
-          EditorStore.uid!,
-          overwriteId: id,
-        );
+  var id = word.id;
+  var doc = word.toJson();
+  var cleanup = false;
+  if (EditorStore.admin) {
+    if (word.contribution != null) {
+      cleanup = true;
+      id = word.contribution?.overwriteId;
+      doc.remove('contribution');
+    }
+  } else {
+    doc['contribution'] = Contribution(
+      EditorStore.user?.uid ?? 'anon',
+      overwriteId: id,
+    ).toJson();
+  }
 
   await showLoadingDialog(
     context,
     FirebaseFirestore.instance
         .collection('dictionary')
         .doc(id)
-        .set(word.toJson())
+        .set(doc)
         .then((_) {
-      if (overwrite != null) {
+      if (cleanup) {
         FirebaseFirestore.instance
             .collection('dictionary')
             .doc(word.id)

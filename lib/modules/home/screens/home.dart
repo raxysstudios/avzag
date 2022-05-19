@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           await showLoadingDialog(
             context,
-            GlobalStore.set(selected.toList()),
+            GlobalStore.set(objects: selected),
           );
           navigate(context);
         },

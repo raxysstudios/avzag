@@ -6,7 +6,6 @@ import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:avzag/store.dart';
 import 'package:badges/badges.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'nav_drawer.dart';
@@ -19,24 +18,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  List<String> editable = [];
-
-  @override
-  void initState() {
-    super.initState();
-    if (FirebaseAuth.instance.currentUser != null) {
-      updateEditable();
-    }
-  }
-
-  Future<void> updateEditable() async {
-    final token =
-        await FirebaseAuth.instance.currentUser?.getIdTokenResult(true);
-    setState(() {
-      editable = json2list(token?.claims?['admin']) ?? [];
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
@@ -55,28 +36,23 @@ class _AccountScreenState extends State<AccountScreen> {
         padding: const EdgeInsets.only(bottom: 76),
         children: [
           SignInButtons(
-            onSignOut: () => setState(() {
-              EditorStore.language = null;
-              EditorStore.isAdmin = false;
-              editable.clear();
-            }),
-            onSingIn: updateEditable,
+            onSignOut: () => setState(() {}),
+            onSingIn: () => setState(() {}),
           ),
-          if (EditorStore.uid != null && GlobalStore.languages.isNotEmpty)
+          if (EditorStore.user?.uid != null)
             ColumnCard(
               children: [
                 for (final l in GlobalStore.languages.keys)
                   Builder(
                     builder: (context) {
                       final editing = l == EditorStore.language;
-                      final isAdmin = editable.contains(l);
                       return ListTile(
                         leading: Badge(
                           padding: EdgeInsets.zero,
                           ignorePointer: true,
                           badgeColor: theme.surface,
                           position: BadgePosition.topEnd(end: -20),
-                          badgeContent: isAdmin
+                          badgeContent: EditorStore.adminable.contains(l)
                               ? SpanIcon(
                                   Icons.account_circle_rounded,
                                   padding: const EdgeInsets.all(2),
@@ -94,7 +70,6 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                         onTap: () => setState(() {
                           EditorStore.language = editing ? null : l;
-                          EditorStore.isAdmin = !editing && isAdmin;
                         }),
                         selected: editing,
                         trailing: Builder(

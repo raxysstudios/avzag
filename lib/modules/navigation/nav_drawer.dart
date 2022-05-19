@@ -132,8 +132,8 @@ class NavDraver extends StatelessWidget {
                     title: const Text('Editor Mode'),
                     subtitle: Row(
                       children: [
-                        if (EditorStore.isEditing) ...[
-                          if (EditorStore.isAdmin)
+                        if (EditorStore.editor) ...[
+                          if (EditorStore.admin)
                             const SpanIcon(Icons.account_circle_rounded),
                           Text(capitalize(EditorStore.language)),
                         ] else

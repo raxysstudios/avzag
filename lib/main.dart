@@ -28,7 +28,7 @@ class App extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             navigate(
               context,
-              GlobalStore.prefs.getString('module') ?? 'home',
+              prefs.getString('module') ?? 'home',
             );
           }
           return const Material();

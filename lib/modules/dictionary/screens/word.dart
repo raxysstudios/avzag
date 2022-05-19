@@ -46,7 +46,7 @@ class _WordScreenState extends State<WordScreen> {
             child: LanguageFlag(
               word.language,
               width: 160,
-              offset: const Offset(32, -2),
+              offset: const Offset(16, -2),
               scale: 1.25,
             ),
           ),

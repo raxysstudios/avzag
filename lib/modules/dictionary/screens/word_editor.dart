@@ -31,12 +31,7 @@ class WordEditorScreen extends StatefulWidget {
 
 class _WordEditorScreenState extends State<WordEditorScreen> {
   final form = GlobalKey<FormState>();
-
   Word get word => widget.word;
-  bool get isReviewing =>
-      EditorStore.isAdmin &&
-      word.language == EditorStore.language &&
-      word.contribution != null;
 
   void exit() {
     Navigator.pop(context);
@@ -55,27 +50,27 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
             child: LanguageFlag(
               word.language,
               width: 160,
-              offset: const Offset(32, -2),
+              offset: const Offset(16, -2),
               scale: 1.25,
             ),
           ),
-          if (EditorStore.isAdmin)
-            OptionsButton(
-              [
-                if (!isReviewing)
-                  OptionItem.simple(
-                    Icons.cancel_rounded,
-                    'Discard',
-                    exit,
-                  ),
-                if (word.id != null)
-                  OptionItem.simple(
-                    Icons.delete_forever_rounded,
-                    'Delete',
-                    () => deleteWord(context, word.id!, exit),
-                  ),
-              ],
-            ),
+          OptionsButton(
+            [
+              OptionItem.simple(
+                Icons.cancel_rounded,
+                'Discard',
+                exit,
+              ),
+              if (word.id != null &&
+                  (EditorStore.admin ||
+                      word.contribution?.uid == EditorStore.user?.uid))
+                OptionItem.simple(
+                  Icons.delete_forever_rounded,
+                  'Delete',
+                  () => deleteWord(context, word.id!, exit),
+                ),
+            ],
+          ),
           const SizedBox(width: 4),
         ],
       ),
