@@ -126,7 +126,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                 ),
               ],
             ),
-            SamplesEditor(Icons.layers_rounded, 'Forms', word.forms),
+            SamplesEditor('Add a form', word.forms),
             for (final u in word.uses) ...[
               ColumnCard(
                 divider: null,
@@ -169,11 +169,11 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   ),
                 ],
               ),
-              SamplesEditor(Icons.notes_rounded, 'Examples', u.examples),
+              SamplesEditor('Add an example', u.examples),
             ],
             Padding(
               padding: const EdgeInsets.all(8),
-              child: TextButton.icon(
+              child: ElevatedButton.icon(
                 onPressed: () => setState(() {
                   word.uses.add(
                     Use(
@@ -185,7 +185,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   );
                 }),
                 icon: const Icon(Icons.add_rounded),
-                label: const Text('Add use'),
+                label: const Text('Add a use'),
               ),
             )
           ],

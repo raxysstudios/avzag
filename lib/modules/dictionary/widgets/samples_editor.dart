@@ -6,14 +6,12 @@ import '../models/sample.dart';
 
 class SamplesEditor extends StatefulWidget {
   const SamplesEditor(
-    this.icon,
     this.title,
     this.samples, {
     this.lowercase = true,
     Key? key,
   }) : super(key: key);
 
-  final IconData icon;
   final String title;
   final bool lowercase;
   final List<Sample> samples;
@@ -26,18 +24,8 @@ class _SamplesEditorState extends State<SamplesEditor> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ListTile(
-          horizontalTitleGap: 0,
-          visualDensity: VisualDensity.compact,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-          leading: Icon(widget.icon),
-          title: Center(child: Text(widget.title)),
-          trailing: const Icon(Icons.add_rounded),
-          onTap: () => setState(() {
-            widget.samples.add(Sample(''));
-          }),
-        ),
         for (final s in widget.samples)
           Column(
             children: [
@@ -50,14 +38,11 @@ class _SamplesEditorState extends State<SamplesEditor> {
                 lowercase: widget.lowercase,
                 noEmpty: true,
                 trailing: IconButton(
-                  onPressed: () => showDangerDialog(
-                    context,
-                    () => setState(() {
-                      widget.samples.remove(s);
-                    }),
-                    'Delete the sample?',
-                  ),
-                  icon: const Icon(Icons.cancel_rounded),
+                  tooltip: 'Remove',
+                  onPressed: () => setState(() {
+                    widget.samples.remove(s);
+                  }),
+                  icon: const Icon(Icons.remove_circle_outline_rounded),
                 ),
               ),
               CompactInput(
@@ -69,7 +54,16 @@ class _SamplesEditorState extends State<SamplesEditor> {
               ),
             ],
           ),
-        const Divider(),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: TextButton.icon(
+            onPressed: () => setState(() {
+              widget.samples.add(Sample(''));
+            }),
+            icon: const Icon(Icons.add_circle_outline_rounded),
+            label: Text(widget.title),
+          ),
+        ),
       ],
     );
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 String? _emptyValidator(String? value) {
   value = value?.trim() ?? '';
-  return value.isEmpty ? '' : null;
+  return value.isEmpty ? "     Can't be empty!" : null;
 }
 
 class CompactInput extends StatelessWidget {
