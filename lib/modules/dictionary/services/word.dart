@@ -24,6 +24,25 @@ Future<Word?> loadWord(String? id) async {
   return doc.data();
 }
 
+void acceptContribution(
+  BuildContext context,
+  Word word, [
+  VoidCallback? after,
+]) async {
+  var id = word.contribution?.overwriteId;
+  var doc = word.toJson();
+  doc.remove('contribution');
+  await showLoadingDialog(
+    context,
+    FirebaseFirestore.instance.collection('dictionary').doc(id).set(doc).then(
+          (_) => FirebaseFirestore.instance
+              .collection('dictionary')
+              .doc(word.id)
+              .delete(),
+        ),
+  ).then((_) => after?.call());
+}
+
 void submitWord(
   BuildContext context,
   Word word, [
@@ -37,34 +56,17 @@ void submitWord(
   }
   var id = word.id;
   var doc = word.toJson();
-  var cleanup = false;
-  if (EditorStore.admin) {
-    if (word.contribution != null) {
-      cleanup = true;
-      id = word.contribution?.overwriteId;
-      doc.remove('contribution');
-    }
-  } else {
+  if (!EditorStore.admin) {
     doc['contribution'] = Contribution(
       EditorStore.user?.uid ?? 'anon',
-      overwriteId: id,
+      overwriteId: word.id,
     ).toJson();
+    id = null;
   }
 
   await showLoadingDialog(
     context,
-    FirebaseFirestore.instance
-        .collection('dictionary')
-        .doc(id)
-        .set(doc)
-        .then((_) {
-      if (cleanup) {
-        FirebaseFirestore.instance
-            .collection('dictionary')
-            .doc(word.id)
-            .delete();
-      }
-    }),
+    FirebaseFirestore.instance.collection('dictionary').doc(id).set(doc),
   ).then((_) => after?.call());
 }
 

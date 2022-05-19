@@ -61,9 +61,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                 'Discard',
                 exit,
               ),
-              if (word.id != null &&
-                  (EditorStore.admin ||
-                      word.contribution?.uid == EditorStore.user?.uid))
+              if (word.id != null && EditorStore.admin)
                 OptionItem.simple(
                   Icons.delete_forever_rounded,
                   'Delete',

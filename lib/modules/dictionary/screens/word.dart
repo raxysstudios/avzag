@@ -15,10 +15,12 @@ class WordScreen extends StatefulWidget {
     this.word, {
     this.scroll,
     this.onEdit,
+    this.embedded = false,
     Key? key,
   }) : super(key: key);
 
   final Word word;
+  final bool embedded;
   final ScrollController? scroll;
   final ValueSetter<Word>? onEdit;
 
@@ -32,44 +34,48 @@ class _WordScreenState extends State<WordScreen> {
     final word = widget.word;
     final theme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(
-        leading: const RoundedBackButton(),
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Text(capitalize(word.language)),
-          ],
-        ),
-        actions: [
-          Opacity(
-            opacity: .5,
-            child: LanguageFlag(
-              word.language,
-              width: 160,
-              offset: const Offset(16, -2),
-              scale: 1.25,
+      appBar: widget.embedded
+          ? null
+          : AppBar(
+              leading: const RoundedBackButton(),
+              title: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Text(capitalize(word.language)),
+                ],
+              ),
+              actions: [
+                Opacity(
+                  opacity: .5,
+                  child: LanguageFlag(
+                    word.language,
+                    width: 160,
+                    offset: const Offset(16, -2),
+                    scale: 1.25,
+                  ),
+                ),
+                if (widget.onEdit != null)
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      widget.onEdit!(word);
+                    },
+                    tooltip: 'Edit',
+                    icon: const Icon(Icons.edit_rounded),
+                  ),
+                const SizedBox(width: 4),
+              ],
             ),
-          ),
-          if (widget.onEdit != null)
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-                widget.onEdit!(word);
-              },
-              tooltip: 'Edit',
-              icon: const Icon(Icons.edit_rounded),
+      floatingActionButton: widget.embedded
+          ? null
+          : FloatingActionButton(
+              onPressed: () => showSnackbar(
+                context,
+                text: 'Word sharing is coming soon',
+              ),
+              tooltip: 'Share',
+              child: const Icon(Icons.share_rounded),
             ),
-          const SizedBox(width: 4),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => showSnackbar(
-          context,
-          text: 'Word sharing is coming soon',
-        ),
-        tooltip: 'Share',
-        child: const Icon(Icons.share_rounded),
-      ),
       body: ListView(
         controller: widget.scroll,
         padding: const EdgeInsets.only(bottom: 76),
