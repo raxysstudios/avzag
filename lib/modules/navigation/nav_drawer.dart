@@ -140,7 +140,7 @@ class NavDraver extends StatelessWidget {
                           const Text('Off')
                       ],
                     ),
-                    value: EditorStore.language != null,
+                    value: EditorStore.editor,
                     secondary: const Padding(
                       padding: EdgeInsets.only(top: 8),
                       child: Icon(Icons.edit_rounded),

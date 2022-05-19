@@ -42,7 +42,7 @@ class EditorStore {
 
   static Future init() async {
     _language = prefs.getString('editorLanguage');
-    _check(user);
+    adminable = await getAdminable();
     FirebaseAuth.instance.userChanges().listen(_check);
   }
 }
