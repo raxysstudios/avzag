@@ -1023,7 +1023,7 @@ packages:
     source: hosted
     version: "0.3.2"
   vector_tile_renderer:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: vector_tile_renderer
       url: "https://pub.dartlang.org"

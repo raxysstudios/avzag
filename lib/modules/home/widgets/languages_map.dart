@@ -20,15 +20,20 @@ class LanguagesMap extends StatelessWidget {
   final Set<Language> selected;
   final ValueSetter<Language> onToggle;
 
-  VectorTileProvider _cachingTileProvider(String urlTemplate) {
+  VectorTileProvider _cachingTileProvider(BuildContext context) {
+    const token =
+        '6F94UuT7990iq8Z5yQpnbyujlm0Zr7bZkJwMshoaTEtYnsabLMp2EttcF6fCoW10';
+    final style = Theme.of(context).brightness == Brightness.light
+        ? '4bfb6bd9-e4e9-42b5-abfe-9f90ecb11e6b'
+        : '5b319ec1-f075-4278-b743-31be8b4a0808';
     return MemoryCacheVectorTileProvider(
-        delegate: NetworkVectorTileProvider(
-            urlTemplate: urlTemplate,
-            // this is the maximum zoom of the provider, not the
-            // maximum of the map. vector tiles are rendered
-            // to larger sizes to support higher zoom levels
-            maximumZoom: 14),
-        maxSizeBytes: 1024 * 1024 * 2);
+      delegate: NetworkVectorTileProvider(
+        urlTemplate:
+            'https://api.jawg.io/styles/$style.json?access-token=$token',
+        maximumZoom: 14,
+      ),
+      maxSizeBytes: 1024 * 1024 * 2,
+    );
   }
 
   @override
@@ -43,14 +48,11 @@ class LanguagesMap extends StatelessWidget {
           VectorMapTilesPlugin(),
         ],
       ),
-      layers: <LayerOptions>[
+      layers: [
         VectorTileLayerOptions(
           theme: vector_theme.ProvidedThemes.lightTheme(),
           tileProviders: TileProviders(
-            {
-              'openmaptiles': _cachingTileProvider(
-                  'https://tiles.stadiamaps.com/data/openmaptiles/{z}/{x}/{y}.pbf?api_key=d441798a-57bb-47df-bff7-64f1c314ef07')
-            },
+            {'jawg': _cachingTileProvider(context)},
           ),
         ),
         MarkerClusterLayerOptions(
