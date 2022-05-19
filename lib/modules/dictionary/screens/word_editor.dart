@@ -43,7 +43,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const RoundedBackButton(),
-        title: Text(capitalize(EditorStore.language)),
+        title: Text(capitalize(word.language)),
         actions: [
           Opacity(
             opacity: .5,
@@ -65,7 +65,11 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                 OptionItem.simple(
                   Icons.delete_forever_rounded,
                   'Delete',
-                  () => deleteWord(context, word.id!, exit),
+                  () => deleteWord(
+                    context,
+                    word.id!,
+                    after: exit,
+                  ),
                 ),
             ],
           ),
@@ -76,7 +80,11 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
         child: const Icon(Icons.upload_rounded),
         onPressed: () async {
           if (form.currentState?.validate() ?? false) {
-            submitWord(context, word, exit);
+            submitWord(
+              context,
+              word,
+              after: exit,
+            );
           }
         },
       ),

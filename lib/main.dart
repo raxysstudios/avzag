@@ -1,7 +1,11 @@
+import 'package:algolia/algolia.dart';
 import 'package:avzag/store.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'config/themes.dart';
+import 'firebase_options.dart';
 import 'modules/navigation/nav_drawer.dart';
 
 void main() async {
@@ -9,6 +13,16 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  prefs = await SharedPreferences.getInstance();
+  algolia = const Algolia.init(
+    applicationId: 'NYVVAA43NI',
+    apiKey: 'cf52a68ac340fc555978892202ce37df',
+  );
+  await EditorStore.init();
+  await GlobalStore.init();
   runApp(const App());
 }
 
@@ -22,15 +36,13 @@ class App extends StatelessWidget {
       title: 'Avzag',
       theme: themes.light,
       darkTheme: themes.dark,
-      home: FutureBuilder(
-        future: GlobalStore.init(),
+      home: FutureBuilder<void>(
+        future: Future.value(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            navigate(
-              context,
-              prefs.getString('module') ?? 'home',
-            );
-          }
+          navigate(
+            context,
+            prefs.getString('module') ?? 'home',
+          );
           return const Material();
         },
       ),

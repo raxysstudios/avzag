@@ -18,6 +18,8 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  var adminable = <String>[];
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
@@ -37,55 +39,55 @@ class _AccountScreenState extends State<AccountScreen> {
         children: [
           SignInButtons(
             onSignOut: () => setState(() {}),
-            onSingIn: () => setState(() {}),
+            onSingIn: () => EditorStore.getAdminable().then(
+              (value) => setState(() {
+                adminable = value;
+              }),
+            ),
           ),
           if (EditorStore.user?.uid != null)
             ColumnCard(
               children: [
                 for (final l in GlobalStore.languages.keys)
-                  Builder(
-                    builder: (context) {
-                      final editing = l == EditorStore.language;
-                      return ListTile(
-                        leading: Badge(
-                          padding: EdgeInsets.zero,
-                          ignorePointer: true,
-                          badgeColor: theme.surface,
-                          position: BadgePosition.topEnd(end: -20),
-                          badgeContent: EditorStore.adminable.contains(l)
-                              ? SpanIcon(
-                                  Icons.account_circle_rounded,
-                                  padding: const EdgeInsets.all(2),
-                                  color: theme.onSurface,
-                                )
-                              : null,
-                          child: LanguageAvatar(l),
-                        ),
-                        title: Text(
-                          capitalize(l),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                          ),
-                        ),
-                        onTap: () => setState(() {
-                          EditorStore.language = editing ? null : l;
-                        }),
-                        selected: editing,
-                        trailing: Builder(
-                          builder: (context) {
-                            final contact = GlobalStore.languages[l]?.contact;
-                            return contact == null
-                                ? const SizedBox()
-                                : IconButton(
-                                    onPressed: () => openLink(contact),
-                                    icon: const Icon(Icons.send_rounded),
-                                    tooltip: 'Contact admin',
-                                  );
-                          },
-                        ),
-                      );
-                    },
+                  ListTile(
+                    leading: Badge(
+                      padding: EdgeInsets.zero,
+                      ignorePointer: true,
+                      badgeColor: theme.surface,
+                      position: BadgePosition.topEnd(end: -20),
+                      badgeContent: EditorStore.adminable.contains(l)
+                          ? SpanIcon(
+                              Icons.account_circle_rounded,
+                              padding: const EdgeInsets.all(2),
+                              color: theme.onSurface,
+                            )
+                          : null,
+                      child: LanguageAvatar(l),
+                    ),
+                    title: Text(
+                      capitalize(l),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => setState(() {
+                      EditorStore.language =
+                          l == EditorStore.language ? null : l;
+                    }),
+                    selected: l == EditorStore.language,
+                    trailing: Builder(
+                      builder: (context) {
+                        final contact = GlobalStore.languages[l]?.contact;
+                        return contact == null
+                            ? const SizedBox()
+                            : IconButton(
+                                onPressed: () => openLink(contact),
+                                icon: const Icon(Icons.send_rounded),
+                                tooltip: 'Contact admin',
+                              );
+                      },
+                    ),
                   ),
               ],
             ),

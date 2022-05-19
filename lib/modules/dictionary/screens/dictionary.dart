@@ -79,11 +79,20 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     );
   }
 
-  bool canEdit(Entry e) {
-    return editing == null &&
-        e.language == EditorStore.language &&
-        EditorStore.editor &&
-        (!e.unverified || EditorStore.admin);
+  void open(Entry entry) {
+    if (entry.unverified && EditorStore.admin) {
+      diffWords(context, entry.entryID);
+      return;
+    }
+    openWord(
+      context,
+      entry.entryID,
+      editing == null &&
+              entry.language == EditorStore.language &&
+              (EditorStore.admin || !entry.unverified)
+          ? edit
+          : null,
+    );
   }
 
   @override
@@ -139,11 +148,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                   itemBuilder: (context, id, _) {
                     return EntryGroup(
                       search.getHits(id),
-                      onTap: (e) => openWord(
-                        context,
-                        e.entryID,
-                        canEdit(e) ? edit : null,
-                      ),
+                      onTap: open,
                       showLanguage: GlobalStore.languages.length > 1 &&
                           !search.monolingual,
                     );

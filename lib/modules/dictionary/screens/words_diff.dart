@@ -3,7 +3,6 @@ import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
-import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 
 import '../models/word.dart';
@@ -35,8 +34,9 @@ class _WordsDiffScreenState extends State<WordsDiffScreen> {
           leading: RoundedBackButton(
             icon: Icons.close_rounded,
           ),
-          title: Text(capitalize(EditorStore.language)),
-          bottom: const TabBar(
+          title: Text(capitalize(widget.overwrite.language)),
+          bottom: TabBar(
+            labelColor: Theme.of(context).colorScheme.onSurface,
             tabs: [
               Tab(
                 icon: Icon(Icons.adjust_rounded),
@@ -59,10 +59,16 @@ class _WordsDiffScreenState extends State<WordsDiffScreen> {
               ),
             ),
             IconButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => deleteWord(
+                context,
+                widget.overwrite.id!,
+                after: () => Navigator.pop(context),
+                title: 'Reject the contribution?',
+              ),
               icon: Icon(Icons.delete_forever),
               tooltip: 'Reject',
-            )
+            ),
+            const SizedBox(width: 4),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -70,7 +76,7 @@ class _WordsDiffScreenState extends State<WordsDiffScreen> {
           onPressed: () async => acceptContribution(
             context,
             widget.overwrite,
-            () => Navigator.pop(context),
+            after: () => Navigator.pop(context),
           ),
         ),
         body: TabBarView(

@@ -1,9 +1,7 @@
 import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'firebase_options.dart';
 import 'models/language.dart';
 import 'shared/utils/utils.dart';
 
@@ -34,11 +32,15 @@ class EditorStore {
       language = null;
       return;
     }
-    final token = await user.getIdTokenResult(true);
-    adminable = json2list(token.claims?['admin']) ?? [];
+    adminable = await getAdminable();
   }
 
-  static Future _init() async {
+  static Future<List<String>> getAdminable() async {
+    final token = await user?.getIdTokenResult(true);
+    return json2list(token?.claims?['admin']) ?? [];
+  }
+
+  static Future init() async {
     _language = prefs.getString('editorLanguage');
     _check(user);
     FirebaseAuth.instance.userChanges().listen(_check);
@@ -63,11 +65,10 @@ class GlobalStore {
     prefs.setStringList('languages', languages.keys.toList());
   }
 
-  static Future<void> _load([List<String>? names]) async {
+  static Future<void> init([List<String>? names]) async {
     set(
       names: names ?? prefs.getStringList('languages') ?? ['iron'],
     );
-
     for (final l in languages.keys) {
       FirebaseFirestore.instance
           .doc('languages/$l')
@@ -81,18 +82,5 @@ class GlobalStore {
         if (l != null) languages[l.name] = l;
       });
     }
-  }
-
-  static Future<void> init() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    prefs = await SharedPreferences.getInstance();
-    algolia = const Algolia.init(
-      applicationId: 'NYVVAA43NI',
-      apiKey: 'cf52a68ac340fc555978892202ce37df',
-    );
-    await EditorStore._init();
-    await _load();
   }
 }

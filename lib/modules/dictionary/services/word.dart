@@ -26,9 +26,9 @@ Future<Word?> loadWord(String? id) async {
 
 void acceptContribution(
   BuildContext context,
-  Word word, [
+  Word word, {
   VoidCallback? after,
-]) async {
+}) async {
   var id = word.contribution?.overwriteId;
   var doc = word.toJson();
   doc.remove('contribution');
@@ -45,9 +45,9 @@ void acceptContribution(
 
 void submitWord(
   BuildContext context,
-  Word word, [
+  Word word, {
   VoidCallback? after,
-]) async {
+}) async {
   if (word.uses.isEmpty) {
     return showSnackbar(
       context,
@@ -72,16 +72,17 @@ void submitWord(
 
 void deleteWord(
   BuildContext context,
-  String id, [
+  String id, {
   VoidCallback? after,
-]) {
+  String title = 'Delete the word?',
+}) {
   showDangerDialog(
     context,
     () => showLoadingDialog(
       context,
       FirebaseFirestore.instance.collection('dictionary').doc(id).delete(),
     ).then((_) => after?.call()),
-    'Delete the word?',
+    title,
     confirmText: 'Delete',
     rejectText: 'Keep',
   );
