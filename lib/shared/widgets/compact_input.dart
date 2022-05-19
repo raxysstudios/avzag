@@ -48,7 +48,7 @@ class CompactInput extends StatelessWidget {
         validator: noEmpty ? _emptyValidator : null,
         onChanged: (s) {
           s = s.trim();
-          if (lowercase) s = s.toLowerCase();
+          // if (lowercase) s = s.toLowerCase();
           onChanged(s);
         },
       ),

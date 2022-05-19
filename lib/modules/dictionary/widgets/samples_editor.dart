@@ -1,5 +1,4 @@
 import 'package:avzag/shared/widgets/compact_input.dart';
-import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
 import 'package:flutter/material.dart';
 
 import '../models/sample.dart';
