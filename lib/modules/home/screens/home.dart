@@ -3,7 +3,6 @@ import 'package:avzag/modules/navigation/nav_drawer.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
-import 'package:avzag/shared/widgets/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:avzag/store.dart';
 import 'package:badges/badges.dart';
@@ -144,23 +143,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          if (selected.isEmpty) {
-            return showSnackbar(
-              context,
-              text: 'Select at least one language.',
-            );
-          }
-          await showLoadingDialog(
-            context,
-            GlobalStore.set(objects: selected),
-          );
-          navigate(context);
-        },
-        tooltip: 'Continue',
-        child: const Icon(Icons.done_all_rounded),
-      ),
+      floatingActionButton: selected.isEmpty
+          ? null
+          : FloatingActionButton(
+              onPressed: () async {
+                await showLoadingDialog(
+                  context,
+                  GlobalStore.set(objects: selected),
+                );
+                navigate(context);
+              },
+              tooltip: 'Continue',
+              child: const Icon(Icons.done_all_rounded),
+            ),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         titleSpacing: 0,
