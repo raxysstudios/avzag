@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:vector_map_tiles/vector_map_tiles.dart';
+import 'package:vector_tile_renderer/vector_tile_renderer.dart' as vector_theme;
 
 class LanguagesMap extends StatelessWidget {
   const LanguagesMap({
@@ -18,13 +20,19 @@ class LanguagesMap extends StatelessWidget {
   final Set<Language> selected;
   final ValueSetter<Language> onToggle;
 
+  VectorTileProvider _cachingTileProvider(String urlTemplate) {
+    return MemoryCacheVectorTileProvider(
+        delegate: NetworkVectorTileProvider(
+            urlTemplate: urlTemplate,
+            // this is the maximum zoom of the provider, not the
+            // maximum of the map. vector tiles are rendered
+            // to larger sizes to support higher zoom levels
+            maximumZoom: 14),
+        maxSizeBytes: 1024 * 1024 * 2);
+  }
+
   @override
   Widget build(context) {
-    final theme = Theme.of(context);
-    final mapStyleUrl = theme.brightness == Brightness.light
-        ? '4bfb6bd9-e4e9-42b5-abfe-9f90ecb11e6b'
-        : '5b319ec1-f075-4278-b743-31be8b4a0808';
-
     return FlutterMap(
       options: MapOptions(
         center: LatLng(43, 45),
@@ -32,16 +40,18 @@ class LanguagesMap extends StatelessWidget {
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
         plugins: [
           MarkerClusterPlugin(),
+          VectorMapTilesPlugin(),
         ],
       ),
-      layers: [
-        TileLayerOptions(
-          urlTemplate:
-              'https://tile.jawg.io/$mapStyleUrl/{z}/{x}/{y}.png?access-token=6F94UuT7990iq8Z5yQpnbyujlm0Zr7bZkJwMshoaTEtYnsabLMp2EttcF6fCoW10',
-          subdomains: ['a', 'b', 'c'],
-          backgroundColor: theme.brightness == Brightness.light
-              ? const Color(0xffcad2d3)
-              : const Color(0xff191a1a),
+      layers: <LayerOptions>[
+        VectorTileLayerOptions(
+          theme: vector_theme.ProvidedThemes.lightTheme(),
+          tileProviders: TileProviders(
+            {
+              'openmaptiles': _cachingTileProvider(
+                  'https://tiles.stadiamaps.com/data/openmaptiles/{z}/{x}/{y}.pbf?api_key=d441798a-57bb-47df-bff7-64f1c314ef07')
+            },
+          ),
         ),
         MarkerClusterLayerOptions(
           size: const Size.square(48),

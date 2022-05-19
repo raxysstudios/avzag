@@ -27,6 +27,7 @@ dependencies:
   flutter_map_marker_cluster: ^0.4.4
   latlong2: ^0.8.1
   intersperse: ^2.0.0
+  vector_map_tiles: ^2.0.1
 
 dev_dependencies:
   flutter_test:
