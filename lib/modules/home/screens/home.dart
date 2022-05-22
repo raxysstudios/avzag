@@ -1,4 +1,5 @@
 import 'package:avzag/models/language.dart';
+import 'package:avzag/modules/home/services/mapbox.dart';
 import 'package:avzag/modules/navigation/nav_drawer.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
@@ -66,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     inputController.addListener(filterLanguages);
+    initThemes();
     load();
   }
 
@@ -283,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Builder(
         builder: (context) {
-          if (isLoading) {
+          if (isLoading || (isMap && !themesLoaded)) {
             return const Center(
               child: CircularProgressIndicator(),
             );

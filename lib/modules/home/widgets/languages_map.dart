@@ -1,5 +1,4 @@
 import 'package:avzag/models/language.dart';
-import 'package:avzag/modules/home/widgets/theme_provider.dart' as my_theme;
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
-import 'package:vector_tile_renderer/vector_tile_renderer.dart' as vector_theme;
+
+import '../services/mapbox.dart';
 
 class LanguagesMap extends StatelessWidget {
   const LanguagesMap({
@@ -21,28 +21,8 @@ class LanguagesMap extends StatelessWidget {
   final Set<Language> selected;
   final ValueSetter<Language> onToggle;
 
-  VectorTileProvider _cachingTileProvider(String url) {
-    return MemoryCacheVectorTileProvider(
-      delegate: NetworkVectorTileProvider(
-        urlTemplate: url,
-        maximumZoom: 14,
-      ),
-      maxSizeBytes: 1024 * 1024 * 2,
-    );
-  }
-
-  vector_theme.Theme _mapTheme(BuildContext context) {
-    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
-      return my_theme.ProvideMyTheme.monodarkTheme();
-    } else {
-      return my_theme.ProvideMyTheme.monowhiteTheme();
-    }
-  }
-
   @override
   Widget build(context) {
-    const String token =
-        'pk.eyJ1IjoicmF4eXNzdHVkaW9zIiwiYSI6ImNsM2RoamIzaTAxbWYzZG4xNTJ4MWhoOGkifQ.bk09KPfb2EQuwtcxU-INrQ';
     return FlutterMap(
       options: MapOptions(
         center: LatLng(43, 45),
@@ -53,16 +33,8 @@ class LanguagesMap extends StatelessWidget {
           VectorMapTilesPlugin(),
         ],
       ),
-      layers: <LayerOptions>[
-        VectorTileLayerOptions(
-          theme: _mapTheme(context),
-          tileProviders: TileProviders(
-            {
-              'composite': _cachingTileProvider(
-                  'https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/1/0/0.mvt?access_token=$token')
-            },
-          ),
-        ),
+      layers: [
+        composeVectorLayer(context),
         MarkerClusterLayerOptions(
           size: const Size.square(48),
           showPolygon: false,
@@ -78,17 +50,16 @@ class LanguagesMap extends StatelessWidget {
           ),
           centerMarkerOnClick: false,
           markers: [
-            for (final language in languages.where((l) => l.location != null))
+            for (final l in languages.where((l) => l.location != null))
               Marker(
                 width: 48,
                 height: 48,
                 point: LatLng(
-                  language.location!.latitude,
-                  language.location!.longitude,
+                  l.location!.latitude,
+                  l.location!.longitude,
                 ),
-                // anchorPos: AnchorPos.align(AnchorAlign.bottom),
                 builder: (context) {
-                  final selected = this.selected.contains(language);
+                  final selected = this.selected.contains(l);
                   return AnimatedOpacity(
                     opacity: selected ? 1 : .5,
                     duration: const Duration(milliseconds: 250),
@@ -97,13 +68,13 @@ class LanguagesMap extends StatelessWidget {
                         borderRadius: BorderRadius.circular(32),
                       ),
                       child: Tooltip(
-                        message: capitalize(language.name),
+                        message: capitalize(l.name),
                         preferBelow: false,
                         child: InkWell(
-                          onTap: () => onToggle(language),
+                          onTap: () => onToggle(l),
                           child: LanguageAvatar(
                             null,
-                            url: language.flag,
+                            url: l.flag,
                             radius: 10,
                           ),
                         ),
