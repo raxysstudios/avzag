@@ -1,4 +1,5 @@
 import 'package:avzag/models/language.dart';
+import 'package:avzag/modules/home/widgets/theme_provider.dart' as my_theme;
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:flutter/material.dart';
@@ -20,24 +21,28 @@ class LanguagesMap extends StatelessWidget {
   final Set<Language> selected;
   final ValueSetter<Language> onToggle;
 
-  VectorTileProvider _cachingTileProvider(BuildContext context) {
-    const token =
-        '6F94UuT7990iq8Z5yQpnbyujlm0Zr7bZkJwMshoaTEtYnsabLMp2EttcF6fCoW10';
-    final style = Theme.of(context).brightness == Brightness.light
-        ? '4bfb6bd9-e4e9-42b5-abfe-9f90ecb11e6b'
-        : '5b319ec1-f075-4278-b743-31be8b4a0808';
+  VectorTileProvider _cachingTileProvider(String url) {
     return MemoryCacheVectorTileProvider(
       delegate: NetworkVectorTileProvider(
-        urlTemplate:
-            'https://api.jawg.io/styles/$style.json?access-token=$token',
+        urlTemplate: url,
         maximumZoom: 14,
       ),
       maxSizeBytes: 1024 * 1024 * 2,
     );
   }
 
+  vector_theme.Theme _mapTheme(BuildContext context) {
+    if (MediaQuery.of(context).platformBrightness == Brightness.dark) {
+      return my_theme.ProvideMyTheme.monodarkTheme();
+    } else {
+      return my_theme.ProvideMyTheme.monowhiteTheme();
+    }
+  }
+
   @override
   Widget build(context) {
+    const String token =
+        'pk.eyJ1IjoicmF4eXNzdHVkaW9zIiwiYSI6ImNsM2RoamIzaTAxbWYzZG4xNTJ4MWhoOGkifQ.bk09KPfb2EQuwtcxU-INrQ';
     return FlutterMap(
       options: MapOptions(
         center: LatLng(43, 45),
@@ -48,11 +53,14 @@ class LanguagesMap extends StatelessWidget {
           VectorMapTilesPlugin(),
         ],
       ),
-      layers: [
+      layers: <LayerOptions>[
         VectorTileLayerOptions(
-          theme: vector_theme.ProvidedThemes.lightTheme(),
+          theme: _mapTheme(context),
           tileProviders: TileProviders(
-            {'jawg': _cachingTileProvider(context)},
+            {
+              'composite': _cachingTileProvider(
+                  'https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/1/0/0.mvt?access_token=$token')
+            },
           ),
         ),
         MarkerClusterLayerOptions(
