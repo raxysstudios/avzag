@@ -7,8 +7,8 @@ import 'package:vector_tile_renderer/vector_tile_renderer.dart' as vector_theme;
 typedef _MapTheme = vector_theme.Theme;
 
 var themesLoaded = false;
-late final _MapTheme _light;
-late final _MapTheme _dark;
+late _MapTheme _light;
+late _MapTheme _dark;
 
 Future<void> initThemes() async {
   if (themesLoaded) return;
@@ -26,7 +26,7 @@ Future<void> initThemes() async {
 
 VectorTileProvider _cachingTileProvider() {
   const token =
-      'pk.eyJ1IjoicmF4eXNzdHVkaW9zIiwiYSI6ImNsM2RoamIzaTAxbWYzZG4xNTJ4MWhoOGkifQ.bk09KPfb2EQuwtcxU-INrQ%60';
+      'pk.eyJ1IjoicmF4eXNzdHVkaW9zIiwiYSI6ImNsM2RoamIzaTAxbWYzZG4xNTJ4MWhoOGkifQ.bk09KPfb2EQuwtcxU-INrQ';
   const url =
       'https://api.mapbox.com/styles/v1/raxysstudios/cl3g6sr4x004o14o2ywap9fhb/wmts?access_token=$token';
   return MemoryCacheVectorTileProvider(
@@ -42,7 +42,7 @@ VectorTileLayerOptions composeVectorLayer(BuildContext context) {
   return VectorTileLayerOptions(
     theme: Theme.of(context).brightness == Brightness.light ? _light : _dark,
     tileProviders: TileProviders(
-      {'mapbox': _cachingTileProvider()},
+      {'composite': _cachingTileProvider()},
     ),
   );
 }
