@@ -28,7 +28,7 @@ VectorTileProvider _cachingTileProvider() {
   const token =
       'pk.eyJ1IjoicmF4eXNzdHVkaW9zIiwiYSI6ImNsM2RoamIzaTAxbWYzZG4xNTJ4MWhoOGkifQ.bk09KPfb2EQuwtcxU-INrQ';
   const url =
-      'https://api.mapbox.com/styles/v1/raxysstudios/cl3g6sr4x004o14o2ywap9fhb/wmts?access_token=$token';
+      'https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/{z}/{x}/{y}.mvt?access_token=$token&style=mapbox://styles/raxysstudios/cl3g6sr4x004o14o2ywap9fhb';
   return MemoryCacheVectorTileProvider(
     delegate: NetworkVectorTileProvider(
       urlTemplate: url,
