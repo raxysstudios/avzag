@@ -31,7 +31,6 @@ VectorTileProvider _cachingTileProvider() {
       'pk.eyJ1IjoicmF4eXNzdHVkaW9zIiwiYSI6ImNsM2RoamIzaTAxbWYzZG4xNTJ4MWhoOGkifQ.bk09KPfb2EQuwtcxU-INrQ';
   const style = 'mapbox://styles/raxysstudios/cl3g6sr4x004o14o2ywap9fhb';
   const url = '$base?style=$style@00&access_token=$token';
-  print('URL $url');
   return MemoryCacheVectorTileProvider(
     delegate: NetworkVectorTileProvider(
       urlTemplate: url,
