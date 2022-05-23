@@ -1,4 +1,5 @@
 import 'package:avzag/models/language.dart';
+import 'package:avzag/modules/home/services/mapbox.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:flutter/material.dart';
@@ -20,28 +21,20 @@ class LanguagesMap extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final theme = Theme.of(context);
-    final mapStyleUrl = theme.brightness == Brightness.light
-        ? '4bfb6bd9-e4e9-42b5-abfe-9f90ecb11e6b'
-        : '5b319ec1-f075-4278-b743-31be8b4a0808';
-
     return FlutterMap(
       options: MapOptions(
         center: LatLng(43, 45),
         zoom: 5,
+        maxZoom: 9,
+        minZoom: 5,
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
-        plugins: [
-          MarkerClusterPlugin(),
-        ],
+        plugins: [MarkerClusterPlugin()],
+        swPanBoundary: LatLng(41.1, 40),
+        nePanBoundary: LatLng(45, 48.1),
       ),
       layers: [
-        TileLayerOptions(
-          urlTemplate:
-              'https://tile.jawg.io/$mapStyleUrl/{z}/{x}/{y}.png?access-token=6F94UuT7990iq8Z5yQpnbyujlm0Zr7bZkJwMshoaTEtYnsabLMp2EttcF6fCoW10',
-          subdomains: ['a', 'b', 'c'],
-          backgroundColor: theme.brightness == Brightness.light
-              ? const Color(0xffcad2d3)
-              : const Color(0xff191a1a),
+        getTileLayer(
+          Theme.of(context).brightness == Brightness.dark,
         ),
         MarkerClusterLayerOptions(
           size: const Size.square(48),
