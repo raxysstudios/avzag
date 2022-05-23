@@ -71,12 +71,12 @@ class SearchToolbarState extends State<SearchToolbar> {
               OptionItem.simple(
                 Icons.language_rounded,
                 GlobalStore.languages.length == 1 ? 'English' : 'Multilingual',
-                () => setLanguage(''),
+                onTap: () => setLanguage(''),
               ),
               OptionItem.simple(
                 Icons.layers_rounded,
                 'Cross-lingual',
-                () => setLanguage('_'),
+                onTap: () => setLanguage('_'),
               ),
               OptionItem.divider(),
               for (final l in GlobalStore.languages.keys)
@@ -86,7 +86,7 @@ class SearchToolbarState extends State<SearchToolbar> {
                     capitalize(l),
                     style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
-                  () => setLanguage(l),
+                  onTap: () => setLanguage(l),
                 )
             ],
             icon: Builder(builder: (context) {

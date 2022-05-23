@@ -2,6 +2,7 @@ import 'package:avzag/modules/dictionary/screens/word.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
+import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:flutter/material.dart';
 
@@ -34,12 +35,18 @@ class WordsDiffScreen extends StatelessWidget {
             labelColor: Theme.of(context).colorScheme.onSurface,
             tabs: [
               Tab(
-                icon: Icon(Icons.adjust_rounded),
-                text: 'Base',
+                child: OptionItem.simple(
+                  Icons.adjust_rounded,
+                  'Base',
+                  centered: true,
+                ).widget,
               ),
               Tab(
-                icon: Icon(Icons.edit_rounded),
-                text: 'Overwrite',
+                child: OptionItem.simple(
+                  Icons.edit_rounded,
+                  'Overwrite',
+                  centered: true,
+                ).widget,
               ),
             ],
           ),
