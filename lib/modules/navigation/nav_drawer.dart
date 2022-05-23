@@ -77,18 +77,14 @@ class NavDraver extends StatelessWidget {
         child: ListView(
           children: [
             ExpandableTile(
-              header: const ListTile(
+              header: ListTile(
                 leading: RaxysLogo(
                   opacity: .1,
                   scale: 7,
                 ),
-                contentPadding: EdgeInsets.only(left: 16),
                 title: Text(
                   'Ævzag',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               ),
               body: ColumnCard(
@@ -96,10 +92,7 @@ class NavDraver extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 12),
                 children: [
                   ListTile(
-                    leading: const Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Icon(Icons.send_rounded),
-                    ),
+                    leading: const Icon(Icons.send_rounded),
                     title: const Text('Developer Contact'),
                     subtitle: const Text('Raxys Studios'),
                     onTap: () => openLink('https://t.me/raxysstudios'),
@@ -110,16 +103,10 @@ class NavDraver extends StatelessWidget {
                       var info = 'Loading...';
                       final package = snapshot.data;
                       if (package != null) {
-                        info = [
-                          'v${package.version}',
-                          'b${package.buildNumber}'
-                        ].join(' • ');
+                        info = 'v${package.version} • b${package.buildNumber}';
                       }
                       return ListTile(
-                        leading: const Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Icon(Icons.code_rounded),
-                        ),
+                        leading: const Icon(Icons.code_rounded),
                         title: const Text('GitHub Repository'),
                         subtitle: Text(info),
                         onTap: () => openLink(
@@ -130,21 +117,15 @@ class NavDraver extends StatelessWidget {
                   ),
                   SwitchListTile(
                     title: const Text('Editor Mode'),
-                    subtitle: Row(
-                      children: [
-                        if (EditorStore.editor) ...[
-                          if (EditorStore.admin)
-                            const SpanIcon(Icons.account_circle_rounded),
-                          Text(capitalize(EditorStore.language)),
-                        ] else
-                          const Text('Off')
-                      ],
-                    ),
+                    subtitle: EditorStore.editor
+                        ? Row(children: [
+                            if (EditorStore.admin)
+                              const SpanIcon(Icons.account_circle_rounded),
+                            Text(capitalize(EditorStore.language)),
+                          ])
+                        : null,
                     value: EditorStore.editor,
-                    secondary: const Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Icon(Icons.edit_rounded),
-                    ),
+                    secondary: const Icon(Icons.edit_rounded),
                     onChanged: (e) => Navigator.push<void>(
                       context,
                       MaterialPageRoute(
