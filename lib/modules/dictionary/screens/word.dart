@@ -118,9 +118,27 @@ class WordScreen extends StatelessWidget {
                 vertical: 8,
               ),
               children: [
-                Text(
-                  capitalize(u.term),
-                  style: theme.headline6,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        capitalize(u.term),
+                        style: theme.headline6,
+                      ),
+                    ),
+                    if (u.aliases.isNotEmpty)
+                      Tooltip(
+                        message: prettyTags(u.aliases)!,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Icon(
+                            Icons.label_rounded,
+                            color: Theme.of(context).textTheme.caption?.color,
+                          ),
+                        ),
+                      )
+                  ],
                 ),
                 if (u.tags.isNotEmpty)
                   Text(
