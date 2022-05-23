@@ -80,7 +80,9 @@ class DictionaryScreenState extends State<DictionaryScreen> {
   }
 
   void open(Entry entry) {
-    if (entry.unverified && EditorStore.admin) {
+    if (entry.unverified &&
+        EditorStore.admin &&
+        EditorStore.language == entry.language) {
       diffWords(context, entry.entryID);
       return;
     }
