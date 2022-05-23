@@ -7,6 +7,7 @@ import 'package:avzag/shared/widgets/markdown_text.dart';
 import 'package:avzag/shared/widgets/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../models/word.dart';
 
@@ -83,12 +84,15 @@ class WordScreen extends StatelessWidget {
             children: [
               Text(
                 capitalize(word.headword),
-                style: theme.headline6,
+                style: GoogleFonts.robotoSlab(
+                  textStyle: theme.headline5,
+                ),
               ),
               if (word.ipa != null)
                 Text(
-                  word.ipa!,
-                  style: theme.bodyText1?.copyWith(
+                  '[ ${word.ipa!} ]',
+                  style: GoogleFonts.notoSans(
+                    textStyle: theme.bodyText1,
                     color: theme.caption?.color,
                   ),
                 ),

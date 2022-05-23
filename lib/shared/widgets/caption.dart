@@ -24,14 +24,13 @@ class Caption extends StatelessWidget {
           if (icon != null)
             SpanIcon(
               icon!,
-              padding: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: 4),
             ),
           Text(
             text,
             style: TextStyle(
               color: Theme.of(context).textTheme.caption?.color,
               fontSize: 14,
-              fontWeight: FontWeight.w500,
               fontStyle: FontStyle.italic,
             ),
           ),
