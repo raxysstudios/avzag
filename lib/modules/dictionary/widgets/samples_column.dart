@@ -44,7 +44,9 @@ class SamplesColumn extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: s.text,
-                        style: GoogleFonts.robotoSlab(),
+                        style: GoogleFonts.bitter(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       if (s.meaning != null) ...[
                         TextSpan(text: inline ? ' ' : '\n'),

@@ -34,7 +34,7 @@ class EntryTile extends StatelessWidget {
             ),
           Text(
             capitalize(hit.headword),
-            style: GoogleFonts.robotoSlab(
+            style: GoogleFonts.bitter(
               textStyle: theme.subtitle1,
               fontWeight: FontWeight.w500,
             ),
@@ -44,7 +44,7 @@ class EntryTile extends StatelessWidget {
               padding: const EdgeInsets.only(left: 4),
               child: Text(
                 capitalize(hit.form!),
-                style: GoogleFonts.robotoSlab(
+                style: GoogleFonts.bitter(
                   textStyle: theme.subtitle1,
                   fontWeight: FontWeight.w500,
                   color: theme.caption?.color,

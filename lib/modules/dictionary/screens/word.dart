@@ -84,8 +84,9 @@ class WordScreen extends StatelessWidget {
             children: [
               Text(
                 capitalize(word.headword),
-                style: GoogleFonts.robotoSlab(
+                style: GoogleFonts.bitter(
                   textStyle: theme.headline5,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               if (word.ipa != null)
@@ -119,7 +120,7 @@ class WordScreen extends StatelessWidget {
               children: [
                 Text(
                   capitalize(u.term),
-                  style: theme.headline6?.copyWith(fontSize: 18),
+                  style: theme.headline6,
                 ),
                 if (u.tags.isNotEmpty)
                   Text(
