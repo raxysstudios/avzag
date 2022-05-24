@@ -10,38 +10,43 @@
 //
 // ignore_for_file: type=lint
 
-import 'package:auto_route/auto_route.dart' as _i5;
-import 'package:flutter/material.dart' as _i6;
+import 'package:auto_route/auto_route.dart' as _i6;
+import 'package:flutter/material.dart' as _i7;
 
-import '../../dictionary/models/word.dart' as _i7;
-import '../../dictionary/screens/dictionary.dart' as _i3;
-import '../../dictionary/screens/word.dart' as _i4;
-import '../../home/screens/home.dart' as _i1;
-import '../account.dart' as _i2;
+import '../../../initial_page.dart' as _i1;
+import '../../dictionary/models/word.dart' as _i8;
+import '../../dictionary/screens/dictionary.dart' as _i4;
+import '../../dictionary/screens/word.dart' as _i5;
+import '../../home/screens/home.dart' as _i2;
+import '../account.dart' as _i3;
 
-class AppRouter extends _i5.RootStackRouter {
-  AppRouter([_i6.GlobalKey<_i6.NavigatorState>? navigatorKey])
+class AppRouter extends _i6.RootStackRouter {
+  AppRouter([_i7.GlobalKey<_i7.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i5.PageFactory> pagesMap = {
-    HomeScreen.name: (routeData) {
-      return _i5.MaterialPageX<_i5.AutoRoute<dynamic>>(
-          routeData: routeData, child: const _i1.HomeScreen());
+  final Map<String, _i6.PageFactory> pagesMap = {
+    InitialPageRoute.name: (routeData) {
+      return _i6.MaterialPageX<_i6.AutoRoute<dynamic>>(
+          routeData: routeData, child: const _i1.InitialPage());
     },
-    AccountScreen.name: (routeData) {
-      return _i5.MaterialPageX<_i5.AutoRoute<dynamic>>(
-          routeData: routeData, child: const _i2.AccountScreen());
+    HomeScreenRoute.name: (routeData) {
+      return _i6.MaterialPageX<_i6.AutoRoute<dynamic>>(
+          routeData: routeData, child: const _i2.HomeScreen());
     },
-    DictionaryScreen.name: (routeData) {
-      return _i5.MaterialPageX<_i5.AutoRoute<dynamic>>(
-          routeData: routeData, child: const _i3.DictionaryScreen());
+    AccountScreenRoute.name: (routeData) {
+      return _i6.MaterialPageX<_i6.AutoRoute<dynamic>>(
+          routeData: routeData, child: const _i3.AccountScreen());
     },
-    WordScreen.name: (routeData) {
-      final args = routeData.argsAs<WordScreenArgs>();
-      return _i5.MaterialPageX<_i5.AutoRoute<dynamic>>(
+    DictionaryScreenRoute.name: (routeData) {
+      return _i6.MaterialPageX<_i6.AutoRoute<dynamic>>(
+          routeData: routeData, child: const _i4.DictionaryScreen());
+    },
+    WordScreenRoute.name: (routeData) {
+      final args = routeData.argsAs<WordScreenRouteArgs>();
+      return _i6.MaterialPageX<_i6.AutoRoute<dynamic>>(
           routeData: routeData,
-          child: _i4.WordScreen(args.word,
+          child: _i5.WordScreen(args.word,
               scroll: args.scroll,
               onEdit: args.onEdit,
               embedded: args.embedded,
@@ -50,89 +55,99 @@ class AppRouter extends _i5.RootStackRouter {
   };
 
   @override
-  List<_i5.RouteConfig> get routes => [
-        _i5.RouteConfig(HomeScreen.name, path: '/', children: [
-          _i5.RouteConfig(AccountScreen.name,
-              path: 'account', parent: HomeScreen.name),
-          _i5.RouteConfig(DictionaryScreen.name,
+  List<_i6.RouteConfig> get routes => [
+        _i6.RouteConfig(InitialPageRoute.name, path: '/', children: [
+          _i6.RouteConfig(HomeScreenRoute.name,
+              path: 'home', parent: InitialPageRoute.name),
+          _i6.RouteConfig(AccountScreenRoute.name,
+              path: 'account', parent: InitialPageRoute.name),
+          _i6.RouteConfig(DictionaryScreenRoute.name,
               path: 'dictionary',
-              parent: HomeScreen.name,
+              parent: InitialPageRoute.name,
               children: [
-                _i5.RouteConfig(WordScreen.name,
-                    path: ':id', parent: DictionaryScreen.name)
+                _i6.RouteConfig(WordScreenRoute.name,
+                    path: ':id', parent: DictionaryScreenRoute.name)
               ])
         ])
       ];
 }
 
 /// generated route for
-/// [_i1.HomeScreen]
-class HomeScreen extends _i5.PageRouteInfo<void> {
-  const HomeScreen({List<_i5.PageRouteInfo>? children})
-      : super(HomeScreen.name, path: '/', initialChildren: children);
+/// [_i1.InitialPage]
+class InitialPageRoute extends _i6.PageRouteInfo<void> {
+  const InitialPageRoute({List<_i6.PageRouteInfo>? children})
+      : super(InitialPageRoute.name, path: '/', initialChildren: children);
 
-  static const String name = 'HomeScreen';
+  static const String name = 'InitialPageRoute';
 }
 
 /// generated route for
-/// [_i2.AccountScreen]
-class AccountScreen extends _i5.PageRouteInfo<void> {
-  const AccountScreen() : super(AccountScreen.name, path: 'account');
+/// [_i2.HomeScreen]
+class HomeScreenRoute extends _i6.PageRouteInfo<void> {
+  const HomeScreenRoute() : super(HomeScreenRoute.name, path: 'home');
 
-  static const String name = 'AccountScreen';
+  static const String name = 'HomeScreenRoute';
 }
 
 /// generated route for
-/// [_i3.DictionaryScreen]
-class DictionaryScreen extends _i5.PageRouteInfo<void> {
-  const DictionaryScreen({List<_i5.PageRouteInfo>? children})
-      : super(DictionaryScreen.name,
+/// [_i3.AccountScreen]
+class AccountScreenRoute extends _i6.PageRouteInfo<void> {
+  const AccountScreenRoute() : super(AccountScreenRoute.name, path: 'account');
+
+  static const String name = 'AccountScreenRoute';
+}
+
+/// generated route for
+/// [_i4.DictionaryScreen]
+class DictionaryScreenRoute extends _i6.PageRouteInfo<void> {
+  const DictionaryScreenRoute({List<_i6.PageRouteInfo>? children})
+      : super(DictionaryScreenRoute.name,
             path: 'dictionary', initialChildren: children);
 
-  static const String name = 'DictionaryScreen';
+  static const String name = 'DictionaryScreenRoute';
 }
 
 /// generated route for
-/// [_i4.WordScreen]
-class WordScreen extends _i5.PageRouteInfo<WordScreenArgs> {
-  WordScreen(
-      {required _i7.Word word,
-      _i6.ScrollController? scroll,
-      void Function(_i7.Word)? onEdit,
+/// [_i5.WordScreen]
+class WordScreenRoute extends _i6.PageRouteInfo<WordScreenRouteArgs> {
+  WordScreenRoute(
+      {required _i8.Word word,
+      _i7.ScrollController? scroll,
+      void Function(_i8.Word)? onEdit,
       bool embedded = false,
-      _i6.Key? key})
-      : super(WordScreen.name,
+      _i7.Key? key})
+      : super(WordScreenRoute.name,
             path: ':id',
-            args: WordScreenArgs(
+            args: WordScreenRouteArgs(
                 word: word,
                 scroll: scroll,
                 onEdit: onEdit,
                 embedded: embedded,
                 key: key));
 
-  static const String name = 'WordScreen';
+  static const String name = 'WordScreenRoute';
 }
 
-class WordScreenArgs {
-  const WordScreenArgs(
+class WordScreenRouteArgs {
+  const WordScreenRouteArgs(
       {required this.word,
       this.scroll,
       this.onEdit,
       this.embedded = false,
       this.key});
 
-  final _i7.Word word;
+  final _i8.Word word;
 
-  final _i6.ScrollController? scroll;
+  final _i7.ScrollController? scroll;
 
-  final void Function(_i7.Word)? onEdit;
+  final void Function(_i8.Word)? onEdit;
 
   final bool embedded;
 
-  final _i6.Key? key;
+  final _i7.Key? key;
 
   @override
   String toString() {
-    return 'WordScreenArgs{word: $word, scroll: $scroll, onEdit: $onEdit, embedded: $embedded, key: $key}';
+    return 'WordScreenRouteArgs{word: $word, scroll: $scroll, onEdit: $onEdit, embedded: $embedded, key: $key}';
   }
 }

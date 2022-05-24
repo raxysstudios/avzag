@@ -1,12 +1,12 @@
 import 'package:algolia/algolia.dart';
+import 'package:avzag/initial_page.dart';
 import 'package:avzag/store.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'config/themes.dart';
 import 'firebase_options.dart';
-import 'modules/navigation/nav_drawer.dart';
+import 'modules/navigation/router/router.gr.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,29 +23,19 @@ void main() async {
   );
   await EditorStore.init();
   await GlobalStore.init();
-  runApp(const App());
+  runApp(App());
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  // make sure you don't initiate your router
+  // inside of the build function.
+  final _appRouter = AppRouter();
 
   @override
-  Widget build(context) {
-    final themes = Themes(Theme.of(context).colorScheme);
-    return MaterialApp(
-      title: 'Avzag',
-      theme: themes.light,
-      darkTheme: themes.dark,
-      home: FutureBuilder<void>(
-        future: Future.value(),
-        builder: (context, snapshot) {
-          navigate(
-            context,
-            prefs.getString('module') ?? 'home',
-          );
-          return const Material();
-        },
-      ),
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routerDelegate: _appRouter.delegate(),
+      routeInformationParser: _appRouter.defaultRouteParser(),
     );
   }
 }
