@@ -9,8 +9,12 @@ import 'package:avzag/modules/navigation/account.dart';
   routes: <AutoRoute>[
     AutoRoute<AutoRoute>(
       path: '/',
-      page: InitialPage,
+      page: EmptyRouterPage,
       children: [
+        AutoRoute<AutoRoute>(
+          path: '',
+          page: InitialPage,
+        ),
         AutoRoute<AutoRoute>(
           path: 'home',
           page: HomeScreen,

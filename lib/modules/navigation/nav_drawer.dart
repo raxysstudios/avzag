@@ -1,5 +1,5 @@
-import 'package:avzag/modules/dictionary/screens/dictionary.dart';
-import 'package:avzag/modules/home/screens/home.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:avzag/modules/navigation/router/router.gr.dart';
 import 'package:avzag/shared/utils/open_link.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -23,21 +23,26 @@ Future<void> navigate(
     if (title == null || title == 'home') title = 'dictionary';
   }
 
-  late Widget Function(BuildContext) builder;
+  // late Route builder;
+  final router = context.router;
   if (title == 'home') {
-    builder = (_) => const HomeScreen();
+    // builder = (_) => const HomeScreen();
+    router.replace(HomeScreenRoute());
     title = null;
   } else if (title == 'dictionary') {
-    builder = (_) => const DictionaryScreen();
+    // builder = (_) => const DictionaryScreen();
+    router.replace(DictionaryScreenRoute());
+    // title = null;
   } else {
-    builder = (_) => const Text('No Route');
+    //  builder = (_) => const Text('No Route');
+    () => const Text('No Route');
   }
 
-  if (title != null) await prefs.setString('module', title);
-  await Navigator.pushReplacement<void, void>(
-    context,
-    MaterialPageRoute(builder: builder),
-  );
+  // if (title != null) await prefs.setString('module', title);
+  // await Navigator.pushReplacement<void, void>(
+  //   context,
+  //   MaterialPageRoute(builder: builder))
+  // );
 }
 
 class _NavModule {
