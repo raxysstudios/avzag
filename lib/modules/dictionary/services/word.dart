@@ -1,7 +1,7 @@
 import 'package:avzag/models/contribution.dart';
-import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
-import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
-import 'package:avzag/shared/widgets/modals/snackbar_manager.dart';
+import 'package:avzag/shared/modals/danger_dialog.dart';
+import 'package:avzag/shared/modals/loading_dialog.dart';
+import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:avzag/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

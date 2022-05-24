@@ -1,8 +1,8 @@
 import 'package:avzag/modules/dictionary/screens/word_editor.dart';
 import 'package:avzag/modules/dictionary/screens/words_diff.dart';
-import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
-import 'package:avzag/shared/widgets/modals/scrollable_modal_sheet.dart';
-import 'package:avzag/shared/widgets/modals/snackbar_manager.dart';
+import 'package:avzag/shared/modals/loading_dialog.dart';
+import 'package:avzag/shared/modals/scrollable_modal_sheet.dart';
+import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../models/word.dart';

@@ -1,8 +1,8 @@
 import 'package:avzag/models/language.dart';
 import 'package:avzag/modules/navigation/nav_drawer.dart';
 import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
-import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:avzag/store.dart';
 import 'package:badges/badges.dart';

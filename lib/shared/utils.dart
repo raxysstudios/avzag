@@ -1,4 +1,4 @@
-import 'package:avzag/shared/widgets/modals/snackbar_manager.dart';
+import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
