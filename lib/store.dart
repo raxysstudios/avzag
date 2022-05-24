@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/language.dart';
-import 'shared/utils/utils.dart';
+import 'shared/utils.dart';
 
 late final Algolia algolia;
 late final SharedPreferences prefs;

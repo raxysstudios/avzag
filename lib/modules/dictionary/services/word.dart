@@ -1,4 +1,4 @@
-import 'package:avzag/shared/utils/contribution.dart';
+import 'package:avzag/models/contribution.dart';
 import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
 import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
 import 'package:avzag/shared/widgets/modals/snackbar_manager.dart';

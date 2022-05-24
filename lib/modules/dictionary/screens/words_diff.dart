@@ -1,5 +1,5 @@
 import 'package:avzag/modules/dictionary/screens/word.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
@@ -30,7 +30,7 @@ class WordsDiffScreen extends StatelessWidget {
           leading: RoundedBackButton(
             icon: Icons.close_rounded,
           ),
-          title: Text(capitalize(overwrite.language)),
+          title: Text(overwrite.language.titled),
           bottom: TabBar(
             labelColor: Theme.of(context).colorScheme.onSurface,
             tabs: [

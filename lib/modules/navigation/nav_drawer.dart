@@ -1,7 +1,7 @@
 import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/home/screens/home.dart';
-import 'package:avzag/shared/utils/open_link.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/expandable_tile.dart';
 import 'package:avzag/shared/widgets/raxys_logo.dart';
@@ -50,7 +50,7 @@ class _NavModule {
     return ListTile(
       leading: Icon(icon),
       title: Text(
-        capitalize(text),
+        text.titled,
         style: const TextStyle(fontSize: 18),
       ),
       trailing: enabled ? null : const Icon(Icons.construction_rounded),
@@ -121,7 +121,7 @@ class NavDraver extends StatelessWidget {
                         ? Row(children: [
                             if (EditorStore.admin)
                               const SpanIcon(Icons.account_circle_rounded),
-                            Text(capitalize(EditorStore.language)),
+                            Text(EditorStore.language!.titled),
                           ])
                         : null,
                     value: EditorStore.editor,

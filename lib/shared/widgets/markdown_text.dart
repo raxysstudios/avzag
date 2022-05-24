@@ -1,6 +1,7 @@
-import 'package:avzag/shared/utils/open_link.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+
+import '../utils.dart';
 
 class MarkdownText extends StatelessWidget {
   const MarkdownText(

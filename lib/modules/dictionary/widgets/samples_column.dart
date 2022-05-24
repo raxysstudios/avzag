@@ -1,4 +1,4 @@
-import 'package:avzag/shared/utils/text.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/sample.dart';

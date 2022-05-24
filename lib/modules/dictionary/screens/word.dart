@@ -1,5 +1,5 @@
 import 'package:avzag/modules/dictionary/widgets/samples_column.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
@@ -36,7 +36,7 @@ class WordScreen extends StatelessWidget {
               title: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Text(capitalize(word.language)),
+                  Text(word.language.titled),
                 ],
               ),
               actions: [
@@ -83,7 +83,7 @@ class WordScreen extends StatelessWidget {
             ),
             children: [
               Text(
-                capitalize(word.headword),
+                word.headword.titled,
                 style: GoogleFonts.bitter(
                   textStyle: theme.headline5,
                   fontWeight: FontWeight.w500,
@@ -99,7 +99,7 @@ class WordScreen extends StatelessWidget {
                 ),
               if (word.tags.isNotEmpty)
                 Text(
-                  prettyTags(word.tags)!,
+                  word.tags.join(' • ').titled,
                   style: theme.caption,
                 ),
               if (word.note != null) MarkdownText(word.note!),
@@ -123,13 +123,13 @@ class WordScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        capitalize(u.term),
+                        u.term.titled,
                         style: theme.headline6,
                       ),
                     ),
                     if (u.aliases.isNotEmpty)
                       Tooltip(
-                        message: prettyTags(u.aliases)!,
+                        message: u.aliases.join(' • ').titled,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: Icon(
@@ -142,7 +142,7 @@ class WordScreen extends StatelessWidget {
                 ),
                 if (u.tags.isNotEmpty)
                   Text(
-                    prettyTags(u.tags)!,
+                    u.tags.join(' • ').titled,
                     style: theme.caption,
                   ),
                 if (u.note != null) MarkdownText(u.note!),

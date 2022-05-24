@@ -1,5 +1,5 @@
 import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/compact_input.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
@@ -43,7 +43,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const RoundedBackButton(),
-        title: Text(capitalize(word.language)),
+        title: Text(word.language.titled),
         actions: [
           Opacity(
             opacity: .5,

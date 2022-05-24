@@ -1,6 +1,6 @@
 import 'package:avzag/models/language.dart';
 import 'package:avzag/modules/home/services/mapbox.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -70,7 +70,7 @@ class LanguagesMap extends StatelessWidget {
                         borderRadius: BorderRadius.circular(32),
                       ),
                       child: Tooltip(
-                        message: capitalize(language.name),
+                        message: language.name.titled,
                         preferBelow: false,
                         child: InkWell(
                           onTap: () => onToggle(language),

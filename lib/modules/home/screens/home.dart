@@ -1,6 +1,6 @@
 import 'package:avzag/models/language.dart';
 import 'package:avzag/modules/navigation/nav_drawer.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             radius: 12,
                           ),
                           label: Text(
-                            capitalize(language.name),
+                            language.name.titled,
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                             ),
@@ -260,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: ListTile(
                                     leading: Icon(ordering.icon),
                                     title: Text(
-                                      capitalize(ordering.text),
+                                      ordering.text.titled,
                                       softWrap: false,
                                       overflow: TextOverflow.fade,
                                       style: const TextStyle(
