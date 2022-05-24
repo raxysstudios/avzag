@@ -27,6 +27,7 @@ dependencies:
   flutter_map_marker_cluster: ^0.4.4
   latlong2: ^0.8.1
   intersperse: ^2.0.0
+  auto_route: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +36,7 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   build_runner: ^2.1.11
   json_serializable: ^6.2.0
+  auto_route_generator: ^4.0.0
 
 flutter_icons:
   image_path: "assets/icon.png"
