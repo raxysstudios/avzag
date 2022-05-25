@@ -26,6 +26,7 @@ Future<T?> showLoadingDialog<T>(
     final result = await future;
     // Navigator.pop(context);
     Navigator.of(context, rootNavigator: true).pop(result);
+
     return result;
   } catch (e) {
     // Navigator.pop(context);

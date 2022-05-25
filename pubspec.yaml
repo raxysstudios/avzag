@@ -28,6 +28,7 @@ dependencies:
   latlong2: ^0.8.1
   intersperse: ^2.0.0
   auto_route: ^4.0.1
+  navigation_history_observer: ^1.1.0
 
 dev_dependencies:
   flutter_test:

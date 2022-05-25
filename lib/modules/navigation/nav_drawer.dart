@@ -9,6 +9,7 @@ import 'package:avzag/shared/widgets/raxys_logo.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
+import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,15 +25,17 @@ Future<void> navigate(
     if (title == null || title == 'home') title = 'dictionary';
   }
 
+  print(NavigationHistoryObserver().history);
+
   // late Route builder;
   final router = context.router;
   if (title == 'home') {
     // builder = (_) => const HomeScreen();
-    router.push(HomeScreenRoute());
+    router.replace(HomeScreenRoute());
     title = null;
   } else if (title == 'dictionary') {
     // builder = (_) => const DictionaryScreen();
-    router.push(DictRouter());
+    router.replace(DictionaryScreenRoute());
     // title = null;
   } else {
     //  builder = (_) => const Text('No Route');

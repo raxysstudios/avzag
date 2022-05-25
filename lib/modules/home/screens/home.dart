@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   GlobalStore.set(objects: selected),
                 );
                 navigate(context);
-                // await context.router.push(DictRouter());
+                // await context.router.push(DictionaryScreenRoute());
               },
               tooltip: 'Continue',
               child: const Icon(Icons.done_all_rounded),

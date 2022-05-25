@@ -26,9 +26,9 @@ class AppRouter extends _i1.RootStackRouter {
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
-    EmptyRouterPageRoute.name: (routeData) {
+    EmptyRouterScreenRoute.name: (routeData) {
       return _i1.MaterialPageX<_i1.AutoRoute<dynamic>>(
-          routeData: routeData, child: const _i1.EmptyRouterPage());
+          routeData: routeData, child: const _i1.EmptyRouterScreen());
     },
     InitialPageRoute.name: (routeData) {
       return _i1.MaterialPageX<_i1.AutoRoute<dynamic>>(
@@ -41,10 +41,6 @@ class AppRouter extends _i1.RootStackRouter {
     AccountScreenRoute.name: (routeData) {
       return _i1.MaterialPageX<_i1.AutoRoute<dynamic>>(
           routeData: routeData, child: const _i4.AccountScreen());
-    },
-    DictRouter.name: (routeData) {
-      return _i1.MaterialPageX<_i1.AutoRoute<dynamic>>(
-          routeData: routeData, child: const _i1.EmptyRouterPage());
     },
     DictionaryScreenRoute.name: (routeData) {
       return _i1.MaterialPageX<_i1.AutoRoute<dynamic>>(
@@ -66,36 +62,32 @@ class AppRouter extends _i1.RootStackRouter {
 
   @override
   List<_i1.RouteConfig> get routes => [
-        _i1.RouteConfig(EmptyRouterPageRoute.name, path: '/', children: [
+        _i1.RouteConfig(EmptyRouterScreenRoute.name, path: '/', children: [
           _i1.RouteConfig(InitialPageRoute.name,
-              path: '', parent: EmptyRouterPageRoute.name),
+              path: '', parent: EmptyRouterScreenRoute.name),
           _i1.RouteConfig(HomeScreenRoute.name,
-              path: 'home', parent: EmptyRouterPageRoute.name),
+              path: 'home', parent: EmptyRouterScreenRoute.name),
           _i1.RouteConfig(AccountScreenRoute.name,
-              path: 'account', parent: EmptyRouterPageRoute.name),
-          _i1.RouteConfig(DictRouter.name,
+              path: 'account', parent: EmptyRouterScreenRoute.name),
+          _i1.RouteConfig(DictionaryScreenRoute.name,
               path: 'dictionary',
-              parent: EmptyRouterPageRoute.name,
+              parent: EmptyRouterScreenRoute.name,
               children: [
-                _i1.RouteConfig(DictionaryScreenRoute.name,
-                    path: '',
-                    parent: DictRouter.name,
-                    children: [
-                      _i1.RouteConfig(WordScreenRoute.name,
-                          path: ':id', parent: DictionaryScreenRoute.name)
-                    ])
+                _i1.RouteConfig(WordScreenRoute.name,
+                    path: ':id', parent: DictionaryScreenRoute.name)
               ])
         ])
       ];
 }
 
 /// generated route for
-/// [_i1.EmptyRouterPage]
-class EmptyRouterPageRoute extends _i1.PageRouteInfo<void> {
-  const EmptyRouterPageRoute({List<_i1.PageRouteInfo>? children})
-      : super(EmptyRouterPageRoute.name, path: '/', initialChildren: children);
+/// [_i1.EmptyRouterScreen]
+class EmptyRouterScreenRoute extends _i1.PageRouteInfo<void> {
+  const EmptyRouterScreenRoute({List<_i1.PageRouteInfo>? children})
+      : super(EmptyRouterScreenRoute.name,
+            path: '/', initialChildren: children);
 
-  static const String name = 'EmptyRouterPageRoute';
+  static const String name = 'EmptyRouterScreenRoute';
 }
 
 /// generated route for
@@ -123,19 +115,11 @@ class AccountScreenRoute extends _i1.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i1.EmptyRouterPage]
-class DictRouter extends _i1.PageRouteInfo<void> {
-  const DictRouter({List<_i1.PageRouteInfo>? children})
-      : super(DictRouter.name, path: 'dictionary', initialChildren: children);
-
-  static const String name = 'DictRouter';
-}
-
-/// generated route for
 /// [_i5.DictionaryScreen]
 class DictionaryScreenRoute extends _i1.PageRouteInfo<void> {
   const DictionaryScreenRoute({List<_i1.PageRouteInfo>? children})
-      : super(DictionaryScreenRoute.name, path: '', initialChildren: children);
+      : super(DictionaryScreenRoute.name,
+            path: 'dictionary', initialChildren: children);
 
   static const String name = 'DictionaryScreenRoute';
 }
@@ -159,7 +143,7 @@ class WordScreenRoute extends _i1.PageRouteInfo<WordScreenRouteArgs> {
                 onEdit: onEdit,
                 embedded: embedded,
                 key: key),
-            rawPathParams: {'id': id});
+            rawPathParams: <String, dynamic>{'id': id});
 
   static const String name = 'WordScreenRoute';
 }

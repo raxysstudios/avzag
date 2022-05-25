@@ -9,6 +9,7 @@ import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:provider/provider.dart';
 
 import '../models/entry.dart';
@@ -103,13 +104,9 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     final id = entry.entryID;
     final router = context.router;
 
-    pushRoute() {
-      print(word.headword);
-      print(entry.entryID);
-      return router.navigateNamed('/dictionary/:$id');
-    }
-
-    pushRoute();
+    () {
+      return router.push(WordScreenRoute(word: word, id: id)); // wrong
+    }();
   }
 
   @override

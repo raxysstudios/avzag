@@ -10,7 +10,7 @@ import 'package:avzag/modules/navigation/router/router.gr.dart';
   routes: <AutoRoute>[
     AutoRoute<AutoRoute>(
       path: '/',
-      page: EmptyRouterPage,
+      page: EmptyRouterScreen,
       children: [
         AutoRoute<AutoRoute>(
           path: '',
@@ -26,18 +26,11 @@ import 'package:avzag/modules/navigation/router/router.gr.dart';
         ),
         AutoRoute<AutoRoute>(
           path: 'dictionary',
-          name: 'DictRouter',
-          page: EmptyRouterPage,
+          page: DictionaryScreen,
           children: [
             AutoRoute<AutoRoute>(
-              path: '',
-              page: DictionaryScreen,
-              children: [
-                AutoRoute<AutoRoute>(
-                  path: ':id',
-                  page: WordScreen,
-                ),
-              ],
+              path: ':id',
+              page: WordScreen,
             ),
           ],
         ),
