@@ -12,16 +12,14 @@ import 'package:flutter/material.dart';
 import '../models/word.dart';
 
 class WordScreen extends StatelessWidget {
-  const WordScreen({
-    @PathParam() this.id,
-    required this.word,
+  const WordScreen(
+    this.word, {
     this.scroll,
     this.onEdit,
     this.embedded = false,
     Key? key,
   }) : super(key: key);
 
-  final String? id;
   final Word word;
   final bool embedded;
   final ScrollController? scroll;

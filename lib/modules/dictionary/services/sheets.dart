@@ -43,8 +43,7 @@ Future<void> openWord(
     context: context,
     builder: (context, scroll) {
       return WordScreen(
-        word: word,
-        id: id,
+        word,
         scroll: scroll,
         onEdit: onEdit,
       );

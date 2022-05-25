@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/navigation/router/router.gr.dart';
 import 'package:avzag/shared/utils/open_link.dart';
 import 'package:avzag/shared/utils/utils.dart';
@@ -9,11 +8,8 @@ import 'package:avzag/shared/widgets/raxys_logo.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
-import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'account.dart';
 
 Future<void> navigate(
   BuildContext context, [
@@ -25,20 +21,14 @@ Future<void> navigate(
     if (title == null || title == 'home') title = 'dictionary';
   }
 
-  print(NavigationHistoryObserver().history);
-
   // late Route builder;
   final router = context.router;
   if (title == 'home') {
-    // builder = (_) => const HomeScreen();
-    router.replace(HomeScreenRoute());
+    router.push(HomeScreenRoute());
     title = null;
   } else if (title == 'dictionary') {
-    // builder = (_) => const DictionaryScreen();
-    router.replace(DictionaryScreenRoute());
-    // title = null;
+    router.push(DictionaryScreenRoute());
   } else {
-    //  builder = (_) => const Text('No Route');
     () => const Text('No Route');
   }
 

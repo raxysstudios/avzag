@@ -562,13 +562,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  navigation_history_observer:
-    dependency: "direct main"
-    description:
-      name: navigation_history_observer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   nested:
     dependency: transitive
     description:

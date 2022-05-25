@@ -4,7 +4,6 @@ import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/dictionary/screens/word.dart';
 import 'package:avzag/modules/home/screens/home.dart';
 import 'package:avzag/modules/navigation/account.dart';
-import 'package:avzag/modules/navigation/router/router.gr.dart';
 
 @MaterialAutoRouter(
   routes: <AutoRoute>[

@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/screens/word.dart';
-import 'package:avzag/modules/dictionary/services/word.dart';
 import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
 import 'package:avzag/modules/navigation/nav_drawer.dart';
 import 'package:avzag/modules/navigation/router/router.gr.dart';
@@ -9,7 +8,6 @@ import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:navigation_history_observer/navigation_history_observer.dart';
 import 'package:provider/provider.dart';
 
 import '../models/entry.dart';
@@ -84,6 +82,8 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     );
   }
 
+  late String wordID;
+
   void open(Entry entry) async {
     if (entry.unverified && EditorStore.admin) {
       diffWords(context, entry.entryID);
@@ -99,14 +99,8 @@ class DictionaryScreenState extends State<DictionaryScreen> {
           : null,
     );
 
-    final Word? temp = await loadWord(entry.entryID);
-    final Word word = temp!;
-    final id = entry.entryID;
-    final router = context.router;
-
-    () {
-      return router.push(WordScreenRoute(word: word, id: id)); // wrong
-    }();
+    wordID = entry.entryID;
+    await context.router.navigateNamed('/dictionary/:$wordID');
   }
 
   @override

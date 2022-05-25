@@ -84,11 +84,11 @@ class WordsDiffScreen extends StatelessWidget {
                     ),
                   )
                 : WordScreen(
-                    word: base!,
+                    base!,
                     embedded: true,
                   ),
             WordScreen(
-              word: overwrite,
+              overwrite,
               embedded: true,
             ),
           ],
