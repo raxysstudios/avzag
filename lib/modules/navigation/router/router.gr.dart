@@ -42,6 +42,10 @@ class AppRouter extends _i1.RootStackRouter {
       return _i1.MaterialPageX<_i1.AutoRoute<dynamic>>(
           routeData: routeData, child: const _i4.AccountScreen());
     },
+    DictRouter.name: (routeData) {
+      return _i1.MaterialPageX<_i1.AutoRoute<dynamic>>(
+          routeData: routeData, child: const _i1.EmptyRouterPage());
+    },
     DictionaryScreenRoute.name: (routeData) {
       return _i1.MaterialPageX<_i1.AutoRoute<dynamic>>(
           routeData: routeData, child: const _i5.DictionaryScreen());
@@ -50,7 +54,9 @@ class AppRouter extends _i1.RootStackRouter {
       final args = routeData.argsAs<WordScreenRouteArgs>();
       return _i1.MaterialPageX<_i1.AutoRoute<dynamic>>(
           routeData: routeData,
-          child: _i6.WordScreen(args.word,
+          child: _i6.WordScreen(
+              id: args.id,
+              word: args.word,
               scroll: args.scroll,
               onEdit: args.onEdit,
               embedded: args.embedded,
@@ -67,12 +73,17 @@ class AppRouter extends _i1.RootStackRouter {
               path: 'home', parent: EmptyRouterPageRoute.name),
           _i1.RouteConfig(AccountScreenRoute.name,
               path: 'account', parent: EmptyRouterPageRoute.name),
-          _i1.RouteConfig(DictionaryScreenRoute.name,
+          _i1.RouteConfig(DictRouter.name,
               path: 'dictionary',
               parent: EmptyRouterPageRoute.name,
               children: [
-                _i1.RouteConfig(WordScreenRoute.name,
-                    path: ':id', parent: DictionaryScreenRoute.name)
+                _i1.RouteConfig(DictionaryScreenRoute.name,
+                    path: '',
+                    parent: DictRouter.name,
+                    children: [
+                      _i1.RouteConfig(WordScreenRoute.name,
+                          path: ':id', parent: DictionaryScreenRoute.name)
+                    ])
               ])
         ])
       ];
@@ -112,11 +123,19 @@ class AccountScreenRoute extends _i1.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i1.EmptyRouterPage]
+class DictRouter extends _i1.PageRouteInfo<void> {
+  const DictRouter({List<_i1.PageRouteInfo>? children})
+      : super(DictRouter.name, path: 'dictionary', initialChildren: children);
+
+  static const String name = 'DictRouter';
+}
+
+/// generated route for
 /// [_i5.DictionaryScreen]
 class DictionaryScreenRoute extends _i1.PageRouteInfo<void> {
   const DictionaryScreenRoute({List<_i1.PageRouteInfo>? children})
-      : super(DictionaryScreenRoute.name,
-            path: 'dictionary', initialChildren: children);
+      : super(DictionaryScreenRoute.name, path: '', initialChildren: children);
 
   static const String name = 'DictionaryScreenRoute';
 }
@@ -125,7 +144,8 @@ class DictionaryScreenRoute extends _i1.PageRouteInfo<void> {
 /// [_i6.WordScreen]
 class WordScreenRoute extends _i1.PageRouteInfo<WordScreenRouteArgs> {
   WordScreenRoute(
-      {required _i8.Word word,
+      {String? id,
+      required _i8.Word word,
       _i7.ScrollController? scroll,
       void Function(_i8.Word)? onEdit,
       bool embedded = false,
@@ -133,22 +153,27 @@ class WordScreenRoute extends _i1.PageRouteInfo<WordScreenRouteArgs> {
       : super(WordScreenRoute.name,
             path: ':id',
             args: WordScreenRouteArgs(
+                id: id,
                 word: word,
                 scroll: scroll,
                 onEdit: onEdit,
                 embedded: embedded,
-                key: key));
+                key: key),
+            rawPathParams: {'id': id});
 
   static const String name = 'WordScreenRoute';
 }
 
 class WordScreenRouteArgs {
   const WordScreenRouteArgs(
-      {required this.word,
+      {this.id,
+      required this.word,
       this.scroll,
       this.onEdit,
       this.embedded = false,
       this.key});
+
+  final String? id;
 
   final _i8.Word word;
 
@@ -162,6 +187,6 @@ class WordScreenRouteArgs {
 
   @override
   String toString() {
-    return 'WordScreenRouteArgs{word: $word, scroll: $scroll, onEdit: $onEdit, embedded: $embedded, key: $key}';
+    return 'WordScreenRouteArgs{id: $id, word: $word, scroll: $scroll, onEdit: $onEdit, embedded: $embedded, key: $key}';
   }
 }

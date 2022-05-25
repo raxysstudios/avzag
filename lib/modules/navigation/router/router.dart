@@ -4,6 +4,7 @@ import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/dictionary/screens/word.dart';
 import 'package:avzag/modules/home/screens/home.dart';
 import 'package:avzag/modules/navigation/account.dart';
+import 'package:avzag/modules/navigation/router/router.gr.dart';
 
 @MaterialAutoRouter(
   routes: <AutoRoute>[
@@ -25,14 +26,21 @@ import 'package:avzag/modules/navigation/account.dart';
         ),
         AutoRoute<AutoRoute>(
           path: 'dictionary',
-          page: DictionaryScreen,
+          name: 'DictRouter',
+          page: EmptyRouterPage,
           children: [
             AutoRoute<AutoRoute>(
-              path: ':id',
-              page: WordScreen,
+              path: '',
+              page: DictionaryScreen,
+              children: [
+                AutoRoute<AutoRoute>(
+                  path: ':id',
+                  page: WordScreen,
+                ),
+              ],
             ),
           ],
-        )
+        ),
       ],
     ),
   ],

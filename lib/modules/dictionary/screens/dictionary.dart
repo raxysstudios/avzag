@@ -1,5 +1,9 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:avzag/modules/dictionary/screens/word.dart';
+import 'package:avzag/modules/dictionary/services/word.dart';
 import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
 import 'package:avzag/modules/navigation/nav_drawer.dart';
+import 'package:avzag/modules/navigation/router/router.gr.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:avzag/store.dart';
@@ -79,7 +83,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     );
   }
 
-  void open(Entry entry) {
+  void open(Entry entry) async {
     if (entry.unverified && EditorStore.admin) {
       diffWords(context, entry.entryID);
       return;
@@ -93,6 +97,19 @@ class DictionaryScreenState extends State<DictionaryScreen> {
           ? edit
           : null,
     );
+
+    final Word? temp = await loadWord(entry.entryID);
+    final Word word = temp!;
+    final id = entry.entryID;
+    final router = context.router;
+
+    pushRoute() {
+      print(word.headword);
+      print(entry.entryID);
+      return router.navigateNamed('/dictionary/:$id');
+    }
+
+    pushRoute();
   }
 
   @override

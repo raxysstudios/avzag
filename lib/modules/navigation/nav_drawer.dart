@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/navigation/router/router.gr.dart';
 import 'package:avzag/shared/utils/open_link.dart';
 import 'package:avzag/shared/utils/utils.dart';
@@ -27,11 +28,11 @@ Future<void> navigate(
   final router = context.router;
   if (title == 'home') {
     // builder = (_) => const HomeScreen();
-    router.replace(HomeScreenRoute());
+    router.push(HomeScreenRoute());
     title = null;
   } else if (title == 'dictionary') {
     // builder = (_) => const DictionaryScreen();
-    router.replace(DictionaryScreenRoute());
+    router.push(DictRouter());
     // title = null;
   } else {
     //  builder = (_) => const Text('No Route');
@@ -150,12 +151,13 @@ class NavDraver extends StatelessWidget {
                       padding: EdgeInsets.only(top: 8),
                       child: Icon(Icons.edit_rounded),
                     ),
-                    onChanged: (e) => Navigator.push<void>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AccountScreen(),
-                      ),
-                    ),
+                    // onChanged: (e) => Navigator.push<void>(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const AccountScreen(),
+                    //   ),
+                    // ),
+                    onChanged: (e) => context.router.push(AccountScreenRoute()),
                   ),
                 ],
               ),

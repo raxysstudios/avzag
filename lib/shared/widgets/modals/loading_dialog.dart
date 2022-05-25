@@ -28,6 +28,7 @@ Future<T?> showLoadingDialog<T>(
     Navigator.of(context, rootNavigator: true).pop(result);
     return result;
   } catch (e) {
+    // Navigator.pop(context);
     Navigator.of(context, rootNavigator: true).pop();
     showSnackbar(context);
     rethrow;
