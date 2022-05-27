@@ -1,8 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/modules/dictionary/screens/word.dart';
 import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
 import 'package:avzag/modules/navigation/nav_drawer.dart';
-import 'package:avzag/modules/navigation/router/router.gr.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:avzag/store.dart';
