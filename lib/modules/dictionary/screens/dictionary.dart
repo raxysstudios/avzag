@@ -80,8 +80,6 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     );
   }
 
-  late String wordID;
-
   void open(Entry entry) async {
     if (entry.unverified && EditorStore.admin) {
       diffWords(context, entry.entryID);
@@ -96,9 +94,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
           ? edit
           : null,
     );
-
-    wordID = entry.entryID;
-    await context.router.navigateNamed('/dictionary/:$wordID');
+    await context.router.navigateNamed('/dictionary/:${entry.entryID}');
   }
 
   @override
