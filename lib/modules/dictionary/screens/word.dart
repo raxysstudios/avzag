@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:avzag/modules/dictionary/widgets/samples_column.dart';
 import 'package:avzag/shared/utils/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
@@ -11,8 +12,9 @@ import 'package:flutter/material.dart';
 import '../models/word.dart';
 
 class WordScreen extends StatelessWidget {
-  const WordScreen(
-    this.word, {
+  const WordScreen({
+    required this.word,
+    @PathParam() this.id,
     this.scroll,
     this.onEdit,
     this.embedded = false,
@@ -20,6 +22,7 @@ class WordScreen extends StatelessWidget {
   }) : super(key: key);
 
   final Word word;
+  final String? id;
   final bool embedded;
   final ScrollController? scroll;
   final ValueSetter<Word>? onEdit;

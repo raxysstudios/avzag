@@ -1,4 +1,5 @@
 import 'package:algolia/algolia.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/initial_page.dart';
 import 'package:avzag/store.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,7 +31,6 @@ class App extends StatelessWidget {
   // make sure you don't initiate your router
   // inside of the build function.
   final _appRouter = AppRouter();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

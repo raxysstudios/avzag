@@ -26,12 +26,10 @@ import 'package:avzag/modules/navigation/account.dart';
         AutoRoute<AutoRoute>(
           path: 'dictionary',
           page: DictionaryScreen,
-          children: [
-            AutoRoute<AutoRoute>(
-              path: ':id',
-              page: WordScreen,
-            ),
-          ],
+        ),
+        AutoRoute<AutoRoute>(
+          path: 'dictionary/:id',
+          page: WordScreen,
         ),
       ],
     ),
