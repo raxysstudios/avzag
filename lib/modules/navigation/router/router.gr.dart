@@ -70,9 +70,12 @@ class AppRouter extends _i1.RootStackRouter {
           _i1.RouteConfig(AccountScreenRoute.name,
               path: 'account', parent: EmptyRouterScreenRoute.name),
           _i1.RouteConfig(DictionaryScreenRoute.name,
-              path: 'dictionary', parent: EmptyRouterScreenRoute.name),
-          _i1.RouteConfig(WordScreenRoute.name,
-              path: 'dictionary/:id', parent: EmptyRouterScreenRoute.name)
+              path: 'dictionary',
+              parent: EmptyRouterScreenRoute.name,
+              children: [
+                _i1.RouteConfig(WordScreenRoute.name,
+                    path: 'dictionary/:id', parent: DictionaryScreenRoute.name)
+              ])
         ])
       ];
 }
@@ -114,8 +117,9 @@ class AccountScreenRoute extends _i1.PageRouteInfo<void> {
 /// generated route for
 /// [_i5.DictionaryScreen]
 class DictionaryScreenRoute extends _i1.PageRouteInfo<void> {
-  const DictionaryScreenRoute()
-      : super(DictionaryScreenRoute.name, path: 'dictionary');
+  const DictionaryScreenRoute({List<_i1.PageRouteInfo>? children})
+      : super(DictionaryScreenRoute.name,
+            path: 'dictionary', initialChildren: children);
 
   static const String name = 'DictionaryScreenRoute';
 }
