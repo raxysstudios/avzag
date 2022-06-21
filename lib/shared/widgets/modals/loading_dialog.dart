@@ -21,13 +21,13 @@ Future<T?> showLoadingDialog<T>(
       );
     },
   );
+  final navigator = Navigator.of(context, rootNavigator: true);
   try {
     final result = await future;
-    Navigator.of(context, rootNavigator: true).pop(result);
-
+    navigator.pop();
     return result;
   } catch (e) {
-    Navigator.of(context, rootNavigator: true).pop();
+    navigator.pop();
     showSnackbar(context);
     rethrow;
   }

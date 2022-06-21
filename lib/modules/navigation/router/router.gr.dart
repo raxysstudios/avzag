@@ -139,7 +139,7 @@ class WordScreenRoute extends _i1.PageRouteInfo<WordScreenRouteArgs> {
                 onEdit: onEdit,
                 embedded: embedded,
                 key: key),
-            rawPathParams: {'id': id});
+            rawPathParams: <String, dynamic>{'id': id});
 
   static const String name = 'WordScreenRoute';
 }
