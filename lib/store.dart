@@ -67,7 +67,7 @@ class GlobalStore {
 
   static Future<void> init([List<String>? names]) async {
     set(
-      names: names ?? prefs.getStringList('languages') ?? ['iron'],
+      names: names ?? prefs.getStringList('languages') ?? ['aghul'],
     );
     for (final l in languages.keys) {
       FirebaseFirestore.instance
