@@ -13,9 +13,9 @@ class Raxys extends StatelessWidget {
   final double opacity;
 
   Color getColor(BuildContext context) {
-    final invert = Theme.of(context).brightness == Brightness.light;
-    final color = invert ? Colors.black : Colors.white;
-    return color.withOpacity(opacity);
+    return Theme.of(context).brightness == Brightness.light
+        ? Colors.black
+        : Colors.white;
   }
 
   @override
@@ -24,15 +24,18 @@ class Raxys extends StatelessWidget {
       dimension: size,
       child: Transform.scale(
         scale: scale,
-        child: ColorFiltered(
-          colorFilter: ColorFilter.mode(
-            getColor(context),
-            BlendMode.modulate,
-          ),
-          child: Image.asset(
-            'assets/raxys.png',
-            isAntiAlias: true,
-            filterQuality: FilterQuality.high,
+        child: Opacity(
+          opacity: opacity,
+          child: ColorFiltered(
+            colorFilter: ColorFilter.mode(
+              getColor(context),
+              BlendMode.modulate,
+            ),
+            child: Image.asset(
+              'assets/raxys.png',
+              isAntiAlias: true,
+              filterQuality: FilterQuality.high,
+            ),
           ),
         ),
       ),
