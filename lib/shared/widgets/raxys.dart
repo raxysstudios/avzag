@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class RaxysLogo extends StatelessWidget {
-  const RaxysLogo({
+class Raxys extends StatelessWidget {
+  const Raxys({
     this.size = 24,
     this.opacity = 1,
     this.scale = 1,
@@ -12,18 +12,25 @@ class RaxysLogo extends StatelessWidget {
   final double size;
   final double opacity;
 
+  Color getColor(BuildContext context) {
+    final invert = Theme.of(context).brightness == Brightness.light;
+    final color = invert ? Colors.black : Colors.white;
+    return color.withOpacity(opacity);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox.square(
       dimension: size,
       child: Transform.scale(
         scale: scale,
-        child: Opacity(
-          opacity: opacity,
+        child: ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            getColor(context),
+            BlendMode.modulate,
+          ),
           child: Image.asset(
-            Theme.of(context).brightness == Brightness.dark
-                ? 'assets/raxys_dark.png'
-                : 'assets/raxys_light.png',
+            'assets/raxys.png',
             isAntiAlias: true,
             filterQuality: FilterQuality.high,
           ),

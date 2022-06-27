@@ -4,7 +4,7 @@ import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/expandable_tile.dart';
-import 'package:avzag/shared/widgets/raxys_logo.dart';
+import 'package:avzag/shared/widgets/raxys.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
@@ -78,9 +78,9 @@ class NavDraver extends StatelessWidget {
           children: [
             ExpandableTile(
               header: ListTile(
-                leading: RaxysLogo(
+                leading: Raxys(
                   opacity: .1,
-                  scale: 7,
+                  scale: 9,
                 ),
                 title: Text(
                   'Ævzag',
