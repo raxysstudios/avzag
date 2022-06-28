@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/navigation/sign_in_buttons.dart';
+import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -29,7 +30,7 @@ class _AccountScreenState extends State<AccountScreen> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.navigateNamedTo('/'),
+        onPressed: () => context.pushRoute(const RootRoute()),
         child: const Icon(Icons.done_all_rounded),
       ),
       body: ListView(

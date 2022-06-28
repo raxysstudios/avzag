@@ -15,20 +15,22 @@ import 'package:flutter/material.dart';
       guards: [RootGuard],
     ),
     AutoRoute<void>(
-      path: '/home',
-      page: HomeScreen,
-    ),
-    AutoRoute<void>(
       path: '/account',
       page: AccountScreen,
     ),
     AutoRoute<void>(
+      path: '/home',
+      page: HomeScreen,
+    ),
+    AutoRoute<void>(
       path: '/dictionary',
       page: EmptyRouterScreen,
+      name: 'DictionaryRoute',
       children: [
         AutoRoute<void>(
           path: '',
           page: DictionaryScreen,
+          name: '_DictionaryRoute',
         )
       ],
     ),
