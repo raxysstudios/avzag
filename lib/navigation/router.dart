@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/home/screens/home.dart';
 import 'package:avzag/modules/navigation/account.dart';
-import 'package:avzag/navigation/startup_guard.dart';
+import 'package:avzag/navigation/root_guard.dart';
 import 'package:flutter/material.dart';
 
 @MaterialAutoRouter(
@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
     AutoRoute<void>(
       path: '/',
       page: EmptyRouterScreen,
-      name: '_StartupRoute',
-      guards: [StartupGuard],
+      name: 'RootRoute',
+      guards: [RootGuard],
     ),
     AutoRoute<void>(
       path: '/home',
@@ -31,7 +31,8 @@ import 'package:flutter/material.dart';
           page: DictionaryScreen,
         )
       ],
-    )
+    ),
+    RedirectRoute(path: '*', redirectTo: '/')
   ],
 )
 class $AppRouter {}

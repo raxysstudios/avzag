@@ -1,5 +1,5 @@
 import 'package:algolia/algolia.dart';
-import 'package:avzag/navigation/startup_guard.dart';
+import 'package:avzag/navigation/root_guard.dart';
 import 'package:avzag/store.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -33,9 +33,7 @@ void main() async {
 class App extends StatelessWidget {
   App({Key? key}) : super(key: key);
 
-  final _appRouter = AppRouter(
-    startupGuard: StartupGuard(),
-  );
+  final _appRouter = AppRouter(rootGuard: RootGuard());
 
   @override
   Widget build(context) {

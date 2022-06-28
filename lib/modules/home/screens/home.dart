@@ -152,9 +152,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   context,
                   GlobalStore.set(objects: selected),
                 );
-                context.navigateTo(const HomeRoute());
+                context.navigateTo(const RootRoute());
               },
-              tooltip: 'Continue',
               child: const Icon(Icons.done_all_rounded),
             ),
       appBar: AppBar(
