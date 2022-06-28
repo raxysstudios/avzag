@@ -7,9 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_strategy/url_strategy.dart';
 
-import 'themes.dart';
 import 'firebase_options.dart';
 import 'navigation/router.gr.dart';
+import 'theme_set.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,11 +37,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(context) {
-    final themes = Themes(Theme.of(context).colorScheme);
+    final theme = ThemeSet(Theme.of(context).colorScheme);
     return MaterialApp.router(
       title: 'Avzag',
-      theme: themes.light,
-      darkTheme: themes.dark,
+      theme: theme.light,
+      darkTheme: theme.dark,
       routerDelegate: _appRouter.delegate(),
       routeInformationParser: _appRouter.defaultRouteParser(),
     );

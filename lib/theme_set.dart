@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class Themes {
+class ThemeSet {
   final ThemeData light;
   final ThemeData dark;
 
-  Themes(ColorScheme scheme)
+  ThemeSet(ColorScheme scheme)
       : light = _getLightTheme(scheme),
         dark = _getDarkTheme(scheme);
 
