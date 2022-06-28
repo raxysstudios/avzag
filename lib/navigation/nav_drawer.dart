@@ -93,14 +93,13 @@ class NavDraver extends StatelessWidget {
                     trailing: m.route == null
                         ? const Icon(Icons.construction_rounded)
                         : null,
-                    selected: context.router.current.name
-                        .toLowerCase()
-                        .startsWith(m.text),
+                    selected: context.router.currentPath
+                        .startsWith(m.route?.path ?? ''),
                     onTap: () async {
                       if (m.route != const HomeRoute()) {
                         await prefs.setString('module', m.text);
                       }
-                      context.pushRoute(const RootRoute());
+                      context.pushRoute(m.route!);
                     },
                     enabled: m.route != null,
                   ),
