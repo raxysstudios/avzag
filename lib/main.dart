@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_strategy/url_strategy.dart';
 
-import 'config/themes.dart';
+import 'themes.dart';
 import 'firebase_options.dart';
 import 'navigation/router.gr.dart';
 
