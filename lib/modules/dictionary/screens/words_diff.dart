@@ -27,7 +27,7 @@ class WordsDiffScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          leading: RoundedBackButton(
+          leading: const RoundedBackButton(
             icon: Icons.close_rounded,
           ),
           title: Text(overwrite.language.titled),
@@ -67,7 +67,7 @@ class WordsDiffScreen extends StatelessWidget {
                 after: () => Navigator.pop(context),
                 title: 'Reject the contribution?',
               ),
-              icon: Icon(Icons.delete_forever),
+              icon: const Icon(Icons.delete_forever),
               tooltip: 'Reject',
             ),
             const SizedBox(width: 4),
@@ -84,7 +84,7 @@ class WordsDiffScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             base == null
-                ? Center(
+                ? const Center(
                     child: Caption(
                       'No base word',
                       icon: Icons.highlight_off_rounded,

@@ -30,7 +30,7 @@ class _LanguageFlagState extends State<LanguageFlag> {
   @override
   Widget build(BuildContext context) {
     final url = widget.url ?? GlobalStore.languages[widget.language]?.flag;
-    if (url == null) return SizedBox();
+    if (url == null) return const SizedBox();
     return Transform.translate(
       offset: widget.offset,
       child: Transform.rotate(

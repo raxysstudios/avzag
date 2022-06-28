@@ -1,5 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/models/language.dart';
-import 'package:avzag/modules/navigation/nav_drawer.dart';
+import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
@@ -151,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   context,
                   GlobalStore.set(objects: selected),
                 );
-                navigate(context);
+                context.navigateTo(const HomeRoute());
               },
               tooltip: 'Continue',
               child: const Icon(Icons.done_all_rounded),

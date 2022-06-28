@@ -78,7 +78,7 @@ class NavDraver extends StatelessWidget {
           children: [
             ExpandableTile(
               header: ListTile(
-                leading: Raxys(
+                leading: const Raxys(
                   opacity: .1,
                   scale: 9,
                 ),
