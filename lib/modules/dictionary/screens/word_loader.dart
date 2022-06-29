@@ -19,14 +19,16 @@ class WordLoaderScreen extends StatelessWidget {
     return LoadingPage<Word>(
       loadWord(id),
       then: (context, w) async {
+        print('WORD ${w != null}');
         if (w == null) {
-          await context.navigateTo(const DictionaryRoute());
+          return const DictionaryRoute();
         } else {
           await context.router.pushNativeRoute<void>(
             MaterialPageRoute(
               builder: (context) => WordScreen(w),
             ),
           );
+          return null;
         }
       },
     );

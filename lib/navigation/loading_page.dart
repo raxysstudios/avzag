@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-class LoadingPage<T> extends StatelessWidget {
+class LoadingPage<T> extends StatefulWidget {
   const LoadingPage(
     this.future, {
     required this.then,
@@ -12,27 +13,33 @@ class LoadingPage<T> extends StatelessWidget {
   }) : super(key: key);
 
   final Future<T?> future;
-  final FutureOr Function(BuildContext, T?) then;
+  final FutureOr<PageRouteInfo?> Function(BuildContext, T?) then;
+
+  @override
+  State<LoadingPage<T>> createState() => _LoadingPageState<T>();
+}
+
+class _LoadingPageState<T> extends State<LoadingPage<T>> {
+  T? result;
+
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback(
+      (_) async {
+        result = await showLoadingDialog2(context, widget.future);
+        final next = await widget.then(context, result);
+        if (next == null) {
+          context.popRoute();
+        } else {
+          context.navigateTo(next);
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<T?>(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          SchedulerBinding.instance.addPostFrameCallback(
-            (_) async {
-              await then(context, snapshot.data);
-              context.popRoute();
-            },
-          );
-        }
-        return Center(
-          child: CircularProgressIndicator(
-            color: Theme.of(context).colorScheme.surface,
-          ),
-        );
-      },
-    );
+    return const SizedBox();
   }
 }

@@ -54,5 +54,6 @@ Route<T> dialogRouteBuilder<T>(
     settings: page,
     context: context,
     builder: (context) => child,
+    barrierColor: Colors.transparent,
   );
 }
