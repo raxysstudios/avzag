@@ -60,7 +60,7 @@
 		<key>CFBundleTypeRole</key>
 		<string>Editor</string>
 		<key>CFBundleURLName</key>
-		<string>flutterbooksample.com</string>
+		<string>avzag.raxys.app</string>
 		<key>CFBundleURLSchemes</key>
 		<array>
 		<string>customscheme</string>
