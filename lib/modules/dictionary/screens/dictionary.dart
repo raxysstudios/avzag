@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
 import 'package:avzag/navigation/nav_drawer.dart';
+import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:avzag/store.dart';
@@ -86,15 +88,16 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       diffWords(context, entry.entryID);
       return;
     }
-    openWord(
-      context,
-      entry.entryID,
-      editing == null &&
-              entry.language == EditorStore.language &&
-              (EditorStore.admin || !entry.unverified)
-          ? edit
-          : null,
-    );
+    context.pushRoute(WordLoaderRoute(id: entry.entryID));
+    // openWord(
+    //   context,
+    //   entry.entryID,
+    //   editing == null &&
+    //           entry.language == EditorStore.language &&
+    //           (EditorStore.admin || !entry.unverified)
+    //       ? edit
+    //       : null,
+    // );
   }
 
   @override
