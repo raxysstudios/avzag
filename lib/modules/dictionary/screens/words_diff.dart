@@ -1,4 +1,4 @@
-import 'package:avzag/modules/dictionary/screens/word.dart';
+import 'package:avzag/modules/dictionary/widgets/word_view.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
@@ -27,7 +27,7 @@ class WordsDiffScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          leading: RoundedBackButton(
+          leading: const RoundedBackButton(
             icon: Icons.close_rounded,
           ),
           title: Text(overwrite.language.titled),
@@ -67,7 +67,7 @@ class WordsDiffScreen extends StatelessWidget {
                 after: () => Navigator.pop(context),
                 title: 'Reject the contribution?',
               ),
-              icon: Icon(Icons.delete_forever),
+              icon: const Icon(Icons.delete_forever),
               tooltip: 'Reject',
             ),
             const SizedBox(width: 4),
@@ -84,20 +84,14 @@ class WordsDiffScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             base == null
-                ? Center(
+                ? const Center(
                     child: Caption(
                       'No base word',
                       icon: Icons.highlight_off_rounded,
                     ),
                   )
-                : WordScreen(
-                    base!,
-                    embedded: true,
-                  ),
-            WordScreen(
-              overwrite,
-              embedded: true,
-            ),
+                : WordView(base!),
+            WordView(overwrite),
           ],
         ),
       ),

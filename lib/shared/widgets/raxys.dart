@@ -12,12 +12,6 @@ class Raxys extends StatelessWidget {
   final double size;
   final double opacity;
 
-  Color getColor(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.light
-        ? Colors.black
-        : Colors.white;
-  }
-
   @override
   Widget build(BuildContext context) {
     return SizedBox.square(
@@ -28,7 +22,9 @@ class Raxys extends StatelessWidget {
           opacity: opacity,
           child: ColorFiltered(
             colorFilter: ColorFilter.mode(
-              getColor(context),
+              Theme.of(context).brightness == Brightness.light
+                  ? Colors.black
+                  : Colors.white,
               BlendMode.modulate,
             ),
             child: Image.asset(

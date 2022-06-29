@@ -1,5 +1,5 @@
-import 'package:avzag/modules/dictionary/screens/dictionary.dart';
-import 'package:avzag/modules/home/screens/home.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -9,65 +9,11 @@ import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'account.dart';
-
-Future<void> navigate(
-  BuildContext context, [
-  String? title,
-]) async {
-  final prefs = await SharedPreferences.getInstance();
-  if (title == null) {
-    title = prefs.getString('module');
-    if (title == null || title == 'home') title = 'dictionary';
-  }
-
-  late Widget Function(BuildContext) builder;
-  if (title == 'home') {
-    builder = (_) => const HomeScreen();
-    title = null;
-  } else if (title == 'dictionary') {
-    builder = (_) => const DictionaryScreen();
-  } else {
-    builder = (_) => const Text('No Route');
-  }
-
-  if (title != null) await prefs.setString('module', title);
-  await Navigator.pushReplacement<void, void>(
-    context,
-    MaterialPageRoute(builder: builder),
-  );
-}
-
-class _NavModule {
-  final IconData icon;
-  final String text;
-  _NavModule(this.icon, this.text);
-
-  Widget build(BuildContext context, [String? route]) {
-    final enabled = route != null;
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(
-        text.titled,
-        style: const TextStyle(fontSize: 18),
-      ),
-      trailing: enabled ? null : const Icon(Icons.construction_rounded),
-      selected: route == text,
-      onTap: enabled ? () => navigate(context, text) : null,
-      enabled: enabled,
-    );
-  }
-}
+import 'nav_modules.dart';
 
 class NavDraver extends StatelessWidget {
-  final String? title;
-
-  const NavDraver({
-    Key? key,
-    this.title,
-  }) : super(key: key);
+  const NavDraver({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +24,9 @@ class NavDraver extends StatelessWidget {
           children: [
             ExpandableTile(
               header: ListTile(
-                leading: Raxys(
+                leading: const Raxys(
                   opacity: .1,
-                  scale: 9,
+                  scale: 7,
                 ),
                 title: Text(
                   'Ævzag',
@@ -118,20 +64,17 @@ class NavDraver extends StatelessWidget {
                   SwitchListTile(
                     title: const Text('Editor Mode'),
                     subtitle: EditorStore.editor
-                        ? Row(children: [
-                            if (EditorStore.admin)
-                              const SpanIcon(Icons.account_circle_rounded),
-                            Text(EditorStore.language!.titled),
-                          ])
+                        ? Row(
+                            children: [
+                              if (EditorStore.admin)
+                                const SpanIcon(Icons.account_circle_rounded),
+                              Text(EditorStore.language!.titled),
+                            ],
+                          )
                         : null,
                     value: EditorStore.editor,
                     secondary: const Icon(Icons.edit_rounded),
-                    onChanged: (e) => Navigator.push<void>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AccountScreen(),
-                      ),
-                    ),
+                    onChanged: (e) => context.pushRoute(const AccountRoute()),
                   ),
                 ],
               ),
@@ -140,20 +83,26 @@ class NavDraver extends StatelessWidget {
               divider: null,
               margin: EdgeInsets.zero,
               children: [
-                _NavModule(
-                  Icons.home_rounded,
-                  'home',
-                ).build(context, title),
-                _NavModule(
-                  Icons.book_rounded,
-                  'dictionary',
-                ).build(context, title),
-                ...[
-                  _NavModule(Icons.music_note_rounded, 'phonology'),
-                  _NavModule(Icons.switch_left_rounded, 'converter'),
-                  _NavModule(Icons.forum_rounded, 'phrasebook'),
-                  _NavModule(Icons.local_library_rounded, 'bootcamp'),
-                ].map((t) => t.build(context)),
+                for (final m in navModules)
+                  ListTile(
+                    leading: Icon(m.icon),
+                    title: Text(
+                      m.text.titled,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    trailing: m.route == null
+                        ? const Icon(Icons.construction_rounded)
+                        : null,
+                    selected: context.router.currentPath
+                        .startsWith(m.route?.path ?? ''),
+                    onTap: () async {
+                      if (m.route != const HomeRoute()) {
+                        await prefs.setString('module', m.text);
+                      }
+                      context.pushRoute(m.route!);
+                    },
+                    enabled: m.route != null,
+                  ),
               ],
             )
           ],

@@ -12,7 +12,7 @@ void showSnackbar(
   messenger.showSnackBar(
     SnackBar(
       behavior: floating ? SnackBarBehavior.floating : SnackBarBehavior.fixed,
-      duration: Duration(milliseconds: 2500),
+      duration: const Duration(milliseconds: 2500),
       backgroundColor: theme.colorScheme.surface,
       content: Row(
         children: [

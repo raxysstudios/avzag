@@ -1,4 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/navigation/sign_in_buttons.dart';
+import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -7,8 +9,6 @@ import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:avzag/store.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-
-import 'nav_drawer.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -30,8 +30,7 @@ class _AccountScreenState extends State<AccountScreen> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => navigate(context),
-        tooltip: 'Continue',
+        onPressed: () => context.pushRoute(const RootRoute()),
         child: const Icon(Icons.done_all_rounded),
       ),
       body: ListView(
