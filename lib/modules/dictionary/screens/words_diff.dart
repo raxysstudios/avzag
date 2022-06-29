@@ -1,4 +1,4 @@
-import 'package:avzag/modules/dictionary/screens/word.dart';
+import 'package:avzag/modules/dictionary/widgets/word_view.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
@@ -90,14 +90,8 @@ class WordsDiffScreen extends StatelessWidget {
                       icon: Icons.highlight_off_rounded,
                     ),
                   )
-                : WordScreen(
-                    base!,
-                    embedded: true,
-                  ),
-            WordScreen(
-              overwrite,
-              embedded: true,
-            ),
+                : WordView(base!),
+            WordView(overwrite),
           ],
         ),
       ),
