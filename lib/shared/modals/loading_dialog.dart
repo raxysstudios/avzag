@@ -7,67 +7,39 @@ import 'snackbar_manager.dart';
 Future<T?> showLoadingDialog<T>(
   BuildContext context,
   Future<T?> future,
-) async {
-  showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) {
-      return const Center(
-        child: Card(
-          shape: CircleBorder(),
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      );
-    },
-  );
-  try {
-    final result = await future;
-    print('DLG $result.');
-    Navigator.pop(context);
-    return result;
-  } catch (e) {
-    Navigator.pop(context);
-    showSnackbar(context);
-    rethrow;
-  }
-}
-
-Future<T?> showLoadingDialog2<T>(
-  BuildContext context,
-  Future<T?> future,
 ) {
+  var done = false;
   return context.router.pushNativeRoute<T?>(
     DialogRoute(
       context: context,
       builder: (context) {
-        return FutureBuilder(
-          future: future,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              SchedulerBinding.instance.addPostFrameCallback(
-                (_) {
-                  if (snapshot.hasError) {
-                    context.popRoute(context);
-                    showSnackbar(context);
-                  } else {
-                    context.popRoute(snapshot.data);
+        return Center(
+          child: Card(
+            shape: const CircleBorder(),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: FutureBuilder(
+                future: future,
+                builder: (context, snapshot) {
+                  if (!done &&
+                      snapshot.connectionState == ConnectionState.done) {
+                    done = true;
+                    SchedulerBinding.instance.addPostFrameCallback(
+                      (_) {
+                        if (snapshot.hasError) {
+                          context.popRoute();
+                          showSnackbar(context);
+                        } else {
+                          context.popRoute(snapshot.data);
+                        }
+                      },
+                    );
                   }
+                  return const CircularProgressIndicator();
                 },
-              );
-            }
-            return const Center(
-              child: Card(
-                shape: CircleBorder(),
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: CircularProgressIndicator(),
-                ),
               ),
-            );
-          },
+            ),
+          ),
         );
       },
     ),

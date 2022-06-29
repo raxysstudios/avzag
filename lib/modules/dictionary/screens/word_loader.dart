@@ -19,7 +19,6 @@ class WordLoaderScreen extends StatelessWidget {
     return LoadingPage<Word>(
       loadWord(id),
       then: (context, w) async {
-        print('WORD ${w != null}');
         if (w == null) {
           return const DictionaryRoute();
         } else {

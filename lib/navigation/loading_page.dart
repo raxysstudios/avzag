@@ -27,8 +27,10 @@ class _LoadingPageState<T> extends State<LoadingPage<T>> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback(
       (_) async {
-        result = await showLoadingDialog2(context, widget.future);
-        final next = await widget.then(context, result);
+        final next = await widget.then(
+          context,
+          await showLoadingDialog(context, widget.future),
+        );
         if (next == null) {
           context.popRoute();
         } else {

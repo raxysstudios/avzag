@@ -1,3 +1,4 @@
+import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
@@ -23,7 +24,9 @@ class WordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const RoundedBackButton(),
+        leading: const RoundedBackButton(
+          route: DictionaryRoute(),
+        ),
         title: Stack(
           alignment: Alignment.center,
           children: [
