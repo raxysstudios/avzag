@@ -15,6 +15,9 @@ class RootGuard extends AutoRouteGuard {
         break;
       }
     }
+    if (saved == null && router.hasEntries) {
+      prefs.setString('module', 'dictionary');
+    }
     router.pushAndPopUntil(route, predicate: (_) => true);
   }
 }
