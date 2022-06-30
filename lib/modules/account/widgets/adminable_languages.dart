@@ -40,9 +40,7 @@ class AdminableLanguages extends StatelessWidget {
                       color: theme.onSurface,
                     )
                   : null,
-              child: LanguageAvatar(
-                l.name
-              ),
+              child: LanguageAvatar(l.name),
             ),
             title: Text(
               l.name.titled,
