@@ -9,25 +9,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^1.17.0
-  cloud_firestore: ^3.1.15
-  url_launcher: ^6.1.2
+  firebase_core: ^1.18.0
+  cloud_firestore: ^3.1.18
+  url_launcher: ^6.1.4
   shared_preferences: ^2.0.15
-  firebase_auth: ^3.3.18
-  google_sign_in: ^5.3.1
+  firebase_auth: ^3.3.20
+  google_sign_in: ^5.3.3
   sign_in_with_apple: ^4.0.0
   crypto: ^3.0.2
   algolia: ^1.1.1
-  flutter_markdown: ^0.6.10
+  flutter_markdown: ^0.6.10+2
   package_info_plus: ^1.4.2
-  provider: ^6.0.2
-  badges: ^2.0.2
+  provider: ^6.0.3
+  badges: ^2.0.3
   infinite_scroll_pagination: ^3.2.0
   flutter_map: ^1.1.1
   flutter_map_marker_cluster: ^0.5.0
   latlong2: ^0.8.1
   intersperse: ^2.0.0
-  google_fonts: ^3.0.0
+  google_fonts: ^3.0.1
   auto_route: ^4.2.0
   url_strategy: ^0.2.0
 
