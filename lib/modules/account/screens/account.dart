@@ -5,7 +5,6 @@ import 'package:avzag/modules/account/widgets/adminable_languages.dart';
 import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/store.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/sign_in_buttons.dart';
