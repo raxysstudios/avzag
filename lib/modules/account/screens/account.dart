@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/modules/navigation/sign_in_buttons.dart';
-import 'package:avzag/navigation/router.gr.dart';
+import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -9,6 +8,8 @@ import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:avzag/store.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+
+import '../widgets/sign_in_buttons.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);

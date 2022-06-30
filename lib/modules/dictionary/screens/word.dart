@@ -1,4 +1,4 @@
-import 'package:avzag/navigation/router.gr.dart';
+import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';

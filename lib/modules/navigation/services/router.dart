@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:avzag/modules/account/screens/account.dart';
 import 'package:avzag/modules/dictionary/screens/dictionary.dart';
 import 'package:avzag/modules/dictionary/screens/word_loader.dart';
 import 'package:avzag/modules/home/screens/home.dart';
-import 'package:avzag/modules/navigation/account.dart';
-import 'package:avzag/navigation/root_guard.dart';
 import 'package:flutter/material.dart';
+
+import 'root_guard.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Screen,Route',

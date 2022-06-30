@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
-import 'package:avzag/navigation/nav_drawer.dart';
-import 'package:avzag/navigation/router.gr.dart';
+import 'package:avzag/modules/navigation/screens/navigation.dart';
+import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:avzag/store.dart';
@@ -106,7 +106,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       value: search,
       builder: (context, _) {
         return Scaffold(
-          drawer: const NavDraver(),
+          drawer: const NavigationScreen(),
           floatingActionButton: EditorStore.editor
               ? FloatingActionButton(
                   onPressed: edit,

@@ -1,5 +1,5 @@
 import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
-import 'package:avzag/navigation/router.gr.dart';
+import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/modals/danger_dialog.dart';
 import 'package:avzag/shared/widgets/column_card.dart';

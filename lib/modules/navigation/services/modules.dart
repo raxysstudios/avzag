@@ -15,7 +15,7 @@ class _NavModule {
   final PageRouteInfo? route;
 }
 
-const navModules = [
+const modules = [
   _NavModule(
     Icons.home_rounded,
     'home',

@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -10,10 +9,11 @@ import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import 'nav_modules.dart';
+import '../services/modules.dart';
+import '../services/router.gr.dart';
 
-class NavDraver extends StatelessWidget {
-  const NavDraver({Key? key}) : super(key: key);
+class NavigationScreen extends StatelessWidget {
+  const NavigationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,7 @@ class NavDraver extends StatelessWidget {
               divider: null,
               margin: EdgeInsets.zero,
               children: [
-                for (final m in navModules)
+                for (final m in modules)
                   ListTile(
                     leading: Icon(m.icon),
                     title: Text(

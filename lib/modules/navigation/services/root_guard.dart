@@ -1,15 +1,15 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/store.dart';
 
-import 'nav_modules.dart';
+import 'modules.dart';
+import 'router.gr.dart';
 
 class RootGuard extends AutoRouteGuard {
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
     var route = router.hasEntries ? const DictionaryRoute() : const HomeRoute();
     final saved = prefs.getString('module');
-    for (final m in navModules) {
+    for (final m in modules) {
       if (saved == m.text && m.route != null) {
         route = m.route!;
         break;

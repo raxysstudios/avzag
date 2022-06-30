@@ -5,8 +5,8 @@ import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-class LoadingPage<T> extends StatefulWidget {
-  const LoadingPage(
+class LoaderScreen<T> extends StatefulWidget {
+  const LoaderScreen(
     this.future, {
     required this.then,
     Key? key,
@@ -16,10 +16,10 @@ class LoadingPage<T> extends StatefulWidget {
   final FutureOr<PageRouteInfo?> Function(BuildContext, T?) then;
 
   @override
-  State<LoadingPage<T>> createState() => _LoadingPageState<T>();
+  State<LoaderScreen<T>> createState() => _LoaderScreenState<T>();
 }
 
-class _LoadingPageState<T> extends State<LoadingPage<T>> {
+class _LoaderScreenState<T> extends State<LoaderScreen<T>> {
   T? result;
 
   @override
