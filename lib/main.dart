@@ -25,7 +25,7 @@ void main() async {
     apiKey: 'cf52a68ac340fc555978892202ce37df',
   );
   await EditorStore.init();
-  await GlobalStore.init();
+  GlobalStore.init();
   setPathUrlStrategy();
   runApp(App());
 }
