@@ -64,13 +64,13 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                 'Discard',
                 onTap: exit,
               ),
-              if (word.id != null && EditorStore.admin)
+              if (word.id.isNotEmpty && EditorStore.admin)
                 OptionItem.simple(
                   Icons.delete_forever_rounded,
                   'Delete',
                   onTap: () => deleteWord(
                     context,
-                    word.id!,
+                    word.id,
                     after: exit,
                   ),
                 ),

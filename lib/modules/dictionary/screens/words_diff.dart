@@ -63,7 +63,7 @@ class WordsDiffScreen extends StatelessWidget {
             IconButton(
               onPressed: () => deleteWord(
                 context,
-                overwrite.id!,
+                overwrite.id,
                 after: () => Navigator.pop(context),
                 title: 'Reject the contribution?',
               ),

@@ -62,6 +62,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     setState(() {
       if (word == null) {
         editing ??= Word(
+          '',
           headword: '',
           uses: [],
           language: EditorStore.language!,

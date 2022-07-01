@@ -54,7 +54,7 @@ void submitWord(
       text: 'Must have at least one use',
     );
   }
-  var id = word.id;
+  String? id = word.id;
   var doc = word.toJson();
   if (!EditorStore.admin) {
     doc['contribution'] = Contribution(
