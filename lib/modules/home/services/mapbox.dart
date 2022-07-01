@@ -9,7 +9,7 @@ TileLayerOptions getTileLayer([bool isDark = false]) {
   final background = isDark ? const Color(0xff3b3b3b) : const Color(0xfff7f8f8);
   return TileLayerOptions(
     urlTemplate:
-        'https://api.mapbox.com/styles/v1/raxysstudios/$style/tiles/{z}/{x}/{y}?access_token=$token',
+        'https://api.mapbox.com/styles/v1/raxysstudios/$style/tiles/{z}/{x}/{y}@2x?access_token=$token',
     subdomains: ['a', 'b', 'c'],
     backgroundColor: background,
     tileSize: 512,
