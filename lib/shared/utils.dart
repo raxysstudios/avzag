@@ -37,7 +37,3 @@ List<T>? listFromJson<T>(
       ?.map((dynamic i) => fromJson(i))
       .toList();
 }
-
-String stripHtml(String text) {
-  return text.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), '');
-}

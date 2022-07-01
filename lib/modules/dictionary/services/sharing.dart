@@ -1,6 +1,5 @@
 import 'package:avzag/modules/dictionary/models/sample.dart';
 import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/utils.dart';
 import 'package:markdown/markdown.dart';
 
 import '../models/word.dart';
@@ -14,51 +13,33 @@ ${word.headword.titled} — ${word.uses.map((u) => u.term.titled).join(', ')}
 ${_getWordLink(word)}
 ''';
 
-String textifyArticle(Word word, [bool html = false]) {
-  String b(String s) => '**$s**';
-  String i(String s) => '*$s*';
-  String c(String s) => '`$s`';
-  String u(String s) => '<u>$s</u>';
+String _cleanMarkdown(String md) =>
+    markdownToHtml(md).replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), '');
 
-  String tags(Iterable<String> ts) => i('# ${ts.join(", ")}');
+String textifyArticle(Word word) {
+  String tags(Iterable<String> ts) => '#️⃣ ${ts.join(", ")}';
+  Iterable<String> samples(Iterable<Sample> ss) => ss.map(
+        (s) => [
+          '— ${s.text}',
+          if (s.meaning != null) ' • ${s.meaning!}',
+        ].join(),
+      );
 
-  String samples(Iterable<Sample> ss) => ss
-      .map((s) => '- ${i([
-            b(s.text),
-            if (s.meaning != null) ...[
-              ':',
-              s.meaning!,
-            ],
-          ].join(' '))}')
-      .join('\n');
-
-  final link = _getWordLink(word);
-  final title = b('avzag • ${word.language}'.titled);
   final article = [
-    if (html)
-      '[$title]($link)'
-    else ...[
-      title,
-      link,
-    ],
-    '',
-    b(word.headword.titled),
-    if (word.ipa != null) c('[${word.ipa}]'),
+    '🌄 Avzag • ${word.language.titled}',
+    _getWordLink(word),
+    '\n🔖 ${word.headword.titled}',
+    if (word.ipa != null) '🔉 ${word.ipa}',
     if (word.tags.isNotEmpty) tags(word.tags),
-    if (word.note?.isNotEmpty ?? false) word.note!,
-    if (word.forms.isNotEmpty) samples(word.forms),
+    if (word.note?.isNotEmpty ?? false) _cleanMarkdown(word.note!),
+    if (word.forms.isNotEmpty) ...samples(word.forms),
     if (word.uses.isNotEmpty)
       for (final use in word.uses) ...[
-        '',
-        u(b(use.term.titled)),
+        '\n💡 ${use.term.titled}',
         if (use.tags.isNotEmpty) tags(use.tags),
-        if (use.note?.isNotEmpty ?? false) use.note!,
-        if (use.examples.isNotEmpty) samples(use.examples),
+        if (use.note?.isNotEmpty ?? false) _cleanMarkdown(use.note!),
+        if (use.examples.isNotEmpty) ...samples(use.examples),
       ],
   ];
-  final code = markdownToHtml(
-    article.join('\n'),
-    inlineOnly: true,
-  );
-  return html ? code : stripHtml(code);
+  return article.join('\n');
 }
