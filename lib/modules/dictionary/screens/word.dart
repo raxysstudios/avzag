@@ -6,7 +6,6 @@ import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../models/word.dart';
 import '../widgets/word_view.dart';
@@ -51,22 +50,17 @@ class WordScreen extends StatelessWidget {
               OptionItem.simple(
                 Icons.link_rounded,
                 'Share link',
-                onTap: () => Share.share(previewArticle(word)),
+                onTap: () => copyText(
+                  context,
+                  previewArticle(word),
+                ),
               ),
               OptionItem.tile(
                 const Icon(Icons.article_rounded),
-                const Text('Share text'),
-                onTap: () => Share.share(
-                  textifyArticle(word),
-                ),
-              ),
-              OptionItem.divider(),
-              OptionItem.tile(
-                const Icon(Icons.code_rounded),
-                const Text('Copy HTML'),
+                const Text('Share article'),
                 onTap: () => copyText(
                   context,
-                  textifyArticle(word, true),
+                  textifyArticle(word),
                 ),
               ),
             ],
