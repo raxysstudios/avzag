@@ -38,7 +38,6 @@ String textifyArticle(Word word, [bool html = false]) {
       title,
       link,
     ],
-    '',
     b(word.headword.titled),
     if (word.ipa != null) c('[${word.ipa}]'),
     if (word.tags.isNotEmpty) tags(word.tags),
