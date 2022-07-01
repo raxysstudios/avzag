@@ -14,7 +14,7 @@ ${_getWordLink(word)}
 ''';
 
 String _cleanMarkdown(String md) =>
-    markdownToHtml(md).replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), '');
+    markdownToHtml(md).replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), '').trim();
 
 String textifyArticle(Word word) {
   String tags(Iterable<String> ts) => '#️⃣ ${ts.join(", ")}';
