@@ -1,9 +1,12 @@
+import 'package:avzag/modules/dictionary/services/sharing.dart';
 import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/modals/snackbar_manager.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
+import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../models/word.dart';
 import '../widgets/word_view.dart';
@@ -43,26 +46,44 @@ class WordScreen extends StatelessWidget {
               scale: 1.25,
             ),
           ),
-          if (onEdit != null)
-            IconButton(
+          OptionsButton(
+            [
+              OptionItem.simple(
+                Icons.link_rounded,
+                'Share link',
+                onTap: () => Share.share(previewArticle(word)),
+              ),
+              OptionItem.tile(
+                const Icon(Icons.article_rounded),
+                const Text('Share text'),
+                onTap: () => Share.share(
+                  textifyArticle(word),
+                ),
+              ),
+              OptionItem.divider(),
+              OptionItem.tile(
+                const Icon(Icons.code_rounded),
+                const Text('Copy HTML'),
+                onTap: () => copyText(
+                  context,
+                  textifyArticle(word, true),
+                ),
+              ),
+            ],
+            icon: const Icon(Icons.share_rounded),
+          ),
+          const SizedBox(width: 4),
+        ],
+      ),
+      floatingActionButton: onEdit == null
+          ? null
+          : FloatingActionButton(
+              child: const Icon(Icons.edit_rounded),
               onPressed: () {
                 Navigator.pop(context);
                 onEdit!(word);
               },
-              tooltip: 'Edit',
-              icon: const Icon(Icons.edit_rounded),
             ),
-          const SizedBox(width: 4),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => showSnackbar(
-          context,
-          text: 'Word sharing is coming soon',
-        ),
-        tooltip: 'Share',
-        child: const Icon(Icons.share_rounded),
-      ),
       body: WordView(word, scroll: scroll),
     );
   }
