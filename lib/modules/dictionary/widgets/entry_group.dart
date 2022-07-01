@@ -45,7 +45,7 @@ class EntryGroup extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: Text(
-                      tags.join(' • ').titled,
+                      tags.join(', '),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.caption,

@@ -49,7 +49,7 @@ class WordView extends StatelessWidget {
               ),
             if (word.tags.isNotEmpty)
               Text(
-                word.tags.join(' • ').titled,
+                word.tags.join(', '),
                 style: theme.caption,
               ),
             if (word.note != null) MarkdownText(word.note!),
@@ -92,7 +92,7 @@ class WordView extends StatelessWidget {
               ),
               if (u.tags.isNotEmpty)
                 Text(
-                  u.tags.join(' • ').titled,
+                  u.tags.join(', '),
                   style: theme.caption,
                 ),
               if (u.note != null) MarkdownText(u.note!),
