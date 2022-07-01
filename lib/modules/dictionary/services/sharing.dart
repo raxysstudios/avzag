@@ -20,13 +20,16 @@ String textifyArticle(Word word, [bool html = false]) {
   String c(String s) => '`$s`';
   String u(String s) => '<u>$s</u>';
 
-  String tags(Iterable<String> ts) => i(ts.join(', '));
+  String tags(Iterable<String> ts) => i('# ${ts.join(", ")}');
 
   String samples(Iterable<Sample> ss) => ss
-      .map((s) => i([
+      .map((s) => '- ${i([
             b(s.text),
-            if (s.meaning != null) s.meaning!,
-          ].join(' : ')))
+            if (s.meaning != null) ...[
+              ':',
+              s.meaning!,
+            ],
+          ].join(' '))}')
       .join('\n');
 
   final link = _getWordLink(word);
@@ -38,32 +41,20 @@ String textifyArticle(Word word, [bool html = false]) {
       title,
       link,
     ],
+    '',
     b(word.headword.titled),
     if (word.ipa != null) c('[${word.ipa}]'),
     if (word.tags.isNotEmpty) tags(word.tags),
-    if (word.note?.isNotEmpty ?? false) ...[
-      '—',
-      word.note!,
-    ],
-    if (word.forms.isNotEmpty) ...[
-      '—',
-      samples(word.forms),
-    ],
-    if (word.uses.isNotEmpty) ...[
+    if (word.note?.isNotEmpty ?? false) word.note!,
+    if (word.forms.isNotEmpty) samples(word.forms),
+    if (word.uses.isNotEmpty)
       for (final use in word.uses) ...[
         '',
         u(b(use.term.titled)),
         if (use.tags.isNotEmpty) tags(use.tags),
-        if (use.note?.isNotEmpty ?? false) ...[
-          '—',
-          use.note!,
-        ],
-        if (use.examples.isNotEmpty) ...[
-          '—',
-          samples(use.examples),
-        ],
+        if (use.note?.isNotEmpty ?? false) use.note!,
+        if (use.examples.isNotEmpty) samples(use.examples),
       ],
-    ],
   ];
   final code = markdownToHtml(
     article.join('\n'),
