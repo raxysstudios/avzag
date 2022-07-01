@@ -1,5 +1,6 @@
 import 'package:algolia/algolia.dart';
 import 'package:avzag/store.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,14 +17,15 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   prefs = await SharedPreferences.getInstance();
   algolia = const Algolia.init(
     applicationId: 'NYVVAA43NI',
     apiKey: 'cf52a68ac340fc555978892202ce37df',
   );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseAuth.instance.authStateChanges().first;
   await EditorStore.init();
   GlobalStore.init();
   setPathUrlStrategy();
