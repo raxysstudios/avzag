@@ -25,7 +25,7 @@ class _AccountScreenState extends State<AccountScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(Icons.arrow_back_outlined),
           onPressed: () => context.pushRoute(const RootRoute()),
         ),
         title: const Text('Account'),

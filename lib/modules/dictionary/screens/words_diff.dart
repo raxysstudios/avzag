@@ -32,14 +32,14 @@ class WordsDiffScreen extends StatelessWidget {
             tabs: [
               Tab(
                 child: OptionItem.simple(
-                  Icons.adjust_rounded,
+                  Icons.adjust_outlined,
                   'Base',
                   centered: true,
                 ).widget,
               ),
               Tab(
                 child: OptionItem.simple(
-                  Icons.edit_rounded,
+                  Icons.edit_outlined,
                   'Overwrite',
                   centered: true,
                 ).widget,
@@ -63,14 +63,14 @@ class WordsDiffScreen extends StatelessWidget {
                 after: context.popRoute,
                 title: 'Reject the contribution?',
               ),
-              icon: const Icon(Icons.delete_rounded),
+              icon: const Icon(Icons.delete_outlined),
               tooltip: 'Reject',
             ),
             const SizedBox(width: 4),
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.upload_rounded),
+          child: const Icon(Icons.upload_outlined),
           onPressed: () async => acceptContribution(
             context,
             overwrite,
@@ -83,7 +83,7 @@ class WordsDiffScreen extends StatelessWidget {
                 ? const Center(
                     child: Caption(
                       'No base word',
-                      icon: Icons.highlight_off_rounded,
+                      icon: Icons.highlight_off_outlined,
                     ),
                   )
                 : WordView(base!),

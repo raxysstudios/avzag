@@ -45,7 +45,7 @@ class WordScreen extends StatelessWidget {
           OptionsButton(
             [
               OptionItem.simple(
-                Icons.link_rounded,
+                Icons.link_outlined,
                 'Share link',
                 onTap: () => copyText(
                   context,
@@ -53,7 +53,7 @@ class WordScreen extends StatelessWidget {
                 ),
               ),
               OptionItem.tile(
-                const Icon(Icons.article_rounded),
+                const Icon(Icons.article_outlined),
                 const Text('Share article'),
                 onTap: () => copyText(
                   context,
@@ -61,7 +61,7 @@ class WordScreen extends StatelessWidget {
                 ),
               ),
             ],
-            icon: const Icon(Icons.share_rounded),
+            icon: const Icon(Icons.share_outlined),
           ),
           const SizedBox(width: 4),
         ],
@@ -69,7 +69,7 @@ class WordScreen extends StatelessWidget {
       floatingActionButton: onEdit == null
           ? null
           : FloatingActionButton(
-              child: const Icon(Icons.edit_rounded),
+              child: const Icon(Icons.edit_outlined),
               onPressed: () async {
                 context.popRoute();
                 onEdit!(word);

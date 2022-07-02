@@ -29,7 +29,7 @@ class EntryTile extends StatelessWidget {
         children: [
           if (hit.unverified)
             const SpanIcon(
-              Icons.unpublished_rounded,
+              Icons.unpublished_outlined,
               padding: EdgeInsets.only(right: 4),
             ),
           Text(

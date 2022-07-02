@@ -58,14 +58,14 @@ class _SignInButtonsState extends State<SignInButtons> {
               children: [
                 ElevatedButton.icon(
                   onPressed: () => signIn(getGoogleCredentials),
-                  icon: const Icon(Icons.login_rounded),
+                  icon: const Icon(Icons.login_outlined),
                   label: const Text('Sign in with Google'),
                 ),
                 if (kIsWeb || Platform.isIOS) ...[
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: () => signIn(getAppleCredentials),
-                    icon: const Icon(Icons.login_rounded),
+                    icon: const Icon(Icons.login_outlined),
                     label: const Text('Sign in with Apple'),
                   ),
                 ],

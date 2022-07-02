@@ -30,7 +30,7 @@ class _SamplesEditorState extends State<SamplesEditor> {
             children: [
               const Divider(),
               CompactInput(
-                Icons.short_text_rounded,
+                Icons.short_text_outlined,
                 'Text',
                 s.text,
                 (t) => s.text = t,
@@ -41,11 +41,11 @@ class _SamplesEditorState extends State<SamplesEditor> {
                   onPressed: () => setState(() {
                     widget.samples.remove(s);
                   }),
-                  icon: const Icon(Icons.remove_circle_outline_rounded),
+                  icon: const Icon(Icons.remove_circle_outline_outlined),
                 ),
               ),
               CompactInput(
-                Icons.info_outline_rounded,
+                Icons.info_outlined,
                 'Meaning',
                 s.meaning,
                 (t) => s.meaning = t,
@@ -59,7 +59,7 @@ class _SamplesEditorState extends State<SamplesEditor> {
             onPressed: () => setState(() {
               widget.samples.add(Sample(''));
             }),
-            icon: const Icon(Icons.add_circle_outline_rounded),
+            icon: const Icon(Icons.add_circle_outline_outlined),
             label: Text(widget.title),
           ),
         ),

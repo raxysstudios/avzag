@@ -41,7 +41,7 @@ class NavigationScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 12),
                 children: [
                   ListTile(
-                    leading: const Icon(Icons.send_rounded),
+                    leading: const Icon(Icons.send_outlined),
                     title: const Text('Developer Contact'),
                     subtitle: const Text('Raxys Studios'),
                     onTap: () => openLink('https://t.me/raxysstudios'),
@@ -53,13 +53,13 @@ class NavigationScreen extends StatelessWidget {
                         ? Row(
                             children: [
                               if (EditorStore.admin)
-                                const SpanIcon(Icons.account_circle_rounded),
+                                const SpanIcon(Icons.account_circle_outlined),
                               Text(EditorStore.language!.titled),
                             ],
                           )
                         : null,
                     value: EditorStore.editor,
-                    secondary: const Icon(Icons.edit_rounded),
+                    secondary: const Icon(Icons.edit_outlined),
                     onChanged: (e) => context.pushRoute(const AccountRoute()),
                   ),
                   if (kIsWeb) ...[

@@ -47,10 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
   var isMap = false;
 
   final orderings = [
-    _LanguageOrdering('name', icon: Icons.label_rounded),
+    _LanguageOrdering('name', icon: Icons.label_outlined),
     _LanguageOrdering(
       'dictionary',
-      icon: Icons.book_rounded,
+      icon: Icons.book_outlined,
       field: 'stats.dictionary',
       descending: true,
     ),
@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 GlobalStore.set(objects: selected);
                 context.navigateTo(const RootRoute());
               },
-              child: const Icon(Icons.done_all_rounded),
+              child: const Icon(Icons.done_all_outlined),
             ),
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -170,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () => setState(() {
                         selected.clear();
                       }),
-                      icon: const Icon(Icons.cancel_rounded),
+                      icon: const Icon(Icons.cancel_outlined),
                       tooltip: 'Unselect all',
                     ),
                     const SizedBox(width: 18),
@@ -206,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 IconButton(
                   tooltip: isMap ? 'Show list' : 'Show map',
                   icon: Icon(
-                    isMap ? Icons.view_list_rounded : Icons.map_rounded,
+                    isMap ? Icons.view_list_outlined : Icons.map_outlined,
                   ),
                   onPressed: () => setState(() {
                     isMap = !isMap;
@@ -237,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: EdgeInsets.zero,
                       ),
                       child: PopupMenuButton<_LanguageOrdering>(
-                        icon: const Icon(Icons.filter_alt_rounded),
+                        icon: const Icon(Icons.filter_alt_outlined),
                         tooltip: 'Order by',
                         onSelected: (value) {
                           ordering = value;

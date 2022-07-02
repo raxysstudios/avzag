@@ -83,7 +83,7 @@ class WordView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: Icon(
-                          Icons.label_rounded,
+                          Icons.label_outlined,
                           color: Theme.of(context).textTheme.caption?.color,
                         ),
                       ),
@@ -103,7 +103,7 @@ class WordView extends StatelessWidget {
         if (word.contribution != null)
           const Caption(
             'Unverified',
-            icon: Icons.unpublished_rounded,
+            icon: Icons.unpublished_outlined,
           ),
       ],
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 void showSnackbar(
   BuildContext context, {
-  IconData icon = Icons.error_rounded,
+  IconData icon = Icons.error_outlined,
   String text = 'Error!',
 }) {
   ScaffoldMessenger.of(context)

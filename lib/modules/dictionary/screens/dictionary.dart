@@ -127,14 +127,13 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                   onPressed: edit,
                   tooltip: editing == null ? 'New' : 'Resume',
                   child: Icon(
-                    editing == null ? Icons.add_rounded : Icons.edit_rounded,
+                    editing == null ? Icons.add_outlined : Icons.edit_outlined,
                   ),
                 )
               : null,
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
-                leading: const AutoLeadingButton(),
                 title: const Text('Dictionary'),
                 actions: [
                   if (EditorStore.admin)
@@ -144,7 +143,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                         search.updateQuery();
                       }),
                       icon: Icon(
-                        Icons.unpublished_rounded,
+                        Icons.unpublished_outlined,
                         color: search.unverified
                             ? Theme.of(context).colorScheme.primary
                             : null,
@@ -192,7 +191,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       search.monolingual
           ? 'End of the results'
           : 'Showing the first 50 entries',
-      icon: Icons.done_all_rounded,
+      icon: Icons.done_all_outlined,
     );
   }
 }

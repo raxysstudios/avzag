@@ -29,7 +29,7 @@ class AccountTile extends StatelessWidget {
               onPressed: () async {
                 if (await signOut(user) == true) onSignOut?.call();
               },
-              icon: const Icon(Icons.logout_rounded),
+              icon: const Icon(Icons.logout_outlined),
               tooltip: 'Sign out',
             ),
     );

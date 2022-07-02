@@ -35,7 +35,7 @@ class AdminableLanguages extends StatelessWidget {
               position: BadgePosition.topEnd(end: -20),
               badgeContent: adminable.contains(l.name)
                   ? SpanIcon(
-                      Icons.account_circle_rounded,
+                      Icons.account_circle_outlined,
                       padding: const EdgeInsets.all(2),
                       color: theme.onSurface,
                     )
@@ -58,7 +58,7 @@ class AdminableLanguages extends StatelessWidget {
                     ? const SizedBox()
                     : IconButton(
                         onPressed: () => openLink(contact),
-                        icon: const Icon(Icons.send_rounded),
+                        icon: const Icon(Icons.send_outlined),
                         tooltip: 'Contact admin',
                       );
               },
