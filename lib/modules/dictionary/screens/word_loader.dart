@@ -31,24 +31,16 @@ class _WordLoaderScreenState extends State<WordLoaderScreen> {
           loadWord(widget.id),
         );
         if (word != null) {
-          context.replaceRoute(
+          final router = context.router;
+          await router.replace(
             WordRoute(
               word: word,
               onEdit: widget.onEdit,
             ),
           );
-          // router.replace(WordRoute(word));
-          // context.router.replace(WordRoute);
-          // await showScrollableModalSheet<void>(
-          //   context,
-          //   (context, scroll) {
-          //     return WordScreen(
-          //       word,
-          //       scroll: scroll,
-          //       onEdit: widget.onEdit,
-          //     );
-          //   },
-          // );
+          if (router.stack.length < 2) {
+            router.navigate(const DictionaryRoute());
+          }
         }
       },
     );
