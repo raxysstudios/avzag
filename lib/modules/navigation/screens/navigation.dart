@@ -53,7 +53,7 @@ class NavigationScreen extends StatelessWidget {
                         ? Row(
                             children: [
                               if (EditorStore.admin)
-                                const SpanIcon(Icons.account_circle_outlined),
+                                const SpanIcon(Icons.verified_user_outlined),
                               Text(EditorStore.language!.titled),
                             ],
                           )
