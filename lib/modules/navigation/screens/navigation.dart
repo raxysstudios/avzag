@@ -62,7 +62,7 @@ class NavigationScreen extends StatelessWidget {
                     secondary: const Icon(Icons.edit_rounded),
                     onChanged: (e) => context.pushRoute(const AccountRoute()),
                   ),
-                  if (!kIsWeb) ...[
+                  if (kIsWeb) ...[
                     const Divider(),
                     const StoresButtons(),
                   ],
