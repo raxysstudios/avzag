@@ -4,7 +4,6 @@ import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
-import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:flutter/material.dart';
 
 import '../models/word.dart';
@@ -26,9 +25,7 @@ class WordsDiffScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          leading: const RoundedBackButton(
-            icon: Icons.close_rounded,
-          ),
+          leading: const AutoLeadingButton(),
           title: Text(overwrite.language.titled),
           bottom: TabBar(
             labelColor: Theme.of(context).colorScheme.onSurface,

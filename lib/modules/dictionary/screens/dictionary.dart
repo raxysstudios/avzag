@@ -5,7 +5,6 @@ import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/caption.dart';
-import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -135,7 +134,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
-                leading: const RoundedDrawerButton(),
+                leading: const AutoLeadingButton(),
                 title: const Text('Dictionary'),
                 actions: [
                   if (EditorStore.admin)

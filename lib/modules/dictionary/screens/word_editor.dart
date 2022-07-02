@@ -6,7 +6,6 @@ import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/compact_input.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
-import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -42,7 +41,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const RoundedBackButton(),
+        leading: const AutoLeadingButton(),
         title: Text(word.language.titled),
         actions: [
           Opacity(
