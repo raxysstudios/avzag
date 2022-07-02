@@ -10,7 +10,7 @@ String _getWordLink(Word word) =>
 String previewArticle(Word word) => '''
 🌄 Avzag • ${word.language.titled}
 🔖 ${word.headword.titled} — ${word.uses.map((u) => u.term.titled).join(', ')}
-🔗 ${_getWordLink(word)}
+${_getWordLink(word)}
 ''';
 
 String _cleanMarkdown(String md) => markdownToHtml(md, inlineOnly: true)
@@ -29,7 +29,7 @@ String textifyArticle(Word word) {
 
   final article = [
     '🌄 Avzag • ${word.language.titled}',
-    '🔗 ${_getWordLink(word)}',
+    _getWordLink(word),
     '\n🔖 ${word.headword.titled}',
     if (word.ipa != null) '🔉 ${word.ipa}',
     if (word.tags.isNotEmpty) tags(word.tags),
