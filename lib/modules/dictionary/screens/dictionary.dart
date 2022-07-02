@@ -87,18 +87,18 @@ class DictionaryScreenState extends State<DictionaryScreen> {
         EditorStore.admin &&
         EditorStore.language == entry.language) {
       diffWords(context, entry.entryID);
-      return;
+    } else {
+      context.pushRoute(
+        WordLoaderRoute(
+          id: entry.entryID,
+          onEdit: editing == null &&
+                  entry.language == EditorStore.language &&
+                  (EditorStore.admin || !entry.unverified)
+              ? edit
+              : null,
+        ),
+      );
     }
-    context.pushRoute(WordLoaderRoute(id: entry.entryID));
-    // openWord(
-    //   context,
-    //   entry.entryID,
-    //   editing == null &&
-    //           entry.language == EditorStore.language &&
-    //           (EditorStore.admin || !entry.unverified)
-    //       ? edit
-    //       : null,
-    // );
   }
 
   @override

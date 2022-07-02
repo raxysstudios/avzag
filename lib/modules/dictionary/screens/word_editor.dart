@@ -1,5 +1,4 @@
 import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
-import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/modals/danger_dialog.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
@@ -43,9 +42,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const RoundedBackButton(
-          route: DictionaryRoute(),
-        ),
+        leading: const RoundedBackButton(),
         title: Text(word.language.titled),
         actions: [
           Opacity(

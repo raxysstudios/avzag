@@ -6,7 +6,6 @@ import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../models/word.dart';
-import '../screens/word.dart';
 import 'word.dart';
 
 Future<void> diffWords(
@@ -21,31 +20,12 @@ Future<void> diffWords(
     loadWord(overwrite?.contribution?.overwriteId),
   );
   await showScrollableModalSheet<void>(
-    context: context,
-    builder: (context, scroll) {
+    context,
+    (context, scroll) {
       return WordsDiffScreen(
         base,
         overwrite!,
         scroll: scroll,
-      );
-    },
-  );
-}
-
-Future<void> openWord(
-  BuildContext context,
-  String id, [
-  ValueSetter<Word>? onEdit,
-]) async {
-  final word = await showLoadingDialog(context, loadWord(id));
-  if (word == null) return showSnackbar(context);
-  await showScrollableModalSheet<void>(
-    context: context,
-    builder: (context, scroll) {
-      return WordScreen(
-        word,
-        scroll: scroll,
-        onEdit: onEdit,
       );
     },
   );
@@ -57,8 +37,8 @@ Future<void> editWord(
   VoidCallback? onDone,
 ]) async {
   await showScrollableModalSheet<void>(
-    context: context,
-    builder: (context, scroll) {
+    context,
+    (context, scroll) {
       return WordEditorScreen(
         word,
         scroll: scroll,

@@ -1,5 +1,4 @@
 import 'package:avzag/modules/dictionary/services/sharing.dart';
-import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
@@ -26,9 +25,7 @@ class WordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const RoundedBackButton(
-          route: DictionaryRoute(),
-        ),
+        leading: const RoundedBackButton(),
         title: Stack(
           alignment: Alignment.center,
           children: [
