@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'router.gr.dart';
 
-class _NavModule {
-  const _NavModule(
+class NavModule {
+  const NavModule(
     this.icon,
     this.text, [
     this.route,
@@ -16,18 +16,18 @@ class _NavModule {
 }
 
 const modules = [
-  _NavModule(
+  NavModule(
     Icons.home_rounded,
     'home',
     HomeRoute(),
   ),
-  _NavModule(
+  NavModule(
     Icons.book_rounded,
     'dictionary',
     DictionaryRoute(),
   ),
-  _NavModule(Icons.music_note_rounded, 'phonology'),
-  _NavModule(Icons.switch_left_rounded, 'converter'),
-  _NavModule(Icons.forum_rounded, 'phrasebook'),
-  _NavModule(Icons.local_library_rounded, 'bootcamp'),
+  NavModule(Icons.music_note_rounded, 'phonology'),
+  NavModule(Icons.switch_left_rounded, 'converter'),
+  NavModule(Icons.forum_rounded, 'phrasebook'),
+  NavModule(Icons.local_library_rounded, 'bootcamp'),
 ];
