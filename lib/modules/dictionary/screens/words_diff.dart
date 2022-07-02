@@ -1,7 +1,9 @@
-import 'package:avzag/modules/dictionary/screens/word.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:avzag/modules/dictionary/widgets/word_view.dart';
+import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
+import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:flutter/material.dart';
 
@@ -12,13 +14,11 @@ class WordsDiffScreen extends StatelessWidget {
   const WordsDiffScreen(
     this.base,
     this.overwrite, {
-    this.scroll,
     Key? key,
   }) : super(key: key);
 
   final Word? base;
   final Word overwrite;
-  final ScrollController? scroll;
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +26,26 @@ class WordsDiffScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          leading: RoundedBackButton(
+          leading: const RoundedBackButton(
             icon: Icons.close_rounded,
           ),
-          title: Text(capitalize(overwrite.language)),
+          title: Text(overwrite.language.titled),
           bottom: TabBar(
             labelColor: Theme.of(context).colorScheme.onSurface,
             tabs: [
               Tab(
-                icon: Icon(Icons.adjust_rounded),
-                text: 'Base',
+                child: OptionItem.simple(
+                  Icons.adjust_rounded,
+                  'Base',
+                  centered: true,
+                ).widget,
               ),
               Tab(
-                icon: Icon(Icons.edit_rounded),
-                text: 'Overwrite',
+                child: OptionItem.simple(
+                  Icons.edit_rounded,
+                  'Overwrite',
+                  centered: true,
+                ).widget,
               ),
             ],
           ),
@@ -56,11 +62,11 @@ class WordsDiffScreen extends StatelessWidget {
             IconButton(
               onPressed: () => deleteWord(
                 context,
-                overwrite.id!,
-                after: () => Navigator.pop(context),
+                overwrite.id,
+                after: context.popRoute,
                 title: 'Reject the contribution?',
               ),
-              icon: Icon(Icons.delete_forever),
+              icon: const Icon(Icons.delete_forever),
               tooltip: 'Reject',
             ),
             const SizedBox(width: 4),
@@ -71,26 +77,20 @@ class WordsDiffScreen extends StatelessWidget {
           onPressed: () async => acceptContribution(
             context,
             overwrite,
-            after: () => Navigator.pop(context),
+            after: context.popRoute,
           ),
         ),
         body: TabBarView(
           children: [
             base == null
-                ? Center(
+                ? const Center(
                     child: Caption(
                       'No base word',
                       icon: Icons.highlight_off_rounded,
                     ),
                   )
-                : WordScreen(
-                    base!,
-                    embedded: true,
-                  ),
-            WordScreen(
-              overwrite,
-              embedded: true,
-            ),
+                : WordView(base!),
+            WordView(overwrite),
           ],
         ),
       ),

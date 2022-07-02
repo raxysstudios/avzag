@@ -1,13 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/modals/danger_dialog.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/compact_input.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
-import 'package:avzag/shared/widgets/modals/danger_dialog.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../models/use.dart';
 import '../models/word.dart';
@@ -16,13 +18,11 @@ import '../services/word.dart';
 class WordEditorScreen extends StatefulWidget {
   const WordEditorScreen(
     this.word, {
-    this.scroll,
     this.onDone,
     Key? key,
   }) : super(key: key);
 
   final Word word;
-  final ScrollController? scroll;
   final VoidCallback? onDone;
 
   @override
@@ -31,10 +31,10 @@ class WordEditorScreen extends StatefulWidget {
 
 class _WordEditorScreenState extends State<WordEditorScreen> {
   final form = GlobalKey<FormState>();
-  Word get word => widget.word;
+  late final word = widget.word;
 
   void exit() {
-    Navigator.pop(context);
+    context.popRoute();
     widget.onDone?.call();
   }
 
@@ -43,7 +43,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const RoundedBackButton(),
-        title: Text(capitalize(word.language)),
+        title: Text(word.language.titled),
         actions: [
           Opacity(
             opacity: .5,
@@ -57,17 +57,17 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
           OptionsButton(
             [
               OptionItem.simple(
-                Icons.cancel_rounded,
+                Icons.close_rounded,
                 'Discard',
-                exit,
+                onTap: exit,
               ),
-              if (word.id != null && EditorStore.admin)
+              if (word.id.isNotEmpty && EditorStore.admin)
                 OptionItem.simple(
-                  Icons.delete_forever_rounded,
+                  Icons.delete_rounded,
                   'Delete',
-                  () => deleteWord(
+                  onTap: () => deleteWord(
                     context,
-                    word.id!,
+                    word.id,
                     after: exit,
                   ),
                 ),
@@ -92,7 +92,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
         key: form,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
-          controller: widget.scroll,
+          controller: ModalScrollController.of(context),
           padding: const EdgeInsets.only(bottom: 76),
           children: [
             ColumnCard(
@@ -129,6 +129,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
             SamplesEditor('Add a form', word.forms),
             for (final u in word.uses) ...[
               ColumnCard(
+                key: Key(u.term),
                 divider: null,
                 children: [
                   CompactInput(

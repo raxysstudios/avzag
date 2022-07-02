@@ -1,5 +1,5 @@
 import 'package:avzag/models/language.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,7 @@ class LanguageCard extends StatelessWidget {
               selected: selected,
               minVerticalPadding: 16,
               title: Text(
-                capitalize(language.name),
+                language.name.titled,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,

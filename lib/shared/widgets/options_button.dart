@@ -5,15 +5,18 @@ class OptionItem {
   final VoidCallback? onTap;
 
   OptionItem(
-    this.widget, [
+    this.widget, {
     this.onTap,
-  ]);
+  });
 
   OptionItem.simple(
     IconData icon,
-    String text, [
+    String text, {
     this.onTap,
-  ]) : widget = Row(
+    bool centered = false,
+  }) : widget = Row(
+          mainAxisAlignment:
+              centered ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: [
             const SizedBox(width: 16),
             Icon(icon),
@@ -25,9 +28,9 @@ class OptionItem {
 
   OptionItem.tile(
     Widget leading,
-    Widget title, [
+    Widget title, {
     this.onTap,
-  ]) : widget = Row(
+  }) : widget = Row(
           children: [
             const SizedBox(width: 16),
             leading,

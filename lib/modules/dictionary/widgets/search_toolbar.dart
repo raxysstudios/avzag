@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/store.dart';
@@ -71,22 +71,22 @@ class SearchToolbarState extends State<SearchToolbar> {
               OptionItem.simple(
                 Icons.language_rounded,
                 GlobalStore.languages.length == 1 ? 'English' : 'Multilingual',
-                () => setLanguage(''),
+                onTap: () => setLanguage(''),
               ),
               OptionItem.simple(
                 Icons.layers_rounded,
                 'Cross-lingual',
-                () => setLanguage('_'),
+                onTap: () => setLanguage('_'),
               ),
               OptionItem.divider(),
               for (final l in GlobalStore.languages.keys)
                 OptionItem.tile(
                   LanguageAvatar(l),
                   Text(
-                    capitalize(l),
+                    l.titled,
                     style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
-                  () => setLanguage(l),
+                  onTap: () => setLanguage(l),
                 )
             ],
             icon: Builder(builder: (context) {
@@ -106,7 +106,7 @@ class SearchToolbarState extends State<SearchToolbar> {
                 builder: (context) {
                   var label = 'Search ';
                   label += search.monolingual
-                      ? 'forms in ${capitalize(search.language)}'
+                      ? 'forms in ${search.language.titled}'
                       : '${search.language.isEmpty ? 'over' : 'across'} the languages';
                   return TextField(
                     controller: inputController,

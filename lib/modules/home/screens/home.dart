@@ -1,8 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/models/language.dart';
-import 'package:avzag/modules/navigation/nav_drawer.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/modules/navigation/services/router.gr.dart';
+import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
-import 'package:avzag/shared/widgets/modals/loading_dialog.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:avzag/store.dart';
 import 'package:badges/badges.dart';
@@ -48,8 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final orderings = [
     _LanguageOrdering('name', icon: Icons.label_rounded),
-    _LanguageOrdering('family', icon: Icons.public_rounded),
-    null,
     _LanguageOrdering(
       'dictionary',
       icon: Icons.book_rounded,
@@ -57,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       descending: true,
     ),
   ];
-  late var ordering = orderings.first!;
+  late var ordering = orderings.first;
 
   late final Future<void> loader;
   final chipsScroll = ScrollController();
@@ -146,14 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: selected.isEmpty
           ? null
           : FloatingActionButton(
-              onPressed: () async {
-                await showLoadingDialog(
-                  context,
-                  GlobalStore.set(objects: selected),
-                );
-                navigate(context);
+              onPressed: () {
+                GlobalStore.set(objects: selected);
+                context.navigateTo(const RootRoute());
               },
-              tooltip: 'Continue',
               child: const Icon(Icons.done_all_rounded),
             ),
       appBar: AppBar(
@@ -190,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             radius: 12,
                           ),
                           label: Text(
-                            capitalize(language.name),
+                            language.name.titled,
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                             ),
@@ -252,24 +246,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (context) {
                           return [
                             for (final ordering in orderings)
-                              if (ordering == null)
-                                const PopupMenuDivider(height: 0)
-                              else
-                                PopupMenuItem(
-                                  value: ordering,
-                                  child: ListTile(
-                                    leading: Icon(ordering.icon),
-                                    title: Text(
-                                      capitalize(ordering.text),
-                                      softWrap: false,
-                                      overflow: TextOverflow.fade,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                              PopupMenuItem(
+                                value: ordering,
+                                child: ListTile(
+                                  leading: Icon(ordering.icon),
+                                  title: Text(
+                                    ordering.text.titled,
+                                    softWrap: false,
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    selected: this.ordering == ordering,
                                   ),
-                                )
+                                  selected: this.ordering == ordering,
+                                ),
+                              )
                           ];
                         },
                       ),

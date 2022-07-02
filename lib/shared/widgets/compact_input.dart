@@ -43,12 +43,12 @@ class CompactInput extends StatelessWidget {
           isDense: true,
           border: InputBorder.none,
         ),
-        maxLines: multiline ? 0 : null,
+        maxLines: multiline ? null : 1,
         initialValue: initial,
         validator: noEmpty ? _emptyValidator : null,
         onChanged: (s) {
           s = s.trim();
-          // if (lowercase) s = s.toLowerCase();
+          if (lowercase) s = s.toLowerCase();
           onChanged(s);
         },
       ),

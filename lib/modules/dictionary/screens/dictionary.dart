@@ -1,5 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
-import 'package:avzag/modules/navigation/nav_drawer.dart';
+import 'package:avzag/modules/navigation/screens/navigation.dart';
+import 'package:avzag/modules/navigation/services/router.gr.dart';
+import 'package:avzag/shared/modals/loading_dialog.dart';
+import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:avzag/store.dart';
@@ -10,7 +14,7 @@ import 'package:provider/provider.dart';
 import '../models/entry.dart';
 import '../models/word.dart';
 import '../search_controller.dart';
-import '../services/sheets.dart';
+import '../services/word.dart';
 import '../widgets/search_toolbar.dart';
 
 class DictionaryScreen extends StatefulWidget {
@@ -60,6 +64,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     setState(() {
       if (word == null) {
         editing ??= Word(
+          '',
           headword: '',
           uses: [],
           language: EditorStore.language!,
@@ -70,29 +75,45 @@ class DictionaryScreenState extends State<DictionaryScreen> {
         editing = Word.fromJson(word.toJson(), word.id);
       }
     });
-    editWord(
-      context,
-      editing!,
-      () => setState(() {
-        editing = null;
-      }),
+    context.pushRoute(
+      WordEditorRoute(
+        word: editing!,
+        onDone: () => setState(() {
+          editing = null;
+        }),
+      ),
     );
   }
 
-  void open(Entry entry) {
-    if (entry.unverified && EditorStore.admin) {
-      diffWords(context, entry.entryID);
-      return;
+  void open(Entry entry) async {
+    if (entry.unverified &&
+        EditorStore.admin &&
+        EditorStore.language == entry.language) {
+      final overwrite =
+          await showLoadingDialog(context, loadWord(entry.entryID));
+      if (overwrite?.contribution == null) return showSnackbar(context);
+      final base = await showLoadingDialog(
+        context,
+        loadWord(overwrite?.contribution?.overwriteId),
+      );
+      context.pushRoute(
+        WordsDiffRoute(
+          base: base!,
+          overwrite: overwrite!,
+        ),
+      );
+    } else {
+      context.pushRoute(
+        WordLoaderRoute(
+          id: entry.entryID,
+          onEdit: editing == null &&
+                  entry.language == EditorStore.language &&
+                  (EditorStore.admin || !entry.unverified)
+              ? edit
+              : null,
+        ),
+      );
     }
-    openWord(
-      context,
-      entry.entryID,
-      editing == null &&
-              entry.language == EditorStore.language &&
-              (EditorStore.admin || !entry.unverified)
-          ? edit
-          : null,
-    );
   }
 
   @override
@@ -101,7 +122,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       value: search,
       builder: (context, _) {
         return Scaffold(
-          drawer: const NavDraver(title: 'dictionary'),
+          drawer: const NavigationScreen(),
           floatingActionButton: EditorStore.editor
               ? FloatingActionButton(
                   onPressed: edit,

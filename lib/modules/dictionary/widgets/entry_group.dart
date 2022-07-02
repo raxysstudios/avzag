@@ -1,5 +1,5 @@
 import 'package:avzag/modules/dictionary/models/entry.dart';
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +34,7 @@ class EntryGroup extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             children: [
               Text(
-                capitalize(groups.first.first.term),
+                groups.first.first.term.titled,
                 style: TextStyle(
                   color: theme.caption?.color,
                   fontWeight: FontWeight.w500,
@@ -45,11 +45,7 @@ class EntryGroup extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: Text(
-                      prettyTags(
-                        tags,
-                        separator: ' ',
-                        capitalized: false,
-                      )!,
+                      tags.join(', '),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.caption,

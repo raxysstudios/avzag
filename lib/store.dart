@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/language.dart';
-import 'shared/utils/utils.dart';
+import 'shared/utils.dart';
 
 late final Algolia algolia;
 late final SharedPreferences prefs;
@@ -26,7 +26,12 @@ class EditorStore {
   static bool get editor => user != null && language != null;
   static bool get admin => editor && adminable.contains(language);
 
-  static Future _check(User? user) async {
+  static Future<List<String>> getAdminable() async {
+    final token = await user?.getIdTokenResult(true);
+    return json2list(token?.claims?['admin']) ?? [];
+  }
+
+  static void _check(User? user) async {
     if (user == null) {
       adminable.clear();
       language = null;
@@ -35,12 +40,7 @@ class EditorStore {
     adminable = await getAdminable();
   }
 
-  static Future<List<String>> getAdminable() async {
-    final token = await user?.getIdTokenResult(true);
-    return json2list(token?.claims?['admin']) ?? [];
-  }
-
-  static Future init() async {
+  static Future<void> init() async {
     _language = prefs.getString('editorLanguage');
     adminable = await getAdminable();
     FirebaseAuth.instance.userChanges().listen(_check);
@@ -50,10 +50,10 @@ class EditorStore {
 class GlobalStore {
   static Map<String, Language?> languages = {};
 
-  static Future<void> set({
+  static void set({
     Iterable<String>? names,
     Iterable<Language>? objects,
-  }) async {
+  }) {
     if (objects != null) {
       languages = {for (final l in objects) l.name: l};
     } else if (names != null) {
@@ -65,9 +65,9 @@ class GlobalStore {
     prefs.setStringList('languages', languages.keys.toList());
   }
 
-  static Future<void> init([List<String>? names]) async {
+  static void init([List<String>? names]) {
     set(
-      names: names ?? prefs.getStringList('languages') ?? ['iron'],
+      names: names ?? prefs.getStringList('languages') ?? ['aghul'],
     );
     for (final l in languages.keys) {
       FirebaseFirestore.instance

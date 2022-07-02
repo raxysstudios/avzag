@@ -1,4 +1,4 @@
-import 'package:avzag/shared/utils/utils.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LanguageStats {
