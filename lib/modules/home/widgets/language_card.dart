@@ -3,6 +3,7 @@ import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LanguageCard extends StatelessWidget {
   final Language language;
@@ -31,9 +32,10 @@ class LanguageCard extends StatelessWidget {
                 child: LanguageFlag(
                   language.name,
                   url: language.flag,
-                  height: 4,
-                  width: 12,
-                  scale: 12,
+                  height: 32,
+                  width: 96,
+                  scale: 2,
+                  offset: const Offset(20, 0),
                 ),
               ),
             ],
@@ -42,9 +44,9 @@ class LanguageCard extends StatelessWidget {
           minVerticalPadding: 16,
           title: Text(
             language.endonym.titled,
-            style: const TextStyle(
+            style: GoogleFonts.bitter(
               fontSize: 18,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
           subtitle: Column(

@@ -36,7 +36,7 @@ class WordView extends StatelessWidget {
               word.headword.titled,
               style: GoogleFonts.bitter(
                 textStyle: theme.headline5,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
             if (word.ipa != null)

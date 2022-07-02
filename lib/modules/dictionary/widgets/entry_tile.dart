@@ -36,7 +36,7 @@ class EntryTile extends StatelessWidget {
             hit.headword.titled,
             style: GoogleFonts.bitter(
               textStyle: theme.subtitle1,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
           if (hit.form != null && hit.form != hit.headword)
@@ -46,7 +46,7 @@ class EntryTile extends StatelessWidget {
                 hit.form!.titled,
                 style: GoogleFonts.bitter(
                   textStyle: theme.subtitle1,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   color: theme.caption?.color,
                 ),
               ),
