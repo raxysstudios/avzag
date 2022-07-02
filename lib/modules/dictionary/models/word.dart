@@ -5,7 +5,7 @@ import 'sample.dart';
 import 'use.dart';
 
 class Word {
-  String id;
+  String? id;
   String headword;
   String? ipa;
   List<Sample> forms;
@@ -27,7 +27,7 @@ class Word {
     this.note,
   });
 
-  Word.fromJson(Map<String, dynamic> json, String id)
+  Word.fromJson(Map<String, dynamic> json, [String? id])
       : this(
           id,
           headword: json['headword'] as String,
