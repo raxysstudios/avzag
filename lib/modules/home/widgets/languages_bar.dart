@@ -48,7 +48,6 @@ class _LanguagesBarState extends State<LanguagesBar> {
             IconButton(
               onPressed: widget.onClear,
               icon: const Icon(Icons.cancel_outlined),
-              tooltip: 'Unselect all',
             ),
             const SizedBox(width: 18),
             for (final language in widget.languages)
