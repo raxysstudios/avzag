@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/modals/danger_dialog.dart';
@@ -34,7 +35,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
   Word get word => widget.word;
 
   void exit() {
-    Navigator.pop(context);
+    context.router.pop();
     widget.onDone?.call();
   }
 

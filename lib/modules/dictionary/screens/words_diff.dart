@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/widgets/word_view.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/caption.dart';
@@ -64,7 +65,7 @@ class WordsDiffScreen extends StatelessWidget {
               onPressed: () => deleteWord(
                 context,
                 overwrite.id,
-                after: () => Navigator.pop(context),
+                after: context.router.pop,
                 title: 'Reject the contribution?',
               ),
               icon: const Icon(Icons.delete_forever),
@@ -78,7 +79,7 @@ class WordsDiffScreen extends StatelessWidget {
           onPressed: () async => acceptContribution(
             context,
             overwrite,
-            after: () => Navigator.pop(context),
+            after: context.router.pop,
           ),
         ),
         body: TabBarView(

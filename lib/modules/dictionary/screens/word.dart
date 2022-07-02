@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/services/sharing.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/utils.dart';
@@ -70,8 +71,8 @@ class WordScreen extends StatelessWidget {
           ? null
           : FloatingActionButton(
               child: const Icon(Icons.edit_rounded),
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: () async {
+                await context.router.pop();
                 onEdit!(word);
               },
             ),
