@@ -1,11 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:avzag/models/language.dart';
+import 'package:avzag/modules/home/widgets/languages_bar.dart';
 import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/widgets/language_avatar.dart';
-import 'package:avzag/shared/widgets/span_icon.dart';
+import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/store.dart';
-import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -23,12 +22,12 @@ class HomeScreen extends StatefulWidget {
 class _LanguageOrdering {
   final bool descending;
   final String text;
-  final IconData? icon;
+  final IconData icon;
   late final String field;
 
   _LanguageOrdering(
-    this.text, {
     this.icon,
+    this.text, {
     String? field,
     this.descending = false,
   }) {
@@ -47,10 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
   var isMap = false;
 
   final orderings = [
-    _LanguageOrdering('name', icon: Icons.label_outlined),
+    _LanguageOrdering(Icons.label_outlined, 'name'),
     _LanguageOrdering(
+      Icons.book_outlined,
       'dictionary',
-      icon: Icons.book_outlined,
       field: 'stats.dictionary',
       descending: true,
     ),
@@ -91,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
       for (var l in catalogue)
         l.name: [
           l.name,
+          l.endonym,
           ...l.aliases ?? [],
         ].join(' ')
     };
@@ -151,127 +151,50 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Icon(Icons.done_all_outlined),
             ),
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         titleSpacing: 0,
         centerTitle: true,
-        title: selected.isEmpty
-            ? Text(
-                'Select languages below',
-                style: Theme.of(context).textTheme.bodyText1,
-              )
-            : SizedBox(
-                height: kToolbarHeight,
-                child: ListView(
-                  controller: chipsScroll,
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  children: [
-                    IconButton(
-                      onPressed: () => setState(() {
-                        selected.clear();
-                      }),
-                      icon: const Icon(Icons.cancel_outlined),
-                      tooltip: 'Unselect all',
-                    ),
-                    const SizedBox(width: 18),
-                    for (final language in selected)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: InputChip(
-                          avatar: LanguageAvatar(
-                            null,
-                            url: language.flag,
-                            radius: 12,
-                          ),
-                          label: Text(
-                            language.name.titled,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          onPressed: () => setState(() {
-                            selected.remove(language);
-                          }),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight + 3),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Row(
-              children: [
-                IconButton(
-                  tooltip: isMap ? 'Show list' : 'Show map',
-                  icon: Icon(
-                    isMap ? Icons.view_list_outlined : Icons.map_outlined,
-                  ),
-                  onPressed: () => setState(() {
-                    isMap = !isMap;
-                  }),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 8),
-                    child: TextField(
-                      controller: inputController,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        labelText: 'Search by names, tags, families',
-                      ),
-                    ),
-                  ),
-                ),
-                Builder(
-                  builder: (context) {
-                    return Badge(
-                      ignorePointer: true,
-                      animationType: BadgeAnimationType.fade,
-                      position: BadgePosition.bottomStart(),
-                      badgeColor: Theme.of(context).colorScheme.primary,
-                      badgeContent: SpanIcon(
-                        ordering.icon!,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        padding: EdgeInsets.zero,
-                      ),
-                      child: PopupMenuButton<_LanguageOrdering>(
-                        icon: const Icon(Icons.filter_alt_outlined),
-                        tooltip: 'Order by',
-                        onSelected: (value) {
-                          ordering = value;
-                          load();
-                        },
-                        itemBuilder: (context) {
-                          return [
-                            for (final ordering in orderings)
-                              PopupMenuItem(
-                                value: ordering,
-                                child: ListTile(
-                                  leading: Icon(ordering.icon),
-                                  title: Text(
-                                    ordering.text.titled,
-                                    softWrap: false,
-                                    overflow: TextOverflow.fade,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  selected: this.ordering == ordering,
-                                ),
-                              )
-                          ];
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+        leading: IconButton(
+          tooltip: isMap ? 'Show list' : 'Show map',
+          icon: Icon(
+            isMap ? Icons.view_list_outlined : Icons.map_outlined,
+          ),
+          onPressed: () => setState(() {
+            isMap = !isMap;
+          }),
+        ),
+        title: TextField(
+          controller: inputController,
+          decoration: const InputDecoration.collapsed(
+            hintText: 'Search by names, tags, families',
           ),
         ),
+        actions: [
+          OptionsButton(
+            [
+              for (final o in orderings)
+                OptionItem.simple(
+                  o.icon,
+                  o.text.titled,
+                  onTap: () {
+                    ordering = o;
+                    load();
+                  },
+                ),
+            ],
+            icon: const Icon(Icons.sort_outlined),
+          ),
+          const SizedBox(width: 4),
+        ],
       ),
+      bottomNavigationBar: selected.isEmpty
+          ? null
+          : LanguagesBar(
+              selected,
+              onTap: (l) => setState(() {
+                selected.remove(l);
+              }),
+              onClear: () => setState(selected.clear),
+            ),
       body: Builder(
         builder: (context) {
           if (isLoading) {
@@ -286,10 +209,9 @@ class _HomeScreenState extends State<HomeScreen> {
               languages: languages,
             );
           }
-          return ListView.separated(
+          return ListView.builder(
             itemCount: languages.length,
             padding: const EdgeInsets.only(top: 12, bottom: 76),
-            separatorBuilder: (_, __) => const Divider(),
             itemBuilder: (context, index) {
               final language = languages[index];
               return LanguageCard(
