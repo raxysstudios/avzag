@@ -35,6 +35,7 @@ class _WordLoaderScreenState extends State<WordLoaderScreen> {
           await router.replace(
             WordRoute(
               word: word,
+              id: word.id,
               onEdit: widget.onEdit,
             ),
           );

@@ -39,7 +39,12 @@ import 'root_guard.dart';
           name: '_DictionaryRoute',
         ),
         CustomRoute<void>(
-          path: 'word',
+          path: ':id',
+          page: WordLoaderScreen,
+          customRouteBuilder: dialogRouteBuilder,
+        ),
+        CustomRoute<void>(
+          path: ':id',
           page: WordScreen,
           customRouteBuilder: sheetRouteBuilder,
         ),
@@ -53,11 +58,6 @@ import 'root_guard.dart';
           page: WordsDiffScreen,
           customRouteBuilder: sheetRouteBuilder,
         ),
-        CustomRoute<void>(
-          path: ':id',
-          page: WordLoaderScreen,
-          customRouteBuilder: dialogRouteBuilder,
-        )
       ],
     ),
     RedirectRoute(path: '*', redirectTo: '/')

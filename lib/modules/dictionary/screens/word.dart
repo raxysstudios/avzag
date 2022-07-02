@@ -14,6 +14,7 @@ import '../widgets/word_view.dart';
 class WordScreen extends StatelessWidget {
   const WordScreen(
     this.word, {
+    @pathParam String? id,
     this.onEdit,
     Key? key,
   }) : super(key: key);
