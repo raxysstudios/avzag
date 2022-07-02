@@ -246,22 +246,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (context) {
                           return [
                             for (final ordering in orderings)
-                          
-                                PopupMenuItem(
-                                  value: ordering,
-                                  child: ListTile(
-                                    leading: Icon(ordering.icon),
-                                    title: Text(
-                                      ordering.text.titled,
-                                      softWrap: false,
-                                      overflow: TextOverflow.fade,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                              PopupMenuItem(
+                                value: ordering,
+                                child: ListTile(
+                                  leading: Icon(ordering.icon),
+                                  title: Text(
+                                    ordering.text.titled,
+                                    softWrap: false,
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    selected: this.ordering == ordering,
                                   ),
-                                )
+                                  selected: this.ordering == ordering,
+                                ),
+                              )
                           ];
                         },
                       ),
