@@ -81,7 +81,13 @@ class SearchToolbarState extends State<SearchToolbar> {
               OptionItem.divider(),
               for (final l in GlobalStore.languages.keys)
                 OptionItem.tile(
-                  LanguageAvatar(l),
+                  Transform.scale(
+                    scale: 1.5,
+                    child: LanguageAvatar(
+                      l,
+                      radius: 12,
+                    ),
+                  ),
                   Text(
                     l.titled,
                     style: const TextStyle(fontWeight: FontWeight.w500),
