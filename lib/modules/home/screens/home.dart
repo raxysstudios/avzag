@@ -48,8 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final orderings = [
     _LanguageOrdering('name', icon: Icons.label_rounded),
-    _LanguageOrdering('family', icon: Icons.public_rounded),
-    null,
     _LanguageOrdering(
       'dictionary',
       icon: Icons.book_rounded,
@@ -57,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       descending: true,
     ),
   ];
-  late var ordering = orderings.first!;
+  late var ordering = orderings.first;
 
   late final Future<void> loader;
   final chipsScroll = ScrollController();
@@ -248,9 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (context) {
                           return [
                             for (final ordering in orderings)
-                              if (ordering == null)
-                                const PopupMenuDivider(height: 0)
-                              else
+                          
                                 PopupMenuItem(
                                   value: ordering,
                                   child: ListTile(
