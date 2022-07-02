@@ -23,60 +23,56 @@ class LanguageCard extends StatelessWidget {
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
-        child: Stack(
-          children: [
-            AnimatedOpacity(
-              opacity: selected ? 1 : 0.5,
-              duration: const Duration(milliseconds: 250),
-              child: Align(
-                alignment: Alignment.centerRight,
+        child: ListTile(
+          leading: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedOpacity(
+                opacity: selected ? 1 : .5,
+                duration: const Duration(milliseconds: 250),
                 child: LanguageFlag(
                   language.name,
                   url: language.flag,
-                  height: 32,
-                  width: 96,
-                  scale: 2,
-                  offset: const Offset(0, 18),
+                  height: 4,
+                  width: 12,
+                  scale: 12,
                 ),
               ),
+            ],
+          ),
+          selected: selected,
+          minVerticalPadding: 16,
+          title: Text(
+            language.endonym.titled,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
             ),
-            ListTile(
-              selected: selected,
-              minVerticalPadding: 16,
-              title: Text(
-                language.name.titled,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              subtitle: language.stats == null
-                  ? null
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(
-                            style:
-                                Theme.of(context).textTheme.caption?.copyWith(
-                                      fontSize: 14,
-                                    ),
-                            children: [
-                              const WidgetSpan(
-                                child: SpanIcon(Icons.book_outlined),
-                              ),
-                              TextSpan(
-                                text: language.stats!.dictionary.toString(),
-                              ),
-                            ],
-                          ),
+          ),
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(language.name.titled),
+              if (language.stats != null)
+                RichText(
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.caption?.copyWith(
+                          fontSize: 14,
                         ),
-                      ],
-                    ),
-            ),
-          ],
+                    children: [
+                      const WidgetSpan(
+                        child: SpanIcon(Icons.book_outlined),
+                      ),
+                      TextSpan(
+                        text: language.stats!.dictionary.toString(),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -20,6 +20,7 @@ class LanguageStats {
 
 class Language {
   final String name;
+  final String endonym;
   final String? flag;
   final String? contact;
   final List<String>? aliases;
@@ -28,6 +29,7 @@ class Language {
 
   const Language({
     required this.name,
+    required this.endonym,
     this.flag,
     this.contact,
     this.aliases,
@@ -38,6 +40,7 @@ class Language {
   Language.fromJson(Map<String, Object?> json)
       : this(
           name: json['name'] as String,
+          endonym: json['endonym'] as String,
           flag: json['flag'] as String?,
           contact: json['contact'] as String?,
           aliases: json2list(json['aliases']),
