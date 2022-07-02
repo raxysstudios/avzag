@@ -8,8 +8,8 @@ String _getWordLink(Word word) =>
     'https://avzag.raxys.app/dictionary/${word.id}';
 
 String previewArticle(Word word) => '''
-Avzag • ${word.language.titled}
-${word.headword.titled} — ${word.uses.map((u) => u.term.titled).join(', ')}
+🌄 Avzag • ${word.language.titled}
+🔖 ${word.headword.titled} — ${word.uses.map((u) => u.term.titled).join(', ')}
 ${_getWordLink(word)}
 ''';
 
