@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -13,7 +12,7 @@ class LoaderScreen<T> extends StatefulWidget {
   }) : super(key: key);
 
   final Future<T?> future;
-  final FutureOr<PageRouteInfo?> Function(BuildContext, T?) then;
+  final void Function(BuildContext, T?) then;
 
   @override
   State<LoaderScreen<T>> createState() => _LoaderScreenState<T>();
@@ -27,15 +26,10 @@ class _LoaderScreenState<T> extends State<LoaderScreen<T>> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback(
       (_) async {
-        final next = await widget.then(
+        widget.then(
           context,
           await showLoadingDialog(context, widget.future),
         );
-        if (next == null) {
-          context.popRoute();
-        } else {
-          context.navigateTo(next);
-        }
       },
     );
   }
