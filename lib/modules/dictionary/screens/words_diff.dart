@@ -14,13 +14,11 @@ class WordsDiffScreen extends StatelessWidget {
   const WordsDiffScreen(
     this.base,
     this.overwrite, {
-    this.scroll,
     Key? key,
   }) : super(key: key);
 
   final Word? base;
   final Word overwrite;
-  final ScrollController? scroll;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +63,7 @@ class WordsDiffScreen extends StatelessWidget {
               onPressed: () => deleteWord(
                 context,
                 overwrite.id,
-                after: context.router.pop,
+                after: context.popRoute,
                 title: 'Reject the contribution?',
               ),
               icon: const Icon(Icons.delete_forever),
@@ -79,7 +77,7 @@ class WordsDiffScreen extends StatelessWidget {
           onPressed: () async => acceptContribution(
             context,
             overwrite,
-            after: context.router.pop,
+            after: context.popRoute,
           ),
         ),
         body: TabBarView(

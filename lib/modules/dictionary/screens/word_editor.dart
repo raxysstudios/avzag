@@ -9,6 +9,7 @@ import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../models/use.dart';
 import '../models/word.dart';
@@ -17,13 +18,11 @@ import '../services/word.dart';
 class WordEditorScreen extends StatefulWidget {
   const WordEditorScreen(
     this.word, {
-    this.scroll,
     this.onDone,
     Key? key,
   }) : super(key: key);
 
   final Word word;
-  final ScrollController? scroll;
   final VoidCallback? onDone;
 
   @override
@@ -35,7 +34,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
   Word get word => widget.word;
 
   void exit() {
-    context.router.pop();
+    context.popRoute();
     widget.onDone?.call();
   }
 
@@ -93,7 +92,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
         key: form,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: ListView(
-          controller: widget.scroll,
+          controller: ModalScrollController.of(context),
           padding: const EdgeInsets.only(bottom: 76),
           children: [
             ColumnCard(

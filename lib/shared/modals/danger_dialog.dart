@@ -19,8 +19,8 @@ void showDangerDialog(
           title: Text(title),
           actions: [
             TextButton.icon(
-              onPressed: () async {
-                await context.router.pop();
+              onPressed: () {
+                context.popRoute();
                 onConfirm();
               },
               icon: Icon(confirmIcon),
@@ -33,7 +33,7 @@ void showDangerDialog(
               ),
             ),
             TextButton.icon(
-              onPressed: context.router.pop,
+              onPressed: context.popRoute,
               icon: Icon(rejectIcon),
               label: Text(rejectText),
             ),

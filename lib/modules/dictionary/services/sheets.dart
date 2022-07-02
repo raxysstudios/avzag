@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/screens/word_editor.dart';
 import 'package:avzag/modules/dictionary/screens/words_diff.dart';
 import 'package:avzag/shared/modals/loading_dialog.dart';
@@ -19,16 +20,17 @@ Future<void> diffWords(
     context,
     loadWord(overwrite?.contribution?.overwriteId),
   );
-  await showScrollableModalSheet<void>(
-    context,
-    (context, scroll) {
-      return WordsDiffScreen(
-        base,
-        overwrite!,
-        scroll: scroll,
-      );
-    },
-  );
+  // context.pushRoute(WordsDiffScreen(base, overwrite!));
+  // context
+  // await showScrollableModalSheet<void>(
+  //   context,
+  //   (context, scroll) {
+  //     return WordsDiffScreen(
+  //       base,
+  //       overwrite!,
+  //     );
+  //   },
+  // );
 }
 
 Future<void> editWord(
@@ -36,14 +38,13 @@ Future<void> editWord(
   Word word, [
   VoidCallback? onDone,
 ]) async {
-  await showScrollableModalSheet<void>(
-    context,
-    (context, scroll) {
-      return WordEditorScreen(
-        word,
-        scroll: scroll,
-        onDone: onDone,
-      );
-    },
-  );
+  // await showScrollableModalSheet<void>(
+  //   context,
+  //   (context, scroll) {
+  //     return WordEditorScreen(
+  //       word,
+  //       onDone: onDone,
+  //     );
+  //   },
+  // );
 }

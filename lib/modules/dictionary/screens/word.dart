@@ -6,6 +6,7 @@ import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../models/word.dart';
 import '../widgets/word_view.dart';
@@ -13,13 +14,11 @@ import '../widgets/word_view.dart';
 class WordScreen extends StatelessWidget {
   const WordScreen(
     this.word, {
-    this.scroll,
     this.onEdit,
     Key? key,
   }) : super(key: key);
 
   final Word word;
-  final ScrollController? scroll;
   final ValueSetter<Word>? onEdit;
 
   @override
@@ -72,11 +71,14 @@ class WordScreen extends StatelessWidget {
           : FloatingActionButton(
               child: const Icon(Icons.edit_rounded),
               onPressed: () async {
-                await context.router.pop();
+                context.popRoute();
                 onEdit!(word);
               },
             ),
-      body: WordView(word, scroll: scroll),
+      body: WordView(
+        word,
+        scroll: ModalScrollController.of(context),
+      ),
     );
   }
 }

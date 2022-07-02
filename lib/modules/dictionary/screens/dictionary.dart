@@ -73,12 +73,15 @@ class DictionaryScreenState extends State<DictionaryScreen> {
         editing = Word.fromJson(word.toJson(), word.id);
       }
     });
-    editWord(
-      context,
-      editing!,
-      () => setState(() {
-        editing = null;
-      }),
+    context.pushRoute(
+      WordEditorRoute(
+        word: editing!,
+        onDone: () => setState(
+          () {
+            editing = null;
+          },
+        ),
+      ),
     );
   }
 
