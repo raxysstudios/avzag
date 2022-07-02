@@ -19,12 +19,10 @@ class LanguageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: const RoundedRectangleBorder(),
-      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
         child: ListTile(
-          leading: Column(
+          trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               AnimatedOpacity(
@@ -49,26 +47,31 @@ class LanguageCard extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(language.name.titled),
+              Text(
+                language.name.titled,
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
               if (language.stats != null)
-                RichText(
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  text: TextSpan(
-                    style: Theme.of(context).textTheme.caption?.copyWith(
-                          fontSize: 14,
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: RichText(
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.caption?.copyWith(
+                            fontSize: 14,
+                          ),
+                      children: [
+                        const WidgetSpan(
+                          child: SpanIcon(Icons.book_outlined),
                         ),
-                    children: [
-                      const WidgetSpan(
-                        child: SpanIcon(Icons.book_outlined),
-                      ),
-                      TextSpan(
-                        text: language.stats!.dictionary.toString(),
-                      ),
-                    ],
+                        TextSpan(
+                          text: language.stats!.dictionary.toString(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
             ],
