@@ -7,7 +7,6 @@ import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 import '../widgets/language_card.dart';
 import '../widgets/languages_map.dart';
@@ -57,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late var ordering = orderings.first;
 
   late final Future<void> loader;
-  final chipsScroll = ScrollController();
 
   @override
   void initState() {
@@ -120,36 +118,17 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void toggleLanguage(Language language) {
-    final has = selected.contains(language);
-    setState(() {
-      if (has) {
-        selected.remove(language);
-      } else {
-        selected.add(language);
-        SchedulerBinding.instance.addPostFrameCallback(
-          (_) => chipsScroll.animateTo(
-            chipsScroll.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.ease,
-          ),
-        );
-      }
-    });
-  }
+  void toggleLanguage(Language language) => setState(() {
+        if (selected.contains(language)) {
+          selected.remove(language);
+        } else {
+          selected.add(language);
+        }
+      });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: selected.isEmpty
-          ? null
-          : FloatingActionButton(
-              onPressed: () {
-                GlobalStore.set(objects: selected);
-                context.navigateTo(const RootRoute());
-              },
-              child: const Icon(Icons.done_all_outlined),
-            ),
       appBar: AppBar(
         titleSpacing: 0,
         centerTitle: true,
@@ -186,6 +165,17 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 4),
         ],
       ),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
+      floatingActionButton: selected.isEmpty
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                GlobalStore.set(objects: selected);
+                context.navigateTo(const RootRoute());
+              },
+              child: const Icon(Icons.done_all_outlined),
+            ),
       bottomNavigationBar: selected.isEmpty
           ? null
           : LanguagesBar(
