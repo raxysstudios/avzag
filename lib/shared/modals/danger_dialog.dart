@@ -5,9 +5,9 @@ void showDangerDialog(
   BuildContext context,
   VoidCallback onConfirm,
   String title, {
-  IconData confirmIcon = Icons.delete_rounded,
+  IconData confirmIcon = Icons.delete_outlined,
   String confirmText = 'Delete',
-  IconData rejectIcon = Icons.edit_rounded,
+  IconData rejectIcon = Icons.edit_outlined,
   String rejectText = 'Keep',
 }) {
   context.router.pushNativeRoute<void>(

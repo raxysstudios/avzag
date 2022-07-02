@@ -4,7 +4,6 @@ import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
-import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:flutter/material.dart';
 
 import '../models/word.dart';
@@ -26,23 +25,21 @@ class WordsDiffScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          leading: const RoundedBackButton(
-            icon: Icons.close_rounded,
-          ),
+          leading: const AutoLeadingButton(),
           title: Text(overwrite.language.titled),
           bottom: TabBar(
             labelColor: Theme.of(context).colorScheme.onSurface,
             tabs: [
               Tab(
                 child: OptionItem.simple(
-                  Icons.adjust_rounded,
+                  Icons.adjust_outlined,
                   'Base',
                   centered: true,
                 ).widget,
               ),
               Tab(
                 child: OptionItem.simple(
-                  Icons.edit_rounded,
+                  Icons.edit_outlined,
                   'Overwrite',
                   centered: true,
                 ).widget,
@@ -62,18 +59,18 @@ class WordsDiffScreen extends StatelessWidget {
             IconButton(
               onPressed: () => deleteWord(
                 context,
-                overwrite.id,
+                overwrite.id!,
                 after: context.popRoute,
                 title: 'Reject the contribution?',
               ),
-              icon: const Icon(Icons.delete_forever),
+              icon: const Icon(Icons.delete_outlined),
               tooltip: 'Reject',
             ),
             const SizedBox(width: 4),
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.upload_rounded),
+          child: const Icon(Icons.upload_outlined),
           onPressed: () async => acceptContribution(
             context,
             overwrite,
@@ -86,7 +83,7 @@ class WordsDiffScreen extends StatelessWidget {
                 ? const Center(
                     child: Caption(
                       'No base word',
-                      icon: Icons.highlight_off_rounded,
+                      icon: Icons.highlight_off_outlined,
                     ),
                   )
                 : WordView(base!),

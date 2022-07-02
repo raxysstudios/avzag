@@ -23,7 +23,7 @@ class ModuleTile extends StatelessWidget {
         style: const TextStyle(fontSize: 18),
       ),
       trailing:
-          module.route == null ? const Icon(Icons.construction_rounded) : null,
+          module.route == null ? const Icon(Icons.construction_outlined) : null,
       selected: context.router.currentPath.startsWith(module.route?.path ?? ''),
       onTap: () async {
         if (module.route != const HomeRoute()) {

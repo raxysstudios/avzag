@@ -69,19 +69,25 @@ class SearchToolbarState extends State<SearchToolbar> {
           OptionsButton(
             [
               OptionItem.simple(
-                Icons.language_rounded,
+                Icons.language_outlined,
                 GlobalStore.languages.length == 1 ? 'English' : 'Multilingual',
                 onTap: () => setLanguage(''),
               ),
               OptionItem.simple(
-                Icons.layers_rounded,
+                Icons.layers_outlined,
                 'Cross-lingual',
                 onTap: () => setLanguage('_'),
               ),
               OptionItem.divider(),
               for (final l in GlobalStore.languages.keys)
                 OptionItem.tile(
-                  LanguageAvatar(l),
+                  Transform.scale(
+                    scale: 1.5,
+                    child: LanguageAvatar(
+                      l,
+                      radius: 12,
+                    ),
+                  ),
                   Text(
                     l.titled,
                     style: const TextStyle(fontWeight: FontWeight.w500),
@@ -91,10 +97,10 @@ class SearchToolbarState extends State<SearchToolbar> {
             ],
             icon: Builder(builder: (context) {
               if (search.language.isEmpty) {
-                return const Icon(Icons.language_rounded);
+                return const Icon(Icons.language_outlined);
               }
               if (search.language == '_') {
-                return const Icon(Icons.layers_rounded);
+                return const Icon(Icons.layers_outlined);
               }
               return LanguageAvatar(search.language);
             }),
@@ -122,7 +128,7 @@ class SearchToolbarState extends State<SearchToolbar> {
           if (inputController.text.isNotEmpty)
             IconButton(
               onPressed: inputController.clear,
-              icon: const Icon(Icons.clear_rounded),
+              icon: const Icon(Icons.clear_outlined),
             ),
         ],
       ),

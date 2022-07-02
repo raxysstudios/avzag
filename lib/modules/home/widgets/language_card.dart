@@ -3,6 +3,7 @@ import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LanguageCard extends StatelessWidget {
   final Language language;
@@ -19,64 +20,59 @@ class LanguageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: const RoundedRectangleBorder(),
-      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
-        child: Stack(
-          children: [
-            AnimatedOpacity(
-              opacity: selected ? 1 : 0.5,
-              duration: const Duration(milliseconds: 250),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: LanguageFlag(
-                  language.name,
-                  url: language.flag,
-                  height: 32,
-                  width: 96,
-                  scale: 2,
-                  offset: const Offset(0, 18),
-                ),
-              ),
+        child: ListTile(
+          trailing: AnimatedOpacity(
+            opacity: selected ? 1 : .5,
+            duration: const Duration(milliseconds: 250),
+            child: LanguageFlag(
+              language.name,
+              url: language.flag,
+              height: 32,
+              width: 96,
+              scale: 2,
+              offset: const Offset(20, 12),
             ),
-            ListTile(
-              selected: selected,
-              minVerticalPadding: 16,
-              title: Text(
+          ),
+          selected: selected,
+          minVerticalPadding: 16,
+          title: Text(
+            language.endonym.titled,
+            style: GoogleFonts.bitter(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
                 language.name.titled,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
-              subtitle: language.stats == null
-                  ? null
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(
-                            style:
-                                Theme.of(context).textTheme.caption?.copyWith(
-                                      fontSize: 14,
-                                    ),
-                            children: [
-                              const WidgetSpan(
-                                child: SpanIcon(Icons.book_rounded),
-                              ),
-                              TextSpan(
-                                text: language.stats!.dictionary.toString(),
-                              ),
-                            ],
+              if (language.stats != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: RichText(
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.caption?.copyWith(
+                            fontSize: 14,
                           ),
+                      children: [
+                        const WidgetSpan(
+                          child: SpanIcon(Icons.book_outlined),
+                        ),
+                        TextSpan(
+                          text: language.stats!.dictionary.toString(),
                         ),
                       ],
                     ),
-            ),
-          ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

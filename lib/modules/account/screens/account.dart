@@ -17,7 +17,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  var adminable = <String>[];
   User? get user => FirebaseAuth.instance.currentUser;
 
   @override
@@ -25,7 +24,7 @@ class _AccountScreenState extends State<AccountScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
+          icon: const Icon(Icons.arrow_back_outlined),
           onPressed: () => context.pushRoute(const RootRoute()),
         ),
         title: const Text('Account'),
@@ -35,11 +34,7 @@ class _AccountScreenState extends State<AccountScreen> {
         children: [
           if (user == null)
             SignInButtons(
-              onSingIn: () => EditorStore.getAdminable().then(
-                (value) => setState(() {
-                  adminable = value;
-                }),
-              ),
+              onSingIn: () => setState(() {}),
             )
           else ...[
             AccountTile(
@@ -48,7 +43,6 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             AdminableLanguages(
               GlobalStore.languages.values.whereType<Language>().toList(),
-              adminable: adminable,
               onTap: (l) => setState(() {
                 EditorStore.language = l == EditorStore.language ? null : l;
               }),

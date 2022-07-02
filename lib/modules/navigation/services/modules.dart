@@ -17,17 +17,17 @@ class NavModule {
 
 const modules = [
   NavModule(
-    Icons.home_rounded,
+    Icons.home_outlined,
     'home',
     HomeRoute(),
   ),
   NavModule(
-    Icons.book_rounded,
+    Icons.book_outlined,
     'dictionary',
     DictionaryRoute(),
   ),
-  NavModule(Icons.music_note_rounded, 'phonology'),
-  NavModule(Icons.switch_left_rounded, 'converter'),
-  NavModule(Icons.forum_rounded, 'phrasebook'),
-  NavModule(Icons.local_library_rounded, 'bootcamp'),
+  NavModule(Icons.music_note_outlined, 'phonology'),
+  NavModule(Icons.switch_left_outlined, 'converter'),
+  NavModule(Icons.forum_outlined, 'phrasebook'),
+  NavModule(Icons.local_library_outlined, 'bootcamp'),
 ];

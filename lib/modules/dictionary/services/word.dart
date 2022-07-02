@@ -63,7 +63,6 @@ void submitWord(
     ).toJson();
     id = null;
   }
-
   await showLoadingDialog(
     context,
     FirebaseFirestore.instance.collection('dictionary').doc(id).set(doc),

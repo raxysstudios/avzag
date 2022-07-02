@@ -10,7 +10,7 @@ void copyText(BuildContext context, String? text) async {
     );
     showSnackbar(
       context,
-      icon: Icons.content_copy_rounded,
+      icon: Icons.content_copy_outlined,
       text: 'Copied to clipboard.',
     );
   }

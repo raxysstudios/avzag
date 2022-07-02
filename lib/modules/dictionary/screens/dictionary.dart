@@ -5,7 +5,6 @@ import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/caption.dart';
-import 'package:avzag/shared/widgets/rounded_menu_button.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -64,7 +63,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     setState(() {
       if (word == null) {
         editing ??= Word(
-          '',
+          null,
           headword: '',
           uses: [],
           language: EditorStore.language!,
@@ -128,14 +127,13 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                   onPressed: edit,
                   tooltip: editing == null ? 'New' : 'Resume',
                   child: Icon(
-                    editing == null ? Icons.add_rounded : Icons.edit_rounded,
+                    editing == null ? Icons.add_outlined : Icons.edit_outlined,
                   ),
                 )
               : null,
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
-                leading: const RoundedDrawerButton(),
                 title: const Text('Dictionary'),
                 actions: [
                   if (EditorStore.admin)
@@ -145,7 +143,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                         search.updateQuery();
                       }),
                       icon: Icon(
-                        Icons.unpublished_rounded,
+                        Icons.unpublished_outlined,
                         color: search.unverified
                             ? Theme.of(context).colorScheme.primary
                             : null,
@@ -193,7 +191,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       search.monolingual
           ? 'End of the results'
           : 'Showing the first 50 entries',
-      icon: Icons.done_all_rounded,
+      icon: Icons.done_all_outlined,
     );
   }
 }

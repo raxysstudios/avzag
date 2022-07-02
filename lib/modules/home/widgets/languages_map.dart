@@ -74,10 +74,12 @@ class LanguagesMap extends StatelessWidget {
                         preferBelow: false,
                         child: InkWell(
                           onTap: () => onToggle(language),
-                          child: LanguageAvatar(
-                            null,
-                            url: language.flag,
-                            radius: 10,
+                          child: Padding(
+                            padding: const EdgeInsets.all(2),
+                            child: LanguageAvatar(
+                              null,
+                              url: language.flag,
+                            ),
                           ),
                         ),
                       ),

@@ -45,7 +45,7 @@ class SamplesColumn extends StatelessWidget {
                       TextSpan(
                         text: s.text,
                         style: GoogleFonts.bitter(
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       if (s.meaning != null) ...[

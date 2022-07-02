@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 
-class LanguageFlag extends StatefulWidget {
+class LanguageFlag extends StatelessWidget {
   final String? language;
   final String? url;
   final double? width;
@@ -23,26 +23,21 @@ class LanguageFlag extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<LanguageFlag> createState() => _LanguageFlagState();
-}
-
-class _LanguageFlagState extends State<LanguageFlag> {
-  @override
   Widget build(BuildContext context) {
-    final url = widget.url ?? GlobalStore.languages[widget.language]?.flag;
+    final url = this.url ?? GlobalStore.languages[language]?.flag;
     if (url == null) return const SizedBox();
     return Transform.translate(
-      offset: widget.offset,
+      offset: offset,
       child: Transform.rotate(
-        angle: widget.rotation,
+        angle: rotation,
         child: Transform.scale(
-          scale: widget.scale,
+          scale: scale,
           child: Image.network(
             url,
             repeat: ImageRepeat.repeatX,
             fit: BoxFit.contain,
-            width: widget.width,
-            height: widget.height,
+            width: width,
+            height: height,
           ),
         ),
       ),

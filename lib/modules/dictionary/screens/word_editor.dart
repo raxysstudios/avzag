@@ -6,7 +6,6 @@ import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/compact_input.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
-import 'package:avzag/shared/widgets/rounded_back_button.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -42,7 +41,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const RoundedBackButton(),
+        leading: const AutoLeadingButton(),
         title: Text(word.language.titled),
         actions: [
           Opacity(
@@ -57,17 +56,17 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
           OptionsButton(
             [
               OptionItem.simple(
-                Icons.close_rounded,
+                Icons.cancel_outlined,
                 'Discard',
                 onTap: exit,
               ),
-              if (word.id.isNotEmpty && EditorStore.admin)
+              if (word.id != null && EditorStore.admin)
                 OptionItem.simple(
-                  Icons.delete_rounded,
+                  Icons.delete_outlined,
                   'Delete',
                   onTap: () => deleteWord(
                     context,
-                    word.id,
+                    word.id!,
                     after: exit,
                   ),
                 ),
@@ -77,7 +76,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.upload_rounded),
+        child: const Icon(Icons.upload_outlined),
         onPressed: () async {
           if (form.currentState?.validate() ?? false) {
             submitWord(
@@ -99,29 +98,30 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
               divider: null,
               children: [
                 CompactInput(
-                  Icons.bookmark_rounded,
+                  Icons.bookmark_border_outlined,
                   'Headword',
                   word.headword,
                   (s) => word.headword = s,
                   noEmpty: true,
                 ),
                 CompactInput(
-                  Icons.volume_up_rounded,
+                  Icons.volume_up_outlined,
                   'IPA',
                   word.ipa,
                   (s) => word.ipa = s,
                 ),
                 CompactInput(
-                  Icons.tag_rounded,
+                  Icons.tag_outlined,
                   'Form tags',
                   word.tags.join(' '),
                   (s) => word.tags = s.split(' '),
                 ),
                 CompactInput(
-                  Icons.note_rounded,
+                  Icons.note_outlined,
                   'General note',
                   word.note,
                   (s) => word.note = s,
+                  multiline: true,
                   lowercase: false,
                 ),
               ],
@@ -133,7 +133,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                 divider: null,
                 children: [
                   CompactInput(
-                    Icons.lightbulb_rounded,
+                    Icons.lightbulb_outlined,
                     'Term',
                     u.term,
                     (s) => u.term = s,
@@ -146,27 +146,28 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                         }),
                         'Delete the use?',
                       ),
-                      icon: const Icon(Icons.delete_rounded),
+                      icon: const Icon(Icons.delete_outlined),
                     ),
                   ),
                   CompactInput(
-                    Icons.label_rounded,
+                    Icons.label_outlined,
                     'Aliases',
                     u.aliases.join(' '),
                     (s) => u.aliases = s.split(' '),
                   ),
                   CompactInput(
-                    Icons.tag_rounded,
+                    Icons.tag_outlined,
                     'Semantic tags',
                     u.tags.join(' '),
                     (s) => u.tags = s.split(' '),
                   ),
                   CompactInput(
-                    Icons.note_rounded,
+                    Icons.note_outlined,
                     'Usage note',
                     u.note,
                     (s) => u.note = s,
                     lowercase: false,
+                    multiline: true,
                   ),
                 ],
               ),
@@ -185,7 +186,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                     ),
                   );
                 }),
-                icon: const Icon(Icons.add_rounded),
+                icon: const Icon(Icons.add_outlined),
                 label: const Text('Add a use'),
               ),
             )

@@ -7,7 +7,7 @@ class StoresButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const Icon(Icons.get_app_rounded),
+      leading: const Icon(Icons.get_app_outlined),
       title: Row(
         children: [
           Expanded(

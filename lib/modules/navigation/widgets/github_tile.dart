@@ -25,7 +25,7 @@ class _GitHubTileState extends State<GitHubTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const Icon(Icons.code_rounded),
+      leading: const Icon(Icons.code_outlined),
       title: const Text('GitHub Repository'),
       subtitle: Text(info),
       onTap: () => openLink(
