@@ -66,7 +66,7 @@ class WordsDiffScreen extends StatelessWidget {
                 after: context.popRoute,
                 title: 'Reject the contribution?',
               ),
-              icon: const Icon(Icons.delete_forever),
+              icon: const Icon(Icons.delete_rounded),
               tooltip: 'Reject',
             ),
             const SizedBox(width: 4),

@@ -57,7 +57,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
           OptionsButton(
             [
               OptionItem.simple(
-                Icons.close_rounded,
+                Icons.cancel_rounded,
                 'Discard',
                 onTap: exit,
               ),
