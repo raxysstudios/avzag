@@ -31,7 +31,7 @@ class WordEditorScreen extends StatefulWidget {
 
 class _WordEditorScreenState extends State<WordEditorScreen> {
   final form = GlobalKey<FormState>();
-  Word get word => widget.word;
+  late final word = widget.word;
 
   void exit() {
     context.popRoute();
@@ -57,13 +57,13 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
           OptionsButton(
             [
               OptionItem.simple(
-                Icons.cancel_rounded,
+                Icons.close_rounded,
                 'Discard',
                 onTap: exit,
               ),
               if (word.id.isNotEmpty && EditorStore.admin)
                 OptionItem.simple(
-                  Icons.delete_forever_rounded,
+                  Icons.delete_rounded,
                   'Delete',
                   onTap: () => deleteWord(
                     context,
