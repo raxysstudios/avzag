@@ -21,6 +21,9 @@ void showSnackbar(
             Text(
               text,
               overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+              ),
               maxLines: 1,
             ),
           ],
