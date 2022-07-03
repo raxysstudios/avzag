@@ -143,7 +143,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         title: TextField(
           controller: inputController,
-          decoration: const InputDecoration.collapsed(
+          decoration: const InputDecoration(
+            border: InputBorder.none,
             hintText: 'Search by names, tags, families',
           ),
         ),
@@ -176,15 +177,13 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: const Icon(Icons.done_all_outlined),
             ),
-      bottomNavigationBar: selected.isEmpty
-          ? null
-          : LanguagesBar(
-              selected,
-              onTap: (l) => setState(() {
-                selected.remove(l);
-              }),
-              onClear: () => setState(selected.clear),
-            ),
+      bottomNavigationBar: LanguagesBar(
+        selected,
+        onTap: (l) => setState(() {
+          selected.remove(l);
+        }),
+        onClear: () => setState(selected.clear),
+      ),
       body: Builder(
         builder: (context) {
           if (isLoading) {
