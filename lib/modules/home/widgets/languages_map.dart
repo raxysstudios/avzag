@@ -1,6 +1,7 @@
 import 'package:avzag/models/language.dart';
 import 'package:avzag/modules/home/services/mapbox.dart';
 import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -64,7 +65,7 @@ class LanguagesMap extends StatelessWidget {
                   final selected = this.selected.contains(language);
                   return AnimatedOpacity(
                     opacity: selected ? 1 : .5,
-                    duration: const Duration(milliseconds: 250),
+                    duration: duration200,
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(32),

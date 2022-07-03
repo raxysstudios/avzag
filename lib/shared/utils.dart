@@ -1,6 +1,7 @@
 import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void copyText(BuildContext context, String? text) async {
@@ -22,6 +23,9 @@ void openLink(String url) {
     mode: LaunchMode.externalApplication,
   );
 }
+
+const duration200 = Duration(milliseconds: 200);
+final styleNative = GoogleFonts.bitter(fontWeight: FontWeight.w600);
 
 List<String>? json2list(Object? array) {
   return (array as Iterable<dynamic>?)

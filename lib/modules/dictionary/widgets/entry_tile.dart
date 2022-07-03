@@ -1,8 +1,8 @@
 import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../models/entry.dart';
 
@@ -34,9 +34,8 @@ class EntryTile extends StatelessWidget {
             ),
           Text(
             hit.headword.titled,
-            style: GoogleFonts.bitter(
-              textStyle: theme.subtitle1,
-              fontWeight: FontWeight.w600,
+            style: styleNative.copyWith(
+              fontSize: theme.subtitle1?.fontSize,
             ),
           ),
           if (hit.form != null && hit.form != hit.headword)
@@ -44,9 +43,8 @@ class EntryTile extends StatelessWidget {
               padding: const EdgeInsets.only(left: 4),
               child: Text(
                 hit.form!.titled,
-                style: GoogleFonts.bitter(
-                  textStyle: theme.subtitle1,
-                  fontWeight: FontWeight.w600,
+                style: styleNative.copyWith(
+                  fontSize: theme.subtitle1?.fontSize,
                   color: theme.caption?.color,
                 ),
               ),

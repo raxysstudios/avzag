@@ -1,5 +1,6 @@
 import 'package:avzag/models/language.dart';
 import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class LanguageCard extends StatelessWidget {
             children: [
               AnimatedOpacity(
                 opacity: selected ? 1 : .5,
-                duration: const Duration(milliseconds: 250),
+                duration:duration200,
                 child: LanguageFlag(
                   null,
                   url: language.flag,
