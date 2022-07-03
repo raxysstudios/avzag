@@ -19,6 +19,10 @@ class WordLoaderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return LoaderScreen<Word>(
       loadWord(id),
+      requiredStack: [
+        const DictionaryRoute(),
+        WordLoaderRoute(id: id),
+      ],
       then: (context, word) async {
         final router = context.router;
         if (word == null) {

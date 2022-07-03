@@ -30,12 +30,11 @@ import 'route_builders.dart';
     AutoRoute<void>(
       path: '/dictionary',
       page: EmptyRouterScreen,
-      name: 'DictionaryRoute',
+      name: 'DictionaryRootRoute',
       children: [
         AutoRoute<void>(
           path: '',
           page: DictionaryScreen,
-          name: '_DictionaryRoute',
         ),
         CustomRoute<void>(
           path: ':id',
