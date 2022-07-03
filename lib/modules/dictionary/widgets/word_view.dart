@@ -41,7 +41,7 @@ class WordView extends StatelessWidget {
             ),
             if (word.ipa != null)
               Text(
-                '[ ${word.ipa!} ]',
+                '[${word.ipa!}]',
                 style: GoogleFonts.notoSans(
                   textStyle: theme.bodyText1,
                   color: theme.caption?.color,
