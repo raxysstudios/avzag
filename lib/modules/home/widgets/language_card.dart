@@ -23,17 +23,22 @@ class LanguageCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: ListTile(
-          trailing: AnimatedOpacity(
-            opacity: selected ? 1 : .5,
-            duration: const Duration(milliseconds: 250),
-            child: LanguageFlag(
-              language.name,
-              url: language.flag,
-              height: 32,
-              width: 96,
-              scale: 2,
-              offset: const Offset(20, 12),
-            ),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedOpacity(
+                opacity: selected ? 1 : .5,
+                duration: const Duration(milliseconds: 250),
+                child: LanguageFlag(
+                  null,
+                  url: language.flag,
+                  height: 32,
+                  width: 96,
+                  scale: 2,
+                  offset: const Offset(20, 0),
+                ),
+              ),
+            ],
           ),
           selected: selected,
           minVerticalPadding: 16,

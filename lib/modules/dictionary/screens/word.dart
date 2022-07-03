@@ -1,8 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/services/sharing.dart';
-import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/utils.dart';
-import 'package:avzag/shared/widgets/language_flag.dart';
+import 'package:avzag/shared/widgets/language_title.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -26,22 +25,8 @@ class WordScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const AutoLeadingButton(),
-        title: Stack(
-          alignment: Alignment.center,
-          children: [
-            Text(word.language.titled),
-          ],
-        ),
+        title: LanguageTitle(word.language),
         actions: [
-          Opacity(
-            opacity: .5,
-            child: LanguageFlag(
-              word.language,
-              width: 160,
-              offset: const Offset(16, -2),
-              scale: 1.25,
-            ),
-          ),
           OptionsButton(
             [
               OptionItem.simple(
