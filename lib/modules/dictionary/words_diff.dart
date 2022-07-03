@@ -5,8 +5,8 @@ import 'package:avzag/shared/widgets/language_title.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:flutter/material.dart';
 
-import '../models/word.dart';
-import '../services/word.dart';
+import 'models/word.dart';
+import 'services/word.dart';
 
 class WordsDiffScreen extends StatelessWidget {
   const WordsDiffScreen(

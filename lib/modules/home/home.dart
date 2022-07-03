@@ -8,8 +8,8 @@ import 'package:avzag/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/language_card.dart';
-import '../widgets/languages_map.dart';
+import 'widgets/language_card.dart';
+import 'widgets/languages_map.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

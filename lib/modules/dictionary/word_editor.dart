@@ -9,9 +9,9 @@ import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../models/use.dart';
-import '../models/word.dart';
-import '../services/word.dart';
+import 'models/use.dart';
+import 'models/word.dart';
+import 'services/word.dart';
 
 class WordEditorScreen extends StatefulWidget {
   const WordEditorScreen(

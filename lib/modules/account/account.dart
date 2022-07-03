@@ -7,7 +7,7 @@ import 'package:avzag/store.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/sign_in_buttons.dart';
+import 'widgets/sign_in_buttons.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);

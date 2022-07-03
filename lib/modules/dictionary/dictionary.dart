@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
-import 'package:avzag/modules/navigation/screens/navigation.dart';
+import 'package:avzag/modules/navigation/navigation.dart';
 import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:avzag/shared/modals/snackbar_manager.dart';
@@ -10,11 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
-import '../models/entry.dart';
-import '../models/word.dart';
-import '../search_controller.dart';
-import '../services/word.dart';
-import '../widgets/search_toolbar.dart';
+import 'models/entry.dart';
+import 'models/word.dart';
+import 'search_controller.dart';
+import 'services/word.dart';
+import 'widgets/search_toolbar.dart';
 
 class DictionaryScreen extends StatefulWidget {
   const DictionaryScreen({Key? key}) : super(key: key);

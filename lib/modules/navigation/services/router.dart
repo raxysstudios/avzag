@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/modules/account/screens/account.dart';
-import 'package:avzag/modules/dictionary/screens/dictionary.dart';
-import 'package:avzag/modules/dictionary/screens/word.dart';
-import 'package:avzag/modules/dictionary/screens/word_editor.dart';
-import 'package:avzag/modules/dictionary/screens/word_loader.dart';
-import 'package:avzag/modules/dictionary/screens/words_diff.dart';
-import 'package:avzag/modules/home/screens/home.dart';
+import 'package:avzag/modules/account/account.dart';
+import 'package:avzag/modules/dictionary/dictionary.dart';
+import 'package:avzag/modules/dictionary/word.dart';
+import 'package:avzag/modules/dictionary/word_editor.dart';
+import 'package:avzag/modules/dictionary/word_loader.dart';
+import 'package:avzag/modules/dictionary/words_diff.dart';
+import 'package:avzag/modules/home/home.dart';
 
 import 'root_guard.dart';
 import 'route_builders.dart';
