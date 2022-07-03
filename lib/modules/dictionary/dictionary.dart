@@ -99,7 +99,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       );
       context.pushRoute(
         WordsDiffRoute(
-          base: base!,
+          base: base,
           overwrite: overwrite!,
         ),
       );
