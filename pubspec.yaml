@@ -1,7 +1,7 @@
 name: avzag
 description: Extensible parallel language compendium
 publish_to: "none"
-version: 0.8.3+63
+version: 0.8.4+64
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
