@@ -13,7 +13,7 @@ class AdminableLanguages extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final List<Language> languages;
+  final Iterable<Language> languages;
   final String? selected;
   final ValueSetter<String> onTap;
 

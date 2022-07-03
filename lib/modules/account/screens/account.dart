@@ -18,16 +18,21 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   User? get user => FirebaseAuth.instance.currentUser;
+  var language = EditorStore.language;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_outlined),
-          onPressed: () => context.pushRoute(const RootRoute()),
-        ),
+        leading: const AutoLeadingButton(),
         title: const Text('Account'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.arrow_back_outlined),
+        onPressed: () {
+          EditorStore.language = language;
+          context.pushRoute(const RootRoute());
+        },
       ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 76),
@@ -42,11 +47,11 @@ class _AccountScreenState extends State<AccountScreen> {
               onSignOut: () => setState(() {}),
             ),
             AdminableLanguages(
-              GlobalStore.languages.values.whereType<Language>().toList(),
+              GlobalStore.languages.values.whereType<Language>(),
               onTap: (l) => setState(() {
-                EditorStore.language = l == EditorStore.language ? null : l;
+                language = l == language ? null : l;
               }),
-              selected: EditorStore.language,
+              selected: language,
             ),
           ],
         ],
