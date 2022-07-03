@@ -27,6 +27,7 @@ class _SamplesEditorState extends State<SamplesEditor> {
       children: [
         for (final s in widget.samples)
           Column(
+            key: ObjectKey(s),
             children: [
               const Divider(),
               CompactInput(

@@ -119,7 +119,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
             SamplesEditor('Add a form', word.forms),
             for (final u in word.uses) ...[
               ColumnCard(
-                key: Key(u.term),
+                key: ObjectKey(u),
                 divider: null,
                 children: [
                   CompactInput(
