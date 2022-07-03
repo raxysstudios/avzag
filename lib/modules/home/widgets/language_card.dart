@@ -32,9 +32,6 @@ class LanguageCard extends StatelessWidget {
                 child: LanguageFlag(
                   null,
                   url: language.flag,
-                  height: 32,
-                  width: 96,
-                  scale: 2,
                   offset: const Offset(20, 0),
                 ),
               ),

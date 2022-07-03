@@ -14,11 +14,11 @@ class LanguageFlag extends StatelessWidget {
   const LanguageFlag(
     this.language, {
     this.url,
-    this.width,
-    this.height,
+    this.height = 32,
+    this.width = 96,
+    this.scale = 2,
     this.rotation = -pi / 4,
     this.offset = const Offset(0, 0),
-    this.scale = 1,
     Key? key,
   }) : super(key: key);
 
