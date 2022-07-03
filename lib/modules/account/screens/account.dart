@@ -28,7 +28,7 @@ class _AccountScreenState extends State<AccountScreen> {
         title: const Text('Account'),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.arrow_back_outlined),
+        child: const Icon(Icons.done_all_outlined),
         onPressed: () {
           EditorStore.language = language;
           context.pushRoute(const RootRoute());
