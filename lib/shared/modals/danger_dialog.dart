@@ -5,7 +5,7 @@ void showDangerDialog(
   BuildContext context,
   VoidCallback onConfirm,
   String title, {
-  IconData confirmIcon = Icons.delete_outlined,
+  IconData confirmIcon = Icons.delete_forever_outlined,
   String confirmText = 'Delete',
   IconData rejectIcon = Icons.edit_outlined,
   String rejectText = 'Keep',
