@@ -73,8 +73,8 @@ Route<T> dialogRouteBuilder<T>(
   return DialogRoute(
     settings: page,
     context: context,
-    builder: (context) => child,
     barrierColor: Colors.transparent,
+    builder: (context) => child,
   );
 }
 
@@ -85,7 +85,14 @@ Route<T> sheetRouteBuilder<T>(
 ) {
   return ModalBottomSheetRoute(
     settings: page,
-    builder: (context) => child,
     expanded: true,
+    builder: (context) {
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: kToolbarHeight),
+          child: child,
+        ),
+      );
+    },
   );
 }
