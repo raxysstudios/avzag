@@ -37,9 +37,10 @@ class _LanguagesBarState extends State<LanguagesBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      child: SizedBox(
-        height: kBottomNavigationBarHeight,
+    return AnimatedContainer(
+      height: widget.languages.isEmpty ? 0 : kBottomNavigationBarHeight,
+      duration: const Duration(milliseconds: 250),
+      child: BottomAppBar(
         child: ListView(
           controller: scroll,
           scrollDirection: Axis.horizontal,
