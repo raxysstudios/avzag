@@ -12,8 +12,8 @@ import 'package:avzag/store.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../services/modules.dart';
-import '../services/router.gr.dart';
+import 'services/modules.dart';
+import 'services/router.gr.dart';
 
 class NavigationScreen extends StatelessWidget {
   const NavigationScreen({Key? key}) : super(key: key);

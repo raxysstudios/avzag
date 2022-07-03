@@ -5,12 +5,12 @@ void showDangerDialog(
   BuildContext context,
   VoidCallback onConfirm,
   String title, {
-  IconData confirmIcon = Icons.delete_outlined,
+  IconData confirmIcon = Icons.delete_forever_outlined,
   String confirmText = 'Delete',
   IconData rejectIcon = Icons.edit_outlined,
   String rejectText = 'Keep',
-}) {
-  context.router.pushNativeRoute<void>(
+}) async {
+  final result = await context.router.pushNativeRoute<bool>(
     DialogRoute(
       context: context,
       builder: (context) {
@@ -19,10 +19,7 @@ void showDangerDialog(
           title: Text(title),
           actions: [
             TextButton.icon(
-              onPressed: () {
-                context.popRoute();
-                onConfirm();
-              },
+              onPressed: () => context.popRoute(true),
               icon: Icon(confirmIcon),
               label: Text(confirmText),
               style: ButtonStyle(
@@ -42,4 +39,5 @@ void showDangerDialog(
       },
     ),
   );
+  if (result == true) onConfirm();
 }

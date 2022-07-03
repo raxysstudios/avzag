@@ -10,8 +10,7 @@ String _getWordLink(Word word) =>
 String previewArticle(Word word) => '''
 🌄 Avzag • ${word.language.titled}
 🔖 ${word.headword.titled} — ${word.uses.map((u) => u.term.titled).join(', ')}
-${_getWordLink(word)}
-''';
+${_getWordLink(word)}''';
 
 String _cleanMarkdown(String md) => markdownToHtml(md, inlineOnly: true)
     .replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), '')

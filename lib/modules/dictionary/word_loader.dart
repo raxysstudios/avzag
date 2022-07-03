@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/models/word.dart';
 import 'package:avzag/modules/dictionary/services/word.dart';
-import 'package:avzag/modules/navigation/screens/loader.dart';
+import 'package:avzag/modules/navigation/loader.dart';
 import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:flutter/material.dart';
 
@@ -19,10 +19,14 @@ class WordLoaderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return LoaderScreen<Word>(
       loadWord(id),
+      requiredStack: [
+        const DictionaryRoute(),
+        WordLoaderRoute(id: id),
+      ],
       then: (context, word) async {
         final router = context.router;
         if (word == null) {
-          router.navigate(const DictionaryRoute());
+          router.navigate(const DictionaryRootRoute());
         } else {
           final router = context.router;
           await router.replace(
@@ -33,7 +37,7 @@ class WordLoaderScreen extends StatelessWidget {
             ),
           );
           if (router.stack.length < 2) {
-            router.navigate(const DictionaryRoute());
+            router.navigate(const DictionaryRootRoute());
           }
         }
       },

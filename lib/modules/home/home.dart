@@ -8,8 +8,8 @@ import 'package:avzag/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/language_card.dart';
-import '../widgets/languages_map.dart';
+import 'widgets/language_card.dart';
+import 'widgets/languages_map.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -54,8 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
   late var ordering = orderings.first;
-
-  late final Future<void> loader;
 
   @override
   void initState() {
@@ -143,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         title: TextField(
           controller: inputController,
-          decoration: const InputDecoration.collapsed(
+          decoration: const InputDecoration(
+            border: InputBorder.none,
             hintText: 'Search by names, tags, families',
           ),
         ),
@@ -176,15 +175,13 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: const Icon(Icons.done_all_outlined),
             ),
-      bottomNavigationBar: selected.isEmpty
-          ? null
-          : LanguagesBar(
-              selected,
-              onTap: (l) => setState(() {
-                selected.remove(l);
-              }),
-              onClear: () => setState(selected.clear),
-            ),
+      bottomNavigationBar: LanguagesBar(
+        selected,
+        onTap: (l) => setState(() {
+          selected.remove(l);
+        }),
+        onClear: () => setState(selected.clear),
+      ),
       body: Builder(
         builder: (context) {
           if (isLoading) {

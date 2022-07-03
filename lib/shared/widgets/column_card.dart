@@ -6,6 +6,7 @@ class ColumnCard extends StatelessWidget {
     required this.children,
     this.title,
     this.subtitle,
+    this.elevation,
     this.divider = const Divider(),
     this.margin = const EdgeInsets.only(top: 12),
     this.padding = EdgeInsets.zero,
@@ -14,6 +15,7 @@ class ColumnCard extends StatelessWidget {
 
   final EdgeInsets margin;
   final EdgeInsets padding;
+  final double? elevation;
   final String? title;
   final String? subtitle;
   final Widget? divider;
@@ -23,6 +25,7 @@ class ColumnCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).textTheme;
     return Card(
+      elevation: elevation,
       margin: margin,
       shape: const RoundedRectangleBorder(),
       child: Padding(

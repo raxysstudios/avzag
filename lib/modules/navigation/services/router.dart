@@ -1,15 +1,14 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/modules/account/screens/account.dart';
-import 'package:avzag/modules/dictionary/screens/dictionary.dart';
-import 'package:avzag/modules/dictionary/screens/word.dart';
-import 'package:avzag/modules/dictionary/screens/word_editor.dart';
-import 'package:avzag/modules/dictionary/screens/word_loader.dart';
-import 'package:avzag/modules/dictionary/screens/words_diff.dart';
-import 'package:avzag/modules/home/screens/home.dart';
-import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:avzag/modules/account/account.dart';
+import 'package:avzag/modules/dictionary/dictionary.dart';
+import 'package:avzag/modules/dictionary/word.dart';
+import 'package:avzag/modules/dictionary/word_editor.dart';
+import 'package:avzag/modules/dictionary/word_loader.dart';
+import 'package:avzag/modules/dictionary/words_diff.dart';
+import 'package:avzag/modules/home/home.dart';
 
 import 'root_guard.dart';
+import 'route_builders.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Screen,Route',
@@ -31,12 +30,11 @@ import 'root_guard.dart';
     AutoRoute<void>(
       path: '/dictionary',
       page: EmptyRouterScreen,
-      name: 'DictionaryRoute',
+      name: 'DictionaryRootRoute',
       children: [
         AutoRoute<void>(
           path: '',
           page: DictionaryScreen,
-          name: '_DictionaryRoute',
         ),
         CustomRoute<void>(
           path: ':id',
@@ -64,28 +62,3 @@ import 'root_guard.dart';
   ],
 )
 class $AppRouter {}
-
-Route<T> dialogRouteBuilder<T>(
-  BuildContext context,
-  Widget child,
-  CustomPage<T> page,
-) {
-  return DialogRoute(
-    settings: page,
-    context: context,
-    builder: (context) => child,
-    barrierColor: Colors.transparent,
-  );
-}
-
-Route<T> sheetRouteBuilder<T>(
-  BuildContext context,
-  Widget child,
-  CustomPage<T> page,
-) {
-  return ModalBottomSheetRoute(
-    settings: page,
-    builder: (context) => child,
-    expanded: true,
-  );
-}

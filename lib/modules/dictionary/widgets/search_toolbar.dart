@@ -7,7 +7,7 @@ import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../search_controller.dart';
+import '../services/search_controller.dart';
 
 class SearchToolbar extends StatefulWidget {
   const SearchToolbar({Key? key}) : super(key: key);
@@ -82,7 +82,7 @@ class SearchToolbarState extends State<SearchToolbar> {
               for (final l in GlobalStore.languages.keys)
                 OptionItem.tile(
                   Transform.scale(
-                    scale: 1.5,
+                    scale: 1.25,
                     child: LanguageAvatar(
                       l,
                       radius: 12,

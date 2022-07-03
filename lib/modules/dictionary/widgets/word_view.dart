@@ -1,5 +1,6 @@
 import 'package:avzag/modules/dictionary/models/word.dart';
 import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/markdown_text.dart';
@@ -34,14 +35,13 @@ class WordView extends StatelessWidget {
           children: [
             Text(
               word.headword.titled,
-              style: GoogleFonts.bitter(
-                textStyle: theme.headline5,
-                fontWeight: FontWeight.w600,
+              style: styleNative.copyWith(
+                fontSize: theme.headline5?.fontSize,
               ),
             ),
             if (word.ipa != null)
               Text(
-                '[ ${word.ipa!} ]',
+                '[${word.ipa!}]',
                 style: GoogleFonts.notoSans(
                   textStyle: theme.bodyText1,
                   color: theme.caption?.color,

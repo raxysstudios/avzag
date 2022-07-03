@@ -1,5 +1,6 @@
 import 'package:avzag/models/language.dart';
 import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -29,7 +30,7 @@ class _LanguagesBarState extends State<LanguagesBar> {
     SchedulerBinding.instance.addPostFrameCallback(
       (_) => scroll.animateTo(
         scroll.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 250),
+        duration: duration200,
         curve: Curves.ease,
       ),
     );
@@ -37,9 +38,10 @@ class _LanguagesBarState extends State<LanguagesBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      child: SizedBox(
-        height: kBottomNavigationBarHeight,
+    return AnimatedContainer(
+      height: widget.languages.isEmpty ? 0 : kBottomNavigationBarHeight,
+      duration: duration200,
+      child: BottomAppBar(
         child: ListView(
           controller: scroll,
           scrollDirection: Axis.horizontal,

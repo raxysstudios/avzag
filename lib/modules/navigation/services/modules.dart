@@ -24,7 +24,7 @@ const modules = [
   NavModule(
     Icons.book_outlined,
     'dictionary',
-    DictionaryRoute(),
+    DictionaryRootRoute(),
   ),
   NavModule(Icons.music_note_outlined, 'phonology'),
   NavModule(Icons.switch_left_outlined, 'converter'),

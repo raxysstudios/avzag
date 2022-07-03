@@ -1,6 +1,7 @@
 import 'package:avzag/models/language.dart';
 import 'package:avzag/modules/home/services/mapbox.dart';
 import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -29,8 +30,9 @@ class LanguagesMap extends StatelessWidget {
         minZoom: 5,
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
         plugins: [MarkerClusterPlugin()],
-        swPanBoundary: LatLng(41.1, 40),
-        nePanBoundary: LatLng(45, 48.1),
+        swPanBoundary: LatLng(38, 38),
+        nePanBoundary: LatLng(52, 52),
+        slideOnBoundaries: true,
       ),
       layers: [
         getTileLayer(
@@ -44,10 +46,10 @@ class LanguagesMap extends StatelessWidget {
             padding: EdgeInsets.all(128),
           ),
           animationsOptions: const AnimationsOptions(
-            zoom: Duration(milliseconds: 250),
-            fitBound: Duration(milliseconds: 250),
-            centerMarker: Duration(milliseconds: 250),
-            spiderfy: Duration(milliseconds: 250),
+            zoom: duration200,
+            fitBound: duration200,
+            centerMarker: duration200,
+            spiderfy: duration200,
           ),
           centerMarkerOnClick: false,
           markers: [
@@ -64,7 +66,7 @@ class LanguagesMap extends StatelessWidget {
                   final selected = this.selected.contains(language);
                   return AnimatedOpacity(
                     opacity: selected ? 1 : .5,
-                    duration: const Duration(milliseconds: 250),
+                    duration: duration200,
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(32),

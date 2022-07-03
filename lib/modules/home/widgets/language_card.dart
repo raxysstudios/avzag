@@ -1,5 +1,6 @@
 import 'package:avzag/models/language.dart';
 import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/language_flag.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 import 'package:flutter/material.dart';
@@ -23,17 +24,19 @@ class LanguageCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: ListTile(
-          trailing: AnimatedOpacity(
-            opacity: selected ? 1 : .5,
-            duration: const Duration(milliseconds: 250),
-            child: LanguageFlag(
-              language.name,
-              url: language.flag,
-              height: 32,
-              width: 96,
-              scale: 2,
-              offset: const Offset(20, 12),
-            ),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedOpacity(
+                opacity: selected ? 1 : .5,
+                duration:duration200,
+                child: LanguageFlag(
+                  null,
+                  url: language.flag,
+                  offset: const Offset(20, 0),
+                ),
+              ),
+            ],
           ),
           selected: selected,
           minVerticalPadding: 16,

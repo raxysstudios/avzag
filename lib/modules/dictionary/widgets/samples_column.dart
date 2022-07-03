@@ -1,6 +1,5 @@
 import 'package:avzag/shared/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../models/sample.dart';
 
 class SamplesColumn extends StatelessWidget {
@@ -44,9 +43,7 @@ class SamplesColumn extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: s.text,
-                        style: GoogleFonts.bitter(
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: styleNative,
                       ),
                       if (s.meaning != null) ...[
                         TextSpan(text: inline ? ' ' : '\n'),

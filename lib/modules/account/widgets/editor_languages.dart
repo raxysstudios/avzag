@@ -5,15 +5,15 @@ import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:flutter/material.dart';
 
-class AdminableLanguages extends StatelessWidget {
-  const AdminableLanguages(
+class EditorLanguages extends StatelessWidget {
+  const EditorLanguages(
     this.languages, {
     required this.onTap,
     this.selected,
     Key? key,
   }) : super(key: key);
 
-  final List<Language> languages;
+  final Iterable<Language> languages;
   final String? selected;
   final ValueSetter<String> onTap;
 

@@ -1,13 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:avzag/modules/dictionary/widgets/word_view.dart';
-import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/caption.dart';
-import 'package:avzag/shared/widgets/language_flag.dart';
+import 'package:avzag/shared/widgets/language_title.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:flutter/material.dart';
 
-import '../models/word.dart';
-import '../services/word.dart';
+import 'models/word.dart';
+import 'services/word.dart';
 
 class WordsDiffScreen extends StatelessWidget {
   const WordsDiffScreen(
@@ -26,7 +25,7 @@ class WordsDiffScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           leading: const AutoLeadingButton(),
-          title: Text(overwrite.language.titled),
+          title: LanguageTitle(overwrite.language),
           bottom: TabBar(
             labelColor: Theme.of(context).colorScheme.onSurface,
             tabs: [
@@ -47,15 +46,6 @@ class WordsDiffScreen extends StatelessWidget {
             ],
           ),
           actions: [
-            Opacity(
-              opacity: .5,
-              child: LanguageFlag(
-                overwrite.language,
-                width: 160,
-                offset: const Offset(16, -2),
-                scale: 1.25,
-              ),
-            ),
             IconButton(
               onPressed: () => deleteWord(
                 context,
