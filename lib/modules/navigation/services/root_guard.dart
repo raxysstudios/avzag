@@ -7,7 +7,8 @@ import 'router.gr.dart';
 class RootGuard extends AutoRouteGuard {
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
-    var route = router.hasEntries ? const DictionaryRoute() : const HomeRoute();
+    var route =
+        router.hasEntries ? const DictionaryRootRoute() : const HomeRoute();
     final saved = prefs.getString('module');
     for (final m in modules) {
       if (saved == m.text && m.route != null) {

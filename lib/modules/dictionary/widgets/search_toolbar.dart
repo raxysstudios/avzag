@@ -7,7 +7,7 @@ import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../search_controller.dart';
+import '../services/search_controller.dart';
 
 class SearchToolbar extends StatefulWidget {
   const SearchToolbar({Key? key}) : super(key: key);

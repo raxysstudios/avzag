@@ -26,7 +26,7 @@ class WordLoaderScreen extends StatelessWidget {
       then: (context, word) async {
         final router = context.router;
         if (word == null) {
-          router.navigate(const DictionaryRoute());
+          router.navigate(const DictionaryRootRoute());
         } else {
           final router = context.router;
           await router.replace(
@@ -37,7 +37,7 @@ class WordLoaderScreen extends StatelessWidget {
             ),
           );
           if (router.stack.length < 2) {
-            router.navigate(const DictionaryRoute());
+            router.navigate(const DictionaryRootRoute());
           }
         }
       },
