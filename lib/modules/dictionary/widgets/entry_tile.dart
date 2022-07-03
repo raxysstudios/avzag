@@ -30,7 +30,7 @@ class EntryTile extends StatelessWidget {
           if (hit.unverified)
             const SpanIcon(
               Icons.unpublished_outlined,
-              padding: EdgeInsets.only(right: 4),
+              padding: EdgeInsets.only(right: 8),
             ),
           Text(
             hit.headword.titled,
@@ -40,7 +40,7 @@ class EntryTile extends StatelessWidget {
           ),
           if (hit.form != null && hit.form != hit.headword)
             Padding(
-              padding: const EdgeInsets.only(left: 4),
+              padding: const EdgeInsets.only(left: 8),
               child: Text(
                 hit.form!.titled,
                 style: styleNative.copyWith(
