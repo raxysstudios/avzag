@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:avzag/models/language.dart';
 import 'package:avzag/modules/account/widgets/account_tile.dart';
-import 'package:avzag/modules/account/widgets/adminable_languages.dart';
+import 'package:avzag/modules/account/widgets/editor_languages.dart';
 import 'package:avzag/modules/navigation/services/router.gr.dart';
 import 'package:avzag/store.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,7 +46,7 @@ class _AccountScreenState extends State<AccountScreen> {
               user!,
               onSignOut: () => setState(() {}),
             ),
-            AdminableLanguages(
+            EditorLanguages(
               GlobalStore.languages.values.whereType<Language>(),
               onTap: (l) => setState(() {
                 language = l == language ? null : l;

@@ -55,8 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   late var ordering = orderings.first;
 
-  late final Future<void> loader;
-
   @override
   void initState() {
     super.initState();
