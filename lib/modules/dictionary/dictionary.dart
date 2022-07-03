@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 import 'models/entry.dart';
 import 'models/word.dart';
-import 'search_controller.dart';
+import 'services/search_controller.dart';
 import 'services/word.dart';
 import 'widgets/search_toolbar.dart';
 
@@ -88,12 +88,14 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     if (entry.unverified &&
         EditorStore.admin &&
         EditorStore.language == entry.language) {
-      final overwrite =
-          await showLoadingDialog(context, loadWord(entry.entryID));
+      final overwrite = await showLoadingDialog(
+        context,
+        loadWord(entry.entryID),
+      );
       if (overwrite?.contribution == null) return showSnackbar(context);
       final base = await showLoadingDialog(
         context,
-        loadWord(overwrite?.contribution?.overwriteId),
+        loadWord(overwrite?.contribution!.overwriteId),
       );
       context.pushRoute(
         WordsDiffRoute(
