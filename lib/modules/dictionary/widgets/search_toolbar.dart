@@ -82,7 +82,7 @@ class SearchToolbarState extends State<SearchToolbar> {
               for (final l in GlobalStore.languages.keys)
                 OptionItem.tile(
                   Transform.scale(
-                    scale: 1.5,
+                    scale: 1.25,
                     child: LanguageAvatar(
                       l,
                       radius: 12,
