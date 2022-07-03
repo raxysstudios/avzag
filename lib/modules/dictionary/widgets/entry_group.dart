@@ -56,6 +56,7 @@ class EntryGroup extends StatelessWidget {
           ),
         ),
         ColumnCard(
+          elevation: .5,
           margin: EdgeInsets.zero,
           children: [
             for (final g in groups)
