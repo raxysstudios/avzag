@@ -30,8 +30,9 @@ class LanguagesMap extends StatelessWidget {
         minZoom: 5,
         interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
         plugins: [MarkerClusterPlugin()],
-        swPanBoundary: LatLng(41.1, 40),
-        nePanBoundary: LatLng(45, 48.1),
+        swPanBoundary: LatLng(38, 38),
+        nePanBoundary: LatLng(52, 52),
+        slideOnBoundaries: true,
       ),
       layers: [
         getTileLayer(
