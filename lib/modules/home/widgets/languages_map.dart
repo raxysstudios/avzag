@@ -45,10 +45,10 @@ class LanguagesMap extends StatelessWidget {
             padding: EdgeInsets.all(128),
           ),
           animationsOptions: const AnimationsOptions(
-            zoom: Duration(milliseconds: 250),
-            fitBound: Duration(milliseconds: 250),
-            centerMarker: Duration(milliseconds: 250),
-            spiderfy: Duration(milliseconds: 250),
+            zoom: duration200,
+            fitBound: duration200,
+            centerMarker: duration200,
+            spiderfy: duration200,
           ),
           centerMarkerOnClick: false,
           markers: [
