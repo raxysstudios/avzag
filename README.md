@@ -15,9 +15,10 @@ Built with Flutter & Firebase & Algolia.
 - [x] December: general availability on Android & Web.
 
 ### 2022
-- [x] Spring: Home-screen map, deep-linking (sharing entries), iOS release.
-- [ ] Autumn: Converter release.
-- [ ] Winter: Phonology release.
+- [x] Spring: Home-screen map, iOS release.
+- [x] Summer: Deep-linking, word sharing.
+- [ ] Autumn: Word of the day, search UI improvements.
+- [ ] Winter: Material 3, UI & UX overhaul.
 
 ## Getting Started
 ```sh
