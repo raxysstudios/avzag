@@ -1,53 +1,33 @@
 import 'package:avzag/shared/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LanguageStats {
-  final int dictionary;
-
-  LanguageStats({
-    this.dictionary = 0,
-  });
-
-  LanguageStats.fromJson(Map<String, Object?> json)
-      : this(
-          dictionary: json['dictionary'] as int,
-        );
-
-  Map<String, Object?> toJson() => {
-        'dictionary': dictionary,
-      };
-}
-
 class Language {
   final String name;
   final String endonym;
-  final String? flag;
   final String? contact;
   final List<String>? aliases;
   final GeoPoint? location;
-  final LanguageStats? stats;
+  final int dictionary;
 
   const Language({
     required this.name,
     required this.endonym,
-    this.flag,
     this.contact,
     this.aliases,
     this.location,
-    this.stats,
+    this.dictionary = 0,
   });
 
   Language.fromJson(Map<String, Object?> json)
       : this(
           name: json['name'] as String,
           endonym: json['endonym'] as String,
-          flag: json['flag'] as String?,
           contact: json['contact'] as String?,
           aliases: json2list(json['aliases']),
           location:
               json['location'] == null ? null : json['location'] as GeoPoint,
-          stats: json['stats'] == null
-              ? null
-              : LanguageStats.fromJson(json['stats'] as Map<String, Object?>),
+          dictionary:
+              (json['stats'] as Map<String, dynamic>?)?['dictionary'] as int? ??
+                  0,
         );
 }
