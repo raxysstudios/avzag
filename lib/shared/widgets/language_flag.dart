@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 
 class LanguageFlag extends StatelessWidget {
@@ -24,8 +23,6 @@ class LanguageFlag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = this.url ?? GlobalStore.languages[language]?.flag;
-    if (url == null) return const SizedBox();
     return Transform.translate(
       offset: offset,
       child: Transform.rotate(
@@ -33,7 +30,7 @@ class LanguageFlag extends StatelessWidget {
         child: Transform.scale(
           scale: scale,
           child: Image.network(
-            url,
+            'https://firebasestorage.googleapis.com/v0/b/avzagapp.appspot.com/o/flags%2F$language.png?alt=media',
             repeat: ImageRepeat.repeatX,
             fit: BoxFit.contain,
             width: width,
