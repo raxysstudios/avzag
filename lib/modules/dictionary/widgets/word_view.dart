@@ -71,21 +71,27 @@ class WordView extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    '${word.uses.indexOf(u) + 1}',
+                    style: theme.headline6?.copyWith(
+                      color: theme.caption?.color,
+                    ),
+                  ),
                   Expanded(
-                    child: Text(
-                      u.term.titled,
-                      style: theme.headline6,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        u.term.titled,
+                        style: theme.headline6,
+                      ),
                     ),
                   ),
                   if (u.aliases.isNotEmpty)
                     Tooltip(
                       message: u.aliases.join(' • ').titled,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Icon(
-                          Icons.label_outlined,
-                          color: Theme.of(context).textTheme.caption?.color,
-                        ),
+                      child: Icon(
+                        Icons.label_outlined,
+                        color: Theme.of(context).textTheme.caption?.color,
                       ),
                     )
                 ],

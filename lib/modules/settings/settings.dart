@@ -20,11 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const AutoLeadingButton(),
-        title: Text(
-          'Settings',
-          style: styleTitle,
-        ),
-        centerTitle: true,
+        title: const Text('Settings'),
         actions: [
           IconButton(
             onPressed: () => openLink('https://raxys.app'),

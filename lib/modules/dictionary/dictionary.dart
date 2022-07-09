@@ -5,7 +5,6 @@ import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
 import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:avzag/shared/modals/snackbar_manager.dart';
-import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
@@ -145,10 +144,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                   tooltip: 'Bookmarks',
                 ),
                 centerTitle: true,
-                title: Text(
-                  'Avzag',
-                  style: styleTitle,
-                ),
+                title: const Text('Avzag'),
                 actions: [
                   if (EditorStore.admin)
                     IconButton(

@@ -25,8 +25,7 @@ void openLink(String url) {
 }
 
 const duration200 = Duration(milliseconds: 200);
-final styleNative = GoogleFonts.bitter(fontWeight: FontWeight.w500);
-final styleTitle = GoogleFonts.outfit(fontWeight: FontWeight.w500);
+final styleNative = GoogleFonts.bitter(fontWeight: FontWeight.w600);
 
 List<String>? json2list(Object? array) {
   return (array as Iterable<dynamic>?)
