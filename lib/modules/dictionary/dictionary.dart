@@ -218,6 +218,9 @@ class DictionaryScreenState extends State<DictionaryScreen> {
   }
 
   Widget _endCaption(BuildContext context) {
+    if (context.watch<SearchController>().snapshot?.nbHits == 0) {
+      return const SizedBox();
+    }
     return Caption(
       search.monolingual
           ? 'End of the results'
