@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/raxys.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const AutoLeadingButton(),
+        leading: IconButton(
+          onPressed: () => context.navigateTo(const RootRoute()),
+          icon: const Icon(Icons.arrow_back_outlined),
+        ),
         title: const Text('Settings'),
         actions: [
           IconButton(
