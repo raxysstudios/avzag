@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
+import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/language_avatar.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
@@ -93,7 +95,16 @@ class SearchToolbarState extends State<SearchToolbar> {
                     style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                   onTap: () => setLanguage(l),
-                )
+                ),
+              OptionItem.divider(),
+              OptionItem.simple(
+                Icons.add_circle_outline_outlined,
+                'Add',
+                onTap: () async {
+                  await context.pushRoute(const HomeRoute());
+                  setState(() {});
+                },
+              ),
             ],
             icon: Builder(builder: (context) {
               if (search.language.isEmpty) {

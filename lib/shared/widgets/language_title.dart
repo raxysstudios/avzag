@@ -1,6 +1,7 @@
 import 'package:avzag/shared/extensions.dart';
 import 'package:flutter/material.dart';
 
+import '../utils.dart';
 import 'language_flag.dart';
 
 class LanguageTitle extends StatelessWidget {
@@ -23,7 +24,10 @@ class LanguageTitle extends StatelessWidget {
             child: LanguageFlag(language),
           ),
         ),
-        Text(language.titled),
+        Text(
+          language.titled,
+          style: styleTitle,
+        ),
       ],
     );
   }

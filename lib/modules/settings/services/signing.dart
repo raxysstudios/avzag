@@ -10,11 +10,9 @@ Future<bool> signIn(
   return true;
 }
 
-Future<bool> signOut([User? user]) async {
-  final provider = (user ?? FirebaseAuth.instance.currentUser)
-      ?.providerData
-      .first
-      .providerId;
+Future<bool> signOut() async {
+  final provider =
+      FirebaseAuth.instance.currentUser?.providerData.first.providerId;
   if (provider == null) return false;
 
   await FirebaseAuth.instance.signOut();
