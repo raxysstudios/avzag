@@ -23,9 +23,7 @@ class LanguageTitle extends StatelessWidget {
             child: LanguageFlag(language),
           ),
         ),
-        Text(
-          language.titled
-        ),
+        Text(language.titled),
       ],
     );
   }
