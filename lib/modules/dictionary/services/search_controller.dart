@@ -11,16 +11,13 @@ class SearchController with ChangeNotifier {
     updateQuery();
   }
 
-  final Iterable<String> _languages;
+  Iterable<String> _languages;
+
   final AlgoliaIndexReference _index;
   final VoidCallback? _onSearch;
 
   String _language = '';
   String get language => _language;
-  set language(String value) {
-    _language = value;
-    updateQuery();
-  }
 
   bool _unverified = false;
   bool get unverified => _unverified;
@@ -47,6 +44,12 @@ class SearchController with ChangeNotifier {
   }
 
   late AlgoliaQuery _query = _index.query('');
+
+  void updateLanguage(String language, [Iterable<String>? languages]) {
+    _language = language;
+    _languages = languages ?? _languages;
+    updateQuery();
+  }
 
   void updateQuery([String text = '']) {
     final parsed = _parseQuery(text);

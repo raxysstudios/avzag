@@ -19,20 +19,20 @@ class SearchToolbar extends StatefulWidget {
 }
 
 class SearchToolbarState extends State<SearchToolbar> {
-  final inputController = TextEditingController();
+  final _input = TextEditingController();
   Timer timer = Timer(Duration.zero, () {});
   String lastText = '';
 
   @override
   void initState() {
     super.initState();
-    inputController.addListener(() {
-      if (lastText == inputController.text) return;
+    _input.addListener(() {
+      if (lastText == _input.text) return;
       setState(() {
-        lastText = inputController.text;
+        lastText = _input.text;
       });
       timer.cancel();
-      if (inputController.text.isEmpty) {
+      if (_input.text.isEmpty) {
         search();
       } else {
         timer = Timer(
@@ -49,16 +49,15 @@ class SearchToolbarState extends State<SearchToolbar> {
 
   @override
   void dispose() {
-    inputController.dispose();
+    _input.dispose();
     super.dispose();
   }
 
-  void search() =>
-      context.read<SearchController>().updateQuery(inputController.text);
+  void search() => context.read<SearchController>().updateQuery(_input.text);
 
   void setLanguage(String language) {
-    context.read<SearchController>().language = language;
-    inputController.clear();
+    context.read<SearchController>().updateLanguage(language);
+    _input.clear();
   }
 
   @override
@@ -102,19 +101,30 @@ class SearchToolbarState extends State<SearchToolbar> {
                 'Add',
                 onTap: () async {
                   await context.pushRoute(const HomeRoute());
-                  setState(() {});
+                  final l = search.language;
+                  final ls = GlobalStore.languages.keys;
+                  search.updateLanguage(
+                    l.isEmpty
+                        ? ''
+                        : ls.contains(l)
+                            ? l
+                            : ls.first,
+                    ls,
+                  );
                 },
               ),
             ],
-            icon: Builder(builder: (context) {
-              if (search.language.isEmpty) {
-                return const Icon(Icons.language_outlined);
-              }
-              if (search.language == '_') {
-                return const Icon(Icons.layers_outlined);
-              }
-              return LanguageAvatar(search.language);
-            }),
+            icon: Builder(
+              builder: (context) {
+                if (search.language.isEmpty) {
+                  return const Icon(Icons.language_outlined);
+                }
+                if (search.language == '_') {
+                  return const Icon(Icons.layers_outlined);
+                }
+                return LanguageAvatar(search.language);
+              },
+            ),
           ),
           Expanded(
             child: Padding(
@@ -126,7 +136,7 @@ class SearchToolbarState extends State<SearchToolbar> {
                       ? 'forms in ${search.language.titled}'
                       : '${search.language.isEmpty ? 'over' : 'across'} the languages';
                   return TextField(
-                    controller: inputController,
+                    controller: _input,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       labelText: label,
@@ -136,9 +146,9 @@ class SearchToolbarState extends State<SearchToolbar> {
               ),
             ),
           ),
-          if (inputController.text.isNotEmpty)
+          if (_input.text.isNotEmpty)
             IconButton(
-              onPressed: inputController.clear,
+              onPressed: _input.clear,
               icon: const Icon(Icons.clear_outlined),
             ),
         ],
