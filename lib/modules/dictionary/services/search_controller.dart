@@ -20,7 +20,6 @@ class SearchController with ChangeNotifier {
   set language(String value) {
     _language = value;
     updateQuery();
-    notifyListeners();
   }
 
   bool _unverified = false;
@@ -28,12 +27,14 @@ class SearchController with ChangeNotifier {
   set unverified(bool value) {
     _unverified = value;
     updateQuery();
-    notifyListeners();
   }
 
   bool get monolingual => language.isNotEmpty && language != '_';
 
   int get length => _tags.length;
+
+  AlgoliaQuerySnapshot? _snapshot;
+  AlgoliaQuerySnapshot? get snapshot => _snapshot;
 
   final Map<String, Set<String>> _tags = {};
   Set<String> getTags(String id) => _tags[id] ?? {};
@@ -66,10 +67,14 @@ class SearchController with ChangeNotifier {
     _tags.clear();
     _hits.clear();
     _onSearch?.call();
+    notifyListeners();
   }
 
   Future<List<String>> fetchHits(int page) async {
-    var hits = await _query.setPage(page).getObjects().then((s) => s.hits);
+    _snapshot = await _query.setPage(page).getObjects();
+    notifyListeners();
+
+    var hits = snapshot!.hits;
     if (hits.isNotEmpty && language == '_') {
       final original = {
         for (final hit in hits) hit.objectID: hit,

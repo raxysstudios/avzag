@@ -146,20 +146,6 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                 centerTitle: true,
                 title: const Text('Avzag'),
                 actions: [
-                  if (EditorStore.admin)
-                    IconButton(
-                      onPressed: () => setState(() {
-                        search.unverified = !search.unverified;
-                        search.updateQuery();
-                      }),
-                      icon: Icon(
-                        Icons.unpublished_outlined,
-                        color: search.unverified
-                            ? Theme.of(context).colorScheme.primary
-                            : null,
-                      ),
-                      tooltip: 'Unverified',
-                    ),
                   IconButton(
                     onPressed: () async {
                       await context.pushRoute(const SettingsRoute());
@@ -178,6 +164,33 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                 snap: true,
                 floating: true,
                 forceElevated: true,
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  if (EditorStore.admin) ...[
+                    SwitchListTile(
+                      value: context.read<SearchController>().unverified,
+                      secondary: const Icon(Icons.unpublished_outlined),
+                      title: const Text('Only unverified'),
+                      onChanged: (v) => setState(() {
+                        search.unverified = v;
+                        search.updateQuery();
+                      }),
+                    ),
+                    const Divider(),
+                  ],
+                  Caption(
+                    'Found ${context.watch<SearchController>().snapshot?.nbHits ?? 0} entries',
+                    icon: Icons.search_outlined,
+                    padding: const EdgeInsets.only(
+                      right: 20,
+                      top: 16,
+                      bottom: 4,
+                      left: 20,
+                    ),
+                    centered: false,
+                  ),
+                ]),
               ),
               PagedSliverList(
                 pagingController: paging,
@@ -210,6 +223,8 @@ class DictionaryScreenState extends State<DictionaryScreen> {
           ? 'End of the results'
           : 'Showing the first 50 entries',
       icon: Icons.done_all_outlined,
+      centered: false,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     );
   }
 }
