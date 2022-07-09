@@ -1,10 +1,9 @@
+import 'package:avzag/models/entry.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/utils.dart';
 import 'package:avzag/shared/widgets/span_icon.dart';
 
 import 'package:flutter/material.dart';
-
-import '../models/entry.dart';
 
 class EntryTile extends StatelessWidget {
   final Entry hit;

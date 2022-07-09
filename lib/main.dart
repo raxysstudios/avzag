@@ -8,8 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import 'firebase_options.dart';
-import 'modules/navigation/services/root_guard.dart';
-import 'modules/navigation/services/router.gr.dart';
+import 'navigation/root_guard.dart';
+import 'navigation/router.gr.dart';
 import 'theme_set.dart';
 
 void main() async {

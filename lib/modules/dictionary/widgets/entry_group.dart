@@ -1,6 +1,5 @@
-import 'package:avzag/modules/dictionary/models/entry.dart';
+import 'package:avzag/models/entry.dart';
 import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:flutter/material.dart';
 
 import 'entry_tile.dart';
@@ -28,7 +27,7 @@ class EntryGroup extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 4),
           child: Row(
             textBaseline: TextBaseline.alphabetic,
             crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -55,22 +54,24 @@ class EntryGroup extends StatelessWidget {
             ],
           ),
         ),
-        ColumnCard(
+        Card(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
           elevation: .5,
-          margin: EdgeInsets.zero,
-          children: [
-            for (final g in groups)
-              Column(
-                children: [
-                  for (var i = 0; i < g.length; i++)
-                    EntryTile(
-                      g[i],
-                      showLanguage: showLanguage && i == 0,
-                      onTap: () => onTap?.call(g[i]),
-                    ),
-                ],
-              )
-          ],
+          child: Column(
+            children: [
+              for (final g in groups)
+                Column(
+                  children: [
+                    for (var i = 0; i < g.length; i++)
+                      EntryTile(
+                        g[i],
+                        showLanguage: showLanguage && i == 0,
+                        onTap: () => onTap?.call(g[i]),
+                      ),
+                  ],
+                )
+            ],
+          ),
         ),
       ],
     );

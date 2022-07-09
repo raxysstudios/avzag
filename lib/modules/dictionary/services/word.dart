@@ -1,12 +1,11 @@
 import 'package:avzag/models/contribution.dart';
+import 'package:avzag/models/word.dart';
 import 'package:avzag/shared/modals/danger_dialog.dart';
 import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:avzag/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../models/word.dart';
 
 Future<Word?> loadWord(String? id) async {
   if (id == null) return null;

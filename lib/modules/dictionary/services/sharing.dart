@@ -1,11 +1,9 @@
-import 'package:avzag/modules/dictionary/models/sample.dart';
+import 'package:avzag/models/sample.dart';
+import 'package:avzag/models/word.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:markdown/markdown.dart';
 
-import '../models/word.dart';
-
-String _getWordLink(Word word) =>
-    'https://avzag.raxys.app/dictionary/${word.id}';
+String _getWordLink(Word word) => 'https://avzag.raxys.app/${word.id}';
 
 String previewArticle(Word word) => '''
 🌄 Avzag • ${word.language.titled}

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:avzag/models/language.dart';
 import 'package:avzag/modules/home/widgets/languages_bar.dart';
-import 'package:avzag/modules/navigation/services/router.gr.dart';
+import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/extensions.dart';
 import 'package:avzag/shared/widgets/options_button.dart';
 import 'package:avzag/store.dart';

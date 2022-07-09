@@ -57,8 +57,7 @@ class _LanguagesBarState extends State<LanguagesBar> {
                 padding: const EdgeInsets.only(right: 4),
                 child: InputChip(
                   avatar: LanguageAvatar(
-                    null,
-                    url: language.flag,
+                    language.name,
                     radius: 12,
                   ),
                   label: Text(

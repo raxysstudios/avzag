@@ -78,10 +78,7 @@ class LanguagesMap extends StatelessWidget {
                           onTap: () => onToggle(language),
                           child: Padding(
                             padding: const EdgeInsets.all(2),
-                            child: LanguageAvatar(
-                              null,
-                              url: language.flag,
-                            ),
+                            child: LanguageAvatar(language.name),
                           ),
                         ),
                       ),

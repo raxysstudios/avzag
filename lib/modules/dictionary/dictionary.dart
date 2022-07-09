@@ -1,17 +1,17 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:avzag/models/entry.dart';
+import 'package:avzag/models/word.dart';
 import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
-import 'package:avzag/modules/navigation/navigation.dart';
-import 'package:avzag/modules/navigation/services/router.gr.dart';
+import 'package:avzag/navigation/router.gr.dart';
 import 'package:avzag/shared/modals/loading_dialog.dart';
 import 'package:avzag/shared/modals/snackbar_manager.dart';
 import 'package:avzag/shared/widgets/caption.dart';
 import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
-import 'models/entry.dart';
-import 'models/word.dart';
 import 'services/search_controller.dart';
 import 'services/word.dart';
 import 'widgets/search_toolbar.dart';
@@ -123,7 +123,6 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       value: search,
       builder: (context, _) {
         return Scaffold(
-          drawer: const NavigationScreen(),
           floatingActionButton: EditorStore.editor
               ? FloatingActionButton(
                   onPressed: edit,
@@ -136,7 +135,15 @@ class DictionaryScreenState extends State<DictionaryScreen> {
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
-                title: const Text('Dictionary'),
+                leading: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.favorite_outline),
+                ),
+                centerTitle: true,
+                title: Text(
+                  'Avzag',
+                  style: GoogleFonts.outfit(),
+                ),
                 actions: [
                   if (EditorStore.admin)
                     IconButton(
@@ -152,6 +159,10 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                       ),
                       tooltip: 'Unverified',
                     ),
+                  IconButton(
+                    onPressed: () => context.pushRoute(const SettingsRoute()),
+                    icon: const Icon(Icons.settings_outlined),
+                  ),
                   const SizedBox(width: 4),
                 ],
                 bottom: const PreferredSize(

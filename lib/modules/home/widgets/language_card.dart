@@ -29,10 +29,9 @@ class LanguageCard extends StatelessWidget {
             children: [
               AnimatedOpacity(
                 opacity: selected ? 1 : .5,
-                duration:duration200,
+                duration: duration200,
                 child: LanguageFlag(
-                  null,
-                  url: language.flag,
+                  language.name,
                   offset: const Offset(20, 0),
                 ),
               ),
@@ -54,7 +53,7 @@ class LanguageCard extends StatelessWidget {
                 language.name.titled,
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
-              if (language.stats != null)
+              if (language.dictionary > 0)
                 Padding(
                   padding: const EdgeInsets.only(top: 2),
                   child: RichText(
@@ -68,7 +67,7 @@ class LanguageCard extends StatelessWidget {
                           child: SpanIcon(Icons.book_outlined),
                         ),
                         TextSpan(
-                          text: language.stats!.dictionary.toString(),
+                          text: language.dictionary.toString(),
                         ),
                       ],
                     ),
