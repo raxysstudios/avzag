@@ -19,7 +19,7 @@ class LanguageTitle extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: Opacity(
-            opacity: .5,
+            opacity: .4,
             child: LanguageFlag(language),
           ),
         ),
