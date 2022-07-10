@@ -1,4 +1,4 @@
-import 'package:avzag/shared/extensions.dart';
+import 'package:bazur/shared/extensions.dart';
 import 'package:flutter/material.dart';
 
 import 'language_flag.dart';

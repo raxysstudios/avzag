@@ -1,9 +1,9 @@
-import 'package:avzag/models/word.dart';
-import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/utils.dart';
-import 'package:avzag/shared/widgets/caption.dart';
-import 'package:avzag/shared/widgets/column_card.dart';
-import 'package:avzag/shared/widgets/markdown_text.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/shared/extensions.dart';
+import 'package:bazur/shared/utils.dart';
+import 'package:bazur/shared/widgets/caption.dart';
+import 'package:bazur/shared/widgets/column_card.dart';
+import 'package:bazur/shared/widgets/markdown_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

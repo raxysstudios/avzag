@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/models/entry.dart';
-import 'package:avzag/models/word.dart';
-import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
-import 'package:avzag/navigation/router.gr.dart';
-import 'package:avzag/shared/modals/loading_dialog.dart';
-import 'package:avzag/shared/modals/snackbar_manager.dart';
-import 'package:avzag/shared/widgets/caption.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/models/entry.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/modules/dictionary/widgets/entry_group.dart';
+import 'package:bazur/navigation/router.gr.dart';
+import 'package:bazur/shared/modals/loading_dialog.dart';
+import 'package:bazur/shared/modals/snackbar_manager.dart';
+import 'package:bazur/shared/widgets/caption.dart';
+import 'package:bazur/store.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -150,7 +150,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                   tooltip: 'Home',
                   icon: const Icon(Icons.landscape_outlined),
                 ),
-                title: const Text('Avzag'),
+                title: const Text('Bazur'),
                 actions: [
                   IconButton(
                     onPressed: () => showSnackbar(

@@ -1,4 +1,4 @@
-import 'package:avzag/shared/modals/snackbar_manager.dart';
+import 'package:bazur/shared/modals/snackbar_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';

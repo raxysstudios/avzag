@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/models/use.dart';
-import 'package:avzag/models/word.dart';
-import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
-import 'package:avzag/shared/modals/danger_dialog.dart';
-import 'package:avzag/shared/widgets/column_card.dart';
-import 'package:avzag/shared/widgets/compact_input.dart';
-import 'package:avzag/shared/widgets/language_title.dart';
-import 'package:avzag/shared/widgets/options_button.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/models/use.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/modules/dictionary/widgets/samples_editor.dart';
+import 'package:bazur/shared/modals/danger_dialog.dart';
+import 'package:bazur/shared/widgets/column_card.dart';
+import 'package:bazur/shared/widgets/compact_input.dart';
+import 'package:bazur/shared/widgets/language_title.dart';
+import 'package:bazur/shared/widgets/options_button.dart';
+import 'package:bazur/store.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 

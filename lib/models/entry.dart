@@ -1,5 +1,5 @@
 import 'package:algolia/algolia.dart';
-import 'package:avzag/shared/utils.dart';
+import 'package:bazur/shared/utils.dart';
 
 class Entry {
   final String entryID;

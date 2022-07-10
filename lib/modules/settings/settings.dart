@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/navigation/router.gr.dart';
-import 'package:avzag/shared/utils.dart';
-import 'package:avzag/shared/widgets/raxys.dart';
+import 'package:bazur/navigation/router.gr.dart';
+import 'package:bazur/shared/utils.dart';
+import 'package:bazur/shared/widgets/raxys.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -58,7 +58,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       : 'v${p.version} • b${p.buildNumber}',
                 ),
                 onTap: () => openLink(
-                  'https://github.com/raxysstudios/avzag',
+                  'https://github.com/raxysstudios/bazur',
                 ),
               );
             },

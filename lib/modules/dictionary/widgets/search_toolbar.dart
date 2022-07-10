@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/widgets/language_avatar.dart';
-import 'package:avzag/shared/widgets/options_button.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/shared/extensions.dart';
+import 'package:bazur/shared/widgets/language_avatar.dart';
+import 'package:bazur/shared/widgets/options_button.dart';
+import 'package:bazur/store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

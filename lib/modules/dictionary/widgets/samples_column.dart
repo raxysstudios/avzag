@@ -1,5 +1,5 @@
-import 'package:avzag/models/sample.dart';
-import 'package:avzag/shared/utils.dart';
+import 'package:bazur/models/sample.dart';
+import 'package:bazur/shared/utils.dart';
 import 'package:flutter/material.dart';
 
 class SamplesColumn extends StatelessWidget {

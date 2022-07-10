@@ -1,7 +1,7 @@
-import 'package:avzag/models/entry.dart';
-import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/utils.dart';
-import 'package:avzag/shared/widgets/span_icon.dart';
+import 'package:bazur/models/entry.dart';
+import 'package:bazur/shared/extensions.dart';
+import 'package:bazur/shared/utils.dart';
+import 'package:bazur/shared/widgets/span_icon.dart';
 
 import 'package:flutter/material.dart';
 

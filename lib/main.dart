@@ -1,5 +1,5 @@
 import 'package:algolia/algolia.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/store.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +41,7 @@ class App extends StatelessWidget {
   Widget build(context) {
     final theme = ThemeSet(Theme.of(context).colorScheme);
     return MaterialApp.router(
-      title: 'Avzag',
+      title: 'Bazur',
       theme: theme.light,
       darkTheme: theme.dark,
       routerDelegate: _appRouter.delegate(),

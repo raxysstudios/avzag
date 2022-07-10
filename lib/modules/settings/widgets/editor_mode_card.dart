@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:avzag/models/language.dart';
-import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/utils.dart';
-import 'package:avzag/shared/widgets/column_card.dart';
-import 'package:avzag/shared/widgets/language_avatar.dart';
-import 'package:avzag/shared/widgets/span_icon.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/models/language.dart';
+import 'package:bazur/shared/extensions.dart';
+import 'package:bazur/shared/utils.dart';
+import 'package:bazur/shared/widgets/column_card.dart';
+import 'package:bazur/shared/widgets/language_avatar.dart';
+import 'package:bazur/shared/widgets/span_icon.dart';
+import 'package:bazur/store.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

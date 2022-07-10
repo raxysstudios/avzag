@@ -1,5 +1,5 @@
-import 'package:avzag/models/contribution.dart';
-import 'package:avzag/shared/utils.dart';
+import 'package:bazur/models/contribution.dart';
+import 'package:bazur/shared/utils.dart';
 
 import 'sample.dart';
 import 'use.dart';

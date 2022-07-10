@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/models/language.dart';
-import 'package:avzag/modules/home/widgets/languages_bar.dart';
-import 'package:avzag/navigation/router.gr.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/models/language.dart';
+import 'package:bazur/modules/home/widgets/languages_bar.dart';
+import 'package:bazur/navigation/router.gr.dart';
+import 'package:bazur/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 

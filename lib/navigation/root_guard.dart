@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/store.dart';
 
 import 'router.gr.dart';
 

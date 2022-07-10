@@ -1,6 +1,6 @@
-import 'package:avzag/models/entry.dart';
-import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/widgets/column_card.dart';
+import 'package:bazur/models/entry.dart';
+import 'package:bazur/shared/extensions.dart';
+import 'package:bazur/shared/widgets/column_card.dart';
 import 'package:flutter/material.dart';
 
 import 'entry_tile.dart';

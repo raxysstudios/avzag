@@ -1,4 +1,4 @@
-import 'package:avzag/shared/utils.dart';
+import 'package:bazur/shared/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Language {

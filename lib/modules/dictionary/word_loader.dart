@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/models/word.dart';
-import 'package:avzag/modules/dictionary/services/word.dart';
-import 'package:avzag/navigation/loader.dart';
-import 'package:avzag/navigation/router.gr.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/modules/dictionary/services/word.dart';
+import 'package:bazur/navigation/loader.dart';
+import 'package:bazur/navigation/router.gr.dart';
 import 'package:flutter/material.dart';
 
 class WordLoaderScreen extends StatelessWidget {

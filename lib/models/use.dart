@@ -1,4 +1,4 @@
-import 'package:avzag/shared/utils.dart';
+import 'package:bazur/shared/utils.dart';
 
 import 'sample.dart';
 

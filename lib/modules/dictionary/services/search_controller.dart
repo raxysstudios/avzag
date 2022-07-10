@@ -1,5 +1,5 @@
 import 'package:algolia/algolia.dart';
-import 'package:avzag/models/entry.dart';
+import 'package:bazur/models/entry.dart';
 import 'package:flutter/material.dart';
 
 class SearchController with ChangeNotifier {

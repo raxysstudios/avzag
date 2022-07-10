@@ -1,5 +1,5 @@
-import 'package:avzag/models/sample.dart';
-import 'package:avzag/shared/widgets/compact_input.dart';
+import 'package:bazur/models/sample.dart';
+import 'package:bazur/shared/widgets/compact_input.dart';
 import 'package:flutter/material.dart';
 
 class SamplesEditor extends StatefulWidget {
