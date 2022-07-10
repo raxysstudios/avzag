@@ -135,17 +135,42 @@ class DictionaryScreenState extends State<DictionaryScreen> {
             slivers: [
               SliverAppBar(
                 leading: IconButton(
-                  onPressed: () => showSnackbar(
-                    context,
-                    icon: Icons.info_outlined,
-                    text: 'Bookmarks are coming soon',
-                  ),
-                  icon: const Icon(Icons.bookmarks_outlined),
-                  tooltip: 'Bookmarks',
+                  onPressed: () async {
+                    await context.pushRoute(const HomeRoute());
+                    final l = search.language;
+                    final ls = GlobalStore.languages.keys;
+                    search.updateLanguage(
+                      l.isEmpty
+                          ? ''
+                          : ls.contains(l)
+                              ? l
+                              : ls.first,
+                      ls,
+                    );
+                  },
+                  tooltip: 'Home',
+                  icon: const Icon(Icons.landscape_outlined),
                 ),
-                centerTitle: true,
                 title: const Text('Avzag'),
                 actions: [
+                  IconButton(
+                    onPressed: () => showSnackbar(
+                      context,
+                      icon: Icons.info_outlined,
+                      text: 'Bookmarks are coming soon',
+                    ),
+                    icon: const Icon(Icons.bookmarks_outlined),
+                    tooltip: 'Bookmarks',
+                  ),
+                  IconButton(
+                    onPressed: () => showSnackbar(
+                      context,
+                      icon: Icons.info_outlined,
+                      text: 'History is coming soon',
+                    ),
+                    icon: const Icon(Icons.history_outlined),
+                    tooltip: 'History',
+                  ),
                   IconButton(
                     onPressed: () async {
                       await context.pushRoute(const SettingsRoute());

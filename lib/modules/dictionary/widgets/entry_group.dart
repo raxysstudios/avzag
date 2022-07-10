@@ -1,5 +1,6 @@
 import 'package:avzag/models/entry.dart';
 import 'package:avzag/shared/extensions.dart';
+import 'package:avzag/shared/widgets/column_card.dart';
 import 'package:flutter/material.dart';
 
 import 'entry_tile.dart';
@@ -54,24 +55,23 @@ class EntryGroup extends StatelessWidget {
             ],
           ),
         ),
-        Card(
+        ColumnCard(
           margin: const EdgeInsets.symmetric(horizontal: 4),
           elevation: .5,
-          child: Column(
-            children: [
-              for (final g in groups)
-                Column(
-                  children: [
-                    for (var i = 0; i < g.length; i++)
-                      EntryTile(
-                        g[i],
-                        showLanguage: showLanguage && i == 0,
-                        onTap: () => onTap?.call(g[i]),
-                      ),
-                  ],
-                )
-            ],
-          ),
+          shape: null,
+          children: [
+            for (final g in groups)
+              Column(
+                children: [
+                  for (var i = 0; i < g.length; i++)
+                    EntryTile(
+                      g[i],
+                      showLanguage: showLanguage && i == 0,
+                      onTap: () => onTap?.call(g[i]),
+                    ),
+                ],
+              ),
+          ],
         ),
       ],
     );
