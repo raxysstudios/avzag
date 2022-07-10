@@ -39,10 +39,10 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     super.initState();
     paging.addPageRequestListener(
       (page) async {
-        final terms = await search.fetchHits(page);
+        final terms = await search.fetch(page);
         if (terms.isEmpty) {
           paging.appendLastPage([]);
-        } else if (search.monolingual) {
+        } else if (search.global) {
           paging.appendPage(terms, page + 1);
         } else {
           paging.appendLastPage(terms);
@@ -116,6 +116,19 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     }
   }
 
+  void updateLanguages() {
+    final l = search.language;
+    final ls = GlobalStore.languages.keys;
+    search.setLanguage(
+      l.isEmpty
+          ? ''
+          : ls.contains(l)
+              ? l
+              : ls.first,
+      ls,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
@@ -137,16 +150,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                 leading: IconButton(
                   onPressed: () async {
                     await context.pushRoute(const HomeRoute());
-                    final l = search.language;
-                    final ls = GlobalStore.languages.keys;
-                    search.updateLanguage(
-                      l.isEmpty
-                          ? ''
-                          : ls.contains(l)
-                              ? l
-                              : ls.first,
-                      ls,
-                    );
+                    updateLanguages();
                   },
                   tooltip: 'Home',
                   icon: const Icon(Icons.landscape_outlined),
@@ -182,8 +186,11 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                   const SizedBox(width: 4),
                 ],
                 bottom: const PreferredSize(
-                  preferredSize: Size.fromHeight(kToolbarHeight + 3),
-                  child: SearchToolbar(),
+                  preferredSize: Size.fromHeight(kToolbarHeight),
+                  child: SizedBox(
+                    height: kToolbarHeight,
+                    child: SearchToolbar(),
+                  ),
                 ),
                 pinned: true,
                 snap: true,
@@ -199,21 +206,29 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                       title: const Text('Only unverified'),
                       onChanged: (v) => setState(() {
                         search.unverified = v;
-                        search.updateQuery();
+                        search.query();
                       }),
                     ),
                     const Divider(),
                   ],
-                  Caption(
-                    'Found ${context.watch<SearchController>().snapshot?.nbHits ?? 0} entries',
-                    icon: Icons.search_outlined,
-                    padding: const EdgeInsets.only(
-                      right: 20,
-                      top: 16,
-                      bottom: 4,
-                      left: 20,
-                    ),
-                    centered: false,
+                  Builder(
+                    builder: (context) {
+                      final snapshot =
+                          context.watch<SearchController>().snapshot;
+                      return Caption(
+                        snapshot == null
+                            ? 'Searching...'
+                            : 'Found ${snapshot.nbHits} entries',
+                        icon: Icons.search_outlined,
+                        padding: const EdgeInsets.only(
+                          right: 20,
+                          top: 16,
+                          bottom: 4,
+                          left: 20,
+                        ),
+                        centered: false,
+                      );
+                    },
                   ),
                 ]),
               ),
@@ -224,8 +239,8 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                     return EntryGroup(
                       search.getHits(id),
                       onTap: open,
-                      showLanguage: GlobalStore.languages.length > 1 &&
-                          !search.monolingual,
+                      showLanguage:
+                          GlobalStore.languages.length > 1 && !search.global,
                     );
                   },
                   noItemsFoundIndicatorBuilder: _endCaption,
@@ -247,9 +262,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       return const SizedBox();
     }
     return Caption(
-      search.monolingual
-          ? 'End of the results'
-          : 'Showing the first 50 entries',
+      search.global ? 'End of the results' : 'Showing the first 50 entries',
       icon: Icons.done_all_outlined,
       centered: false,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),

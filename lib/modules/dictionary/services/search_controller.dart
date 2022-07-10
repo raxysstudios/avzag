@@ -8,7 +8,7 @@ class SearchController with ChangeNotifier {
     this._index, [
     this._onSearch,
   ]) {
-    updateQuery();
+    query();
   }
 
   Iterable<String> _languages;
@@ -23,11 +23,10 @@ class SearchController with ChangeNotifier {
   bool get unverified => _unverified;
   set unverified(bool value) {
     _unverified = value;
-    updateQuery();
+    query();
   }
 
-  bool get monolingual => language.isNotEmpty && language != '_';
-
+  bool get global => language.isNotEmpty;
   int get length => _tags.length;
 
   AlgoliaQuerySnapshot? _snapshot;
@@ -45,16 +44,16 @@ class SearchController with ChangeNotifier {
 
   late AlgoliaQuery _query = _index.query('');
 
-  void updateLanguage(String language, [Iterable<String>? languages]) {
+  void setLanguage(String language, [Iterable<String>? languages]) {
     _language = language;
     _languages = languages ?? _languages;
-    updateQuery();
+    query();
   }
 
-  void updateQuery([String text = '']) {
+  void query([String text = '']) {
     final parsed = _parseQuery(text);
     final languages = _generateFilter(
-      monolingual ? [language] : _languages,
+      global ? [language] : _languages,
       'language',
     );
     _query = _index.query(parsed[0]).filters(
@@ -63,45 +62,29 @@ class SearchController with ChangeNotifier {
     if (unverified) {
       _query = _query.facetFilter('unverified:true');
     }
-    _query = monolingual
+    _query = global
         ? _query.setRestrictSearchableAttributes(['forms'])
         : _query.setHitsPerPage(50);
 
+    _snapshot = null;
     _tags.clear();
     _hits.clear();
     _onSearch?.call();
     notifyListeners();
   }
 
-  Future<List<String>> fetchHits(int page) async {
+  Future<List<String>> fetch(int page) async {
     _snapshot = await _query.setPage(page).getObjects();
     notifyListeners();
-
-    var hits = snapshot!.hits;
-    if (hits.isNotEmpty && language == '_') {
-      final original = {
-        for (final hit in hits) hit.objectID: hit,
-      };
-      final terms = _generateFilter(
-        hits.map((hit) => hit.data['term'] as String),
-        'term',
-      );
-      final languages = _generateFilter(_languages, 'language');
-      hits = await _index
-          .filters('($languages) AND ($terms)')
-          .getObjects()
-          .then((s) => s.hits.map((h) => original[h.objectID] ?? h))
-          .then((h) => h.toList());
-    }
-    return _organizeHits(
-      hits.map((h) => Entry.fromAlgoliaHit(h)),
+    return _organize(
+      snapshot!.hits.map((h) => Entry.fromAlgoliaHit(h)),
     );
   }
 
-  List<String> _organizeHits(Iterable<Entry> hits) {
+  List<String> _organize(Iterable<Entry> hits) {
     final newIds = <String>[];
     for (final hit in hits) {
-      final id = monolingual ? hit.objectID : hit.term;
+      final id = global ? hit.objectID : hit.term;
       _hits.putIfAbsent(id, () {
         _tags[id] = <String>{};
         newIds.add(id);

@@ -51,31 +51,29 @@ class SearchToolbarState extends State<SearchToolbar> {
     super.dispose();
   }
 
-  void search() => context.read<SearchController>().updateQuery(_input.text);
+  void search() => context.read<SearchController>().query(_input.text);
 
   void setLanguage(String language) {
-    context.read<SearchController>().updateLanguage(language);
+    context.read<SearchController>().setLanguage(language);
     _input.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     final search = context.watch<SearchController>();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Row(
-        children: [
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(width: 4),
+        if (GlobalStore.languages.length == 1)
+          LanguageAvatar(GlobalStore.languages.keys.first)
+        else
           OptionsButton(
             [
               OptionItem.simple(
                 Icons.language_outlined,
-                GlobalStore.languages.length == 1 ? 'English' : 'Multilingual',
+                'Global',
                 onTap: () => setLanguage(''),
-              ),
-              OptionItem.simple(
-                Icons.layers_outlined,
-                'Cross-lingual',
-                onTap: () => setLanguage('_'),
               ),
               OptionItem.divider(),
               for (final l in GlobalStore.languages.keys)
@@ -107,33 +105,32 @@ class SearchToolbarState extends State<SearchToolbar> {
               },
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, right: 4),
-              child: Builder(
-                builder: (context) {
-                  var label = 'Search ';
-                  label += search.monolingual
-                      ? 'forms in ${search.language.titled}'
-                      : '${search.language.isEmpty ? 'over' : 'across'} the languages';
-                  return TextField(
-                    controller: _input,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      labelText: label,
-                    ),
-                  );
-                },
-              ),
-            ),
+        const SizedBox(width: 20),
+        Expanded(
+          child: Builder(
+            builder: (context) {
+              var label = 'Search ';
+              label += search.global
+                  ? 'forms in ${search.language.titled}'
+                  : '${search.language.isEmpty ? 'over' : 'across'} the languages';
+              return TextField(
+                controller: _input,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: label,
+                ),
+              );
+            },
           ),
-          if (_input.text.isNotEmpty)
-            IconButton(
-              onPressed: _input.clear,
-              icon: const Icon(Icons.clear_outlined),
-            ),
-        ],
-      ),
+        ),
+        const SizedBox(width: 4),
+        if (_input.text.isNotEmpty)
+          IconButton(
+            onPressed: _input.clear,
+            icon: const Icon(Icons.clear_outlined),
+          ),
+        const SizedBox(width: 4),
+      ],
     );
   }
 }
