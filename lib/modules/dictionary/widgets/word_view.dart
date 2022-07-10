@@ -88,6 +88,8 @@ class WordView extends StatelessWidget {
                   ),
                   if (u.aliases.isNotEmpty)
                     Tooltip(
+                      waitDuration: Duration.zero,
+                      triggerMode: TooltipTriggerMode.tap,
                       message: u.aliases.join(' • ').titled,
                       child: Icon(
                         Icons.label_outlined,
