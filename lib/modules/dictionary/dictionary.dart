@@ -117,14 +117,9 @@ class DictionaryScreenState extends State<DictionaryScreen> {
   }
 
   void updateLanguages() {
-    final l = search.language;
     final ls = GlobalStore.languages.keys;
     search.setLanguage(
-      l.isEmpty
-          ? ''
-          : ls.contains(l)
-              ? l
-              : ls.first,
+      ls.length == 1 ? ls.first : '',
       ls,
     );
   }

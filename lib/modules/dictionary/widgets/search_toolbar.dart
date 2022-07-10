@@ -65,46 +65,37 @@ class SearchToolbarState extends State<SearchToolbar> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(width: 4),
-        if (GlobalStore.languages.length == 1)
-          LanguageAvatar(GlobalStore.languages.keys.first)
-        else
-          OptionsButton(
-            [
+        OptionsButton(
+          [
+            if (GlobalStore.languages.length > 1) ...[
               OptionItem.simple(
                 Icons.language_outlined,
                 'Global',
                 onTap: () => setLanguage(''),
               ),
               OptionItem.divider(),
-              for (final l in GlobalStore.languages.keys)
-                OptionItem.tile(
-                  Transform.scale(
-                    scale: 1.25,
-                    child: LanguageAvatar(
-                      l,
-                      radius: 12,
-                    ),
-                  ),
-                  Text(
-                    l.titled,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  onTap: () => setLanguage(l),
-                ),
             ],
-            tooltip: 'Search mode',
-            icon: Builder(
-              builder: (context) {
-                if (search.language.isEmpty) {
-                  return const Icon(Icons.language_outlined);
-                }
-                if (search.language == '_') {
-                  return const Icon(Icons.layers_outlined);
-                }
-                return LanguageAvatar(search.language);
-              },
-            ),
-          ),
+            for (final l in GlobalStore.languages.keys)
+              OptionItem.tile(
+                Transform.scale(
+                  scale: 1.25,
+                  child: LanguageAvatar(
+                    l,
+                    radius: 12,
+                  ),
+                ),
+                Text(
+                  l.titled,
+                  style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                onTap: () => setLanguage(l),
+              ),
+          ],
+          tooltip: 'Search mode',
+          icon: search.language.isEmpty
+              ? const Icon(Icons.language_outlined)
+              : LanguageAvatar(search.language),
+        ),
         const SizedBox(width: 20),
         Expanded(
           child: Builder(
@@ -127,6 +118,7 @@ class SearchToolbarState extends State<SearchToolbar> {
         if (_input.text.isNotEmpty)
           IconButton(
             onPressed: _input.clear,
+            tooltip: 'Clear',
             icon: const Icon(Icons.clear_outlined),
           ),
         const SizedBox(width: 4),
