@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as functions from "firebase-functions";
 import algoliasearch from "algoliasearch";
+import {firestore} from "firebase-admin";
 
 const dictionary = algoliasearch(
     functions.config().algolia.app,
@@ -25,6 +26,7 @@ export const indexDictionary = functions
           entryID,
           headword: entry.headword,
           language: entry.language,
+          lastUpdated: firestore.Timestamp.now(),
           forms: [
             entry.headword,
             ...(entry.forms?.map((s: any) => s.text) ?? []),
@@ -36,13 +38,16 @@ export const indexDictionary = functions
 
         const records = [];
 
-        for (const use of entry.uses) {
-          const record = Object.assign({term: use.term}, base) as any;
-          if (use.tags?.length || entry.tags?.length) {
-            record.tags = (use.tags ?? []).concat(entry.tags ?? []);
+        for (const definition of entry.definitions) {
+          const record = Object.assign({
+            translation: definition.translation,
+            rand: Math.random(),
+          }, base) as any;
+          if (definition.tags?.length || entry.tags?.length) {
+            record.tags = (definition.tags ?? []).concat(entry.tags ?? []);
           }
-          if (use.aliases?.length) {
-            record.aliases = use.aliases;
+          if (definition.aliases?.length) {
+            record.aliases = definition.aliases;
           }
           records.push(record);
         }
