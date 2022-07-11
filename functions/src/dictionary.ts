@@ -26,6 +26,7 @@ export const indexDictionary = functions
           entryID,
           headword: entry.headword,
           language: entry.language,
+          rand: Math.random(),
           lastUpdated: firestore.Timestamp.now(),
           forms: [
             entry.headword,
@@ -41,7 +42,6 @@ export const indexDictionary = functions
         for (const definition of entry.definitions) {
           const record = Object.assign({
             translation: definition.translation,
-            rand: Math.random(),
           }, base) as any;
           if (definition.tags?.length || entry.tags?.length) {
             record.tags = (definition.tags ?? []).concat(entry.tags ?? []);
