@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/modules/dictionary/services/sharing.dart';
-import 'package:avzag/shared/utils.dart';
-import 'package:avzag/shared/widgets/language_title.dart';
-import 'package:avzag/shared/widgets/options_button.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/modules/dictionary/services/sharing.dart';
+import 'package:bazur/shared/utils.dart';
+import 'package:bazur/shared/widgets/language_title.dart';
+import 'package:bazur/shared/widgets/options_button.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import 'models/word.dart';
 import 'widgets/word_view.dart';
 
 class WordScreen extends StatelessWidget {

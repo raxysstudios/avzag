@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class Raxys extends StatelessWidget {
   const Raxys({
     this.size = 24,
-    this.opacity = 1,
-    this.scale = 1,
+    this.opacity = .1,
+    this.scale = 7,
     Key? key,
   }) : super(key: key);
 

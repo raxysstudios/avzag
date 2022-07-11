@@ -1,5 +1,5 @@
-import 'package:avzag/models/contribution.dart';
-import 'package:avzag/shared/utils.dart';
+import 'package:bazur/models/contribution.dart';
+import 'package:bazur/shared/utils.dart';
 
 import 'sample.dart';
 import 'use.dart';
@@ -12,7 +12,7 @@ class Word {
   String language;
   List<String> tags;
   String? note;
-  List<Use> uses;
+  List<Definition> definitions;
   Contribution? contribution;
 
   Word(
@@ -20,7 +20,7 @@ class Word {
     required this.headword,
     this.ipa,
     required this.language,
-    required this.uses,
+    required this.definitions,
     required this.forms,
     required this.tags,
     this.contribution,
@@ -38,9 +38,9 @@ class Word {
               ) ??
               [],
           language: json['language'] as String,
-          uses: listFromJson(
-            json['uses'],
-            (dynamic j) => Use.fromJson(j as Map<String, dynamic>),
+          definitions: listFromJson(
+            json['definitions'],
+            (dynamic j) => Definition.fromJson(j as Map<String, dynamic>),
           )!,
           tags: json2list(json['tags']) ?? [],
           note: json['note'] as String?,
@@ -60,7 +60,7 @@ class Word {
     data['language'] = language;
     if (tags.isNotEmpty) data['tags'] = tags;
     if (note?.isNotEmpty ?? false) data['note'] = note;
-    data['uses'] = uses.map((v) => v.toJson()).toList();
+    data['definitions'] = definitions.map((v) => v.toJson()).toList();
     if (contribution != null) data['contribution'] = contribution!.toJson();
     return data;
   }

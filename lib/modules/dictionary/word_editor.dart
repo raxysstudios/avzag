@@ -1,16 +1,16 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/modules/dictionary/widgets/samples_editor.dart';
-import 'package:avzag/shared/modals/danger_dialog.dart';
-import 'package:avzag/shared/widgets/column_card.dart';
-import 'package:avzag/shared/widgets/compact_input.dart';
-import 'package:avzag/shared/widgets/language_title.dart';
-import 'package:avzag/shared/widgets/options_button.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/models/use.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/modules/dictionary/widgets/samples_editor.dart';
+import 'package:bazur/shared/modals/danger_dialog.dart';
+import 'package:bazur/shared/widgets/column_card.dart';
+import 'package:bazur/shared/widgets/compact_input.dart';
+import 'package:bazur/shared/widgets/language_title.dart';
+import 'package:bazur/shared/widgets/options_button.dart';
+import 'package:bazur/store.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import 'models/use.dart';
-import 'models/word.dart';
 import 'services/word.dart';
 
 class WordEditorScreen extends StatefulWidget {
@@ -88,7 +88,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
               divider: null,
               children: [
                 CompactInput(
-                  Icons.bookmark_border_outlined,
+                  Icons.label_important_outlined,
                   'Headword',
                   word.headword,
                   (s) => word.headword = s,
@@ -107,7 +107,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   (s) => word.tags = s.split(' '),
                 ),
                 CompactInput(
-                  Icons.note_outlined,
+                  Icons.sticky_note_2_outlined,
                   'General note',
                   word.note,
                   (s) => word.note = s,
@@ -117,24 +117,24 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
               ],
             ),
             SamplesEditor('Add a form', word.forms),
-            for (final u in word.uses) ...[
+            for (final d in word.definitions) ...[
               ColumnCard(
-                key: ObjectKey(u),
+                key: ObjectKey(d),
                 divider: null,
                 children: [
                   CompactInput(
                     Icons.lightbulb_outlined,
-                    'Term',
-                    u.term,
-                    (s) => u.term = s,
+                    'Translation',
+                    d.translation,
+                    (s) => d.translation = s,
                     noEmpty: true,
                     trailing: IconButton(
                       onPressed: () => showDangerDialog(
                         context,
                         () => setState(() {
-                          word.uses.remove(u);
+                          word.definitions.remove(d);
                         }),
-                        'Delete the use?',
+                        'Delete the definition?',
                       ),
                       icon: const Icon(Icons.delete_outlined),
                     ),
@@ -142,33 +142,33 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   CompactInput(
                     Icons.label_outlined,
                     'Aliases',
-                    u.aliases.join(' '),
-                    (s) => u.aliases = s.split(' '),
+                    d.aliases.join(' '),
+                    (s) => d.aliases = s.split(' '),
                   ),
                   CompactInput(
                     Icons.tag_outlined,
                     'Semantic tags',
-                    u.tags.join(' '),
-                    (s) => u.tags = s.split(' '),
+                    d.tags.join(' '),
+                    (s) => d.tags = s.split(' '),
                   ),
                   CompactInput(
-                    Icons.note_outlined,
+                    Icons.sticky_note_2_outlined,
                     'Usage note',
-                    u.note,
-                    (s) => u.note = s,
+                    d.note,
+                    (s) => d.note = s,
                     lowercase: false,
                     multiline: true,
                   ),
                 ],
               ),
-              SamplesEditor('Add an example', u.examples),
+              SamplesEditor('Add an example', d.examples),
             ],
             Padding(
               padding: const EdgeInsets.all(8),
               child: ElevatedButton.icon(
                 onPressed: () => setState(() {
-                  word.uses.add(
-                    Use(
+                  word.definitions.add(
+                    Definition(
                       '',
                       aliases: [],
                       tags: [],
@@ -177,7 +177,7 @@ class _WordEditorScreenState extends State<WordEditorScreen> {
                   );
                 }),
                 icon: const Icon(Icons.add_outlined),
-                label: const Text('Add a use'),
+                label: const Text('Add a definition'),
               ),
             )
           ],

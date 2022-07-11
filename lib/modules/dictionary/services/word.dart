@@ -1,12 +1,11 @@
-import 'package:avzag/models/contribution.dart';
-import 'package:avzag/shared/modals/danger_dialog.dart';
-import 'package:avzag/shared/modals/loading_dialog.dart';
-import 'package:avzag/shared/modals/snackbar_manager.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/models/contribution.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/shared/modals/danger_dialog.dart';
+import 'package:bazur/shared/modals/loading_dialog.dart';
+import 'package:bazur/shared/modals/snackbar_manager.dart';
+import 'package:bazur/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../models/word.dart';
 
 Future<Word?> loadWord(String? id) async {
   if (id == null) return null;
@@ -48,10 +47,10 @@ void submitWord(
   Word word, {
   VoidCallback? after,
 }) async {
-  if (word.uses.isEmpty) {
+  if (word.definitions.isEmpty) {
     return showSnackbar(
       context,
-      text: 'Must have at least one use',
+      text: 'Must have at least one definition',
     );
   }
   String? id = word.id;

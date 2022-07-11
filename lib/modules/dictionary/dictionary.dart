@@ -1,17 +1,16 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/modules/dictionary/widgets/entry_group.dart';
-import 'package:avzag/modules/navigation/navigation.dart';
-import 'package:avzag/modules/navigation/services/router.gr.dart';
-import 'package:avzag/shared/modals/loading_dialog.dart';
-import 'package:avzag/shared/modals/snackbar_manager.dart';
-import 'package:avzag/shared/widgets/caption.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/models/entry.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/modules/dictionary/widgets/entry_group.dart';
+import 'package:bazur/navigation/router.gr.dart';
+import 'package:bazur/shared/modals/loading_dialog.dart';
+import 'package:bazur/shared/modals/snackbar_manager.dart';
+import 'package:bazur/shared/widgets/caption.dart';
+import 'package:bazur/store.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
-import 'models/entry.dart';
-import 'models/word.dart';
 import 'services/search_controller.dart';
 import 'services/word.dart';
 import 'widgets/search_toolbar.dart';
@@ -30,7 +29,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     firstPageKey: 0,
   );
   late final search = SearchController(
-    GlobalStore.languages.keys,
+    GlobalStore.languages,
     algolia.index('dictionary'),
     paging.refresh,
   );
@@ -40,10 +39,10 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     super.initState();
     paging.addPageRequestListener(
       (page) async {
-        final terms = await search.fetchHits(page);
+        final terms = await search.fetch(page);
         if (terms.isEmpty) {
           paging.appendLastPage([]);
-        } else if (search.monolingual) {
+        } else if (search.global) {
           paging.appendPage(terms, page + 1);
         } else {
           paging.appendLastPage(terms);
@@ -65,7 +64,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
         editing ??= Word(
           null,
           headword: '',
-          uses: [],
+          definitions: [],
           language: EditorStore.language!,
           tags: [],
           forms: [],
@@ -123,7 +122,6 @@ class DictionaryScreenState extends State<DictionaryScreen> {
       value: search,
       builder: (context, _) {
         return Scaffold(
-          drawer: const NavigationScreen(),
           floatingActionButton: EditorStore.editor
               ? FloatingActionButton(
                   onPressed: edit,
@@ -136,32 +134,90 @@ class DictionaryScreenState extends State<DictionaryScreen> {
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
-                title: const Text('Dictionary'),
+                leading: IconButton(
+                  onPressed: () async {
+                    await context.pushRoute(const HomeRoute());
+                    search.setLanguage('', GlobalStore.languages);
+                  },
+                  tooltip: 'Home',
+                  icon: const Icon(Icons.landscape_outlined),
+                ),
+                title: const Text('Bazur'),
                 actions: [
-                  if (EditorStore.admin)
-                    IconButton(
-                      onPressed: () => setState(() {
-                        search.unverified = !search.unverified;
-                        search.updateQuery();
-                      }),
-                      icon: Icon(
-                        Icons.unpublished_outlined,
-                        color: search.unverified
-                            ? Theme.of(context).colorScheme.primary
-                            : null,
-                      ),
-                      tooltip: 'Unverified',
+                  IconButton(
+                    onPressed: () => showSnackbar(
+                      context,
+                      icon: Icons.info_outlined,
+                      text: 'Bookmarks are coming soon',
                     ),
+                    icon: const Icon(Icons.bookmarks_outlined),
+                    tooltip: 'Bookmarks',
+                  ),
+                  IconButton(
+                    onPressed: () => showSnackbar(
+                      context,
+                      icon: Icons.info_outlined,
+                      text: 'History is coming soon',
+                    ),
+                    icon: const Icon(Icons.history_outlined),
+                    tooltip: 'History',
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      await context.pushRoute(const SettingsRoute());
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.settings_outlined),
+                    tooltip: 'Settings',
+                  ),
                   const SizedBox(width: 4),
                 ],
                 bottom: const PreferredSize(
-                  preferredSize: Size.fromHeight(kToolbarHeight + 3),
-                  child: SearchToolbar(),
+                  preferredSize: Size.fromHeight(kToolbarHeight),
+                  child: SizedBox(
+                    height: kToolbarHeight,
+                    child: SearchToolbar(),
+                  ),
                 ),
                 pinned: true,
                 snap: true,
                 floating: true,
                 forceElevated: true,
+              ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  if (EditorStore.admin) ...[
+                    SwitchListTile(
+                      value: context.read<SearchController>().unverified,
+                      secondary: const Icon(Icons.unpublished_outlined),
+                      title: const Text('Only unverified'),
+                      onChanged: (v) => setState(() {
+                        search.unverified = v;
+                        search.query();
+                      }),
+                    ),
+                    const Divider(),
+                  ],
+                  Builder(
+                    builder: (context) {
+                      final snapshot =
+                          context.watch<SearchController>().snapshot;
+                      return Caption(
+                        snapshot == null
+                            ? 'Searching...'
+                            : 'Found ${snapshot.nbHits} entries',
+                        icon: Icons.search_outlined,
+                        padding: const EdgeInsets.only(
+                          right: 20,
+                          top: 16,
+                          bottom: 4,
+                          left: 20,
+                        ),
+                        centered: false,
+                      );
+                    },
+                  ),
+                ]),
               ),
               PagedSliverList(
                 pagingController: paging,
@@ -170,8 +226,8 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                     return EntryGroup(
                       search.getHits(id),
                       onTap: open,
-                      showLanguage: GlobalStore.languages.length > 1 &&
-                          !search.monolingual,
+                      showLanguage:
+                          GlobalStore.languages.length > 1 && !search.global,
                     );
                   },
                   noItemsFoundIndicatorBuilder: _endCaption,
@@ -189,11 +245,14 @@ class DictionaryScreenState extends State<DictionaryScreen> {
   }
 
   Widget _endCaption(BuildContext context) {
+    if (context.watch<SearchController>().snapshot?.nbHits == 0) {
+      return const SizedBox();
+    }
     return Caption(
-      search.monolingual
-          ? 'End of the results'
-          : 'Showing the first 50 entries',
+      search.global ? 'End of the results' : 'Showing the first 50 entries',
       icon: Icons.done_all_outlined,
+      centered: false,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     );
   }
 }

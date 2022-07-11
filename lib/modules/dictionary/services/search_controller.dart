@@ -1,7 +1,6 @@
 import 'package:algolia/algolia.dart';
+import 'package:bazur/models/entry.dart';
 import 'package:flutter/material.dart';
-
-import '../models/entry.dart';
 
 class SearchController with ChangeNotifier {
   SearchController(
@@ -9,32 +8,29 @@ class SearchController with ChangeNotifier {
     this._index, [
     this._onSearch,
   ]) {
-    updateQuery();
+    query();
   }
 
-  final Iterable<String> _languages;
+  Iterable<String> _languages;
+
   final AlgoliaIndexReference _index;
   final VoidCallback? _onSearch;
 
   String _language = '';
   String get language => _language;
-  set language(String value) {
-    _language = value;
-    updateQuery();
-    notifyListeners();
-  }
 
   bool _unverified = false;
   bool get unverified => _unverified;
   set unverified(bool value) {
     _unverified = value;
-    updateQuery();
-    notifyListeners();
+    query();
   }
 
-  bool get monolingual => language.isNotEmpty && language != '_';
-
+  bool get global => language.isNotEmpty;
   int get length => _tags.length;
+
+  AlgoliaQuerySnapshot? _snapshot;
+  AlgoliaQuerySnapshot? get snapshot => _snapshot;
 
   final Map<String, Set<String>> _tags = {};
   Set<String> getTags(String id) => _tags[id] ?? {};
@@ -48,10 +44,16 @@ class SearchController with ChangeNotifier {
 
   late AlgoliaQuery _query = _index.query('');
 
-  void updateQuery([String text = '']) {
+  void setLanguage(String language, [Iterable<String>? languages]) {
+    _language = language;
+    _languages = languages ?? _languages;
+    query();
+  }
+
+  void query([String text = '']) {
     final parsed = _parseQuery(text);
     final languages = _generateFilter(
-      monolingual ? [language] : _languages,
+      global ? [language] : _languages,
       'language',
     );
     _query = _index.query(parsed[0]).filters(
@@ -60,41 +62,29 @@ class SearchController with ChangeNotifier {
     if (unverified) {
       _query = _query.facetFilter('unverified:true');
     }
-    _query = monolingual
+    _query = global
         ? _query.setRestrictSearchableAttributes(['forms'])
         : _query.setHitsPerPage(50);
 
+    _snapshot = null;
     _tags.clear();
     _hits.clear();
     _onSearch?.call();
+    notifyListeners();
   }
 
-  Future<List<String>> fetchHits(int page) async {
-    var hits = await _query.setPage(page).getObjects().then((s) => s.hits);
-    if (hits.isNotEmpty && language == '_') {
-      final original = {
-        for (final hit in hits) hit.objectID: hit,
-      };
-      final terms = _generateFilter(
-        hits.map((hit) => hit.data['term'] as String),
-        'term',
-      );
-      final languages = _generateFilter(_languages, 'language');
-      hits = await _index
-          .filters('($languages) AND ($terms)')
-          .getObjects()
-          .then((s) => s.hits.map((h) => original[h.objectID] ?? h))
-          .then((h) => h.toList());
-    }
-    return _organizeHits(
-      hits.map((h) => Entry.fromAlgoliaHit(h)),
+  Future<List<String>> fetch(int page) async {
+    _snapshot = await _query.setPage(page).getObjects();
+    notifyListeners();
+    return _organize(
+      snapshot!.hits.map((h) => Entry.fromAlgoliaHit(h)),
     );
   }
 
-  List<String> _organizeHits(Iterable<Entry> hits) {
+  List<String> _organize(Iterable<Entry> hits) {
     final newIds = <String>[];
     for (final hit in hits) {
-      final id = monolingual ? hit.objectID : hit.term;
+      final id = global ? hit.objectID : hit.translation;
       _hits.putIfAbsent(id, () {
         _tags[id] = <String>{};
         newIds.add(id);

@@ -1,7 +1,7 @@
-import 'package:avzag/models/language.dart';
-import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/utils.dart';
-import 'package:avzag/shared/widgets/language_avatar.dart';
+import 'package:bazur/models/language.dart';
+import 'package:bazur/shared/extensions.dart';
+import 'package:bazur/shared/utils.dart';
+import 'package:bazur/shared/widgets/language_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -57,8 +57,7 @@ class _LanguagesBarState extends State<LanguagesBar> {
                 padding: const EdgeInsets.only(right: 4),
                 child: InputChip(
                   avatar: LanguageAvatar(
-                    null,
-                    url: language.flag,
+                    language.name,
                     radius: 12,
                   ),
                   label: Text(

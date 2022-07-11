@@ -1,9 +1,9 @@
-import 'package:avzag/modules/dictionary/models/word.dart';
-import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/utils.dart';
-import 'package:avzag/shared/widgets/caption.dart';
-import 'package:avzag/shared/widgets/column_card.dart';
-import 'package:avzag/shared/widgets/markdown_text.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/shared/extensions.dart';
+import 'package:bazur/shared/utils.dart';
+import 'package:bazur/shared/widgets/caption.dart';
+import 'package:bazur/shared/widgets/column_card.dart';
+import 'package:bazur/shared/widgets/markdown_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -33,14 +33,14 @@ class WordView extends StatelessWidget {
             vertical: 8,
           ),
           children: [
-            Text(
+            SelectableText(
               word.headword.titled,
               style: styleNative.copyWith(
                 fontSize: theme.headline5?.fontSize,
               ),
             ),
             if (word.ipa != null)
-              Text(
+              SelectableText(
                 '[${word.ipa!}]',
                 style: GoogleFonts.notoSans(
                   textStyle: theme.bodyText1,
@@ -60,7 +60,7 @@ class WordView extends StatelessWidget {
             word.forms,
             inline: true,
           ),
-        for (final u in word.uses) ...[
+        for (final d in word.definitions) ...[
           ColumnCard(
             divider: const SizedBox(height: 4),
             padding: const EdgeInsets.symmetric(
@@ -71,34 +71,42 @@ class WordView extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Text(
-                      u.term.titled,
-                      style: theme.headline6,
+                  Text(
+                    '${word.definitions.indexOf(d) + 1}',
+                    style: theme.headline6?.copyWith(
+                      color: theme.caption?.color,
                     ),
                   ),
-                  if (u.aliases.isNotEmpty)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: SelectableText(
+                        d.translation.titled,
+                        style: theme.headline6,
+                      ),
+                    ),
+                  ),
+                  if (d.aliases.isNotEmpty)
                     Tooltip(
-                      message: u.aliases.join(' • ').titled,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Icon(
-                          Icons.label_outlined,
-                          color: Theme.of(context).textTheme.caption?.color,
-                        ),
+                      waitDuration: Duration.zero,
+                      triggerMode: TooltipTriggerMode.tap,
+                      message: d.aliases.join(' • ').titled,
+                      child: Icon(
+                        Icons.label_outlined,
+                        color: Theme.of(context).textTheme.caption?.color,
                       ),
                     )
                 ],
               ),
-              if (u.tags.isNotEmpty)
+              if (d.tags.isNotEmpty)
                 Text(
-                  u.tags.join(', '),
+                  d.tags.join(', '),
                   style: theme.caption,
                 ),
-              if (u.note != null) MarkdownText(u.note!),
+              if (d.note != null) MarkdownText(d.note!),
             ],
           ),
-          if (u.examples.isNotEmpty) SamplesColumn(u.examples),
+          if (d.examples.isNotEmpty) SamplesColumn(d.examples),
         ],
         if (word.contribution != null)
           const Caption(

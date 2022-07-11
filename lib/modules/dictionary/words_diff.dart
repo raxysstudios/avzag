@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/modules/dictionary/widgets/word_view.dart';
-import 'package:avzag/shared/widgets/caption.dart';
-import 'package:avzag/shared/widgets/language_title.dart';
-import 'package:avzag/shared/widgets/options_button.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/modules/dictionary/widgets/word_view.dart';
+import 'package:bazur/shared/widgets/caption.dart';
+import 'package:bazur/shared/widgets/language_title.dart';
+import 'package:bazur/shared/widgets/options_button.dart';
 import 'package:flutter/material.dart';
 
-import 'models/word.dart';
 import 'services/word.dart';
 
 class WordsDiffScreen extends StatelessWidget {

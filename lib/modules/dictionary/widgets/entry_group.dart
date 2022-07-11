@@ -1,6 +1,6 @@
-import 'package:avzag/modules/dictionary/models/entry.dart';
-import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/widgets/column_card.dart';
+import 'package:bazur/models/entry.dart';
+import 'package:bazur/shared/extensions.dart';
+import 'package:bazur/shared/widgets/column_card.dart';
 import 'package:flutter/material.dart';
 
 import 'entry_tile.dart';
@@ -28,13 +28,13 @@ class EntryGroup extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 4),
           child: Row(
             textBaseline: TextBaseline.alphabetic,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             children: [
               Text(
-                groups.first.first.term.titled,
+                groups.first.first.translation.titled,
                 style: TextStyle(
                   color: theme.caption?.color,
                   fontWeight: FontWeight.w500,
@@ -56,8 +56,9 @@ class EntryGroup extends StatelessWidget {
           ),
         ),
         ColumnCard(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
           elevation: .5,
-          margin: EdgeInsets.zero,
+          shape: null,
           children: [
             for (final g in groups)
               Column(
@@ -69,7 +70,7 @@ class EntryGroup extends StatelessWidget {
                       onTap: () => onTap?.call(g[i]),
                     ),
                 ],
-              )
+              ),
           ],
         ),
       ],

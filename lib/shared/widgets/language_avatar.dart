@@ -1,4 +1,3 @@
-import 'package:avzag/store.dart';
 import 'package:flutter/material.dart';
 
 class LanguageAvatar extends StatelessWidget {
@@ -15,11 +14,11 @@ class LanguageAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final url = this.url ?? GlobalStore.languages[language]?.flag;
-    if (url == null) return const Icon(Icons.flag_outlined);
     return CircleAvatar(
       radius: radius,
-      backgroundImage: NetworkImage(url),
+      foregroundImage: NetworkImage(
+        'https://firebasestorage.googleapis.com/v0/b/avzagapp.appspot.com/o/flags%2F$language.png?alt=media',
+      ),
       backgroundColor: Colors.transparent,
     );
   }

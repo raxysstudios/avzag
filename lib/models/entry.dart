@@ -1,5 +1,5 @@
 import 'package:algolia/algolia.dart';
-import 'package:avzag/shared/utils.dart';
+import 'package:bazur/shared/utils.dart';
 
 class Entry {
   final String entryID;
@@ -7,7 +7,7 @@ class Entry {
   final String headword;
   final String? form;
   final String language;
-  final String term;
+  final String translation;
   final bool unverified;
   final List<String>? tags;
 
@@ -17,7 +17,7 @@ class Entry {
     required this.headword,
     this.form,
     required this.language,
-    required this.term,
+    required this.translation,
     this.tags,
     this.unverified = false,
   });
@@ -37,7 +37,7 @@ class Entry {
       headword: json['headword'] as String,
       form: form >= 0 ? json2list(json['forms'])![form] : null,
       language: json['language'] as String,
-      term: json['term'] as String,
+      translation: json['translation'] as String,
       unverified: json['unverified'] as bool? ?? false,
       tags: json2list(json['tags']),
     );

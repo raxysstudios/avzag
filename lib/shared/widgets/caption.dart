@@ -7,19 +7,22 @@ class Caption extends StatelessWidget {
     this.text, {
     this.icon,
     this.padding = const EdgeInsets.all(16),
+    this.centered = true,
     Key? key,
   }) : super(key: key);
 
   final String text;
   final IconData? icon;
   final EdgeInsets padding;
+  final bool centered;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: padding,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment:
+            centered ? MainAxisAlignment.center : MainAxisAlignment.start,
         children: [
           if (icon != null)
             SpanIcon(

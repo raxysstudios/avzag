@@ -1,8 +1,8 @@
-import 'package:avzag/models/language.dart';
-import 'package:avzag/modules/home/services/mapbox.dart';
-import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/utils.dart';
-import 'package:avzag/shared/widgets/language_avatar.dart';
+import 'package:bazur/models/language.dart';
+import 'package:bazur/modules/home/services/mapbox.dart';
+import 'package:bazur/shared/extensions.dart';
+import 'package:bazur/shared/utils.dart';
+import 'package:bazur/shared/widgets/language_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -78,10 +78,7 @@ class LanguagesMap extends StatelessWidget {
                           onTap: () => onToggle(language),
                           child: Padding(
                             padding: const EdgeInsets.all(2),
-                            child: LanguageAvatar(
-                              null,
-                              url: language.flag,
-                            ),
+                            child: LanguageAvatar(language.name),
                           ),
                         ),
                       ),

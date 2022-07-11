@@ -1,10 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:avzag/models/language.dart';
-import 'package:avzag/modules/home/widgets/languages_bar.dart';
-import 'package:avzag/modules/navigation/services/router.gr.dart';
-import 'package:avzag/shared/extensions.dart';
-import 'package:avzag/shared/widgets/options_button.dart';
-import 'package:avzag/store.dart';
+import 'package:bazur/models/language.dart';
+import 'package:bazur/modules/home/widgets/languages_bar.dart';
+import 'package:bazur/navigation/router.gr.dart';
+import 'package:bazur/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -18,60 +16,34 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _LanguageOrdering {
-  final bool descending;
-  final String text;
-  final IconData icon;
-  late final String field;
-
-  _LanguageOrdering(
-    this.icon,
-    this.text, {
-    String? field,
-    this.descending = false,
-  }) {
-    this.field = field ?? text;
-  }
-}
-
 class _HomeScreenState extends State<HomeScreen> {
   var catalogue = <Language>[];
   var tags = <String, String>{};
   var languages = <Language>[];
   var selected = <Language>{};
 
-  final inputController = TextEditingController();
-  var isLoading = false;
-  var isMap = false;
-
-  final orderings = [
-    _LanguageOrdering(Icons.label_outlined, 'name'),
-    _LanguageOrdering(
-      Icons.book_outlined,
-      'dictionary',
-      field: 'stats.dictionary',
-      descending: true,
-    ),
-  ];
-  late var ordering = orderings.first;
+  final _input = TextEditingController();
+  var loading = false;
+  var map = false;
+  var alpha = true;
 
   @override
   void initState() {
     super.initState();
-    inputController.addListener(filterLanguages);
+    _input.addListener(filterLanguages);
     load();
   }
 
   Future load() async {
     setState(() {
-      isLoading = true;
+      loading = true;
     });
-    var query = FirebaseFirestore.instance
+    catalogue = await FirebaseFirestore.instance
         .collection('languages')
-        .orderBy(ordering.field, descending: ordering.descending);
-    if (ordering.field != 'name') query = query.orderBy('name');
-
-    catalogue = await query
+        .orderBy(
+          alpha ? 'name' : 'stats.dictionary',
+          descending: !alpha,
+        )
         .withConverter(
           fromFirestore: (snapshot, _) => Language.fromJson(snapshot.data()!),
           toFirestore: (__, _) => {},
@@ -79,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .get()
         .then((r) => r.docs.map((d) => d.data()).toList());
 
-    selected = GlobalStore.languages.keys
+    selected = GlobalStore.languages
         .map((n) => catalogue.firstWhere((l) => l.name == n))
         .toSet();
     tags = {
@@ -91,17 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ].join(' ')
     };
 
-    isLoading = false;
+    loading = false;
     filterLanguages();
   }
 
   void filterLanguages() {
-    if (isLoading) return;
-    final query = inputController.text
-        .trim()
-        .toLowerCase()
-        .split(' ')
-        .where((s) => s.isNotEmpty);
+    if (loading) return;
+    final query =
+        _input.text.trim().toLowerCase().split(' ').where((s) => s.isNotEmpty);
     setState(() {
       languages
         ..clear()
@@ -131,35 +100,30 @@ class _HomeScreenState extends State<HomeScreen> {
         titleSpacing: 0,
         centerTitle: true,
         leading: IconButton(
-          tooltip: isMap ? 'Show list' : 'Show map',
+          tooltip: map ? 'Show list' : 'Show map',
           icon: Icon(
-            isMap ? Icons.view_list_outlined : Icons.map_outlined,
+            map ? Icons.view_list_outlined : Icons.map_outlined,
           ),
           onPressed: () => setState(() {
-            isMap = !isMap;
+            map = !map;
           }),
         ),
         title: TextField(
-          controller: inputController,
+          controller: _input,
           decoration: const InputDecoration(
             border: InputBorder.none,
             hintText: 'Search by names, tags, families',
           ),
         ),
         actions: [
-          OptionsButton(
-            [
-              for (final o in orderings)
-                OptionItem.simple(
-                  o.icon,
-                  o.text.titled,
-                  onTap: () {
-                    ordering = o;
-                    load();
-                  },
-                ),
-            ],
-            icon: const Icon(Icons.sort_outlined),
+          IconButton(
+            onPressed: () => setState(() {
+              alpha = !alpha;
+              load();
+            }),
+            icon: Icon(
+              alpha ? Icons.sort_by_alpha_outlined : Icons.sort_outlined,
+            ),
           ),
           const SizedBox(width: 4),
         ],
@@ -170,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ? null
           : FloatingActionButton(
               onPressed: () {
-                GlobalStore.set(objects: selected);
+                GlobalStore.set(selected.map((l) => l.name).toList());
                 context.navigateTo(const RootRoute());
               },
               child: const Icon(Icons.done_all_outlined),
@@ -184,12 +148,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Builder(
         builder: (context) {
-          if (isLoading) {
+          if (loading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-          if (isMap) {
+          if (map) {
             return LanguagesMap(
               onToggle: toggleLanguage,
               selected: selected,

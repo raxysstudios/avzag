@@ -1,4 +1,4 @@
-import 'package:avzag/shared/extensions.dart';
+import 'package:bazur/shared/extensions.dart';
 import 'package:flutter/material.dart';
 
 import 'language_flag.dart';
@@ -19,7 +19,7 @@ class LanguageTitle extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: Opacity(
-            opacity: .5,
+            opacity: .4,
             child: LanguageFlag(language),
           ),
         ),

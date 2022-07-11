@@ -10,12 +10,14 @@ class ColumnCard extends StatelessWidget {
     this.divider = const Divider(),
     this.margin = const EdgeInsets.only(top: 12),
     this.padding = EdgeInsets.zero,
+    this.shape = const RoundedRectangleBorder(),
     Key? key,
   }) : super(key: key);
 
   final EdgeInsets margin;
   final EdgeInsets padding;
   final double? elevation;
+  final ShapeBorder? shape;
   final String? title;
   final String? subtitle;
   final Widget? divider;
@@ -27,7 +29,7 @@ class ColumnCard extends StatelessWidget {
     return Card(
       elevation: elevation,
       margin: margin,
-      shape: const RoundedRectangleBorder(),
+      shape: shape,
       child: Padding(
         padding: padding,
         child: Column(

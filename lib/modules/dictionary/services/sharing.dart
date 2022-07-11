@@ -1,16 +1,14 @@
-import 'package:avzag/modules/dictionary/models/sample.dart';
-import 'package:avzag/shared/extensions.dart';
+import 'package:bazur/models/sample.dart';
+import 'package:bazur/models/word.dart';
+import 'package:bazur/shared/extensions.dart';
 import 'package:markdown/markdown.dart';
 
-import '../models/word.dart';
-
-String _getWordLink(Word word) =>
-    'https://avzag.raxys.app/dictionary/${word.id}';
+String _getLink(Word word) => 'https://bazur.raxys.app/${word.id}';
 
 String previewArticle(Word word) => '''
-🌄 Avzag • ${word.language.titled}
-🔖 ${word.headword.titled} — ${word.uses.map((u) => u.term.titled).join(', ')}
-${_getWordLink(word)}''';
+🌄 Bazur • ${word.language.titled}
+🔖 ${word.headword.titled} — ${word.definitions.map((d) => d.translation.titled).join(', ')}
+${_getLink(word)}''';
 
 String _cleanMarkdown(String md) => markdownToHtml(md, inlineOnly: true)
     .replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), '')
@@ -27,20 +25,19 @@ String textifyArticle(Word word) {
   String note(String n) => '📝 ${_cleanMarkdown(n)}';
 
   final article = [
-    '🌄 Avzag • ${word.language.titled}',
-    _getWordLink(word),
+    '🌄 Bazur • ${word.language.titled}',
+    _getLink(word),
     '\n🔖 ${word.headword.titled}',
     if (word.ipa != null) '🔉 ${word.ipa}',
     if (word.tags.isNotEmpty) tags(word.tags),
     if (word.note?.isNotEmpty ?? false) note(word.note!),
     if (word.forms.isNotEmpty) ...samples(word.forms),
-    if (word.uses.isNotEmpty)
-      for (final use in word.uses) ...[
-        '\n💡 ${use.term.titled}',
-        if (use.tags.isNotEmpty) tags(use.tags),
-        if (use.note?.isNotEmpty ?? false) note(use.note!),
-        if (use.examples.isNotEmpty) ...samples(use.examples),
-      ],
+    for (final d in word.definitions) ...[
+      '\n💡${word.definitions.indexOf(d) + 1} ${d.translation.titled}',
+      if (d.tags.isNotEmpty) tags(d.tags),
+      if (d.note?.isNotEmpty ?? false) note(d.note!),
+      if (d.examples.isNotEmpty) ...samples(d.examples),
+    ],
   ];
   return article.join('\n');
 }
