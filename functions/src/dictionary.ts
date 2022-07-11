@@ -27,7 +27,7 @@ export const indexDictionary = functions
           headword: entry.headword,
           language: entry.language,
           rand: Math.random(),
-          lastUpdated: firestore.Timestamp.now(),
+          lastUpdated: firestore.Timestamp.now().toDate().valueOf(),
           forms: [
             entry.headword,
             ...(entry.forms?.map((s: any) => s.text) ?? []),
