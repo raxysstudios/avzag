@@ -33,14 +33,14 @@ class WordView extends StatelessWidget {
             vertical: 8,
           ),
           children: [
-            Text(
+            SelectableText(
               word.headword.titled,
               style: styleNative.copyWith(
                 fontSize: theme.headline5?.fontSize,
               ),
             ),
             if (word.ipa != null)
-              Text(
+              SelectableText(
                 '[${word.ipa!}]',
                 style: GoogleFonts.notoSans(
                   textStyle: theme.bodyText1,
@@ -80,7 +80,7 @@ class WordView extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
+                      child: SelectableText(
                         u.term.titled,
                         style: theme.headline6,
                       ),

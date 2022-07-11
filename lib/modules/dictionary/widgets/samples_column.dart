@@ -23,37 +23,27 @@ class SamplesColumn extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           for (final s in samples)
-            InkWell(
-              onLongPress: () {
-                final text = [
-                  s.text,
-                  if (s.meaning != null)
-                    inline ? s.meaning!.toUpperCase() : s.meaning
-                ].join(inline ? ' ' : '\n');
-                copyText(context, text);
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 4,
-                ),
-                child: RichText(
-                  text: TextSpan(
-                    style: theme.bodyText2,
-                    children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 4,
+              ),
+              child: SelectableText.rich(
+                TextSpan(
+                  style: theme.bodyText2,
+                  children: [
+                    TextSpan(
+                      text: s.text,
+                      style: styleNative,
+                    ),
+                    if (s.meaning != null) ...[
+                      TextSpan(text: inline ? ' ' : '\n'),
                       TextSpan(
-                        text: s.text,
-                        style: styleNative,
+                        text: inline ? s.meaning!.toUpperCase() : s.meaning,
+                        style: TextStyle(color: theme.caption?.color),
                       ),
-                      if (s.meaning != null) ...[
-                        TextSpan(text: inline ? ' ' : '\n'),
-                        TextSpan(
-                          text: inline ? s.meaning!.toUpperCase() : s.meaning,
-                          style: TextStyle(color: theme.caption?.color),
-                        ),
-                      ],
                     ],
-                  ),
+                  ],
                 ),
               ),
             ),
