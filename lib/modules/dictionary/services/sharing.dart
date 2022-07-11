@@ -33,7 +33,7 @@ String textifyArticle(Word word) {
     if (word.note?.isNotEmpty ?? false) note(word.note!),
     if (word.forms.isNotEmpty) ...samples(word.forms),
     for (final d in word.definitions) ...[
-      '\n💡${word.definitions.indexOf(d) + 1} ${d.translation.titled}',
+      '\n💡${word.definitions.indexOf(d) + 1}. ${d.translation.titled}',
       if (d.tags.isNotEmpty) tags(d.tags),
       if (d.note?.isNotEmpty ?? false) note(d.note!),
       if (d.examples.isNotEmpty) ...samples(d.examples),
