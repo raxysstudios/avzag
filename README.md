@@ -1,4 +1,4 @@
-# Andax
+# Bazur
 
 Expandable parallel dictionary for the languages of the Caucasus in English.
 
