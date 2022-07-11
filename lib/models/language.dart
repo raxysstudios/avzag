@@ -24,8 +24,7 @@ class Language {
           endonym: json['endonym'] as String,
           contact: json['contact'] as String?,
           aliases: json2list(json['aliases']),
-          location:
-              json['location'] == null ? null : json['location'] as GeoPoint,
+          location: json['location'] as GeoPoint?,
           dictionary: json['dictionary'] as int? ?? 0,
         );
 }
