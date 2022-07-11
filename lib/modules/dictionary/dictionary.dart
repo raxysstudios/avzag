@@ -116,14 +116,6 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     }
   }
 
-  void updateLanguages() {
-    final ls = GlobalStore.languages.keys;
-    search.setLanguage(
-      ls.length == 1 ? ls.first : '',
-      ls,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
@@ -145,7 +137,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                 leading: IconButton(
                   onPressed: () async {
                     await context.pushRoute(const HomeRoute());
-                    updateLanguages();
+                    search.setLanguage('');
                   },
                   tooltip: 'Home',
                   icon: const Icon(Icons.landscape_outlined),

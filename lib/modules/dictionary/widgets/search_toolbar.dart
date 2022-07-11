@@ -67,14 +67,12 @@ class SearchToolbarState extends State<SearchToolbar> {
         const SizedBox(width: 4),
         OptionsButton(
           [
-            if (GlobalStore.languages.length > 1) ...[
-              OptionItem.simple(
-                Icons.language_outlined,
-                'Global',
-                onTap: () => setLanguage(''),
-              ),
-              OptionItem.divider(),
-            ],
+            OptionItem.simple(
+              Icons.language_outlined,
+              'Global',
+              onTap: () => setLanguage(''),
+            ),
+            OptionItem.divider(),
             for (final l in GlobalStore.languages.keys)
               OptionItem.tile(
                 Transform.scale(
