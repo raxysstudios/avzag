@@ -7,6 +7,7 @@ import 'package:bazur/shared/widgets/column_card.dart';
 import 'package:bazur/shared/widgets/language_avatar.dart';
 import 'package:bazur/shared/widgets/span_icon.dart';
 import 'package:bazur/store.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,7 @@ class EditorModeCard extends StatefulWidget {
 class _EditorModeCardState extends State<EditorModeCard> {
   late final StreamSubscription<User?> _authStream;
   var adminable = <String>[];
+  List<Language>? languages;
 
   @override
   void initState() {
@@ -36,6 +38,23 @@ class _EditorModeCardState extends State<EditorModeCard> {
   }
 
   void updateAdminable() async {
+    if (languages == null) {
+      languages = [];
+      for (final l in GlobalStore.languages) {
+        await FirebaseFirestore.instance
+            .doc('languages/$l')
+            .withConverter(
+              fromFirestore: (snapshot, _) =>
+                  Language.fromJson(snapshot.data()!),
+              toFirestore: (_, __) => {},
+            )
+            .get()
+            .then((d) {
+          final l = d.data();
+          if (l != null) languages!.add(l);
+        });
+      }
+    }
     adminable = await EditorStore.getAdminable();
     setState(() {});
   }
@@ -65,15 +84,14 @@ class _EditorModeCardState extends State<EditorModeCard> {
             ],
           ),
         ),
-        if (EditorStore.user != null)
+        if (EditorStore.user != null && languages != null)
           Padding(
             padding: const EdgeInsets.all(8),
             child: Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
-                for (final l
-                    in GlobalStore.languages.values.whereType<Language>())
+                for (final l in languages!)
                   InputChip(
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     avatar: LanguageAvatar(l.name),

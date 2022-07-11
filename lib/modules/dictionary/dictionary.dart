@@ -29,7 +29,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
     firstPageKey: 0,
   );
   late final search = SearchController(
-    GlobalStore.languages.keys,
+    GlobalStore.languages,
     algolia.index('dictionary'),
     paging.refresh,
   );
@@ -137,7 +137,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                 leading: IconButton(
                   onPressed: () async {
                     await context.pushRoute(const HomeRoute());
-                    search.setLanguage('', GlobalStore.languages.keys);
+                    search.setLanguage('', GlobalStore.languages);
                   },
                   tooltip: 'Home',
                   icon: const Icon(Icons.landscape_outlined),

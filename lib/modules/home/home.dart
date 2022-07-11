@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .get()
         .then((r) => r.docs.map((d) => d.data()).toList());
 
-    selected = GlobalStore.languages.keys
+    selected = GlobalStore.languages
         .map((n) => catalogue.firstWhere((l) => l.name == n))
         .toSet();
     tags = {
@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ? null
           : FloatingActionButton(
               onPressed: () {
-                GlobalStore.set(objects: selected);
+                GlobalStore.set(selected.map((l) => l.name).toList());
                 context.navigateTo(const RootRoute());
               },
               child: const Icon(Icons.done_all_outlined),

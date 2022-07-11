@@ -73,7 +73,7 @@ class SearchToolbarState extends State<SearchToolbar> {
               onTap: () => setLanguage(''),
             ),
             OptionItem.divider(),
-            for (final l in GlobalStore.languages.keys)
+            for (final l in GlobalStore.languages)
               OptionItem.tile(
                 Transform.scale(
                   scale: 1.25,
