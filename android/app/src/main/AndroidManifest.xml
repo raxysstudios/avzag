@@ -28,7 +28,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="avzag.raxys.app" />
+                <data android:scheme="http" android:host="bazur.raxys.app" />
                 <data android:scheme="https" />
             </intent-filter>
         </activity>

@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     catalogue = await FirebaseFirestore.instance
         .collection('languages')
         .orderBy(
-          alpha ? 'name' : 'stats.dictionary',
+          alpha ? 'name' : 'dictionary',
           descending: !alpha,
         )
         .withConverter(
