@@ -2,9 +2,6 @@
 
 Expandable parallel dictionary for the languages of the Caucasus in English.
 
-Google Play: <https://play.google.com/store/apps/details?id=com.alkaitagi.bazur>  
-Web application: <https://bazur.raxys.app/>.
-
 Built with Flutter & Firebase & Algolia.
 
 ## Roadmap
