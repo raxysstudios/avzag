@@ -137,7 +137,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                 leading: IconButton(
                   onPressed: () async {
                     await context.pushRoute(const HomeRoute());
-                    search.setLanguage('');
+                    search.setLanguage('', GlobalStore.languages.keys);
                   },
                   tooltip: 'Home',
                   icon: const Icon(Icons.landscape_outlined),
