@@ -7,7 +7,7 @@ String _getLink(Word word) => 'https://bazur.raxys.app/${word.id}';
 
 String previewArticle(Word word) => '''
 🌄 Bazur • ${word.language.titled}
-🔖 ${word.headword.titled} — ${word.uses.map((u) => u.term.titled).join(', ')}
+🔖 ${word.headword.titled} — ${word.definitions.map((d) => d.translation.titled).join(', ')}
 ${_getLink(word)}''';
 
 String _cleanMarkdown(String md) => markdownToHtml(md, inlineOnly: true)
@@ -32,13 +32,12 @@ String textifyArticle(Word word) {
     if (word.tags.isNotEmpty) tags(word.tags),
     if (word.note?.isNotEmpty ?? false) note(word.note!),
     if (word.forms.isNotEmpty) ...samples(word.forms),
-    if (word.uses.isNotEmpty)
-      for (final use in word.uses) ...[
-        '\n💡${word.uses.indexOf(use) + 1} ${use.term.titled}',
-        if (use.tags.isNotEmpty) tags(use.tags),
-        if (use.note?.isNotEmpty ?? false) note(use.note!),
-        if (use.examples.isNotEmpty) ...samples(use.examples),
-      ],
+    for (final d in word.definitions) ...[
+      '\n💡${word.definitions.indexOf(d) + 1} ${d.translation.titled}',
+      if (d.tags.isNotEmpty) tags(d.tags),
+      if (d.note?.isNotEmpty ?? false) note(d.note!),
+      if (d.examples.isNotEmpty) ...samples(d.examples),
+    ],
   ];
   return article.join('\n');
 }

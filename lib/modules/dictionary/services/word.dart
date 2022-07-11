@@ -47,10 +47,10 @@ void submitWord(
   Word word, {
   VoidCallback? after,
 }) async {
-  if (word.uses.isEmpty) {
+  if (word.definitions.isEmpty) {
     return showSnackbar(
       context,
-      text: 'Must have at least one use',
+      text: 'Must have at least one definition',
     );
   }
   String? id = word.id;

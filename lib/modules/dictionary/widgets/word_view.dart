@@ -60,7 +60,7 @@ class WordView extends StatelessWidget {
             word.forms,
             inline: true,
           ),
-        for (final u in word.uses) ...[
+        for (final d in word.definitions) ...[
           ColumnCard(
             divider: const SizedBox(height: 4),
             padding: const EdgeInsets.symmetric(
@@ -72,7 +72,7 @@ class WordView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${word.uses.indexOf(u) + 1}',
+                    '${word.definitions.indexOf(d) + 1}',
                     style: theme.headline6?.copyWith(
                       color: theme.caption?.color,
                     ),
@@ -81,16 +81,16 @@ class WordView extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: SelectableText(
-                        u.term.titled,
+                        d.translation.titled,
                         style: theme.headline6,
                       ),
                     ),
                   ),
-                  if (u.aliases.isNotEmpty)
+                  if (d.aliases.isNotEmpty)
                     Tooltip(
                       waitDuration: Duration.zero,
                       triggerMode: TooltipTriggerMode.tap,
-                      message: u.aliases.join(' • ').titled,
+                      message: d.aliases.join(' • ').titled,
                       child: Icon(
                         Icons.label_outlined,
                         color: Theme.of(context).textTheme.caption?.color,
@@ -98,15 +98,15 @@ class WordView extends StatelessWidget {
                     )
                 ],
               ),
-              if (u.tags.isNotEmpty)
+              if (d.tags.isNotEmpty)
                 Text(
-                  u.tags.join(', '),
+                  d.tags.join(', '),
                   style: theme.caption,
                 ),
-              if (u.note != null) MarkdownText(u.note!),
+              if (d.note != null) MarkdownText(d.note!),
             ],
           ),
-          if (u.examples.isNotEmpty) SamplesColumn(u.examples),
+          if (d.examples.isNotEmpty) SamplesColumn(d.examples),
         ],
         if (word.contribution != null)
           const Caption(

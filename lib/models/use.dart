@@ -2,24 +2,24 @@ import 'package:bazur/shared/utils.dart';
 
 import 'sample.dart';
 
-class Use {
-  String term;
+class Definition {
+  String translation;
   List<String> aliases;
   List<String> tags;
   String? note;
   List<Sample> examples;
 
-  Use(
-    this.term, {
+  Definition(
+    this.translation, {
     required this.aliases,
     required this.tags,
     this.note,
     required this.examples,
   });
 
-  Use.fromJson(Map<String, dynamic> json)
+  Definition.fromJson(Map<String, dynamic> json)
       : this(
-          json['term'] as String,
+          json['translation'] as String,
           aliases: json2list(json['aliases']) ?? [],
           tags: json2list(json['tags']) ?? [],
           note: json['note'] as String?,
@@ -32,7 +32,7 @@ class Use {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['term'] = term;
+    data['translation'] = translation;
     if (aliases.isNotEmpty) data['aliases'] = aliases;
     if (tags.isNotEmpty) data['tags'] = tags;
     if (note?.isNotEmpty ?? false) data['note'] = note;

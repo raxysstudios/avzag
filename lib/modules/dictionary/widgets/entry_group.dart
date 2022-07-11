@@ -34,7 +34,7 @@ class EntryGroup extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             children: [
               Text(
-                groups.first.first.term.titled,
+                groups.first.first.translation.titled,
                 style: TextStyle(
                   color: theme.caption?.color,
                   fontWeight: FontWeight.w500,

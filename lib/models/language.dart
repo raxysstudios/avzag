@@ -26,8 +26,6 @@ class Language {
           aliases: json2list(json['aliases']),
           location:
               json['location'] == null ? null : json['location'] as GeoPoint,
-          dictionary:
-              (json['stats'] as Map<String, dynamic>?)?['dictionary'] as int? ??
-                  0,
+          dictionary: json['dictionary'] as int? ?? 0,
         );
 }
