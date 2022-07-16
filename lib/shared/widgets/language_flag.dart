@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class LanguageFlag extends StatelessWidget {
   final String? language;
-  final String? url;
   final double? width;
   final double? height;
   final double rotation;
@@ -12,7 +11,6 @@ class LanguageFlag extends StatelessWidget {
 
   const LanguageFlag(
     this.language, {
-    this.url,
     this.height = 32,
     this.width = 96,
     this.scale = 2,
