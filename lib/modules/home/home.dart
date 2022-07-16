@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
               load();
             }),
             icon: Icon(
-              alpha ? Icons.sort_by_alpha_outlined : Icons.sort_outlined,
+              alpha ? Icons.sort_outlined : Icons.sort_by_alpha_outlined,
             ),
           ),
           const SizedBox(width: 4),
