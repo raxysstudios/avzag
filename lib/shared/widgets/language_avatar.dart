@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class LanguageAvatar extends StatelessWidget {
   final String? language;
-  final String? url;
   final double? radius;
 
   const LanguageAvatar(
     this.language, {
-    this.url,
     this.radius,
     Key? key,
   }) : super(key: key);

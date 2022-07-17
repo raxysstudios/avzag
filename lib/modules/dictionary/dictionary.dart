@@ -150,7 +150,7 @@ class DictionaryScreenState extends State<DictionaryScreen> {
                       icon: Icons.info_outlined,
                       text: 'Bookmarks are coming soon',
                     ),
-                    icon: const Icon(Icons.bookmarks_outlined),
+                    icon: const Icon(Icons.bookmark_border_outlined),
                     tooltip: 'Bookmarks',
                   ),
                   IconButton(

@@ -21,7 +21,8 @@ class EditorModeCard extends StatefulWidget {
 class _EditorModeCardState extends State<EditorModeCard> {
   late final StreamSubscription<User?> _authStream;
   var adminable = <String>[];
-  List<Language>? languages;
+  var languages = <Language>[];
+  var loading = false;
 
   @override
   void initState() {
@@ -38,8 +39,15 @@ class _EditorModeCardState extends State<EditorModeCard> {
   }
 
   void updateAdminable() async {
-    if (languages == null) {
-      languages = [];
+    if (EditorStore.user == null) {
+      setState(() {
+        languages.clear();
+        adminable.clear();
+      });
+    } else {
+      setState(() {
+        loading = true;
+      });
       for (final l in GlobalStore.languages) {
         await FirebaseFirestore.instance
             .doc('languages/$l')
@@ -51,12 +59,14 @@ class _EditorModeCardState extends State<EditorModeCard> {
             .get()
             .then((d) {
           final l = d.data();
-          if (l != null) languages!.add(l);
+          if (l != null) languages.add(l);
         });
       }
+      adminable = await EditorStore.getAdminable();
     }
-    adminable = await EditorStore.getAdminable();
-    setState(() {});
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -67,6 +77,15 @@ class _EditorModeCardState extends State<EditorModeCard> {
         ListTile(
           leading: const Icon(Icons.edit_outlined),
           title: const Text('Editor mode'),
+          trailing: loading
+              ? const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: SizedBox.square(
+                    dimension: 24,
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : null,
           subtitle: Row(
             children: [
               if (EditorStore.language == null)
@@ -84,14 +103,14 @@ class _EditorModeCardState extends State<EditorModeCard> {
             ],
           ),
         ),
-        if (EditorStore.user != null && languages != null)
+        if (languages.isNotEmpty)
           Padding(
             padding: const EdgeInsets.all(8),
             child: Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
-                for (final l in languages!)
+                for (final l in languages)
                   InputChip(
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     avatar: LanguageAvatar(l.name),
