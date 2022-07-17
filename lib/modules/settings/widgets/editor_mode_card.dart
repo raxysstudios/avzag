@@ -49,7 +49,6 @@ class _EditorModeCardState extends State<EditorModeCard> {
         loading = true;
       });
       for (final l in GlobalStore.languages) {
-        await Future<void>.delayed(const Duration(seconds: 3));
         await FirebaseFirestore.instance
             .doc('languages/$l')
             .withConverter(
