@@ -77,6 +77,15 @@ class _EditorModeCardState extends State<EditorModeCard> {
         ListTile(
           leading: const Icon(Icons.edit_outlined),
           title: const Text('Editor mode'),
+          trailing: loading
+              ? const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: SizedBox.square(
+                    dimension: 24,
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : null,
           subtitle: Row(
             children: [
               if (EditorStore.language == null)
@@ -94,7 +103,6 @@ class _EditorModeCardState extends State<EditorModeCard> {
             ],
           ),
         ),
-        if (loading) const LinearProgressIndicator(),
         if (languages.isNotEmpty)
           Padding(
             padding: const EdgeInsets.all(8),
