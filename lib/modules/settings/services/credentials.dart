@@ -5,7 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart' as apple;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 Future<AuthCredential?> getGoogleCredentials() async {
   final user = await GoogleSignIn().signIn();
@@ -30,12 +30,12 @@ Future<AuthCredential?> getAppleCredentials() async {
     final nonce = sha256ofString(rawNonce);
     var redirectURL = 'https://avzagapp.firebaseapp.com/__/auth/handler';
     var clientID = 'avzagapp';
-    final appleIdCredential = await apple.SignInWithApple.getAppleIDCredential(
+    final appleIdCredential = await SignInWithApple.getAppleIDCredential(
       scopes: [
-        apple.AppleIDAuthorizationScopes.email,
-        apple.AppleIDAuthorizationScopes.fullName,
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
       ],
-      webAuthenticationOptions: apple.WebAuthenticationOptions(
+      webAuthenticationOptions: WebAuthenticationOptions(
         clientId: clientID,
         redirectUri: Uri.parse(redirectURL),
       ),
